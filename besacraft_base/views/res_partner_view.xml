@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="minecraft_infos__inherit_res_partner" model="ir.ui.view">
+        <field name="name">res.partner.form.inherit</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form" />
+        <field name="arch" type="xml">
+            <field name="vat" position="after">
+                <separator string="Minecraft infos"/>
+                <field name="minecraft_login"/>
+                <field name="minecraft_uuid"/>
+                <field name="minecraft_skin"/>
+            </field>
+        </field>
+    </record>
+</odoo>
