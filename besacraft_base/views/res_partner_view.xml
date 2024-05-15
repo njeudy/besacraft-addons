@@ -9,7 +9,8 @@
                 <separator string="Minecraft infos"/>
                 <field name="minecraft_login"/>
                 <field name="minecraft_uuid"/>
-                <field name="minecraft_skin"/>
+                <field name="minecraft_skin" widget="image" class="oe_avatar"/>
+                <field name="minecraft_head" widget="image" class="oe_avatar"/>
             </field>
         </field>
     </record>

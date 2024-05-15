@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="besacraft_portal_my_details_fields" inherit_id="portal.portal_my_details_fields">
+            <xpath expr="/t" position="inside">
+                <div class="clearfix"/>
+                <br/><img style="display: inline; margin: 0 5px; width: 100px;" title="besacraft_logo" src="https://besacraft.fr/web/image/9028-ebee024f/besacraft_final_2.png"/><h2>Infos Minecraft / Besacraft</h2>
+                <div t-attf-class="mb-1 #{error.get('minecraft_login') and 'o_has_error' or ''} col-xl-6">
+                    <label class="col-form-label label-optional" for="minecraft_login">Minecraft Login</label>
+                    <!-- The <input> use "disabled" attribute to avoid sending an unauthorized value on form submit.
+                        The user might not have rights to change company_name but should still be able to see it.
+                    -->
+                    <input type="text" name="minecraft_login" t-attf-class="form-control #{error.get('minecraft_login') and 'is-invalid' or ''}" t-att-value="minecraft_login or partner.minecraft_login"/>
+                </div>
+                <div t-attf-class="mb-1 #{error.get('minecraft_uuid') and 'o_has_error' or ''} col-xl-6">
+                    <label class="col-form-label label-optional" for="minecraft_uuid">Minecraft Uuid</label>
+                    <!-- The <input> use "disabled" attribute to avoid sending an unauthorized value on form submit.
+                        The user might not have rights to change company_name but should still be able to see it.
+                    -->
+                    <input type="text" name="minecraft_uuid" disabled="1" t-attf-class="form-control #{error.get('minecraft_uuid') and 'is-invalid' or ''}" t-att-value="minecraft_uuid or partner.minecraft_uuid"/>
+                </div>
+                <br/>
+                <img t-att-src="'https://crafthead.net/armor/body/%s' % partner.minecraft_uuid" style="width: auto; height: 250px;" class="img img-fluid"/>
+            </xpath>
+        </template>
+    
+
+</odoo>
