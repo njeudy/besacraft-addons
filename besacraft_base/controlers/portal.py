@@ -16,7 +16,7 @@ class CustomerPortal(CustomerPortal):
         partner = request.env.user.partner_id
 
         _logger.debug('I AM IN: %s' % kw)
-        if partner.minecraft_uuid or kw['minecraft_login']:
+        if partner.minecraft_uuid or kw.get('minecraft_login', False):
             na_fields = ['street', 'phone', 'zipcode', 'city']
             for field in na_fields:
                 if not kw.get(field, False):
