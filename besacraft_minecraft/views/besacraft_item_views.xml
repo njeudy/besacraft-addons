@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <record id="besacraft_item_view_search" model="ir.ui.view">
+    <field name="name">besacraft.item.search</field>
+    <field name="model">besacraft.item</field>
+    <field name="arch" type="xml">
+      <search string="Blocs">
+        <field name="name" string="Nom ou identifiant"
+               filter_domain="['|', ('name', 'ilike', self), ('identifiant', 'ilike', self)]"/>
+        <field name="famille"/>
+        <filter name="en_vente" string="Proposables à la vente"
+                domain="[('actif_en_vente', '=', True)]"/>
+        <filter name="sans_image" string="Sans vignette"
+                domain="[('image_1920', '=', False)]"/>
+        <separator/>
+        <filter name="vanilla" string="Minecraft" domain="[('source', '=', 'Minecraft')]"/>
+        <filter name="conquest" string="Conquest Reforged"
+                domain="[('source', '=', 'Conquest Reforged')]"/>
+        <group expand="0" string="Regrouper par">
+          <filter name="par_source" string="Provenance" context="{'group_by': 'source'}"/>
+          <filter name="par_famille" string="Famille" context="{'group_by': 'famille'}"/>
+        </group>
+      </search>
+    </field>
+  </record>
+
+  <record id="besacraft_item_view_kanban" model="ir.ui.view">
+    <field name="name">besacraft.item.kanban</field>
+    <field name="model">besacraft.item</field>
+    <field name="arch" type="xml">
+      <kanban class="o_kanban_small_column" sample="1">
+        <field name="image_1920"/>
+        <templates>
+          <t t-name="card">
+            <div class="d-flex align-items-center gap-2">
+              <img t-att-src="kanban_image('besacraft.item', 'image_1920', record.id.raw_value)"
+                   alt="" style="width:40px;height:40px;image-rendering:pixelated"/>
+              <div class="overflow-hidden">
+                <strong class="d-block text-truncate"><field name="name"/></strong>
+                <small class="text-muted d-block text-truncate"><field name="identifiant"/></small>
+              </div>
+            </div>
+          </t>
+        </templates>
+      </kanban>
+    </field>
+  </record>
+
+  <record id="besacraft_item_view_list" model="ir.ui.view">
+    <field name="name">besacraft.item.list</field>
+    <field name="model">besacraft.item</field>
+    <field name="arch" type="xml">
+      <list string="Blocs" editable="bottom">
+        <field name="image_1920" widget="image" options="{'size': [32, 32]}"/>
+        <field name="name" readonly="1"/>
+        <field name="identifiant" readonly="1"/>
+        <field name="source" readonly="1" optional="show"/>
+        <field name="famille" readonly="1" optional="show"/>
+        <field name="actif_en_vente"/>
+      </list>
+    </field>
+  </record>
+
+  <record id="besacraft_item_action" model="ir.actions.act_window">
+    <field name="name">Blocs Minecraft</field>
+    <field name="res_model">besacraft.item</field>
+    <field name="view_mode">kanban,list</field>
+    <field name="context">{'search_default_par_source': 1}</field>
+    <field name="help" type="html">
+      <p class="o_view_nocontent_smiley_face">Le catalogue est vide.</p>
+      <p>Il se charge avec le module. Les vignettes s'importent à part, depuis les jars
+         du serveur — voir <code>tools/import_images.py</code>.</p>
+    </field>
+  </record>
+
+  <menuitem id="besacraft_menu_root" name="Besacraft" web_icon="besacraft_minecraft,static/description/icon.png" sequence="90"/>
+  <menuitem id="besacraft_menu_items" name="Blocs" parent="besacraft_menu_root"
+            action="besacraft_item_action" sequence="10"/>
+
+</odoo>

@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_besacraft_item_user,besacraft.item.user,model_besacraft_item,base.group_user,1,0,0,0
+access_besacraft_item_manager,besacraft.item.manager,model_besacraft_item,base.group_system,1,1,1,1
+access_besacraft_item_portal,besacraft.item.portal,model_besacraft_item,base.group_portal,1,0,0,0
+access_besacraft_product_line_user,besacraft.product.line.user,model_besacraft_product_line,base.group_user,1,0,0,0
+access_besacraft_product_line_manager,besacraft.product.line.manager,model_besacraft_product_line,base.group_system,1,1,1,1
