@@ -7,3 +7,5 @@ access_besacraft_build_layer_user,besacraft.build.layer.user,model_besacraft_bui
 access_besacraft_build_layer_manager,besacraft.build.layer.manager,model_besacraft_build_layer,base.group_system,1,1,1,1
 access_besacraft_build_layer_line_user,besacraft.build.layer.line.user,model_besacraft_build_layer_line,base.group_user,1,0,0,0
 access_besacraft_build_layer_line_manager,besacraft.build.layer.line.manager,model_besacraft_build_layer_line,base.group_system,1,1,1,1
+access_besacraft_build_member_user,besacraft.build.member.user,model_besacraft_build_member,base.group_user,1,0,0,0
+access_besacraft_build_member_manager,besacraft.build.member.manager,model_besacraft_build_member,base.group_system,1,1,1,1

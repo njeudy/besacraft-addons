@@ -45,14 +45,54 @@ class BesacraftBuild(models.Model):
     viewer_attachment_id = fields.Many2one("ir.attachment", ondelete="set null")
     build_json_attachment_id = fields.Many2one("ir.attachment", ondelete="set null")
     layer_ids = fields.One2many("besacraft.build.layer", "build_id")
+    enroll = fields.Selection(
+        [("public", "Free"), ("payment", "On payment"), ("invite", "On invitation")],
+        default="public", required=True,
+        help="Free: anyone. On payment: access is granted when the order is confirmed.",
+    )
+    product_id = fields.Many2one(
+        "product.product", string="Product",
+        help="The product that grants access. Required when enroll is 'payment'.",
+    )
+    member_ids = fields.Many2many(
+        "res.partner", "besacraft_build_member", "build_id", "partner_id",
+        string="Members", readonly=True,
+    )
 
-    _sql_constraints = [("code_uniq", "unique(code)", "A tutorial number must be unique.")]
+    _sql_constraints = [
+        ("code_uniq", "unique(code)", "A tutorial number must be unique."),
+        ("product_required_on_payment",
+         "CHECK (enroll != 'payment' OR product_id IS NOT NULL)",
+         "A paying build needs a product."),
+    ]
 
     @api.constrains("code")
     def _check_code(self):
         for build in self:
             if not CODE_RE.match(build.code or ""):
                 raise ValidationError("The tutorial number must contain digits only.")
+
+    def _action_add_members(self, partners, member_status="joined"):
+        """Grant access. Idempotent: an existing member is left untouched."""
+        Member = self.env["besacraft.build.member"].sudo()
+        a_creer = []
+        for build in self:
+            deja = Member.search([("build_id", "=", build.id),
+                                  ("partner_id", "in", partners.ids)]).mapped("partner_id")
+            for partner in partners - deja:
+                a_creer.append({"build_id": build.id, "partner_id": partner.id,
+                                "member_status": member_status})
+        return Member.create(a_creer) if a_creer else Member
+
+    def is_accessible_by(self, partner):
+        """True when this partner may see the viewer and the notice."""
+        self.ensure_one()
+        if self.enroll == "public":
+            return True
+        if not partner:
+            return False
+        return bool(self.env["besacraft.build.member"].sudo().search_count(
+            [("build_id", "=", self.id), ("partner_id", "=", partner.id)]))
 
     def _compute_website_url(self):
         # website.published.mixin's hook: the public URL drops the padding zeros.
