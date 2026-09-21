@@ -9,3 +9,11 @@ access_besacraft_build_layer_line_user,besacraft.build.layer.line.user,model_bes
 access_besacraft_build_layer_line_manager,besacraft.build.layer.line.manager,model_besacraft_build_layer_line,base.group_system,1,1,1,1
 access_besacraft_build_member_user,besacraft.build.member.user,model_besacraft_build_member,base.group_user,1,0,0,0
 access_besacraft_build_member_manager,besacraft.build.member.manager,model_besacraft_build_member,base.group_system,1,1,1,1
+access_besacraft_serie_public,besacraft.serie.public,model_besacraft_serie,base.group_public,1,0,0,0
+access_besacraft_build_public,besacraft.build.public,model_besacraft_build,base.group_public,1,0,0,0
+access_besacraft_build_layer_public,besacraft.build.layer.public,model_besacraft_build_layer,base.group_public,1,0,0,0
+access_besacraft_build_layer_line_public,besacraft.build.layer.line.public,model_besacraft_build_layer_line,base.group_public,1,0,0,0
+access_besacraft_serie_portal,besacraft.serie.portal,model_besacraft_serie,base.group_portal,1,0,0,0
+access_besacraft_build_portal,besacraft.build.portal,model_besacraft_build,base.group_portal,1,0,0,0
+access_besacraft_build_layer_portal,besacraft.build.layer.portal,model_besacraft_build_layer,base.group_portal,1,0,0,0
+access_besacraft_build_layer_line_portal,besacraft.build.layer.line.portal,model_besacraft_build_layer_line,base.group_portal,1,0,0,0
