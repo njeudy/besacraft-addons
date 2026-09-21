@@ -3,3 +3,7 @@ access_besacraft_serie_user,besacraft.serie.user,model_besacraft_serie,base.grou
 access_besacraft_serie_manager,besacraft.serie.manager,model_besacraft_serie,base.group_system,1,1,1,1
 access_besacraft_build_user,besacraft.build.user,model_besacraft_build,base.group_user,1,0,0,0
 access_besacraft_build_manager,besacraft.build.manager,model_besacraft_build,base.group_system,1,1,1,1
+access_besacraft_build_layer_user,besacraft.build.layer.user,model_besacraft_build_layer,base.group_user,1,0,0,0
+access_besacraft_build_layer_manager,besacraft.build.layer.manager,model_besacraft_build_layer,base.group_system,1,1,1,1
+access_besacraft_build_layer_line_user,besacraft.build.layer.line.user,model_besacraft_build_layer_line,base.group_user,1,0,0,0
+access_besacraft_build_layer_line_manager,besacraft.build.layer.line.manager,model_besacraft_build_layer_line,base.group_system,1,1,1,1

@@ -44,6 +44,7 @@ class BesacraftBuild(models.Model):
     youtube_url = fields.Char()
     viewer_attachment_id = fields.Many2one("ir.attachment", ondelete="set null")
     build_json_attachment_id = fields.Many2one("ir.attachment", ondelete="set null")
+    layer_ids = fields.One2many("besacraft.build.layer", "build_id")
 
     _sql_constraints = [("code_uniq", "unique(code)", "A tutorial number must be unique.")]
 
