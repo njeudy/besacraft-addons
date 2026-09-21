@@ -119,9 +119,25 @@
                                 <div class="bc-scene-vide">
                                     <img t-attf-src="/web/image/besacraft.build/#{build.id}/overview_image"
                                          t-att-alt="build.name"/>
-                                    <span t-if="not accessible" class="bc-verrou">
-                                        Ce tutoriel est réservé — la vue 3D s'ouvre une fois l'accès obtenu.
-                                    </span>
+                                    <div t-if="not accessible" class="bc-verrou">
+                                        <span class="bc-verrou-t">Ce tutoriel est réservé</span>
+                                        <span class="bc-verrou-s">La vue 3D, la liste cochable et la
+                                            notice s'ouvrent une fois l'accès obtenu.</span>
+                                        <form t-if="build.enroll == 'payment' and build.product_id"
+                                              action="/shop/cart/update" method="post" class="bc-achat">
+                                            <input type="hidden" name="csrf_token"
+                                                   t-att-value="request.csrf_token()"/>
+                                            <input type="hidden" name="product_id" t-att-value="build.product_id.id"/>
+                                            <input type="hidden" name="express" value="1"/>
+                                            <button type="submit" class="bc-btn-achat">
+                                                Obtenir ce tutoriel ·
+                                                <span t-esc="'%.2f' % build.product_id.list_price"/> €
+                                            </button>
+                                        </form>
+                                        <span t-if="build.enroll == 'invite'" class="bc-verrou-s">
+                                            Sur invitation.
+                                        </span>
+                                    </div>
                                 </div>
                             </t>
                         </div>

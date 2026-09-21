@@ -62,6 +62,8 @@
                                 <div class="bc-rendu">
                                     <img t-attf-src="/web/image/besacraft.build/#{build.id}/overview_image"
                                          t-att-alt="build.name" loading="lazy"/>
+                                    <span t-if="build.enroll == 'payment'" class="bc-ruban">Payant</span>
+                                    <span t-if="build.enroll == 'invite'" class="bc-ruban bc-ruban-invite">Sur invitation</span>
                                     <span class="bc-pastille">
                                         <span class="bc-pastille-n" t-esc="'{:,}'.format(build.block_count).replace(',', ' ')"/>
                                         <span class="bc-pastille-u">pièces</span>
@@ -99,7 +101,13 @@
                                     </div>
 
                                     <div class="bc-actions">
-                                        <a t-attf-href="/t/#{int(build.code)}" class="bc-btn">Suivre le tutoriel</a>
+                                        <a t-attf-href="/t/#{int(build.code)}" class="bc-btn">
+                                            <t t-if="build.enroll == 'payment' and build.product_id">
+                                                Voir le tutoriel ·
+                                                <t t-esc="'%.2f' % build.product_id.list_price"/> €
+                                            </t>
+                                            <t t-else="">Suivre le tutoriel</t>
+                                        </a>
                                         <a t-if="build.youtube_url" t-att-href="build.youtube_url"
                                            target="_blank" class="bc-btn-second">Voir l'épisode sur YouTube</a>
                                     </div>
