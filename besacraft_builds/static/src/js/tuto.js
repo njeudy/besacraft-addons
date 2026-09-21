@@ -125,7 +125,7 @@ function demarrer() {
         index = Math.max(0, Math.min(couches.length - 1, n));
         rendreCouche();
         if (piloterViewer) {
-            pousserCurseur("#slider", couches[index].sequence + decalage);
+            pousserCurseur("#slider", couches[index].sequence + calerDecalage());
         }
     }
 
@@ -311,7 +311,7 @@ function demarrer() {
             if (!m) {
                 return;
             }
-            var seq = parseInt(m[1], 10) - decalage;
+            var seq = parseInt(m[1], 10) - calerDecalage();
             var pos = couches.findIndex(function (c) { return c.sequence === seq; });
             if (pos >= 0 && pos !== index) {
                 index = pos;
@@ -320,18 +320,20 @@ function demarrer() {
         }).observe(etiquette, { childList: true, characterData: true, subtree: true });
     }
 
-    function calerDecalage(d) {
+    function calerDecalage() {
         // Le décalage se DÉDUIT du viewer : son curseur va de 1 à son nombre de couches,
         // le tutoriel n'en montre qu'une partie. La différence est exacte par construction,
         // là où une valeur recopiée du plan finit toujours par diverger d'une unité.
-        var curseur = d.getElementById("slider");
-        if (!curseur || !couches.length) {
-            return;
-        }
-        var maxViewer = parseInt(curseur.max, 10);
-        if (maxViewer > 0) {
+        //
+        // Calculé à chaque usage et non une fois au chargement : le viewer règle le max de
+        // son curseur après avoir construit la scène, donc bien après l'événement « load ».
+        var d = doc();
+        var curseur = d && d.getElementById("slider");
+        var maxViewer = curseur ? parseInt(curseur.max, 10) : 0;
+        if (maxViewer > 1 && couches.length) {
             decalage = maxViewer - couches.length;
         }
+        return decalage;
     }
 
     function brancherViewer() {
@@ -399,7 +401,7 @@ function demarrer() {
 
         document.getElementById("bc_dedans").addEventListener("input", function () {
             document.getElementById("bc_dedans_v").textContent = this.value;
-            pousserCurseur("#sliderLo", parseInt(this.value, 10) + decalage);
+            pousserCurseur("#sliderLo", parseInt(this.value, 10) + calerDecalage());
         });
 
         document.getElementById("bc_cadence").addEventListener("input", function () {
