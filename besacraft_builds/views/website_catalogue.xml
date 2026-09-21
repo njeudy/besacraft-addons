@@ -1,0 +1,124 @@
+<odoo>
+    <!-- Catalogue des builds, direction « Notice ». La mise en page reprend la maquette
+         validée (doc/claude-design-2026-09-14/Catalogue des builds.dc.html) : boîtes de
+         construction, bandeau de série, pastille bronze du nombre de pièces. -->
+    <template id="catalogue" name="Besacraft — Catalogue des builds">
+        <t t-call="website.layout">
+            <t t-set="additional_title">Catalogue des builds</t>
+            <div id="wrap" class="bc-notice">
+                <div class="bc-page">
+
+                    <header class="bc-entete">
+                        <div class="bc-entete-texte">
+                            <span class="bc-surtitre">Catalogue des builds</span>
+                            <h1 class="bc-titre">Choisis ta boîte, on a compté les pièces.</h1>
+                            <p class="bc-chapo">Chaque build a son numéro, son nombre exact de
+                                blocs et sa notice couche par couche. L'épisode se regarde, la 3D
+                                se tourne, la liste se coche pendant que tu poses.</p>
+                        </div>
+                        <form class="bc-aller" action="/builds" method="get">
+                            <span class="bc-label">Aller au tuto par numéro</span>
+                            <div class="bc-aller-champs">
+                                <input type="text" name="numero" placeholder="042"
+                                       class="bc-numero" id="bc_numero"/>
+                                <button type="button" class="bc-btn-sombre" id="bc_aller">Ouvrir</button>
+                            </div>
+                            <span class="bc-aide">Trois chiffres, comme sur la boîte.</span>
+                        </form>
+                    </header>
+
+                    <div class="bc-filtres">
+                        <a href="/builds"
+                           t-attf-class="bc-filtre#{not serie_active and ' bc-filtre-actif' or ''}">
+                            <span class="bc-puce" style="background:#323837"/>
+                            <span>Toutes les séries</span>
+                            <span class="bc-filtre-n"><t t-esc="total"/></span>
+                        </a>
+                        <t t-foreach="series" t-as="s">
+                            <a t-attf-href="/builds?serie=#{s.code}"
+                               t-attf-class="bc-filtre#{serie_active == s.code and ' bc-filtre-actif' or ''}">
+                                <span class="bc-puce" t-attf-style="background:#{s.color}"/>
+                                <span t-field="s.name"/>
+                                <span class="bc-filtre-n"><t t-esc="par_serie.get(s.id, 0)"/></span>
+                            </a>
+                        </t>
+                    </div>
+
+                    <div class="bc-grille">
+                        <t t-foreach="builds" t-as="build">
+                            <article class="bc-boite">
+                                <div class="bc-bandeau"
+                                     t-attf-style="background:#{build.serie_id.color};color:#{build.serie_id.badge_ink}">
+                                    <span class="bc-serie" t-field="build.serie_id.name"/>
+                                    <span class="bc-numero-boite" t-esc="build.code"/>
+                                </div>
+
+                                <div class="bc-rendu">
+                                    <img t-attf-src="/web/image/besacraft.build/#{build.id}/overview_image"
+                                         t-att-alt="build.name" loading="lazy"/>
+                                    <span class="bc-pastille">
+                                        <span class="bc-pastille-n" t-esc="'{:,}'.format(build.block_count).replace(',', ' ')"/>
+                                        <span class="bc-pastille-u">pièces</span>
+                                    </span>
+                                </div>
+
+                                <div class="bc-corps">
+                                    <div class="bc-titre-bloc">
+                                        <span class="bc-nom" t-field="build.name"/>
+                                        <span class="bc-accroche" t-field="build.accroche"/>
+                                    </div>
+
+                                    <div class="bc-stats">
+                                        <span class="bc-stat">
+                                            <span class="bc-stat-l">Couches</span>
+                                            <span class="bc-stat-v" t-esc="build.layer_count"/>
+                                        </span>
+                                        <span class="bc-stat">
+                                            <span class="bc-stat-l">Emprise</span>
+                                            <span class="bc-stat-v">
+                                                <t t-esc="build.size_x"/><span class="bc-sep">×</span><t t-esc="build.size_y"/><span class="bc-sep">×</span><t t-esc="build.size_z"/>
+                                            </span>
+                                        </span>
+                                        <span class="bc-stat">
+                                            <span class="bc-stat-l">Niveau</span>
+                                            <span class="bc-stat-v" t-esc="dict(
+                                                debutant='Débutant', confirme='Confirmé',
+                                                forgeron='Forgeron').get(build.level, '—')"/>
+                                        </span>
+                                    </div>
+
+                                    <div class="bc-palette">
+                                        <span class="bc-label">Palette</span>
+                                        <span class="bc-palette-t" t-field="build.palette_label"/>
+                                    </div>
+
+                                    <div class="bc-actions">
+                                        <a t-attf-href="/t/#{int(build.code)}" class="bc-btn">Suivre le tutoriel</a>
+                                        <a t-if="build.youtube_url" t-att-href="build.youtube_url"
+                                           target="_blank" class="bc-btn-second">Voir l'épisode sur YouTube</a>
+                                    </div>
+                                </div>
+                            </article>
+                        </t>
+                    </div>
+
+                    <section class="bc-legende">
+                        <span class="bc-legende-t">Comment se lit une boîte</span>
+                        <p>La pastille bronze donne le nombre de pièces, comme au dos d'une boîte.
+                            Le bandeau porte la couleur de la série et le numéro de tuto. Le niveau
+                            dit combien de blocs de mods sont nécessaires : <strong>Débutant</strong>
+                            ne demande que du vanilla, <strong>Confirmé</strong> ajoute Domum
+                            Ornamentum et Macaw's, <strong>Forgeron</strong> demande Create.</p>
+                    </section>
+
+                </div>
+            </div>
+            <script>
+                document.getElementById('bc_aller').addEventListener('click', function () {
+                    var n = parseInt(document.getElementById('bc_numero').value, 10);
+                    if (n) { window.location = '/t/' + n; }
+                });
+            </script>
+        </t>
+    </template>
+</odoo>

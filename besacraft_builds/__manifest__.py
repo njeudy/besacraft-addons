@@ -13,7 +13,13 @@
         "views/besacraft_serie_views.xml",
         "views/besacraft_build_views.xml",
         "views/menus.xml",
+        "views/website_catalogue.xml",
     ],
+    "assets": {
+        "web.assets_frontend": [
+            "besacraft_builds/static/src/scss/notice.scss",
+        ],
+    },
     "installable": True,
     "application": True,
 }
