@@ -120,10 +120,13 @@
                 </div>
             </div>
 
-            <script type="application/json" id="bc_donnees" t-esc="couches_json"/>
+            <!-- Les couches voyagent dans un attribut data- : dans un <script>, t-esc
+                 echappe les guillemets en &#34; et JSON.parse echoue, alors que le parseur
+                 HTML decode un attribut tout seul. -->
+            <div id="bc_donnees" class="d-none" t-att-data-couches="couches_json"/>
             <script>
                 (function () {
-                    var data = JSON.parse(document.getElementById('bc_donnees').textContent || '[]');
+                    var data = JSON.parse(document.getElementById('bc_donnees').dataset.couches || '[]');
                     if (!data.length) { return; }
                     var i = 0;
                     var liste = document.getElementById('bc_liste');
@@ -166,6 +169,27 @@
                         rendre();
                     });
                     rendre();
+
+                    // Contrat VIEWER-API : le viewer garde son moteur, on masque ses
+                    // controles pour ne pas doubler ceux de la page. L'injection n'est
+                    // possible que parce qu'il est servi depuis notre origine.
+                    var cadre = document.querySelector('.bc-viewer');
+                    if (cadre) {
+                        cadre.addEventListener('load', function () {
+                            try {
+                                var doc = cadre.contentDocument;
+                                var st = doc.createElement('style');
+                                st.textContent =
+                                    '#hud,#stepbar,#panel{display:none!important}' +
+                                    '#app{grid-template-columns:1fr!important;' +
+                                    'grid-template-rows:1fr!important}' +
+                                    '#modal .box{font-family:\'Anonymous Pro\',monospace}';
+                                doc.head.appendChild(st);
+                            } catch (e) {
+                                // Origine differente : on garde l'habillage d'origine.
+                            }
+                        });
+                    }
                 })();
             </script>
         </t>
