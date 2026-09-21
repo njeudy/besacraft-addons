@@ -18,6 +18,7 @@
     var couches = JSON.parse((boite && boite.dataset.couches) || "[]");
     var cadre = document.getElementById("bc_viewer");
     var index = 0;
+    var dejaBranche = false;
 
     /* ---------------------------------------------------------------- l'établi */
 
@@ -260,9 +261,8 @@
         }).observe(etiquette, { childList: true, characterData: true, subtree: true });
     }
 
-    if (cadre) {
-        cadre.addEventListener("load", function () {
-            var d = doc();
+    function brancherViewer() {
+        var d = doc();
             var voile = document.getElementById("bc_voile");
             if (voile) {
                 voile.hidden = true;
@@ -281,10 +281,20 @@
                 var mien = document.getElementById("bc_bom");
                 mien.hidden = false;
                 mien.addEventListener("click", function () { bom.click(); });
-            } else {
-                racine.classList.add("bc-sans-recettes");
-            }
-        });
+        } else {
+            racine.classList.add("bc-sans-recettes");
+        }
+    }
+
+    if (cadre) {
+        // L'iframe peut avoir fini AVANT que ce script ne tourne : le bundle est chargé en
+        // fin de page et « load » ne se rejoue pas. On branche les deux chemins, sinon le
+        // voile reste et les reglages restent vides alors que le viewer est bien la.
+        cadre.addEventListener("load", brancherViewer);
+        var dejaLa = doc();
+        if (dejaLa && dejaLa.readyState === "complete" && dejaLa.getElementById("app")) {
+            brancherViewer();
+        }
 
         document.querySelectorAll(".bc-angle").forEach(function (bouton) {
             bouton.addEventListener("click", function () {
@@ -337,7 +347,7 @@
     var bouton = document.getElementById("bc_plein_b");
     if (bouton) {
         bouton.addEventListener("click", function () {
-            var zone = document.getElementById("bc_plein");
+            var zone = document.querySelector(".bc-scene");
             var actif = zone.classList.toggle("bc-plein-actif");
             bouton.textContent = actif ? "Quitter" : "Plein écran";
             // L'API Fullscreen n'est pas toujours autorisée (page en iframe sans
@@ -356,8 +366,8 @@
         });
         document.addEventListener("keydown", function (ev) {
             if (ev.key === "Escape") {
-                var zone = document.getElementById("bc_plein");
-                if (zone.classList.contains("bc-plein-actif")) {
+                var zone = document.querySelector(".bc-scene");
+                if (zone && zone.classList.contains("bc-plein-actif")) {
                     zone.classList.remove("bc-plein-actif");
                     bouton.textContent = "Plein écran";
                 }

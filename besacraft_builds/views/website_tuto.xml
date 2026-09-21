@@ -21,6 +21,10 @@
                             </span>
                         </div>
                         <div class="bc-barre-d">
+                            <span class="bc-tuto-total">
+                                <t t-esc="'{:,}'.format(build.block_count).replace(',', ' ')"/>
+                                <span class="bc-tuto-total-u">blocs au total</span>
+                            </span>
                             <span class="bc-tuto-url">besacraft.fr/t/<t t-esc="int(build.code)"/></span>
                             <button type="button" class="bc-btn-fin" id="bc_plein_b">Plein écran</button>
                         </div>
