@@ -52,6 +52,9 @@
 
                         <div class="bc-scene">
                             <t t-if="accessible and build.viewer_attachment_id">
+                                <button type="button" class="bc-sortie" id="bc_sortie" hidden="hidden">
+                                    ✕ Quitter le plein écran
+                                </button>
                                 <div class="bc-cadre">
                                     <iframe t-attf-src="/besacraft/viewer/#{build.id}" class="bc-viewer"
                                             id="bc_viewer" title="Vue 3D du build"/>
@@ -193,7 +196,8 @@
             <!-- Les couches voyagent dans un attribut data- : dans un <script>, t-esc échappe
                  les guillemets en &#34; et JSON.parse échoue, alors que le parseur HTML décode
                  un attribut tout seul. -->
-            <div id="bc_donnees" class="d-none" t-att-data-couches="couches_json"/>
+            <div id="bc_donnees" class="d-none" t-att-data-couches="couches_json"
+                 t-att-data-decalage="decalage"/>
         </t>
     </template>
 </odoo>

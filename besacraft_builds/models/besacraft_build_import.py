@@ -24,6 +24,9 @@ class BesacraftBuildImport(models.Model):
         total = (plan_json or {}).get(
             "total", sum(sum((c.get("counts") or {}).values()) for c in couches))
         valeurs = {
+            # Le viewer, lui, garde TOUTES les couches : sans ce décalage sa couche 1 est
+            # une fondation enterrée et la page montre des blocs que la 3D ne pose pas.
+            "layer_offset": depuis,
             "block_count": total,
             "layer_count": len(couches),
             "size_x": taille[0], "size_y": taille[1], "size_z": taille[2],

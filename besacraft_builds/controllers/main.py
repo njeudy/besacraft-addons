@@ -49,6 +49,7 @@ class BesacraftBuilds(http.Controller):
             "build": build,
             "accessible": build.is_accessible_by(request.env.user.partner_id),
             "couches_json": json.dumps(couches),
+            "decalage": build.layer_offset,
         })
 
     @http.route("/besacraft/viewer/<int:build_id>", type="http", auth="public", sitemap=False)

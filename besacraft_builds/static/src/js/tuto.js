@@ -32,6 +32,9 @@ function demarrer() {
 
     var boite = document.getElementById("bc_donnees");
     var couches = JSON.parse((boite && boite.dataset.couches) || "[]");
+    // Le viewer numérote TOUTES les couches, fondations enterrées comprises ; le tutoriel
+    // commence après. Sans ce décalage, la couche 1 de la liste pilote une couche vide.
+    var decalage = parseInt((boite && boite.dataset.decalage) || "0", 10) || 0;
     var cadre = document.getElementById("bc_viewer");
     var index = 0;
     var dejaBranche = false;
@@ -117,7 +120,7 @@ function demarrer() {
         index = Math.max(0, Math.min(couches.length - 1, n));
         rendreCouche();
         if (piloterViewer) {
-            pousserCurseur("#slider", couches[index].sequence);
+            pousserCurseur("#slider", couches[index].sequence + decalage);
         }
     }
 
@@ -268,7 +271,7 @@ function demarrer() {
             if (!m) {
                 return;
             }
-            var seq = parseInt(m[1], 10);
+            var seq = parseInt(m[1], 10) - decalage;
             var pos = couches.findIndex(function (c) { return c.sequence === seq; });
             if (pos >= 0 && pos !== index) {
                 index = pos;
@@ -342,7 +345,7 @@ function demarrer() {
 
         document.getElementById("bc_dedans").addEventListener("input", function () {
             document.getElementById("bc_dedans_v").textContent = this.value;
-            pousserCurseur("#sliderLo", this.value);
+            pousserCurseur("#sliderLo", parseInt(this.value, 10) + decalage);
         });
 
         document.getElementById("bc_cadence").addEventListener("input", function () {
@@ -360,12 +363,46 @@ function demarrer() {
 
     /* ---------------------------------------------------------------- plein écran */
 
+    function quitterPlein() {
+        var zone = document.querySelector(".bc-scene");
+        if (!zone || !zone.classList.contains("bc-plein-actif")) {
+            return;
+        }
+        zone.classList.remove("bc-plein-actif");
+        var b = document.getElementById("bc_plein_b");
+        if (b) {
+            b.textContent = "Plein écran";
+        }
+        var sortie = document.getElementById("bc_sortie");
+        if (sortie) {
+            sortie.hidden = true;
+        }
+        try {
+            if (document.fullscreenElement) {
+                document.exitFullscreen();
+            }
+        } catch (e) {
+            // sans importance
+        }
+    }
+
+    var sortieB = document.getElementById("bc_sortie");
+    if (sortieB) {
+        sortieB.addEventListener("click", quitterPlein);
+    }
+
     var bouton = document.getElementById("bc_plein_b");
     if (bouton) {
         bouton.addEventListener("click", function () {
             var zone = document.querySelector(".bc-scene");
             var actif = zone.classList.toggle("bc-plein-actif");
             bouton.textContent = actif ? "Quitter" : "Plein écran";
+            // La barre de titre disparaît sous la superposition : sans ce bouton-ci,
+            // il n'y a plus aucun moyen de revenir à la page.
+            var sortie = document.getElementById("bc_sortie");
+            if (sortie) {
+                sortie.hidden = !actif;
+            }
             // L'API Fullscreen n'est pas toujours autorisée (page en iframe sans
             // allow="fullscreen") : la superposition CSS fait le travail, le reste est un
             // bonus. Et surtout : on ne démonte jamais l'iframe, sinon le viewer recharge
@@ -382,11 +419,7 @@ function demarrer() {
         });
         document.addEventListener("keydown", function (ev) {
             if (ev.key === "Escape") {
-                var zone = document.querySelector(".bc-scene");
-                if (zone && zone.classList.contains("bc-plein-actif")) {
-                    zone.classList.remove("bc-plein-actif");
-                    bouton.textContent = "Plein écran";
-                }
+                quitterPlein();
             }
         });
     }

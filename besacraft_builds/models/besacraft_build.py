@@ -40,6 +40,10 @@ class BesacraftBuild(models.Model):
     size_z = fields.Integer()
     palette_label = fields.Char(help='Free text, e.g. "11 block types".')
     has_recipes = fields.Boolean(help="True when recipes.json was generated; drives the recipe UI.")
+    layer_offset = fields.Integer(
+        "Viewer Offset",
+        help="Foundation layers sunk below ground level, which the tutorial skips but the "
+             "viewer still counts. Layer 1 here is layer 1+offset there.")
     overview_image = fields.Image("Overview")
     youtube_url = fields.Char()
     viewer_attachment_id = fields.Many2one("ir.attachment", ondelete="set null")

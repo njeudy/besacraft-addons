@@ -393,3 +393,11 @@ $bc-sable: #C8AF8F;
         background: $bc-carte; border: 1px solid $bc-trait;
     }
 }
+
+.bc-tuto .bc-sortie {
+    position: absolute; top: 14px; right: 14px; z-index: 2;
+    padding: 10px 16px; cursor: pointer;
+    font-size: 12px; font-weight: 700; letter-spacing: 0.08em;
+    background: #323837; color: #FBFAF7; border: 1px solid #98764B;
+    &:hover { background: #98764B; }
+}
