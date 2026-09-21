@@ -35,11 +35,58 @@ function demarrer() {
     // Le viewer numérote TOUTES les couches, fondations enterrées comprises ; le tutoriel
     // commence après. Sans ce décalage, la couche 1 de la liste pilote une couche vide.
     var decalage = parseInt((boite && boite.dataset.decalage) || "0", 10) || 0;
+    var vueEnsemble = false;   // position 0 : tout le build posé
     var cadre = document.getElementById("bc_viewer");
     var index = 0;
     var dejaBranche = false;
 
     /* ---------------------------------------------------------------- l'établi */
+
+    function ligneBloc(b) {
+        var ligne = document.createElement("div");
+        ligne.className = "bc-ligne";
+
+        var caseAcocher = document.createElement("button");
+        caseAcocher.type = "button";
+        caseAcocher.className = "bc-case";
+        caseAcocher.title = "Marquer comme posé";
+        // Cocher ne regarde que celui qui construit : c'est local, ça marche sans compte.
+        caseAcocher.addEventListener("click", function () {
+            ligne.classList.toggle("bc-pose");
+        });
+
+        var icone = document.createElement("img");
+        icone.className = "bc-ligne-i";
+        icone.src = "/web/image/besacraft.build.layer.line/" + b.id + "/icon";
+        icone.alt = "";
+        icone.loading = "lazy";
+
+        var nom = document.createElement("button");
+        nom.type = "button";
+        nom.className = "bc-ligne-n";
+        var titre = document.createElement("span");
+        titre.className = "bc-ligne-nom";
+        titre.textContent = b.name;
+        var mod = document.createElement("span");
+        mod.className = "bc-ligne-mod";
+        mod.textContent = b.mod || "";
+        nom.appendChild(titre);
+        nom.appendChild(mod);
+        nom.addEventListener("click", function () {
+            ouvrirRecette(b.key);
+        });
+
+        var quantite = document.createElement("span");
+        quantite.className = "bc-ligne-q";
+        quantite.innerHTML = '<span class="bc-x">×</span><span class="bc-qte"></span>';
+        quantite.querySelector(".bc-qte").textContent = b.qty;
+
+        ligne.appendChild(caseAcocher);
+        ligne.appendChild(icone);
+        ligne.appendChild(nom);
+        ligne.appendChild(quantite);
+        return ligne;
+    }
 
     function rendreCouche() {
         var c = couches[index];
@@ -54,51 +101,8 @@ function demarrer() {
         var liste = document.getElementById("bc_liste");
         liste.innerHTML = "";
         c.lines.forEach(function (b) {
-            var ligne = document.createElement("div");
-            ligne.className = "bc-ligne";
-
-            var caseAcocher = document.createElement("button");
-            caseAcocher.type = "button";
-            caseAcocher.className = "bc-case";
-            caseAcocher.title = "Marquer comme posé";
-            // Cocher ne regarde que celui qui construit : c'est local, ça marche sans compte.
-            caseAcocher.addEventListener("click", function () {
-                ligne.classList.toggle("bc-pose");
-            });
-
-            var icone = document.createElement("img");
-            icone.className = "bc-ligne-i";
-            icone.src = "/web/image/besacraft.build.layer.line/" + b.id + "/icon";
-            icone.alt = "";
-            icone.loading = "lazy";
-
-            var nom = document.createElement("button");
-            nom.type = "button";
-            nom.className = "bc-ligne-n";
-            var titre = document.createElement("span");
-            titre.className = "bc-ligne-nom";
-            titre.textContent = b.name;
-            var mod = document.createElement("span");
-            mod.className = "bc-ligne-mod";
-            mod.textContent = b.mod || "";
-            nom.appendChild(titre);
-            nom.appendChild(mod);
-            nom.addEventListener("click", function () {
-                ouvrirRecette(b.key);
-            });
-
-            var quantite = document.createElement("span");
-            quantite.className = "bc-ligne-q";
-            quantite.innerHTML = '<span class="bc-x">×</span><span class="bc-qte"></span>';
-            quantite.querySelector(".bc-qte").textContent = b.qty;
-
-            ligne.appendChild(caseAcocher);
-            ligne.appendChild(icone);
-            ligne.appendChild(nom);
-            ligne.appendChild(quantite);
-            liste.appendChild(ligne);
+            liste.appendChild(ligneBloc(b));
         });
-
         var prev = document.getElementById("bc_prev");
         var next = document.getElementById("bc_next");
         prev.textContent = index > 0 ? "‹ Couche " + couches[index - 1].sequence : "‹ Début";
@@ -117,6 +121,7 @@ function demarrer() {
     }
 
     function allerA(n, piloterViewer) {
+        vueEnsemble = false;
         index = Math.max(0, Math.min(couches.length - 1, n));
         rendreCouche();
         if (piloterViewer) {
@@ -124,6 +129,41 @@ function demarrer() {
         }
     }
 
+    function voirTout() {
+        // Avant de poser la première couche, on veut voir ce qu'on va construire.
+        vueEnsemble = true;
+        var d = doc();
+        var curseur = d && d.getElementById("slider");
+        if (curseur) {
+            pousserCurseur("#slider", curseur.max);
+        }
+        document.getElementById("bc_num").textContent = "00";
+        document.getElementById("bc_pos").textContent = "0";
+        document.getElementById("bc_titre").textContent = "Le build complet";
+        document.getElementById("bc_total").textContent =
+            couches.reduce(function (t, c) { return t + c.block_count; }, 0);
+        var liste = document.getElementById("bc_liste");
+        liste.innerHTML = "";
+        // Tous les blocs du build, cumulés par type.
+        var cumul = {};
+        couches.forEach(function (c) {
+            c.lines.forEach(function (b) {
+                if (!cumul[b.key]) {
+                    cumul[b.key] = { id: b.id, name: b.name, mod: b.mod, key: b.key, qty: 0 };
+                }
+                cumul[b.key].qty += b.qty;
+            });
+        });
+        Object.keys(cumul)
+            .map(function (k) { return cumul[k]; })
+            .sort(function (a, b) { return b.qty - a.qty; })
+            .forEach(function (b) { liste.appendChild(ligneBloc(b)); });
+        document.querySelectorAll(".bc-couche-carte").forEach(function (carte) {
+            carte.classList.remove("bc-cc-active");
+        });
+    }
+
+    document.getElementById("bc_tout").addEventListener("click", voirTout);
     document.getElementById("bc_prev").addEventListener("click", function () {
         allerA(index - 1, true);
     });
@@ -278,6 +318,20 @@ function demarrer() {
                 rendreCouche();
             }
         }).observe(etiquette, { childList: true, characterData: true, subtree: true });
+    }
+
+    function calerDecalage(d) {
+        // Le décalage se DÉDUIT du viewer : son curseur va de 1 à son nombre de couches,
+        // le tutoriel n'en montre qu'une partie. La différence est exacte par construction,
+        // là où une valeur recopiée du plan finit toujours par diverger d'une unité.
+        var curseur = d.getElementById("slider");
+        if (!curseur || !couches.length) {
+            return;
+        }
+        var maxViewer = parseInt(curseur.max, 10);
+        if (maxViewer > 0) {
+            decalage = maxViewer - couches.length;
+        }
     }
 
     function brancherViewer() {

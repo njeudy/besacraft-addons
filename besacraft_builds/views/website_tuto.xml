@@ -45,6 +45,7 @@
                             <div class="bc-liste" id="bc_liste"/>
 
                             <div class="bc-couche-nav">
+                                <button type="button" class="bc-couche-tout" id="bc_tout">Tout</button>
                                 <button type="button" class="bc-couche-prev" id="bc_prev">‹ Début</button>
                                 <button type="button" class="bc-couche-next" id="bc_next">Couche 2 ›</button>
                             </div>

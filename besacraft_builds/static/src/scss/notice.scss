@@ -197,7 +197,7 @@ $bc-sable: #C8AF8F;
     // passent sous la ligne de flottaison (piège signalé par le handoff).
     .bc-etabli {
         flex: 1; min-height: 0;
-        display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+        display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
         @media (max-width: 899px) {
             grid-template-columns: 1fr; grid-template-rows: 46% 1fr;
             direction: ltr;
@@ -265,6 +265,12 @@ $bc-sable: #C8AF8F;
         &[disabled] { opacity: 0.4; cursor: default; }
     }
     .bc-couche-prev { background: $bc-carte; color: $bc-encre; border: 2px solid $bc-encre; }
+    .bc-couche-tout {
+        flex: 0 0 84px; min-height: 66px; cursor: pointer;
+        font-size: 12px; font-weight: 700; letter-spacing: 0.08em;
+        background: $bc-bronze; color: $bc-carte; border: 2px solid $bc-bronze-sombre;
+        &:hover { background: $bc-bronze-sombre; }
+    }
     .bc-couche-next {
         background: $bc-encre; color: $bc-carte; border: 2px solid $bc-encre;
         &:hover:not([disabled]) { background: $bc-bleu-sombre; border-color: $bc-bleu-sombre; }
