@@ -1,3 +1,4 @@
+/** @odoo-module **/
 /**
  * Fiche de tuto « Établi ».
  *
@@ -5,8 +6,23 @@
  * moteur, on clique ses propres commandes depuis la page hôte. C'est possible uniquement
  * parce qu'il est servi depuis notre origine (/besacraft/viewer/<id>) ; sans ça, ni
  * l'injection de style ni la lecture de l'état ne passeraient.
+ *
+ * Enregistré comme publicWidget et non comme script autonome : en 18.0 les assets du site
+ * sont scindés en « minimal » et « lazy », et un fichier ordinaire tombe dans le lazy, que
+ * rien n'évalue sur une page sans composant. Le widget, lui, démarre sur son sélecteur.
  */
-(function () {
+import publicWidget from "@web/legacy/js/public/public_widget";
+
+publicWidget.registry.BesacraftTuto = publicWidget.Widget.extend({
+    selector: ".bc-tuto",
+
+    start() {
+        demarrer();
+        return this._super.apply(this, arguments);
+    },
+});
+
+function demarrer() {
     "use strict";
 
     var racine = document.querySelector(".bc-tuto");
@@ -410,4 +426,4 @@
     }
 
     rendreCouche();
-})();
+}
