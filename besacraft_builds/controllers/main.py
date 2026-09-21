@@ -42,7 +42,7 @@ class BesacraftBuilds(http.Controller):
             "sequence": c.sequence,
             "title": c.title or "",
             "block_count": c.block_count,
-            "lines": [{"id": l.id, "name": l.name_fr or l.item_key,
+            "lines": [{"id": l.id, "name": l.name_fr or l.item_key, "key": l.item_key,
                        "mod": l.mod or "", "qty": l.qty} for l in c.line_ids],
         } for c in build.layer_ids]
         return request.render("besacraft_builds.tuto", {

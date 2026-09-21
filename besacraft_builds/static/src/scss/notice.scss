@@ -150,9 +150,21 @@ $bc-sable: #C8AF8F;
     .bc-legende-t { font-family: 'VT323', monospace; font-size: 32px; line-height: 1; }
 }
 
-// --- Fiche de tuto, direction « Établi » -------------------------------------------
+
+// --- Fiche de tuto, direction « Établi » --------------------------------------------
+// Valeurs reprises du handoff (README.md §Écran 1 — Composants). Ce qu'on lit sur une
+// tablette posée à côté du clavier, c'est la LISTE DES BLOCS : elle prend 1.25fr, la 3D
+// vérifie sur 1fr.
 .bc-tuto {
+    .bc-plein {
+        display: flex; flex-direction: column; height: 100vh;
+        &.bc-plein-actif {
+            position: fixed; inset: 0; z-index: 1050; background: $bc-page;
+        }
+    }
+
     .bc-barre {
+        height: 60px; flex: none;
         display: flex; align-items: center; justify-content: space-between; gap: 14px;
         padding: 10px 20px; background: $bc-encre; color: $bc-carte;
     }
@@ -166,76 +178,158 @@ $bc-sable: #C8AF8F;
         text-overflow: ellipsis; white-space: nowrap;
     }
     .bc-tuto-url {
-        font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: $bc-sable;
+        font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+        color: $bc-sable; white-space: nowrap;
     }
     .bc-btn-fin {
         font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
-        padding: 10px 14px; background: transparent; color: $bc-carte;
-        border: 1px solid $bc-bronze;
-        &:hover { background: $bc-bronze; color: $bc-carte; }
+        padding: 0 14px; min-height: 40px; background: transparent; color: $bc-carte;
+        border: 1px solid $bc-bronze; cursor: pointer;
+        &:hover { background: $bc-bronze; }
     }
 
+    // flex:1 + min-height:0, jamais une hauteur calculée : sinon les boutons de couche
+    // passent sous la ligne de flottaison (piège signalé par le handoff).
     .bc-etabli {
-        display: grid; grid-template-columns: minmax(320px, 400px) 1fr;
-        height: 74vh; min-height: 520px;
-        @media (max-width: 900px) { grid-template-columns: 1fr; height: auto; }
+        flex: 1; min-height: 0;
+        display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+        @media (max-width: 899px) {
+            grid-template-columns: 1fr; grid-template-rows: 46% 1fr;
+            direction: ltr;
+        }
     }
+
     .bc-panneau {
-        display: flex; flex-direction: column; background: $bc-carte;
-        min-width: 0; overflow: hidden; border-right: 1px solid $bc-trait;
+        display: flex; flex-direction: column; min-width: 0; min-height: 0;
+        background: $bc-carte;
     }
     .bc-couche-tete {
-        display: flex; align-items: center; gap: 18px;
+        display: flex; align-items: center; gap: 18px; flex: none;
         padding: 18px 22px 16px; border-bottom: 2px solid $bc-encre;
     }
     .bc-couche-num {
         font-family: 'VT323', monospace; font-size: 96px; line-height: 0.72;
-        color: $bc-bleu-sombre;
+        color: $bc-bleu-sombre; flex: none;
     }
     .bc-couche-txt { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
     .bc-couche-titre { font-family: 'VT323', monospace; font-size: 34px; line-height: 0.95; }
     .bc-couche-total { font-size: 13px; color: $bc-encre-douce; }
 
-    .bc-liste { flex: 1; overflow-y: auto; padding: 8px 0; }
+    .bc-liste {
+        flex: 1; min-height: 0; overflow-y: auto;
+        @media (min-width: 660px) and (max-width: 899px) {
+            columns: 2; column-gap: 0;
+        }
+    }
     .bc-ligne {
-        display: flex; align-items: center; gap: 12px; padding: 8px 22px;
-        border-bottom: 1px solid $bc-trait;
-        &.bc-pose { opacity: 0.42; }
-        &.bc-pose .bc-case { background: $bc-bleu-sombre; border-color: $bc-bleu-sombre; }
-        &.bc-pose .bc-case::after { content: '✓'; color: $bc-carte; font-size: 15px; }
+        display: flex; align-items: center; gap: 14px; min-height: 62px;
+        padding: 11px 12px; background: $bc-page; border-bottom: 1px solid $bc-trait;
+        break-inside: avoid;
+        &.bc-pose {
+            background: #EDE7DA;
+            .bc-ligne-nom { color: $bc-bronze-sombre; text-decoration: line-through; }
+            .bc-case { background: $bc-bronze; }
+            .bc-case::after { content: '✓'; color: $bc-carte; font-size: 19px; line-height: 1; }
+        }
     }
     .bc-case {
-        width: 22px; height: 22px; flex: none; padding: 0; cursor: pointer;
-        background: $bc-page; border: 2px solid $bc-encre;
+        width: 32px; height: 32px; flex: none; padding: 0; cursor: pointer;
+        background: transparent; border: 2px solid $bc-bronze;
         display: flex; align-items: center; justify-content: center;
     }
-    .bc-ligne-i { width: 32px; height: 32px; flex: none; image-rendering: pixelated; }
-    .bc-ligne-n { display: flex; flex-direction: column; min-width: 0; flex: 1; }
+    .bc-ligne-i { width: 40px; height: 40px; flex: none; image-rendering: pixelated; }
+    .bc-ligne-n {
+        display: flex; flex-direction: column; align-items: flex-start; min-width: 0;
+        flex: 1; background: none; border: 0; padding: 0; text-align: left; cursor: pointer;
+    }
     .bc-ligne-nom {
-        font-size: 19px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+        font-size: 19px; color: $bc-encre; overflow: hidden;
+        text-overflow: ellipsis; white-space: nowrap; max-width: 100%;
     }
     .bc-ligne-mod { font-size: 11px; color: $bc-encre-douce; }
     .bc-ligne-q { display: flex; align-items: baseline; gap: 3px; flex: none; }
     .bc-x { font-size: 17px; font-weight: 700; }
     .bc-qte { font-family: 'VT323', monospace; font-size: 34px; color: $bc-bleu-sombre; }
 
-    .bc-nav {
-        display: flex; align-items: center; gap: 12px; padding: 12px 22px;
-        border-top: 2px solid $bc-encre; background: $bc-page;
-    }
-    .bc-nav-b {
-        width: 44px; height: 44px; flex: none; cursor: pointer;
-        font-family: 'VT323', monospace; font-size: 30px; line-height: 1;
-        background: $bc-carte; color: $bc-encre; border: 2px solid $bc-encre;
-        &:hover { background: $bc-encre; color: $bc-carte; }
-    }
-    .bc-curseur { flex: 1; accent-color: $bc-bleu-sombre; }
+    &.bc-sans-recettes .bc-ligne-n { cursor: default; pointer-events: none; }
 
-    .bc-scene { position: relative; background: #1B1F1E; min-height: 420px; }
+    .bc-couche-nav { display: flex; gap: 0; flex: none; }
+    .bc-couche-prev, .bc-couche-next {
+        flex: 1; min-height: 66px; cursor: pointer;
+        font-size: 13px; font-weight: 700; letter-spacing: 0.08em;
+        &[disabled] { opacity: 0.4; cursor: default; }
+    }
+    .bc-couche-prev { background: $bc-carte; color: $bc-encre; border: 2px solid $bc-encre; }
+    .bc-couche-next {
+        background: $bc-encre; color: $bc-carte; border: 2px solid $bc-encre;
+        &:hover:not([disabled]) { background: $bc-bleu-sombre; border-color: $bc-bleu-sombre; }
+    }
+
+    .bc-scene {
+        display: flex; flex-direction: column; min-height: 0; background: #EDE7DA;
+    }
+    .bc-cadre { position: relative; flex: 1; min-height: 0; }
     .bc-viewer { width: 100%; height: 100%; border: 0; display: block; }
+    .bc-voile {
+        position: absolute; inset: 0; pointer-events: none; background: #1B1F1E;
+        display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
+    }
+    .bc-voile-t { font-family: 'VT323', monospace; font-size: 34px; color: $bc-sable; }
+    .bc-voile-s { font-size: 12px; color: #EDE6DA; }
+
+    .bc-commandes {
+        flex: none; display: flex; flex-direction: column; gap: 8px;
+        padding: 10px 12px; background: #EDE7DA; max-height: 46%; overflow-y: auto;
+    }
+    .bc-angles { display: flex; flex-wrap: wrap; gap: 6px; }
+    .bc-angle {
+        min-height: 44px; padding: 0 12px; font-size: 11px; font-weight: 700;
+        background: $bc-carte; color: $bc-encre; border: 1px solid #D8D2C4; cursor: pointer;
+        &:hover { border-color: $bc-sable; }
+    }
+    .bc-lecture {
+        min-height: 44px; font-size: 12px; font-weight: 700; letter-spacing: 0.1em;
+        text-transform: uppercase; background: $bc-bleu-sombre; color: $bc-carte;
+        border: 2px solid $bc-bleu-sombre; cursor: pointer;
+    }
+    .bc-curseur-l { display: flex; align-items: center; gap: 10px; }
+    .bc-curseur { flex: 1; accent-color: $bc-bleu-sombre; }
+    .bc-curseur-t { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+        color: $bc-encre-douce; font-weight: 700; white-space: nowrap; }
+    .bc-curseur-v { font-family: 'VT323', monospace; font-size: 24px; flex: none; }
+
+    .bc-tiroir { border-top: 1px solid #D8D2C4; padding-top: 8px; }
+    .bc-tiroir-b {
+        width: 100%; min-height: 48px; display: flex; align-items: center;
+        justify-content: space-between; gap: 10px; padding: 0 12px; cursor: pointer;
+        background: $bc-carte; border: 1px solid $bc-trait;
+        font-size: 12px; font-weight: 700; color: $bc-encre;
+    }
+    .bc-chevron { font-family: 'VT323', monospace; font-size: 22px; }
+    .bc-tiroir-c {
+        display: flex; flex-direction: column; gap: 10px; padding: 12px;
+        background: $bc-carte; border: 1px solid $bc-trait; border-top: 0;
+    }
+    .bc-bom {
+        min-height: 48px; background: $bc-encre; color: $bc-carte; border: 0; cursor: pointer;
+        font-size: 12px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+    }
+    .bc-cases { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); }
+    .bc-case-l {
+        display: flex; align-items: center; gap: 8px; min-height: 40px;
+        font-size: 13px; margin: 0; cursor: pointer;
+    }
+    .bc-reglages { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 8px; }
+    .bc-reglage { display: flex; align-items: center; gap: 8px; }
+    .bc-ligne-outils { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .bc-outil {
+        min-height: 40px; padding: 0 12px; font-size: 12px; cursor: pointer;
+        background: $bc-page; border: 1px solid $bc-trait;
+    }
+
     .bc-scene-vide {
-        width: 100%; height: 100%; display: flex; flex-direction: column;
-        align-items: center; justify-content: center; gap: 14px;
+        flex: 1; display: flex; flex-direction: column; align-items: center;
+        justify-content: center; gap: 14px; position: relative;
         img { max-width: 100%; max-height: 100%; object-fit: contain; }
     }
     .bc-verrou {
@@ -250,22 +344,43 @@ $bc-sable: #C8AF8F;
     .bc-stat-texte { font-family: 'Anonymous Pro', monospace; font-size: 15px; }
     .bc-h2 { font-family: 'VT323', monospace; font-size: 40px; line-height: 0.95; margin: 38px 0 18px; }
 
-    .bc-notice-grille {
-        display: grid; grid-template-columns: repeat(auto-fill, minmax(268px, 1fr)); gap: 14px;
+    .bc-notice-liste { display: flex; flex-direction: column; gap: 12px; }
+    .bc-couche-carte {
+        display: grid; gap: 14px; padding: 14px;
+        grid-template-columns: 140px 1fr 1fr 1.4fr;
+        background: $bc-carte; border: 1px solid $bc-trait; border-left: 5px solid $bc-trait;
+        &.bc-cc-active { border-left-color: $bc-bleu-sombre; }
+        @media (max-width: 899px) { grid-template-columns: 1fr 1fr; }
     }
-    .bc-couche-carte { background: $bc-carte; border: 1px solid $bc-trait; padding: 12px 14px; }
-    .bc-couche-carte-tete { display: flex; align-items: baseline; gap: 10px; }
-    .bc-couche-carte-n {
-        font-family: 'VT323', monospace; font-size: 30px; color: $bc-bleu-sombre; flex: none;
+    .bc-cc-num { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; }
+    .bc-cc-n { font-family: 'VT323', monospace; font-size: 68px; line-height: 0.8; color: $bc-bleu-sombre; }
+    .bc-cc-total { font-size: 12px; color: $bc-encre-douce; }
+    .bc-cc-voir {
+        margin-top: 4px; padding: 7px 12px; font-size: 11px; font-weight: 700;
+        background: $bc-page; border: 1px solid $bc-trait; cursor: pointer;
     }
-    .bc-couche-carte-t { flex: 1; font-size: 14px; }
-    .bc-couche-carte-b { font-size: 11px; color: $bc-encre-douce; flex: none; }
-    .bc-couche-carte-blocs {
-        display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 9px;
+    // Emplacements des rendus : buildplan produit images/step-NN.png et plan-NN.png, qui
+    // ne sont pas encore importés. La trame dit ce qui manque plutôt que de laisser un vide.
+    .bc-cc-iso, .bc-cc-plan {
+        min-height: 100px; display: flex; align-items: flex-end; justify-content: center;
+        padding: 6px; border: 1px dashed $bc-sable;
+        background: repeating-linear-gradient(135deg, #EDE7DA 0 6px, $bc-page 6px 12px);
     }
-    .bc-mini { display: flex; align-items: center; gap: 3px;
+    .bc-cc-fichier { font-size: 11px; color: $bc-encre-douce; }
+    .bc-cc-blocs { display: flex; flex-wrap: wrap; align-content: flex-start; gap: 8px; }
+    .bc-cc-titre { width: 100%; font-size: 14px; font-weight: 700; }
+    .bc-mini {
+        display: flex; align-items: center; gap: 4px; padding: 3px 7px;
+        background: $bc-page; border: 1px solid $bc-trait;
         img { width: 24px; height: 24px; image-rendering: pixelated; }
     }
-    .bc-mini-n { font-family: 'VT323', monospace; font-size: 18px; color: $bc-encre-douce; }
-    .bc-mini-plus { font-size: 12px; color: $bc-encre-douce; }
+    .bc-mini-nom { font-size: 12px; }
+    .bc-mini-n { font-family: 'VT323', monospace; font-size: 18px; color: $bc-bleu-sombre; }
+    .bc-mini-plus { font-size: 12px; color: $bc-encre-douce; align-self: center; }
+
+    .bc-plus {
+        margin-top: 12px; min-height: 48px; width: 100%; cursor: pointer;
+        font-size: 12px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+        background: $bc-carte; border: 1px solid $bc-trait;
+    }
 }

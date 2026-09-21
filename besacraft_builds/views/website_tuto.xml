@@ -1,7 +1,8 @@
 <odoo>
-    <!-- Fiche de tuto, direction « Établi » (doc/claude-design-2026-09-14/
-         Tuto 042 Hotel de ville v2.dc.html) : bandeau sombre, liste cochable des blocs
-         de la couche à gauche, viewer 3D à droite, notice couche par couche dessous. -->
+    <!-- Fiche de tuto, direction « Établi » — maquette de référence :
+         doc/claude-design-2026-09-14/Tuto 042 Hotel de ville v2.dc.html et README.md §Écran 1.
+         Intention : sur une tablette posée à côté du clavier, ce qu'on lit c'est la LISTE DES
+         BLOCS, pas la 3D. Elle occupe donc la colonne principale (1.25fr), la 3D vérifie (1fr). -->
     <template id="tuto" name="Besacraft — Fiche de tuto">
         <t t-call="website.layout">
             <t t-set="additional_title"><t t-esc="build.name"/></t>
@@ -11,55 +12,111 @@
 
             <div id="wrap" class="bc-notice bc-tuto">
 
-                <div class="bc-barre">
-                    <div class="bc-barre-g">
-                        <span class="bc-tuto-n">TUTO N°<t t-esc="build.code"/></span>
-                        <span class="bc-tuto-nom">
-                            <t t-esc="build.name"/> · <t t-esc="build.serie_id.name"/>
-                        </span>
-                    </div>
-                    <div class="bc-barre-d">
-                        <span class="bc-tuto-url">besacraft.fr/t/<t t-esc="int(build.code)"/></span>
-                        <a href="/builds" class="bc-btn-fin">Catalogue</a>
-                    </div>
-                </div>
-
-                <div class="bc-etabli">
-
-                    <div class="bc-panneau">
-                        <div class="bc-couche-tete">
-                            <span class="bc-couche-num" id="bc_num">1</span>
-                            <div class="bc-couche-txt">
-                                <span class="bc-surtitre">Couche <span id="bc_pos">1</span> sur <t t-esc="build.layer_count"/></span>
-                                <span class="bc-couche-titre" id="bc_titre">—</span>
-                                <span class="bc-couche-total"><span id="bc_total">0</span> blocs à poser</span>
-                            </div>
+                <div class="bc-plein" id="bc_plein">
+                    <div class="bc-barre">
+                        <div class="bc-barre-g">
+                            <span class="bc-tuto-n">TUTO N°<t t-esc="build.code"/></span>
+                            <span class="bc-tuto-nom">
+                                <t t-esc="build.name"/> · <t t-esc="build.serie_id.name"/>
+                            </span>
                         </div>
-
-                        <div class="bc-liste" id="bc_liste"/>
-
-                        <div class="bc-nav">
-                            <button type="button" class="bc-nav-b" id="bc_prev">‹</button>
-                            <input type="range" min="1" t-att-max="build.layer_count" value="1"
-                                   class="bc-curseur" id="bc_curseur"/>
-                            <button type="button" class="bc-nav-b" id="bc_next">›</button>
+                        <div class="bc-barre-d">
+                            <span class="bc-tuto-url">besacraft.fr/t/<t t-esc="int(build.code)"/></span>
+                            <button type="button" class="bc-btn-fin" id="bc_plein_b">Plein écran</button>
                         </div>
                     </div>
 
-                    <div class="bc-scene">
-                        <t t-if="accessible and build.viewer_attachment_id">
-                            <iframe t-attf-src="/besacraft/viewer/#{build.id}" class="bc-viewer"
-                                    title="Vue 3D du build" loading="lazy"/>
-                        </t>
-                        <t t-else="">
-                            <div class="bc-scene-vide">
-                                <img t-attf-src="/web/image/besacraft.build/#{build.id}/overview_image"
-                                     t-att-alt="build.name"/>
-                                <span t-if="not accessible" class="bc-verrou">
-                                    Ce tutoriel est réservé — la vue 3D s'ouvre une fois l'accès obtenu.
-                                </span>
+                    <div class="bc-etabli" id="bc_etabli">
+
+                        <div class="bc-panneau">
+                            <div class="bc-couche-tete">
+                                <span class="bc-couche-num" id="bc_num">01</span>
+                                <div class="bc-couche-txt">
+                                    <span class="bc-surtitre">Couche <span id="bc_pos">1</span> sur <t t-esc="build.layer_count"/></span>
+                                    <span class="bc-couche-titre" id="bc_titre">—</span>
+                                    <span class="bc-couche-total"><span id="bc_total">0</span> blocs à poser</span>
+                                </div>
                             </div>
-                        </t>
+
+                            <div class="bc-liste" id="bc_liste"/>
+
+                            <div class="bc-couche-nav">
+                                <button type="button" class="bc-couche-prev" id="bc_prev">‹ Début</button>
+                                <button type="button" class="bc-couche-next" id="bc_next">Couche 2 ›</button>
+                            </div>
+                        </div>
+
+                        <div class="bc-scene">
+                            <t t-if="accessible and build.viewer_attachment_id">
+                                <div class="bc-cadre">
+                                    <iframe t-attf-src="/besacraft/viewer/#{build.id}" class="bc-viewer"
+                                            id="bc_viewer" title="Vue 3D du build"/>
+                                    <div class="bc-voile" id="bc_voile">
+                                        <span class="bc-voile-t">Chargement du plan 3D…</span>
+                                        <span class="bc-voile-s">
+                                            <t t-esc="'{:,}'.format(build.block_count).replace(',', ' ')"/> blocs ·
+                                            <t t-esc="build.layer_count"/> couches
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="bc-commandes" id="bc_commandes">
+                                    <div class="bc-angles">
+                                        <button type="button" class="bc-angle" data-az="45">SE</button>
+                                        <button type="button" class="bc-angle" data-az="315">SO</button>
+                                        <button type="button" class="bc-angle" data-az="225">NO</button>
+                                        <button type="button" class="bc-angle" data-az="135">NE</button>
+                                        <button type="button" class="bc-angle" data-cible="btnTop">Dessus</button>
+                                        <button type="button" class="bc-angle" data-cible="btnFit">Recentrer</button>
+                                    </div>
+
+                                    <button type="button" class="bc-lecture" id="bc_lecture">▶ Bloc par bloc</button>
+
+                                    <div class="bc-curseur-l">
+                                        <input type="range" min="1" t-att-max="build.layer_count" value="1"
+                                               class="bc-curseur" id="bc_curseur"/>
+                                        <span class="bc-curseur-v"><span id="bc_cur_n">1</span> / <t t-esc="build.layer_count"/></span>
+                                    </div>
+
+                                    <div class="bc-curseur-l">
+                                        <span class="bc-curseur-t">Voir dedans dès</span>
+                                        <input type="range" min="1" t-att-max="build.layer_count" value="1"
+                                               class="bc-curseur" id="bc_dedans"/>
+                                        <span class="bc-curseur-v" id="bc_dedans_v">1</span>
+                                    </div>
+
+                                    <div class="bc-tiroir">
+                                        <button type="button" class="bc-tiroir-b" id="bc_tiroir_b">
+                                            <span>Réglages &amp; matières · total <t t-esc="'{:,}'.format(build.block_count).replace(',', ' ')"/></span>
+                                            <span class="bc-chevron" id="bc_chevron">▸</span>
+                                        </button>
+                                        <div class="bc-tiroir-c" id="bc_tiroir_c" hidden="hidden">
+                                            <button type="button" class="bc-bom" id="bc_bom" hidden="hidden">
+                                                Matières premières du build
+                                            </button>
+                                            <div class="bc-cases" id="bc_cases"/>
+                                            <div class="bc-reglages" id="bc_reglages"/>
+                                            <div class="bc-ligne-outils">
+                                                <button type="button" class="bc-outil" id="bc_replay">⟲ Recommencer</button>
+                                                <span class="bc-curseur-t">Cadence</span>
+                                                <input type="range" min="0" max="500" step="10" value="120"
+                                                       class="bc-curseur" id="bc_cadence"/>
+                                                <span class="bc-curseur-v" id="bc_cadence_v">120 ms</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </t>
+                            <t t-else="">
+                                <div class="bc-scene-vide">
+                                    <img t-attf-src="/web/image/besacraft.build/#{build.id}/overview_image"
+                                         t-att-alt="build.name"/>
+                                    <span t-if="not accessible" class="bc-verrou">
+                                        Ce tutoriel est réservé — la vue 3D s'ouvre une fois l'accès obtenu.
+                                    </span>
+                                </div>
+                            </t>
+                        </div>
                     </div>
                 </div>
 
@@ -86,112 +143,53 @@
                     </section>
 
                     <h2 class="bc-h2">La notice, couche par couche</h2>
-                    <div class="bc-notice-grille">
+                    <div class="bc-notice-liste" id="bc_notice">
                         <t t-foreach="build.layer_ids" t-as="couche">
-                            <article class="bc-couche-carte">
-                                <div class="bc-couche-carte-tete">
-                                    <span class="bc-couche-carte-n" t-esc="couche.sequence"/>
-                                    <span class="bc-couche-carte-t">
+                            <article class="bc-couche-carte" t-att-data-seq="couche.sequence">
+                                <div class="bc-cc-num">
+                                    <span class="bc-cc-n" t-esc="'%02d' % couche.sequence"/>
+                                    <span class="bc-cc-total"><t t-esc="couche.block_count"/> blocs</span>
+                                    <button type="button" class="bc-cc-voir" t-att-data-seq="couche.sequence">Voir en 3D</button>
+                                </div>
+                                <div class="bc-cc-iso">
+                                    <span class="bc-cc-fichier">images/step-<t t-esc="'%02d' % couche.sequence"/>.png</span>
+                                </div>
+                                <div class="bc-cc-plan">
+                                    <span class="bc-cc-fichier">images/plan-<t t-esc="'%02d' % couche.sequence"/>.png</span>
+                                </div>
+                                <div class="bc-cc-blocs">
+                                    <span class="bc-cc-titre">
                                         <t t-esc="couche.title or 'Couche %d' % couche.sequence"/>
                                     </span>
-                                    <span class="bc-couche-carte-b"><t t-esc="couche.block_count"/> blocs</span>
-                                </div>
-                                <div class="bc-couche-carte-blocs">
                                     <t t-foreach="couche.line_ids[:6]" t-as="ligne">
                                         <span class="bc-mini">
                                             <img t-attf-src="/web/image/besacraft.build.layer.line/#{ligne.id}/icon"
                                                  t-att-alt="ligne.name_fr" loading="lazy"/>
-                                            <span class="bc-mini-n" t-esc="ligne.qty"/>
+                                            <span class="bc-mini-nom" t-field="ligne.name_fr"/>
+                                            <span class="bc-mini-n">×<t t-esc="ligne.qty"/></span>
                                         </span>
                                     </t>
                                     <span t-if="len(couche.line_ids) &gt; 6" class="bc-mini-plus">
-                                        +<t t-esc="len(couche.line_ids) - 6"/>
+                                        et <t t-esc="len(couche.line_ids) - 6"/> autres
                                     </span>
                                 </div>
                             </article>
                         </t>
                     </div>
+                    <button type="button" class="bc-plus" id="bc_plus">Afficher les couches suivantes</button>
 
                     <section class="bc-legende">
                         <span class="bc-legende-t">Crédit</span>
-                        <p>Structure MineColonies — ldtteam — GPL-3.0. Ces tutoriels sont libres :
-                            ils apprennent à construire, ils ne distribuent pas le schematic.</p>
+                        <p>Structure MineColonies — ldtteam — GPL-3.0. Ces tutoriels apprennent à
+                            construire ; ils ne distribuent pas le schematic.</p>
                     </section>
                 </div>
             </div>
 
-            <!-- Les couches voyagent dans un attribut data- : dans un <script>, t-esc
-                 echappe les guillemets en &#34; et JSON.parse echoue, alors que le parseur
-                 HTML decode un attribut tout seul. -->
+            <!-- Les couches voyagent dans un attribut data- : dans un <script>, t-esc échappe
+                 les guillemets en &#34; et JSON.parse échoue, alors que le parseur HTML décode
+                 un attribut tout seul. -->
             <div id="bc_donnees" class="d-none" t-att-data-couches="couches_json"/>
-            <script>
-                (function () {
-                    var data = JSON.parse(document.getElementById('bc_donnees').dataset.couches || '[]');
-                    if (!data.length) { return; }
-                    var i = 0;
-                    var liste = document.getElementById('bc_liste');
-                    var curseur = document.getElementById('bc_curseur');
-
-                    function rendre() {
-                        var c = data[i];
-                        document.getElementById('bc_num').textContent = c.sequence;
-                        document.getElementById('bc_pos').textContent = c.sequence;
-                        document.getElementById('bc_titre').textContent = c.title || ('Couche ' + c.sequence);
-                        document.getElementById('bc_total').textContent = c.block_count;
-                        liste.innerHTML = '';
-                        c.lines.forEach(function (b) {
-                            var l = document.createElement('div');
-                            l.className = 'bc-ligne';
-                            // La case se coche cote client : suivre sa pose ne regarde que
-                            // celui qui construit, et ca doit marcher sans etre connecte.
-                            l.innerHTML =
-                                '&lt;button type="button" class="bc-case"&gt;&lt;/button&gt;' +
-                                '&lt;img class="bc-ligne-i" src="/web/image/besacraft.build.layer.line/' + b.id + '/icon" alt=""/&gt;' +
-                                '&lt;span class="bc-ligne-n"&gt;&lt;span class="bc-ligne-nom"&gt;' + b.name + '&lt;/span&gt;' +
-                                '&lt;span class="bc-ligne-mod"&gt;' + (b.mod || '') + '&lt;/span&gt;&lt;/span&gt;' +
-                                '&lt;span class="bc-ligne-q"&gt;&lt;span class="bc-x"&gt;×&lt;/span&gt;&lt;span class="bc-qte"&gt;' + b.qty + '&lt;/span&gt;&lt;/span&gt;';
-                            l.querySelector('.bc-case').addEventListener('click', function () {
-                                l.classList.toggle('bc-pose');
-                            });
-                            liste.appendChild(l);
-                        });
-                        curseur.value = c.sequence;
-                    }
-
-                    document.getElementById('bc_prev').addEventListener('click', function () {
-                        if (i &gt; 0) { i--; rendre(); }
-                    });
-                    document.getElementById('bc_next').addEventListener('click', function () {
-                        if (i &lt; data.length - 1) { i++; rendre(); }
-                    });
-                    curseur.addEventListener('input', function () {
-                        i = Math.max(0, Math.min(data.length - 1, parseInt(curseur.value, 10) - 1));
-                        rendre();
-                    });
-                    rendre();
-
-                    // Contrat VIEWER-API : le viewer garde son moteur, on masque ses
-                    // controles pour ne pas doubler ceux de la page. L'injection n'est
-                    // possible que parce qu'il est servi depuis notre origine.
-                    var cadre = document.querySelector('.bc-viewer');
-                    if (cadre) {
-                        cadre.addEventListener('load', function () {
-                            try {
-                                var doc = cadre.contentDocument;
-                                var st = doc.createElement('style');
-                                st.textContent =
-                                    '#hud,#stepbar,#panel{display:none!important}' +
-                                    '#app{grid-template-columns:1fr!important;' +
-                                    'grid-template-rows:1fr!important}' +
-                                    '#modal .box{font-family:\'Anonymous Pro\',monospace}';
-                                doc.head.appendChild(st);
-                            } catch (e) {
-                                // Origine differente : on garde l'habillage d'origine.
-                            }
-                        });
-                    }
-                })();
-            </script>
         </t>
     </template>
 </odoo>

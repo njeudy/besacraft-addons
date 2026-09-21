@@ -19,6 +19,7 @@
     "assets": {
         "web.assets_frontend": [
             "besacraft_builds/static/src/scss/notice.scss",
+            "besacraft_builds/static/src/js/tuto.js",
         ],
     },
     "installable": True,
