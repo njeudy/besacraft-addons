@@ -149,3 +149,123 @@ $bc-sable: #C8AF8F;
     }
     .bc-legende-t { font-family: 'VT323', monospace; font-size: 32px; line-height: 1; }
 }
+
+// --- Fiche de tuto, direction « Établi » -------------------------------------------
+.bc-tuto {
+    .bc-barre {
+        display: flex; align-items: center; justify-content: space-between; gap: 14px;
+        padding: 10px 20px; background: $bc-encre; color: $bc-carte;
+    }
+    .bc-barre-g, .bc-barre-d { display: flex; align-items: center; gap: 14px; min-width: 0; }
+    .bc-tuto-n {
+        font-family: 'VT323', monospace; font-size: 26px; line-height: 1;
+        color: $bc-sable; white-space: nowrap;
+    }
+    .bc-tuto-nom {
+        font-size: 13px; color: #EDE6DA; overflow: hidden;
+        text-overflow: ellipsis; white-space: nowrap;
+    }
+    .bc-tuto-url {
+        font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: $bc-sable;
+    }
+    .bc-btn-fin {
+        font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+        padding: 10px 14px; background: transparent; color: $bc-carte;
+        border: 1px solid $bc-bronze;
+        &:hover { background: $bc-bronze; color: $bc-carte; }
+    }
+
+    .bc-etabli {
+        display: grid; grid-template-columns: minmax(320px, 400px) 1fr;
+        height: 74vh; min-height: 520px;
+        @media (max-width: 900px) { grid-template-columns: 1fr; height: auto; }
+    }
+    .bc-panneau {
+        display: flex; flex-direction: column; background: $bc-carte;
+        min-width: 0; overflow: hidden; border-right: 1px solid $bc-trait;
+    }
+    .bc-couche-tete {
+        display: flex; align-items: center; gap: 18px;
+        padding: 18px 22px 16px; border-bottom: 2px solid $bc-encre;
+    }
+    .bc-couche-num {
+        font-family: 'VT323', monospace; font-size: 96px; line-height: 0.72;
+        color: $bc-bleu-sombre;
+    }
+    .bc-couche-txt { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+    .bc-couche-titre { font-family: 'VT323', monospace; font-size: 34px; line-height: 0.95; }
+    .bc-couche-total { font-size: 13px; color: $bc-encre-douce; }
+
+    .bc-liste { flex: 1; overflow-y: auto; padding: 8px 0; }
+    .bc-ligne {
+        display: flex; align-items: center; gap: 12px; padding: 8px 22px;
+        border-bottom: 1px solid $bc-trait;
+        &.bc-pose { opacity: 0.42; }
+        &.bc-pose .bc-case { background: $bc-bleu-sombre; border-color: $bc-bleu-sombre; }
+        &.bc-pose .bc-case::after { content: '✓'; color: $bc-carte; font-size: 15px; }
+    }
+    .bc-case {
+        width: 22px; height: 22px; flex: none; padding: 0; cursor: pointer;
+        background: $bc-page; border: 2px solid $bc-encre;
+        display: flex; align-items: center; justify-content: center;
+    }
+    .bc-ligne-i { width: 32px; height: 32px; flex: none; image-rendering: pixelated; }
+    .bc-ligne-n { display: flex; flex-direction: column; min-width: 0; flex: 1; }
+    .bc-ligne-nom {
+        font-size: 19px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    }
+    .bc-ligne-mod { font-size: 11px; color: $bc-encre-douce; }
+    .bc-ligne-q { display: flex; align-items: baseline; gap: 3px; flex: none; }
+    .bc-x { font-size: 17px; font-weight: 700; }
+    .bc-qte { font-family: 'VT323', monospace; font-size: 34px; color: $bc-bleu-sombre; }
+
+    .bc-nav {
+        display: flex; align-items: center; gap: 12px; padding: 12px 22px;
+        border-top: 2px solid $bc-encre; background: $bc-page;
+    }
+    .bc-nav-b {
+        width: 44px; height: 44px; flex: none; cursor: pointer;
+        font-family: 'VT323', monospace; font-size: 30px; line-height: 1;
+        background: $bc-carte; color: $bc-encre; border: 2px solid $bc-encre;
+        &:hover { background: $bc-encre; color: $bc-carte; }
+    }
+    .bc-curseur { flex: 1; accent-color: $bc-bleu-sombre; }
+
+    .bc-scene { position: relative; background: #1B1F1E; min-height: 420px; }
+    .bc-viewer { width: 100%; height: 100%; border: 0; display: block; }
+    .bc-scene-vide {
+        width: 100%; height: 100%; display: flex; flex-direction: column;
+        align-items: center; justify-content: center; gap: 14px;
+        img { max-width: 100%; max-height: 100%; object-fit: contain; }
+    }
+    .bc-verrou {
+        position: absolute; bottom: 18px; padding: 10px 16px;
+        background: $bc-bronze; color: $bc-carte; font-size: 13px;
+    }
+
+    .bc-resume {
+        display: flex; flex-wrap: wrap; gap: 1px; margin: 34px 0 0;
+        background: $bc-trait; border: 1px solid $bc-trait;
+    }
+    .bc-stat-texte { font-family: 'Anonymous Pro', monospace; font-size: 15px; }
+    .bc-h2 { font-family: 'VT323', monospace; font-size: 40px; line-height: 0.95; margin: 38px 0 18px; }
+
+    .bc-notice-grille {
+        display: grid; grid-template-columns: repeat(auto-fill, minmax(268px, 1fr)); gap: 14px;
+    }
+    .bc-couche-carte { background: $bc-carte; border: 1px solid $bc-trait; padding: 12px 14px; }
+    .bc-couche-carte-tete { display: flex; align-items: baseline; gap: 10px; }
+    .bc-couche-carte-n {
+        font-family: 'VT323', monospace; font-size: 30px; color: $bc-bleu-sombre; flex: none;
+    }
+    .bc-couche-carte-t { flex: 1; font-size: 14px; }
+    .bc-couche-carte-b { font-size: 11px; color: $bc-encre-douce; flex: none; }
+    .bc-couche-carte-blocs {
+        display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 9px;
+    }
+    .bc-mini { display: flex; align-items: center; gap: 3px;
+        img { width: 24px; height: 24px; image-rendering: pixelated; }
+    }
+    .bc-mini-n { font-family: 'VT323', monospace; font-size: 18px; color: $bc-encre-douce; }
+    .bc-mini-plus { font-size: 12px; color: $bc-encre-douce; }
+}

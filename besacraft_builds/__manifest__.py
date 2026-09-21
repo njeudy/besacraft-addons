@@ -14,6 +14,7 @@
         "views/besacraft_build_views.xml",
         "views/menus.xml",
         "views/website_catalogue.xml",
+        "views/website_tuto.xml",
     ],
     "assets": {
         "web.assets_frontend": [
