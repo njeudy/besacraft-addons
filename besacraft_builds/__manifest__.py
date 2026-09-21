@@ -10,7 +10,10 @@
     "data": [
         "security/ir.model.access.csv",
         "data/besacraft_serie_data.xml",
+        "views/besacraft_serie_views.xml",
+        "views/besacraft_build_views.xml",
+        "views/menus.xml",
     ],
     "installable": True,
-    "application": False,
+    "application": True,
 }

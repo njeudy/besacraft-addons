@@ -1,0 +1,22 @@
+<odoo>
+    <record id="view_besacraft_serie_list" model="ir.ui.view">
+        <field name="name">besacraft.serie.list</field>
+        <field name="model">besacraft.serie</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="visual_mode"/>
+                <field name="color"/>
+                <field name="badge_ink"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_serie" model="ir.actions.act_window">
+        <field name="name">Series</field>
+        <field name="res_model">besacraft.serie</field>
+        <field name="view_mode">list</field>
+    </record>
+</odoo>

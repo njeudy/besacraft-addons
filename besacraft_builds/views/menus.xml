@@ -1,0 +1,6 @@
+<odoo>
+    <menuitem id="menu_root" name="Besacraft" sequence="90" web_icon="besacraft_builds,static/description/icon.png"/>
+    <menuitem id="menu_build" name="Builds" parent="menu_root" action="action_build" sequence="10"/>
+    <menuitem id="menu_configuration" name="Configuration" parent="menu_root" sequence="90"/>
+    <menuitem id="menu_serie" name="Series" parent="menu_configuration" action="action_serie" sequence="10"/>
+</odoo>

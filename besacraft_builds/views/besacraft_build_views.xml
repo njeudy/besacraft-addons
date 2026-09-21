@@ -1,0 +1,118 @@
+<odoo>
+    <record id="view_besacraft_build_form" model="ir.ui.view">
+        <field name="name">besacraft.build.form</field>
+        <field name="model">besacraft.build</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <field name="overview_image" widget="image" class="oe_avatar"/>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" placeholder="L'Hôtel de Ville"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="code"/>
+                            <field name="serie_id"/>
+                            <field name="level"/>
+                            <field name="state"/>
+                            <field name="is_published"/>
+                        </group>
+                        <group>
+                            <field name="enroll"/>
+                            <field name="product_id" invisible="enroll != 'payment'"
+                                   required="enroll == 'payment'"/>
+                            <field name="block_count" readonly="1"/>
+                            <field name="layer_count" readonly="1"/>
+                            <field name="palette_label"/>
+                            <field name="youtube_url" widget="url"/>
+                        </group>
+                    </group>
+                    <field name="accroche" placeholder="Phrase du catalogue"/>
+                    <notebook>
+                        <page string="Layers" name="layers">
+                            <field name="layer_ids">
+                                <list>
+                                    <field name="sequence"/>
+                                    <field name="title"/>
+                                    <field name="block_count"/>
+                                </list>
+                                <form>
+                                    <group>
+                                        <field name="sequence"/>
+                                        <field name="title"/>
+                                        <field name="block_count" readonly="1"/>
+                                    </group>
+                                    <field name="instruction" placeholder="Consigne de pose"/>
+                                    <field name="line_ids">
+                                        <list>
+                                            <field name="icon" widget="image" width="40"/>
+                                            <field name="name_fr"/>
+                                            <field name="item_key"/>
+                                            <field name="qty"/>
+                                        </list>
+                                    </field>
+                                </form>
+                            </field>
+                        </page>
+                        <page string="Members" name="members">
+                            <field name="member_ids">
+                                <list>
+                                    <field name="partner_id"/>
+                                    <field name="member_status"/>
+                                    <field name="layer_reached"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_besacraft_build_list" model="ir.ui.view">
+        <field name="name">besacraft.build.list</field>
+        <field name="model">besacraft.build</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="code"/>
+                <field name="name"/>
+                <field name="serie_id"/>
+                <field name="block_count"/>
+                <field name="layer_count"/>
+                <field name="enroll"/>
+                <field name="state"/>
+                <field name="is_published"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_besacraft_build_kanban" model="ir.ui.view">
+        <field name="name">besacraft.build.kanban</field>
+        <field name="model">besacraft.build</field>
+        <field name="arch" type="xml">
+            <kanban>
+                <templates>
+                    <t t-name="card">
+                        <div class="d-flex">
+                            <field name="overview_image" widget="image" class="me-2"
+                                   options="{'size': [90, 90]}"/>
+                            <div>
+                                <strong><field name="code"/> · <field name="name"/></strong>
+                                <div class="text-muted"><field name="serie_id"/></div>
+                                <div><field name="block_count"/> blocs ·
+                                     <field name="layer_count"/> couches</div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="action_build" model="ir.actions.act_window">
+        <field name="name">Builds</field>
+        <field name="res_model">besacraft.build</field>
+        <field name="view_mode">kanban,list,form</field>
+    </record>
+</odoo>
