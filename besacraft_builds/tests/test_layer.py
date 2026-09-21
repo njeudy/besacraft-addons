@@ -21,6 +21,9 @@ class TestLayer(TransactionCase):
     def test_les_couches_sont_triees_par_sequence(self):
         for seq in (3, 1, 2):
             self.env["besacraft.build.layer"].create({"build_id": self.build.id, "sequence": seq})
+        # Sans invalidation on relit le cache de la transaction, rempli dans l'ordre de
+        # creation : c'est le tri en base qu'on veut verifier, pas l'ordre d'insertion.
+        self.build.invalidate_recordset(["layer_ids"])
         self.assertEqual(self.build.layer_ids.mapped("sequence"), [1, 2, 3])
 
     def test_supprimer_un_build_supprime_ses_couches(self):
