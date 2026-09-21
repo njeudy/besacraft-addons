@@ -32,9 +32,9 @@ class TestMember(TransactionCase):
     def test_le_lien_pointe_bien_res_partner(self):
         """La table de liaison n'est pas un partenaire bis : member_ids EST res.partner."""
         self.build._action_add_members(self.partner)
-        self.build.invalidate_recordset(["member_ids"])
-        self.assertEqual(self.build.member_ids._name, "res.partner")
-        self.assertIn(self.partner, self.build.member_ids)
+        self.build.invalidate_recordset(["member_ids", "partner_ids"])
+        self.assertEqual(self.build.partner_ids._name, "res.partner")
+        self.assertIn(self.partner, self.build.partner_ids)
 
     def test_le_code_reste_unique_apres_ajout_des_contraintes(self):
         """La tache 4 etend _sql_constraints : l'unicite du code ne doit pas disparaitre."""

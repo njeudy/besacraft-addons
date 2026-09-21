@@ -54,9 +54,13 @@ class BesacraftBuild(models.Model):
         "product.product", string="Product",
         help="The product that grants access. Required when enroll is 'payment'.",
     )
-    member_ids = fields.Many2many(
-        "res.partner", "besacraft_build_member", "build_id", "partner_id",
-        string="Members", readonly=True,
+    member_ids = fields.One2many("besacraft.build.member", "build_id", string="Access Lines")
+    # Computed, never stored: a Many2many stored on besacraft_build_member would fight the
+    # model that already owns that table -- Odoo builds the m2m table without an id column,
+    # and every search on the model then fails on "column ... .id does not exist".
+    # website_slides computes slide.channel.partner_ids for exactly this reason.
+    partner_ids = fields.Many2many(
+        "res.partner", string="Members", compute="_compute_partner_ids", search="_search_partner_ids",
     )
 
     _sql_constraints = [
@@ -71,6 +75,16 @@ class BesacraftBuild(models.Model):
         for build in self:
             if not CODE_RE.match(build.code or ""):
                 raise ValidationError("The tutorial number must contain digits only.")
+
+    @api.depends("member_ids.partner_id")
+    def _compute_partner_ids(self):
+        for build in self:
+            build.partner_ids = build.member_ids.partner_id
+
+    def _search_partner_ids(self, operator, value):
+        membres = self.env["besacraft.build.member"].sudo().search(
+            [("partner_id", operator, value)])
+        return [("id", "in", membres.build_id.ids)]
 
     def _action_add_members(self, partners, member_status="joined"):
         """Grant access. Idempotent: an existing member is left untouched."""
