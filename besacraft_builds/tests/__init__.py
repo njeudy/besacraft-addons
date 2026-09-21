@@ -5,3 +5,4 @@ from . import test_member
 from . import test_sale
 from . import test_import
 from . import test_views
+from . import test_acces

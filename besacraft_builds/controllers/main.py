@@ -36,6 +36,11 @@ class BesacraftBuilds(http.Controller):
             [("code", "=", "%03d" % code), ("is_published", "=", True)], limit=1)
         if not build:
             return request.not_found()
+        # Pas encore l'accès : on envoie vers ce qu'il faut acheter, jamais vers un mur.
+        # Une page qui refuse sans dire comment entrer est une impasse.
+        redirection = self._vers_le_produit(build)
+        if redirection:
+            return redirection
         # Les couches partent en JSON : la page change de couche sans aller-retour serveur,
         # et la liste se coche pendant qu'on pose, hors ligne si besoin.
         couches = [{
@@ -52,6 +57,19 @@ class BesacraftBuilds(http.Controller):
             "decalage": build.layer_offset,
         })
 
+    def _vers_le_produit(self, build):
+        """Redirection vers le produit quand l'accès manque, sinon None.
+
+        `sudo` sur le produit : un visiteur n'a pas le droit de lire product.product, mais
+        il a le droit de savoir ce qu'il doit acheter et combien ça coûte.
+        """
+        if build.is_accessible_by(request.env.user.partner_id):
+            return None
+        produit = build.sudo().product_id
+        if build.enroll == "payment" and produit:
+            return request.redirect(produit.product_tmpl_id.website_url, code=303)
+        return None     # enroll=invite : la fiche s'affiche, verrouillée et sans achat
+
     @http.route("/besacraft/viewer/<int:build_id>", type="http", auth="public", sitemap=False)
     def viewer(self, build_id, **kw):
         """Serve the build's standalone viewer.html from OUR origin.
@@ -62,8 +80,9 @@ class BesacraftBuilds(http.Controller):
         build = request.env["besacraft.build"].sudo().browse(build_id).exists()
         if not build or not build.viewer_attachment_id:
             return request.not_found()
-        if not build.is_accessible_by(request.env.user.partner_id):
-            return request.not_found()
+        redirection = self._vers_le_produit(build)
+        if redirection:
+            return redirection
         piece = build.viewer_attachment_id
         contenu = base64.b64decode(piece.datas)
         # The viewer is regenerated per build version: a long cache plus an ETag on the
