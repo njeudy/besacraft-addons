@@ -5,7 +5,9 @@ from odoo.tests import TransactionCase, tagged
 @tagged("post_install", "-at_install")
 class TestBuild(TransactionCase):
     def _build(self, **kw):
-        valeurs = {"name": "L'Hôtel de Ville", "code": "043",
+        # Un code hors de la plage éditoriale : la base de dev porte de vrais builds, et un
+        # test qui suppose qu'un numéro est libre casse dès qu'on en importe un.
+        valeurs = {"name": "L'Hôtel de Ville", "code": "9943",
                    "serie_id": self.env.ref("besacraft_builds.serie_survie").id}
         valeurs.update(kw)
         return self.env["besacraft.build"].create(valeurs)
@@ -18,8 +20,8 @@ class TestBuild(TransactionCase):
 
     def test_l_url_perd_les_zeros_de_tete(self):
         """Le code s'écrit 043 sur la fiche mais l'URL publique est /t/43."""
-        self.assertEqual(self._build().website_url, "/t/43")
+        self.assertEqual(self._build().website_url, "/t/9943")
 
     def test_le_code_n_accepte_que_des_chiffres(self):
         with self.assertRaises(ValidationError):
-            self._build(code="4x3")
+            self._build(code="9x43")
