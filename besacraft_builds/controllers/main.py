@@ -11,7 +11,9 @@ class BesacraftBuilds(http.Controller):
     @http.route("/builds", type="http", auth="public", website=True, sitemap=True)
     def catalogue(self, serie=None, **kw):
         """The catalogue, laid out as a shelf of construction boxes."""
-        domaine = [("is_published", "=", True)]
+        # website_domain() borne au site courant : le même Odoo sert aussi la boutique
+        # freelance, et /builds y afficherait les tutos de Besacraft.
+        domaine = [("is_published", "=", True)] + request.website.website_domain()
         Build = request.env["besacraft.build"].sudo()
         series = request.env["besacraft.serie"].sudo().search([])
         if serie:
@@ -19,10 +21,10 @@ class BesacraftBuilds(http.Controller):
         builds = Build.search(domaine)
         # Le compteur de chaque filtre se lit sur la totalité, pas sur la sélection
         # courante : un filtre qui afficherait « 0 » une fois cliqué serait absurde.
-        tous = Build.search_count([("is_published", "=", True)])
+        publies = [("is_published", "=", True)] + request.website.website_domain()
+        tous = Build.search_count(publies)
         par_serie = {
-            s.id: Build.search_count([("is_published", "=", True), ("serie_id", "=", s.id)])
-            for s in series
+            s.id: Build.search_count(publies + [("serie_id", "=", s.id)]) for s in series
         }
         return request.render("besacraft_builds.catalogue", {
             "builds": builds, "series": series, "serie_active": serie,
@@ -33,7 +35,8 @@ class BesacraftBuilds(http.Controller):
     def tuto(self, code, **kw):
         """A build's tutorial sheet. The URL carries the number without padding zeros."""
         build = request.env["besacraft.build"].sudo().search(
-            [("code", "=", "%03d" % code), ("is_published", "=", True)], limit=1)
+            [("code", "=", "%03d" % code), ("is_published", "=", True)]
+            + request.website.website_domain(), limit=1)
         if not build:
             return request.not_found()
         # Les couches partent en JSON : la page change de couche sans aller-retour serveur,

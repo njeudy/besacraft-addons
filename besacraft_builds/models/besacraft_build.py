@@ -16,7 +16,10 @@ class BesacraftBuild(models.Model):
 
     _name = "besacraft.build"
     _description = "Build Tutorial"
-    _inherit = ["website.published.mixin"]
+    # Multi, pas simple : le même Odoo sert plusieurs sites, et un tuto Besacraft n'a
+    # rien à faire dans la boutique du site freelance. Le mixin apporte website_id et le
+    # filtrage par site courant.
+    _inherit = ["website.published.multi.mixin"]
     _order = "code"
 
     name = fields.Char(required=True, translate=True,
@@ -109,47 +112,57 @@ class BesacraftBuild(models.Model):
     # Ce qu'on achete, dit dans l'ordre ou on se pose les questions : ce que c'est, ce
     # qu'il y a dedans, et combien de temps ca prend. Les chiffres viennent du plan, pas
     # d'une estimation -- promettre 23 couches et en livrer 21 se voit a la premiere.
+    CASE = ('<div class="col-6 col-md-4 p-3 border">'
+            '<div class="small text-uppercase text-muted" style="letter-spacing:.16em">%s</div>'
+            '<div style="font-size:1.6rem;line-height:1.1">%s</div></div>')
+
     DESCRIPTION = """
 <p class="lead">%(accroche)s</p>
 <p>Un tutoriel <strong>couche par couche</strong> : on pose la première rangée, puis la
-suivante, jusqu'au toit. Pas de plan à déchiffrer, pas de vidéo à mettre en pause toutes
-les dix secondes — la visionneuse 3D tourne dans le navigateur et n'affiche que la couche
-en cours de construction.</p>
-<h4>Ce que vous obtenez</h4>
+suivante, jusqu'au toit. Pas de plan à déchiffrer, pas de vidéo à mettre en pause toutes les
+dix secondes — la visionneuse 3D tourne dans le navigateur et n'affiche que la couche en
+cours de construction.</p>
+<div class="row g-0 my-4">%(cases)s</div>
+<h4>Dans la boîte</h4>
 <ul>
-  <li><strong>La visionneuse 3D</strong> du build, couche par couche, à faire tourner et
-      zoomer dans tous les sens.</li>
-  <li><strong>L'inventaire complet</strong> : %(palette)s, avec les quantités exactes à
-      réunir avant de commencer.</li>
+  <li><strong>La vue 3D</strong> du build, à tourner et à parcourir couche par couche.</li>
+  <li><strong>La liste des blocs</strong> de chaque couche, cochable pendant que tu poses.</li>
+  <li><strong>La notice complète</strong>, de la fondation au faîtage.</li>
+  <li><strong>Les recettes de fabrication</strong> et les matières premières à réunir.</li>
   <li><strong>La vidéo courte</strong> de la construction, du premier bloc à la vue finale.</li>
-  <li><strong>Un accès à vie</strong>, depuis n'importe quel appareil, mises à jour comprises.</li>
 </ul>
-<h4>Le chantier en trois chiffres</h4>
-<ul>
-  <li><strong>%(blocs)s blocs</strong> à poser</li>
-  <li><strong>%(couches)s couches</strong> de la fondation au faîtage</li>
-  <li><strong>%(taille)s</strong> d'emprise au sol</li>
-</ul>
-<p class="text-muted">Collection %(serie)s · %(niveau)s. Jouable en survie : aucun bloc
-inaccessible, aucune commande, aucun mod obligatoire.</p>
+<p class="text-muted"><em>Pas de schematic : on construit soi-même, c'est le principe.</em>
+Jouable en survie — aucun bloc inaccessible, aucune commande, aucun mod obligatoire.
+%(niveau)s</p>
 """
 
-    NIVEAUX = {"debutant": "accessible dès la première cabane",
-               "confirme": "pour qui a déjà terminé quelques chantiers",
-               "forgeron": "un gros morceau, à prendre au sérieux"}
+    NIVEAUX = {"debutant": "Accessible dès la première cabane.",
+               "confirme": "Pour qui a déjà terminé quelques chantiers.",
+               "forgeron": "Un gros morceau, à prendre au sérieux."}
+    NIVEAUX_COURT = {"debutant": "Débutant", "confirme": "Confirmé", "forgeron": "Forgeron"}
 
     def _description_produit(self):
-        """The shop copy, written from the plan's own numbers."""
+        """The shop copy, written from the plan's own numbers.
+
+        Elle vit dans website_description, donc en base et éditable : une page de boutique
+        se retouche sans déployer, et le module n'a pas à s'insérer dans le gabarit produit
+        pour dire ce qu'il a à dire. D'où le HTML autonome -- classes Bootstrap seulement,
+        aucune dépendance au SCSS du module, pour tenir dans n'importe quel thème.
+        """
         self.ensure_one()
-        taille = ("%d × %d blocs" % (self.size_x, self.size_z)
-                  if self.size_x and self.size_z else "variable")
+        emprise = ("%d × %d × %d" % (self.size_x, self.size_y, self.size_z)
+                   if self.size_x else "—")
+        cases = "".join(self.CASE % paire for paire in (
+            ("Pièces", "{:,}".format(self.block_count).replace(",", " ")),
+            ("Couches", self.layer_count),
+            ("Emprise", emprise),
+            ("Niveau", self.NIVEAUX_COURT.get(self.level, "—")),
+            ("Palette", self.palette_label or "—"),
+            ("Collection", self.serie_id.name),
+        ))
         return self.DESCRIPTION % {
             "accroche": self.accroche or self.name,
-            "palette": self.palette_label or "la liste des blocs",
-            "blocs": "{:,}".format(self.block_count).replace(",", " "),
-            "couches": self.layer_count,
-            "taille": taille,
-            "serie": self.serie_id.name,
+            "cases": cases,
             "niveau": self.NIVEAUX.get(self.level, ""),
         }
 

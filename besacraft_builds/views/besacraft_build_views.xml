@@ -24,6 +24,7 @@
                             <field name="level"/>
                             <field name="state"/>
                             <field name="is_published"/>
+                            <field name="website_id" options="{'no_create': True}"/>
                         </group>
                         <group>
                             <field name="enroll"/>

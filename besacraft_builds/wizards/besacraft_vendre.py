@@ -27,6 +27,16 @@ class BesacraftVendre(models.TransientModel):
     def _nom_produit(build):
         return "Tuto %s — %s" % (build.code, build.name)
 
+    def _site_besacraft(self):
+        """The Besacraft website, when the build does not name one itself.
+
+        Cherché par son nom : sur une base où il n'existe pas encore -- une base de tests,
+        par exemple -- le produit reste sans site plutôt que d'échouer, ce qui le rend
+        visible partout mais ne casse rien.
+        """
+        site = self.env["website"].sudo().search([("name", "=ilike", "besacraft")], limit=1)
+        return site.id or False
+
     def _compute_product_name(self):
         for wizard in self:
             wizard.product_name = (self._nom_produit(wizard.build_id)
@@ -46,6 +56,9 @@ class BesacraftVendre(models.TransientModel):
             "website_description": build._description_produit(),
             # La boite d'abord : une boutique montre un produit, pas une capture d'ecran.
             "image_1920": build.box_image or build.overview_image,
+            # Le meme Odoo sert plusieurs sites : sans ca le tuto apparait dans la boutique
+            # du site freelance, ou il n'a rien a faire.
+            "website_id": build.website_id.id or self._site_besacraft(),
         }
         if produit:
             produit.product_tmpl_id.write(valeurs)

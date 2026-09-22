@@ -60,6 +60,24 @@ class TestVendre(TransactionCase):
         self._vendre().action_vendre()
         modele = self.build.product_id.product_tmpl_id
         self.assertIn("couche par couche", modele.website_description)
+        # La fiche chiffrée vit dans la description, pas dans un gabarit surchargé : une
+        # page de boutique se retouche en base, sans déployer.
+        self.assertIn("2 177", modele.website_description)
+        self.assertIn("15 × 26 × 22", modele.website_description)
+
+    def test_le_produit_est_rattache_au_site_besacraft(self):
+        """Le même Odoo sert la boutique freelance : un tuto n'y a rien à faire."""
+        site = self.env["website"].search([("name", "=ilike", "besacraft")], limit=1)
+        if not site:
+            site = self.env["website"].create({"name": "Besacraft"})
+        self._vendre().action_vendre()
+        self.assertEqual(self.build.product_id.product_tmpl_id.website_id, site)
+
+    def test_le_site_du_build_prime_sur_la_recherche_par_nom(self):
+        autre = self.env["website"].create({"name": "Boutique d'essai"})
+        self.build.website_id = autre
+        self._vendre().action_vendre()
+        self.assertEqual(self.build.product_id.product_tmpl_id.website_id, autre)
 
     def test_revendre_reutilise_le_meme_produit(self):
         """Corriger un prix ne doit pas laisser deux fiches pour un tutoriel."""
