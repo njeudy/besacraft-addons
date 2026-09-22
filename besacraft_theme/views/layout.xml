@@ -2,8 +2,8 @@
     <!-- Les fontes sont chargées une fois pour tout le site.
 
          Pas via `@import url()` dans le SCSS : l'URL de Google Fonts contient des `;` dans
-         son paramètre `wght`, et le compilateur SCSS d'Odoo coupe la règle dessus -- ce qui
-         casse le bundle frontend entier, pas seulement la fonte. Un <link> ne pose pas ce
+         son paramètre `wght`, et le compilateur SCSS d'Odoo coupe la règle dessus, ce qui
+         casse le bundle frontend entier, pas seulement la fonte. Un lien ne pose pas ce
          problème et précharge en parallèle. -->
     <template id="fontes" inherit_id="website.layout" name="Besacraft — fontes">
         <xpath expr="//head" position="inside">
