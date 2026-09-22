@@ -23,6 +23,10 @@ class BesacraftBuildImport(models.Model):
         couches = (build_json.get("layers") or [])[depuis:]
         total = (plan_json or {}).get(
             "total", sum(sum((c.get("counts") or {}).values()) for c in couches))
+        # Le crédit voyage avec la structure : buildplan le pose dans build.json, l'import
+        # le reprend tel quel. Une licence libre se respecte en citant, et citer à la main
+        # une fois sur deux revient à ne pas citer.
+        credits = build_json.get("credits") or {}
         valeurs = {
             # Le viewer, lui, garde TOUTES les couches : sans ce décalage sa couche 1 est
             # une fondation enterrée et la page montre des blocs que la 3D ne pose pas.
@@ -30,6 +34,9 @@ class BesacraftBuildImport(models.Model):
             "block_count": total,
             "layer_count": len(couches),
             "size_x": taille[0], "size_y": taille[1], "size_z": taille[2],
+            "source_author": credits.get("author") or "",
+            "source_license": credits.get("license") or "",
+            "source_url": credits.get("website") or "",
         }
         if build:
             build.write(valeurs)

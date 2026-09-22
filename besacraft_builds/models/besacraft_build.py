@@ -53,6 +53,11 @@ class BesacraftBuild(models.Model):
         help="The build's box, rendered by buildplan. This is what the shop shows: a "
              "bare render looks like a screenshot, a box looks like something you buy.")
     youtube_url = fields.Char()
+    # Crédit de la structure d'origine. Les blueprints du pack sont sous GPL-3.0 : le nom,
+    # la licence et le lien doivent voyager avec elle partout où on la montre ou la vend.
+    source_author = fields.Char("Original Author")
+    source_license = fields.Char("Licence")
+    source_url = fields.Char("Source")
     viewer_attachment_id = fields.Many2one("ir.attachment", ondelete="set null")
     build_json_attachment_id = fields.Many2one("ir.attachment", ondelete="set null")
     layer_ids = fields.One2many("besacraft.build.layer", "build_id")
@@ -134,7 +139,11 @@ cours de construction.</p>
 <p class="text-muted"><em>Pas de schematic : on construit soi-même, c'est le principe.</em>
 Jouable en survie — aucun bloc inaccessible, aucune commande, aucun mod obligatoire.
 %(niveau)s</p>
+%(credit)s
 """
+
+    CREDIT = ('<p class="small text-muted border-top pt-3 mt-4">'
+              'Structure d\'origine : %s%s.%s</p>')
 
     NIVEAUX = {"debutant": "Accessible dès la première cabane.",
                "confirme": "Pour qui a déjà terminé quelques chantiers.",
@@ -164,7 +173,22 @@ Jouable en survie — aucun bloc inaccessible, aucune commande, aucun mod obliga
             "accroche": self.accroche or self.name,
             "cases": cases,
             "niveau": self.NIVEAUX.get(self.level, ""),
+            "credit": self._credit_html(),
         }
+
+    def _credit_html(self):
+        """The original structure's credit, or nothing when the build is ours.
+
+        Une licence libre se respecte en citant, pas en ayant l'intention de citer : le
+        bloc se construit à partir des champs, donc il suit la structure sans qu'on y pense.
+        """
+        self.ensure_one()
+        if not self.source_author:
+            return ""
+        licence = " — %s" % self.source_license if self.source_license else ""
+        lien = (' <a href="%s" target="_blank" rel="noopener">Voir la source</a>'
+                % self.source_url if self.source_url else "")
+        return self.CREDIT % (self.source_author, licence, lien)
 
     def action_vendre(self):
         """Open the wizard, pre-filled with what we already know."""

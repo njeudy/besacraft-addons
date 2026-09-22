@@ -214,10 +214,21 @@
                     </div>
                     <button t-if="accessible" type="button" class="bc-plus" id="bc_plus">Afficher les couches suivantes</button>
 
+                    <!-- Le crédit vient des champs du build, pas d'un texte écrit ici : une
+                         structure d'un autre auteur ou sous une autre licence arriverait un
+                         jour et personne ne penserait à rouvrir ce gabarit. -->
                     <section class="bc-legende">
                         <span class="bc-legende-t">Crédit</span>
-                        <p>Structure MineColonies — ldtteam — GPL-3.0. Ces tutoriels apprennent à
-                            construire ; ils ne distribuent pas le schematic.</p>
+                        <p>
+                            <t t-if="build.source_author">
+                                Structure : <t t-esc="build.source_author"/><t
+                                    t-if="build.source_license"> — <t t-esc="build.source_license"/></t>.
+                                <a t-if="build.source_url" t-att-href="build.source_url"
+                                   target="_blank" rel="noopener">Voir la source</a>
+                            </t>
+                            Ces tutoriels apprennent à construire ; ils ne distribuent pas le
+                            schematic.
+                        </p>
                     </section>
                 </div>
             </div>

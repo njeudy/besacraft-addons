@@ -52,7 +52,7 @@ class TestVendre(TransactionCase):
         texte = self.build._description_produit()
         self.assertIn("2 177", texte)
         self.assertIn("23", texte)
-        self.assertIn("15 × 22", texte)
+        self.assertIn("15 × 26 × 22", texte)
         self.assertIn("18 types de blocs", texte)
         self.assertIn(self.build.accroche, texte)
 
@@ -78,6 +78,19 @@ class TestVendre(TransactionCase):
         self.build.website_id = autre
         self._vendre().action_vendre()
         self.assertEqual(self.build.product_id.product_tmpl_id.website_id, autre)
+
+    def test_le_credit_de_la_structure_suit_la_fiche(self):
+        """GPL-3.0 : citer est une obligation, pas une intention."""
+        self.build.write({"source_author": "ldtteam — MineColonies",
+                          "source_license": "GPL-3.0",
+                          "source_url": "https://github.com/ldtteam/minecolonies"})
+        texte = self.build._description_produit()
+        self.assertIn("ldtteam", texte)
+        self.assertIn("GPL-3.0", texte)
+        self.assertIn("https://github.com/ldtteam/minecolonies", texte)
+
+    def test_un_build_a_soi_n_affiche_aucun_credit(self):
+        self.assertNotIn("Structure d'origine", self.build._description_produit())
 
     def test_revendre_reutilise_le_meme_produit(self):
         """Corriger un prix ne doit pas laisser deux fiches pour un tutoriel."""

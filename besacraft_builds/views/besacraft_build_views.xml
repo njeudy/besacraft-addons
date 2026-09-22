@@ -34,6 +34,9 @@
                             <field name="layer_count" readonly="1"/>
                             <field name="palette_label"/>
                             <field name="youtube_url" widget="url"/>
+                            <field name="source_author"/>
+                            <field name="source_license"/>
+                            <field name="source_url" widget="url"/>
                         </group>
                     </group>
                     <field name="accroche" placeholder="Phrase du catalogue"/>
