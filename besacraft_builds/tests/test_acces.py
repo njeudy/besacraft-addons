@@ -16,11 +16,24 @@ class TestAcces(HttpCase):
             "serie_id": self.env.ref("besacraft_builds.serie_survie").id,
         })
 
-    def test_un_visiteur_est_envoye_vers_le_produit(self):
-        """Une fiche payante ne se ferme pas au nez : elle mène à ce qu'il faut acheter."""
+    def test_une_fiche_payante_montre_le_voile_et_mene_au_produit(self):
+        """La fiche ne se ferme pas au nez : on devine derrière, et on sait quoi acheter.
+
+        Pas de redirection ici -- envoyer vers /shop ferait disparaître le build que le
+        visiteur est venu voir, et c'est justement ce qui lui donne envie.
+        """
         reponse = self.url_open("/t/911", allow_redirects=False)
-        self.assertEqual(reponse.status_code, 303)
-        self.assertIn("/shop", reponse.headers.get("Location", ""))
+        self.assertEqual(reponse.status_code, 200)
+        self.assertIn(self.produit.product_tmpl_id.website_url, reponse.text)
+
+    def test_la_notice_ne_part_pas_dans_la_page_sans_acces(self):
+        """Un voile devant une liste lisible dans le code source serait une serrure en carton."""
+        couche = self.env["besacraft.build.layer"].create({
+            "build_id": self.build.id, "sequence": 1, "title": "Fondations"})
+        self.env["besacraft.build.layer.line"].create({
+            "layer_id": couche.id, "item_key": "minecraft:oak_planks",
+            "name_fr": "Planches de chene", "qty": 64})
+        self.assertNotIn("Planches de chene", self.url_open("/t/911").text)
 
     def test_un_build_gratuit_s_ouvre_directement(self):
         self.build.write({"enroll": "public", "product_id": False})
