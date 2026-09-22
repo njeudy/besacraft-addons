@@ -174,7 +174,7 @@ Jouable en survie — aucun bloc inaccessible, aucune commande, aucun mod obliga
             ("Niveau", self.NIVEAUX_COURT.get(self.level, "—")),
             ("Palette", self.palette_label or "—"),
             ("Collection", self.serie_id.name),
-        )))
+        ))
         return self.DESCRIPTION % {
             "accroche": self.accroche or self.name,
             "cases": cases,
