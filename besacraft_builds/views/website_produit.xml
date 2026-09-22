@@ -4,7 +4,7 @@
          bandeau de marque, bandeau de thème, âge, numéro de set, nombre de pièces. -->
     <template id="produit_boite" inherit_id="website_sale.product"
               name="Besacraft — Boîte de construction">
-        <xpath expr="//div[@id='product_detail']" position="before">
+        <xpath expr="//section[@id='product_detail']" position="before">
             <t t-set="build" t-value="product.sudo().besacraft_build_id"/>
             <div t-if="build" class="bc-notice bc-produit">
                 <div class="bc-produit-haut">
