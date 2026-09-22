@@ -45,6 +45,10 @@ class BesacraftBuild(models.Model):
         help="Foundation layers sunk below ground level, which the tutorial skips but the "
              "viewer still counts. Layer 1 here is layer 1+offset there.")
     overview_image = fields.Image("Overview")
+    box_image = fields.Image(
+        "Box",
+        help="The build's box, rendered by buildplan. This is what the shop shows: a "
+             "bare render looks like a screenshot, a box looks like something you buy.")
     youtube_url = fields.Char()
     viewer_attachment_id = fields.Many2one("ir.attachment", ondelete="set null")
     build_json_attachment_id = fields.Many2one("ir.attachment", ondelete="set null")
@@ -101,6 +105,53 @@ class BesacraftBuild(models.Model):
                 a_creer.append({"build_id": build.id, "partner_id": partner.id,
                                 "member_status": member_status})
         return Member.create(a_creer) if a_creer else Member
+
+    # Ce qu'on achete, dit dans l'ordre ou on se pose les questions : ce que c'est, ce
+    # qu'il y a dedans, et combien de temps ca prend. Les chiffres viennent du plan, pas
+    # d'une estimation -- promettre 23 couches et en livrer 21 se voit a la premiere.
+    DESCRIPTION = """
+<p class="lead">%(accroche)s</p>
+<p>Un tutoriel <strong>couche par couche</strong> : on pose la première rangée, puis la
+suivante, jusqu'au toit. Pas de plan à déchiffrer, pas de vidéo à mettre en pause toutes
+les dix secondes — la visionneuse 3D tourne dans le navigateur et n'affiche que la couche
+en cours de construction.</p>
+<h4>Ce que vous obtenez</h4>
+<ul>
+  <li><strong>La visionneuse 3D</strong> du build, couche par couche, à faire tourner et
+      zoomer dans tous les sens.</li>
+  <li><strong>L'inventaire complet</strong> : %(palette)s, avec les quantités exactes à
+      réunir avant de commencer.</li>
+  <li><strong>La vidéo courte</strong> de la construction, du premier bloc à la vue finale.</li>
+  <li><strong>Un accès à vie</strong>, depuis n'importe quel appareil, mises à jour comprises.</li>
+</ul>
+<h4>Le chantier en trois chiffres</h4>
+<ul>
+  <li><strong>%(blocs)s blocs</strong> à poser</li>
+  <li><strong>%(couches)s couches</strong> de la fondation au faîtage</li>
+  <li><strong>%(taille)s</strong> d'emprise au sol</li>
+</ul>
+<p class="text-muted">Collection %(serie)s · %(niveau)s. Jouable en survie : aucun bloc
+inaccessible, aucune commande, aucun mod obligatoire.</p>
+"""
+
+    NIVEAUX = {"debutant": "accessible dès la première cabane",
+               "confirme": "pour qui a déjà terminé quelques chantiers",
+               "forgeron": "un gros morceau, à prendre au sérieux"}
+
+    def _description_produit(self):
+        """The shop copy, written from the plan's own numbers."""
+        self.ensure_one()
+        taille = ("%d × %d blocs" % (self.size_x, self.size_z)
+                  if self.size_x and self.size_z else "variable")
+        return self.DESCRIPTION % {
+            "accroche": self.accroche or self.name,
+            "palette": self.palette_label or "la liste des blocs",
+            "blocs": "{:,}".format(self.block_count).replace(",", " "),
+            "couches": self.layer_count,
+            "taille": taille,
+            "serie": self.serie_id.name,
+            "niveau": self.NIVEAUX.get(self.level, ""),
+        }
 
     def action_vendre(self):
         """Open the wizard, pre-filled with what we already know."""

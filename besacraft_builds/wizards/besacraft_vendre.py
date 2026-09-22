@@ -43,7 +43,9 @@ class BesacraftVendre(models.TransientModel):
             "list_price": self.price,
             "is_published": True,
             "description_sale": build.accroche or "",
-            "image_1920": build.overview_image,
+            "website_description": build._description_produit(),
+            # La boite d'abord : une boutique montre un produit, pas une capture d'ecran.
+            "image_1920": build.box_image or build.overview_image,
         }
         if produit:
             produit.product_tmpl_id.write(valeurs)

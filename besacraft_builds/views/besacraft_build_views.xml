@@ -11,6 +11,7 @@
                             invisible="enroll != 'payment'"/>
                 </header>
                 <sheet>
+                    <field name="box_image" widget="image" class="oe_avatar"/>
                     <field name="overview_image" widget="image" class="oe_avatar"/>
                     <div class="oe_title">
                         <label for="name"/>
