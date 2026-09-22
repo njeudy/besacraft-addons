@@ -1,0 +1,103 @@
+<odoo>
+    <!-- Fiche produit d'un tuto : la boîte de construction, façon boîte de jeu, avec le
+         rendu du build à la place de l'illustration. Le code visuel est immédiatement lu :
+         bandeau de marque, bandeau de thème, âge, numéro de set, nombre de pièces. -->
+    <template id="produit_boite" inherit_id="website_sale.product"
+              name="Besacraft — Boîte de construction">
+        <xpath expr="//div[@id='product_detail']" position="before">
+            <t t-set="build" t-value="product.sudo().besacraft_build_id"/>
+            <div t-if="build" class="bc-notice bc-produit">
+                <div class="bc-produit-haut">
+
+                    <div class="bc-boite3d">
+                        <div class="bc-boite3d-face">
+                            <div class="bc-boite3d-tete">
+                                <span class="bc-marque">BESACRAFT</span>
+                                <span class="bc-theme"
+                                      t-attf-style="background:#{build.serie_id.color};color:#{build.serie_id.badge_ink}">
+                                    <t t-esc="build.serie_id.name"/>
+                                </span>
+                            </div>
+                            <div class="bc-boite3d-image">
+                                <img t-attf-src="/web/image/besacraft.build/#{build.id}/overview_image"
+                                     t-att-alt="build.name"/>
+                            </div>
+                            <div class="bc-boite3d-pied">
+                                <span class="bc-age">
+                                    <t t-esc="dict(debutant='0+', confirme='6+',
+                                                   forgeron='9+').get(build.level, '0+')"/>
+                                </span>
+                                <span class="bc-boite3d-ref">
+                                    <span class="bc-boite3d-num" t-esc="build.code"/>
+                                    <span class="bc-boite3d-nom" t-field="build.name"/>
+                                </span>
+                                <span class="bc-boite3d-pcs">
+                                    <t t-esc="'{:,}'.format(build.block_count).replace(',', ' ')"/>
+                                    <span class="bc-boite3d-pcs-u">blocs</span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="bc-boite3d-tranche">
+                            <span class="bc-tranche-t" t-field="build.name"/>
+                            <span class="bc-tranche-n" t-esc="build.code"/>
+                        </div>
+                        <div class="bc-boite3d-dessus"/>
+                    </div>
+
+                    <div class="bc-produit-texte">
+                        <span class="bc-surtitre">
+                            <t t-esc="build.serie_id.name"/> · Tuto n°<t t-esc="build.code"/>
+                        </span>
+                        <h1 class="bc-produit-titre" t-field="build.name"/>
+                        <p class="bc-produit-accroche" t-field="build.accroche"/>
+
+                        <div class="bc-fiche">
+                            <span class="bc-fiche-c">
+                                <span class="bc-fiche-l">Pièces</span>
+                                <span class="bc-fiche-v"
+                                      t-esc="'{:,}'.format(build.block_count).replace(',', ' ')"/>
+                            </span>
+                            <span class="bc-fiche-c">
+                                <span class="bc-fiche-l">Couches</span>
+                                <span class="bc-fiche-v" t-esc="build.layer_count"/>
+                            </span>
+                            <span class="bc-fiche-c">
+                                <span class="bc-fiche-l">Emprise</span>
+                                <span class="bc-fiche-v">
+                                    <t t-esc="build.size_x"/><span class="bc-sep">×</span><t t-esc="build.size_y"/><span class="bc-sep">×</span><t t-esc="build.size_z"/>
+                                </span>
+                            </span>
+                            <span class="bc-fiche-c">
+                                <span class="bc-fiche-l">Niveau</span>
+                                <span class="bc-fiche-v bc-fiche-mot"
+                                      t-esc="dict(debutant='Débutant', confirme='Confirmé',
+                                                  forgeron='Forgeron').get(build.level, '—')"/>
+                            </span>
+                            <span class="bc-fiche-c">
+                                <span class="bc-fiche-l">Palette</span>
+                                <span class="bc-fiche-v bc-fiche-mot" t-field="build.palette_label"/>
+                            </span>
+                            <span class="bc-fiche-c">
+                                <span class="bc-fiche-l">Collection</span>
+                                <span class="bc-fiche-v bc-fiche-mot" t-field="build.serie_id.name"/>
+                            </span>
+                        </div>
+
+                        <div class="bc-inclus">
+                            <span class="bc-inclus-t">Dans la boîte</span>
+                            <ul>
+                                <li>La vue 3D du build, à tourner et à parcourir couche par couche</li>
+                                <li>La liste des blocs de chaque couche, cochable pendant que tu poses</li>
+                                <li>La notice complète, couche par couche</li>
+                                <li>Les recettes de fabrication et les matières premières</li>
+                            </ul>
+                            <span class="bc-inclus-n">
+                                Pas de schematic : on construit soi-même, c'est le principe.
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </xpath>
+    </template>
+</odoo>

@@ -478,3 +478,123 @@ $bc-sable: #C8AF8F;
     background: #323837; color: #FBFAF7; border: 1px solid #98764B;
     &:hover { background: #98764B; }
 }
+
+// --- Fiche produit : la boîte de construction ---------------------------------------
+// Le code visuel d'une boîte de jeu se lit sans légende : bandeau de marque en haut à
+// gauche, bandeau de thème à côté, grande image, âge en rond, numéro de set et nombre de
+// pièces en pied. On le reprend tel quel, avec le rendu du build à la place de l'illustration.
+.bc-produit {
+    padding: 28px 0 8px;
+
+    .bc-produit-haut {
+        display: grid; grid-template-columns: minmax(0, 420px) minmax(0, 1fr);
+        gap: 44px; align-items: start; max-width: 1180px; margin: 0 auto; padding: 0 24px;
+        @media (max-width: 899px) { grid-template-columns: 1fr; gap: 28px; }
+    }
+
+    // La boîte : une face, une tranche, un dessus. Perspective sur le parent, rotation sur
+    // l'ensemble — pas d'image 3D, juste trois faces qui se rejoignent.
+    .bc-boite3d {
+        position: relative; transform-style: preserve-3d;
+        transform: perspective(1600px) rotateX(4deg) rotateY(-15deg);
+        transition: transform 0.4s ease;
+        &:hover { transform: perspective(1600px) rotateX(2deg) rotateY(-7deg); }
+    }
+    .bc-boite3d-face {
+        position: relative; aspect-ratio: 4 / 3.4; display: flex; flex-direction: column;
+        background: $bc-carte; border: 2px solid $bc-encre;
+        box-shadow: 0 22px 44px rgba(50, 56, 55, 0.34);
+        overflow: hidden;
+    }
+    .bc-boite3d-tete { display: flex; align-items: stretch; gap: 0; flex: none; }
+    .bc-marque {
+        display: flex; align-items: center; justify-content: center;
+        padding: 10px 14px; background: $bc-bronze; color: $bc-carte;
+        font-family: 'VT323', monospace; font-size: 26px; line-height: 1;
+        letter-spacing: 0.04em; border-right: 2px solid $bc-encre;
+    }
+    .bc-theme {
+        display: flex; align-items: center; padding: 0 16px;
+        font-size: 13px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase;
+    }
+    .bc-boite3d-image {
+        flex: 1; min-height: 0; background: #1B1F1E;
+        img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    }
+    .bc-boite3d-pied {
+        display: flex; align-items: center; gap: 12px; flex: none;
+        padding: 10px 14px; background: $bc-carte; border-top: 2px solid $bc-encre;
+    }
+    .bc-age {
+        display: flex; align-items: center; justify-content: center; flex: none;
+        width: 44px; height: 44px; border-radius: 50%;
+        background: $bc-page; border: 2px solid $bc-encre;
+        font-family: 'VT323', monospace; font-size: 24px; line-height: 1;
+    }
+    .bc-boite3d-ref { display: flex; flex-direction: column; min-width: 0; flex: 1; }
+    .bc-boite3d-num {
+        font-family: 'VT323', monospace; font-size: 22px; line-height: 1; color: $bc-bronze-sombre;
+    }
+    .bc-boite3d-nom {
+        font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    }
+    .bc-boite3d-pcs {
+        display: flex; flex-direction: column; align-items: flex-end; flex: none;
+        font-family: 'VT323', monospace; font-size: 30px; line-height: 0.9;
+    }
+    .bc-boite3d-pcs-u {
+        font-family: 'Anonymous Pro', monospace; font-size: 9px;
+        letter-spacing: 0.16em; text-transform: uppercase; color: $bc-encre-douce;
+    }
+    // La tranche : posée sur le bord droit, tournée d'un quart de tour.
+    .bc-boite3d-tranche {
+        position: absolute; top: 0; right: 0; height: 100%; width: 44px;
+        transform-origin: right center; transform: rotateY(90deg) translateX(44px);
+        background: $bc-bronze-sombre; border: 2px solid $bc-encre;
+        display: flex; flex-direction: column; align-items: center; justify-content: space-between;
+        padding: 12px 0; color: $bc-carte;
+    }
+    .bc-tranche-t {
+        writing-mode: vertical-rl; font-family: 'VT323', monospace; font-size: 22px;
+        letter-spacing: 0.06em;
+    }
+    .bc-tranche-n { font-family: 'VT323', monospace; font-size: 18px; color: $bc-sable; }
+    .bc-boite3d-dessus {
+        position: absolute; top: 0; left: 0; width: 100%; height: 44px;
+        transform-origin: center top; transform: rotateX(90deg);
+        background: $bc-sable; border: 2px solid $bc-encre;
+    }
+
+    .bc-produit-texte { display: flex; flex-direction: column; gap: 12px; }
+    .bc-produit-titre {
+        font-family: 'VT323', monospace; font-size: 62px; line-height: 0.9; margin: 0;
+    }
+    .bc-produit-accroche { margin: 0; font-size: 15px; line-height: 1.6; color: $bc-encre-douce; }
+
+    .bc-fiche {
+        display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px;
+        margin-top: 6px; background: $bc-trait; border: 1px solid $bc-trait;
+        @media (max-width: 599px) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    .bc-fiche-c {
+        display: flex; flex-direction: column; gap: 2px; padding: 12px 14px;
+        background: $bc-carte;
+    }
+    .bc-fiche-l {
+        font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase;
+        color: $bc-encre-douce; font-weight: 700;
+    }
+    .bc-fiche-v { font-family: 'VT323', monospace; font-size: 30px; line-height: 1; }
+    .bc-fiche-mot { font-family: 'Anonymous Pro', monospace; font-size: 15px; }
+
+    .bc-inclus {
+        margin-top: 8px; padding: 18px 20px; background: $bc-carte;
+        border: 1px solid $bc-trait; border-left: 5px solid $bc-sable;
+        ul { margin: 8px 0 0; padding-left: 20px; }
+        li { font-size: 14px; line-height: 1.7; }
+    }
+    .bc-inclus-t { font-family: 'VT323', monospace; font-size: 28px; line-height: 1; }
+    .bc-inclus-n {
+        display: block; margin-top: 10px; font-size: 12px; color: $bc-encre-douce;
+    }
+}

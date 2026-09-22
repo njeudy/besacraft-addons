@@ -15,6 +15,7 @@
         "views/menus.xml",
         "views/website_catalogue.xml",
         "views/website_tuto.xml",
+        "views/website_produit.xml",
     ],
     "assets": {
         "web.assets_frontend": [
