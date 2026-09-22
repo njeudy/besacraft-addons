@@ -8,9 +8,6 @@
             <!-- Les polices se chargent par un lien, jamais par @import dans le SCSS :
                  l'URL Google contient des ';' et le compilateur retire les guillemets,
                  ce qui coupe la regle au milieu de l'URL et casse tout le bundle. -->
-            <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="crossorigin"/>
-            <link rel="stylesheet"
-                  href="https://fonts.googleapis.com/css2?family=VT323&amp;family=Anonymous+Pro:ital,wght@0,400;0,700;1,400&amp;display=swap"/>
             <div id="wrap" class="bc-notice">
                 <div class="bc-page">
 

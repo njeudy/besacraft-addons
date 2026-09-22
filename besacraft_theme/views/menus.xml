@@ -1,0 +1,19 @@
+<odoo>
+    <!-- La navigation du site. `noupdate="1"` : une fois posés, les menus appartiennent à
+         Nicolas -- il les réordonne et les renomme dans l'éditeur, et une mise à jour du
+         module ne doit pas lui repasser dessus. -->
+    <data noupdate="1">
+        <record id="menu_builds" model="website.menu">
+            <field name="name">Les séries</field>
+            <field name="url">/builds</field>
+            <field name="parent_id" ref="website.main_menu"/>
+            <field name="sequence">20</field>
+        </record>
+        <record id="menu_boutique" model="website.menu">
+            <field name="name">La boutique</field>
+            <field name="url">/shop</field>
+            <field name="parent_id" ref="website.main_menu"/>
+            <field name="sequence">30</field>
+        </record>
+    </data>
+</odoo>

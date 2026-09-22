@@ -1,0 +1,135 @@
+// Habillage du site : ce que les variables primaires ne peuvent pas dire.
+//
+// Les variables donnent les couleurs, les fontes et les rayons. Restent les gestes propres
+// à la charte « Notice » : les petites capitales, les filets, le rythme de l'en-tête, les
+// badges de série. Tout est scopé sous le corps du site pour ne pas déborder sur le backend.
+
+$bc-page:          #F4F1EA;
+$bc-carte:         #FBFAF7;
+$bc-fond2:         #EDE7DA;
+$bc-trait:         #E4DFD3;
+$bc-trait-fort:    #D8D2C4;
+$bc-encre:         #323837;
+$bc-encre-douce:   #4A5250;
+$bc-bronze:        #98764B;
+$bc-bronze-sombre: #7A5D38;
+$bc-sable:         #C8AF8F;
+$bc-bleu:          #478BB2;
+$bc-bleu-sombre:   #2F6A8E;
+$bc-rouge:         #A33A2C;
+
+#wrapwrap {
+    background: $bc-page;
+    color: $bc-encre;
+
+    // VT323 rend mieux légèrement espacé : sans cela les chiffres se collent.
+    h1, h2, h3, h4, h5, .h1, .h2, .h3, .h4 {
+        letter-spacing: 0.01em;
+    }
+
+    a { color: $bc-bleu-sombre; }
+    a:hover { color: $bc-bronze-sombre; }
+
+    // --- L'en-tête ---------------------------------------------------------------------
+    header .navbar {
+        background: $bc-carte;
+        border-bottom: 2px solid $bc-encre;
+
+        .navbar-brand {
+            font-family: 'VT323', monospace;
+            font-size: 34px;
+            line-height: 1;
+            color: $bc-encre;
+        }
+        .nav-link {
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: $bc-encre-douce;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: $bc-encre;
+            // Le filet sous l'onglet actif plutôt qu'un aplat : la charte ne remplit pas,
+            // elle souligne.
+            box-shadow: inset 0 -2px 0 0 $bc-bronze-sombre;
+        }
+    }
+
+    // --- Le pied ------------------------------------------------------------------------
+    footer {
+        background: $bc-encre;
+        color: $bc-page;
+        border-top: 2px solid $bc-encre;
+
+        a, .nav-link { color: $bc-sable; }
+        a:hover { color: $bc-carte; }
+        h1, h2, h3, h4, h5 { color: $bc-page; font-family: 'VT323', monospace; }
+    }
+
+    // --- Boutons ------------------------------------------------------------------------
+    .btn {
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        font-size: 12px;
+        // 44 px est le plancher tactile de la charte ; un bouton principal vise 52.
+        min-height: 44px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .btn-primary {
+        background: $bc-encre;
+        border-color: $bc-encre;
+        color: $bc-page;
+        &:hover { background: $bc-bronze-sombre; border-color: $bc-bronze-sombre; }
+    }
+    .btn-secondary, .btn-outline-primary {
+        background: transparent;
+        border: 1px solid $bc-trait-fort;
+        color: $bc-encre;
+        &:hover { background: $bc-fond2; border-color: $bc-encre; color: $bc-encre; }
+    }
+
+    // --- Gestes de la charte, réutilisables dans les pages --------------------------------
+    .bc-surtitre {
+        display: inline-block;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        // Le bronze clair ne passe pas 4,5:1 : les petites capitales prennent le foncé.
+        color: $bc-bronze-sombre;
+    }
+    .bc-chiffre {
+        font-family: 'VT323', monospace;
+        line-height: 1;
+    }
+    // VT323 n'a pas de glyphe « × » : il retombe sur un X capitale. Le signe se pose donc
+    // toujours dans ce span, en Anonymous Pro, et seuls les chiffres restent en VT323.
+    .bc-mult {
+        font-family: 'Anonymous Pro', monospace;
+        padding: 0 0.15em;
+    }
+    .bc-filet { border: 0; border-top: 1px solid $bc-trait; margin: 26px 0; }
+    .bc-filet-fort { border: 0; border-top: 2px solid $bc-encre; margin: 26px 0; }
+
+    .bc-badge {
+        display: inline-block;
+        padding: 6px 13px;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+    }
+    .bc-badge-1722     { background: $bc-sable;      color: $bc-encre; }
+    .bc-badge-survie   { background: $bc-bleu-sombre; color: $bc-carte; }
+    .bc-badge-hardcore { background: $bc-rouge;      color: $bc-carte; }
+
+    .bc-carte-notice {
+        background: $bc-carte;
+        border: 1px solid $bc-trait;
+        box-shadow: 0 16px 38px rgba(50, 56, 55, 0.10);
+    }
+}

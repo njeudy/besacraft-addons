@@ -1,0 +1,69 @@
+// Palette et typographies du site, posées AVANT Bootstrap.
+//
+// C'est le seul endroit d'où l'on change les couleurs et les fontes de TOUT le site : les
+// variables primaires sont lues avant que Bootstrap ne calcule ses dérivés (états de bouton,
+// bordures, tables, formulaires). Les redéfinir plus tard ne rattrape que ce qu'on pense à
+// couvrir, et la page finit bricolée sélecteur par sélecteur.
+//
+// On passe par $o-user-website-values et $o-user-theme-color-palette -- les variables que
+// l'éditeur de site remplit lui-même quand on choisit une police ou une couleur -- plutôt
+// que par une palette de thème nommée : une palette suppose un module `theme_*`, dont
+// l'installation COPIE les vues en base, et la copie cesse alors de suivre le module.
+//
+// Les valeurs viennent de la charte validée (handoff Claude Design du 14/09) : elles se
+// retrouvent à l'identique dans les vidéos, sur les boîtes et dans la notice imprimée.
+// Ne pas les improviser.
+
+$bc-page:          #F4F1EA;
+$bc-carte:         #FBFAF7;
+$bc-fond2:         #EDE7DA;
+$bc-trait:         #E4DFD3;
+$bc-trait-fort:    #D8D2C4;
+$bc-encre:         #323837;
+$bc-encre-douce:   #4A5250;
+$bc-bronze:        #98764B;
+$bc-bronze-sombre: #7A5D38;
+$bc-sable:         #C8AF8F;
+$bc-bleu:          #478BB2;
+$bc-bleu-sombre:   #2F6A8E;
+$bc-rouge:         #A33A2C;
+$bc-nuit:          #1B1F1E;
+$bc-nuit-panneau:  #323837;
+$bc-nuit-encre:    #EDE6DA;
+
+$o-user-theme-color-palette: map-merge((
+    'o-color-1': $bc-encre,          // primaire : boutons pleins, aplats forts
+    'o-color-2': $bc-bronze-sombre,  // secondaire
+    'o-color-3': $bc-page,           // fond clair de section
+    'o-color-4': $bc-carte,          // fond de carte
+    // Le bleu de marque est réservé aux grandes tailles : sous 24 px il ne passe pas
+    // 4,5:1. C'est le bleu foncé qui sert d'accent lisible.
+    'o-color-5': $bc-bleu-sombre,
+    'success': #4A7A4A,
+    'danger':  $bc-rouge,
+    'warning': $bc-bronze,
+    'info':    $bc-bleu-sombre,
+), $o-user-theme-color-palette);
+
+$o-user-website-values: map-merge((
+    // Deux familles, aucune autre : ni Inter, ni Roboto, ni Arial, ni police système.
+    'font': 'Anonymous Pro',
+    'headings-font': 'VT323',
+    'navbar-font': 'Anonymous Pro',
+    'buttons-font': 'Anonymous Pro',
+    'font-size-base': 15px,
+    // Pas d'arrondi : la charte n'en prévoit que pour les pastilles rondes, traitées au
+    // cas par cas dans theme.scss.
+    'btn-border-radius': 0,
+    'btn-border-radius-sm': 0,
+    'btn-border-radius-lg': 0,
+    'input-border-radius': 0,
+    'btn-padding-y': 14px,
+    'btn-padding-x': 24px,
+    'btn-padding-y-lg': 16px,
+    'btn-padding-x-lg': 30px,
+    'btn-font-size': 14px,
+    'headings-line-height': 0.92,
+    'header-template': 'default',
+    'footer-template': 'descriptive',
+), $o-user-website-values);
