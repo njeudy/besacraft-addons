@@ -12,7 +12,44 @@
 
             <div id="wrap" class="bc-notice bc-tuto">
 
-                <div class="bc-plein" id="bc_plein">
+                <t t-if="not accessible">
+                    <!-- Couverture pleine page : le build se devine derriere le flou, on ne
+                         le cache pas derriere une porte close. La notice, elle, n'est pas
+                         dans la page tant que l'acces n'est pas accorde. -->
+                    <div class="bc-paywall">
+                        <div class="bc-paywall-fond"
+                             t-attf-style="background-image:url('/web/image/besacraft.build/#{build.id}/overview_image')"/>
+                        <div class="bc-paywall-boite">
+                            <img t-attf-src="/web/image/besacraft.build/#{build.id}/overview_image"
+                                 t-att-alt="build.name" class="bc-paywall-img"/>
+                            <span class="bc-paywall-serie">
+                                <t t-esc="build.serie_id.name"/> · Tuto n°<t t-esc="build.code"/>
+                            </span>
+                            <span class="bc-paywall-titre" t-field="build.name"/>
+                            <span class="bc-paywall-accroche" t-field="build.accroche"/>
+                            <div class="bc-paywall-stats">
+                                <span><t t-esc="'{:,}'.format(build.block_count).replace(',', ' ')"/> blocs</span>
+                                <span><t t-esc="build.layer_count"/> couches</span>
+                                <span><t t-esc="build.size_x"/>×<t t-esc="build.size_y"/>×<t t-esc="build.size_z"/></span>
+                            </div>
+                            <t t-if="build.enroll == 'payment' and build.product_id">
+                                <a t-att-href="build.sudo().product_id.product_tmpl_id.website_url"
+                                   class="bc-btn-achat">
+                                    Obtenir ce tutoriel ·
+                                    <t t-esc="'%.2f' % build.sudo().product_id.list_price"/> €
+                                </a>
+                                <span class="bc-paywall-note">La vue 3D, la liste cochable et la
+                                    notice couche par couche s'ouvrent aussitôt.</span>
+                            </t>
+                            <span t-else="" class="bc-paywall-note">
+                                Ce tutoriel s'ouvre sur invitation.
+                            </span>
+                            <a href="/builds" class="bc-paywall-retour">‹ Retour au catalogue</a>
+                        </div>
+                    </div>
+                </t>
+
+                <div t-if="accessible" class="bc-plein" id="bc_plein">
                     <div class="bc-barre">
                         <div class="bc-barre-g">
                             <span class="bc-tuto-n">TUTO N°<t t-esc="build.code"/></span>
@@ -115,45 +152,11 @@
                                     </div>
                                 </div>
                             </t>
-                            <t t-else="">
-                                <!-- Paywall : on devine le build derrière un voile flouté.
-                                     C'est l'image d'ensemble qui est floutée en fond, jamais
-                                     la notice : elle n'est pas dans la page tant qu'on n'a
-                                     pas l'accès. -->
-                                <div class="bc-paywall">
-                                    <div class="bc-paywall-fond"
-                                         t-attf-style="background-image:url('/web/image/besacraft.build/#{build.id}/overview_image')"/>
-                                    <div class="bc-paywall-boite">
-                                        <img t-attf-src="/web/image/besacraft.build/#{build.id}/overview_image"
-                                             t-att-alt="build.name" class="bc-paywall-img"/>
-                                        <span class="bc-paywall-serie" t-field="build.serie_id.name"/>
-                                        <span class="bc-paywall-titre" t-field="build.name"/>
-                                        <span class="bc-paywall-accroche" t-field="build.accroche"/>
-                                        <div class="bc-paywall-stats">
-                                            <span><t t-esc="'{:,}'.format(build.block_count).replace(',', ' ')"/> blocs</span>
-                                            <span><t t-esc="build.layer_count"/> couches</span>
-                                            <span><t t-esc="build.size_x"/>×<t t-esc="build.size_y"/>×<t t-esc="build.size_z"/></span>
-                                        </div>
-                                        <t t-if="build.enroll == 'payment' and build.product_id">
-                                            <a t-att-href="build.sudo().product_id.product_tmpl_id.website_url"
-                                               class="bc-btn-achat">
-                                                Obtenir ce tutoriel ·
-                                                <t t-esc="'%.2f' % build.sudo().product_id.list_price"/> €
-                                            </a>
-                                            <span class="bc-paywall-note">La vue 3D, la liste cochable
-                                                et la notice couche par couche s'ouvrent aussitôt.</span>
-                                        </t>
-                                        <span t-else="" class="bc-paywall-note">
-                                            Ce tutoriel s'ouvre sur invitation.
-                                        </span>
-                                    </div>
-                                </div>
-                            </t>
                         </div>
                     </div>
                 </div>
 
-                <div class="bc-page">
+                <div t-if="accessible" class="bc-page">
                     <section class="bc-resume">
                         <span class="bc-stat">
                             <span class="bc-stat-l">Blocs</span>
