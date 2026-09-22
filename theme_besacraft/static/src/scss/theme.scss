@@ -27,8 +27,12 @@ $bc-rouge:         #A33A2C;
         letter-spacing: 0.01em;
     }
 
-    a { color: $bc-bleu-sombre; }
-    a:hover { color: $bc-bronze-sombre; }
+    // `:where()` annule la spécificité du sélecteur parent : la règle pèse alors autant
+    // qu'un `a` nu, et la moindre classe la bat. Sans cela `#wrapwrap a` (0,1,1) écrasait
+    // la couleur de texte des boutons des pages -- `.bc-btn` (0,1,0) se retrouvait écrit
+    // en bleu sur son propre fond bleu, donc illisible.
+    :where(a) { color: $bc-bleu-sombre; }
+    :where(a:hover) { color: $bc-bronze-sombre; }
 
     // --- L'en-tête ---------------------------------------------------------------------
     header .navbar {
