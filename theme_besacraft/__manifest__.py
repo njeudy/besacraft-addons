@@ -18,10 +18,6 @@
             "theme_besacraft/static/src/scss/primary_variables.scss",
         ],
         "web.assets_frontend": [
-            # Les fontes viennent par URL plutot que par `@import url()` dans le SCSS :
-            # l'URL de Google Fonts contient des `;` dans son parametre `wght`, sur lesquels
-            # le compilateur SCSS coupe la regle -- ce qui casse le bundle entier.
-            "https://fonts.googleapis.com/css2?family=VT323&family=Anonymous+Pro:ital,wght@0,400;0,700;1,400&display=swap",
             "theme_besacraft/static/src/scss/theme.scss",
         ],
     },
