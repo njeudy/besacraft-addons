@@ -11,6 +11,9 @@
     "category": "Theme/Creative",
     "summary": "Notice-style skin for besacraft.fr: palette, type scale, header and footer",
     "depends": ["website"],
+    "data": [
+        "data/menus.xml",
+    ],
     "assets": {
         # En APPEND : le site pose ses propres valeurs d'editeur dans ce meme bundle, et ce
         # qui passe avant se fait ecraser sans bruit.

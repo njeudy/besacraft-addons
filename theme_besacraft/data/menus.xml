@@ -1,0 +1,21 @@
+<odoo>
+    <!-- Les entrées de navigation du thème.
+
+         En `theme.website.menu` et pas en `website.menu` : Odoo les recopie vers le site qui
+         active le thème, avec son `website_id`. Un `website.menu` posé depuis un module
+         ordinaire n'appartiendrait à aucun site en particulier et apparaîtrait sur les six.
+
+         Ici la copie est voulue : un menu appartient au site, il se réordonne et se renomme
+         dans l'éditeur, et une mise à jour du module ne doit pas repasser dessus. C'est
+         l'inverse d'une vue, qu'on veut voir suivre son module. -->
+    <record id="menu_builds" model="theme.website.menu">
+        <field name="name">Les séries</field>
+        <field name="url">/builds</field>
+        <field name="sequence">15</field>
+    </record>
+    <record id="menu_boutique" model="theme.website.menu">
+        <field name="name">La boutique</field>
+        <field name="url">/shop</field>
+        <field name="sequence">18</field>
+    </record>
+</odoo>
