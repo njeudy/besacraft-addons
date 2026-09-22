@@ -36,14 +36,12 @@ class BesacraftBuilds(http.Controller):
             [("code", "=", "%03d" % code), ("is_published", "=", True)], limit=1)
         if not build:
             return request.not_found()
-        # Pas encore l'accès : on envoie vers ce qu'il faut acheter, jamais vers un mur.
-        # Une page qui refuse sans dire comment entrer est une impasse.
-        redirection = self._vers_le_produit(build)
-        if redirection:
-            return redirection
         # Les couches partent en JSON : la page change de couche sans aller-retour serveur,
         # et la liste se coche pendant qu'on pose, hors ligne si besoin.
-        couches = [{
+        accessible = build.is_accessible_by(request.env.user.partner_id)
+        # Sans accès, la notice ne part pas dans la page : le voile serait une serrure en
+        # carton si la liste des blocs restait lisible dans le code source.
+        couches = [] if not accessible else [{
             "sequence": c.sequence,
             "title": c.title or "",
             "block_count": c.block_count,
@@ -52,7 +50,7 @@ class BesacraftBuilds(http.Controller):
         } for c in build.layer_ids]
         return request.render("besacraft_builds.tuto", {
             "build": build,
-            "accessible": build.is_accessible_by(request.env.user.partner_id),
+            "accessible": accessible,
             "couches_json": json.dumps(couches),
             "decalage": build.layer_offset,
         })

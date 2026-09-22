@@ -116,26 +116,35 @@
                                 </div>
                             </t>
                             <t t-else="">
-                                <div class="bc-scene-vide">
-                                    <img t-attf-src="/web/image/besacraft.build/#{build.id}/overview_image"
-                                         t-att-alt="build.name"/>
-                                    <div t-if="not accessible" class="bc-verrou">
-                                        <span class="bc-verrou-t">Ce tutoriel est réservé</span>
-                                        <span class="bc-verrou-s">La vue 3D, la liste cochable et la
-                                            notice s'ouvrent une fois l'accès obtenu.</span>
-                                        <form t-if="build.enroll == 'payment' and build.product_id"
-                                              action="/shop/cart/update" method="post" class="bc-achat">
-                                            <input type="hidden" name="csrf_token"
-                                                   t-att-value="request.csrf_token()"/>
-                                            <input type="hidden" name="product_id" t-att-value="build.product_id.id"/>
-                                            <input type="hidden" name="express" value="1"/>
-                                            <button type="submit" class="bc-btn-achat">
+                                <!-- Paywall : on devine le build derrière un voile flouté.
+                                     C'est l'image d'ensemble qui est floutée en fond, jamais
+                                     la notice : elle n'est pas dans la page tant qu'on n'a
+                                     pas l'accès. -->
+                                <div class="bc-paywall">
+                                    <div class="bc-paywall-fond"
+                                         t-attf-style="background-image:url('/web/image/besacraft.build/#{build.id}/overview_image')"/>
+                                    <div class="bc-paywall-boite">
+                                        <img t-attf-src="/web/image/besacraft.build/#{build.id}/overview_image"
+                                             t-att-alt="build.name" class="bc-paywall-img"/>
+                                        <span class="bc-paywall-serie" t-field="build.serie_id.name"/>
+                                        <span class="bc-paywall-titre" t-field="build.name"/>
+                                        <span class="bc-paywall-accroche" t-field="build.accroche"/>
+                                        <div class="bc-paywall-stats">
+                                            <span><t t-esc="'{:,}'.format(build.block_count).replace(',', ' ')"/> blocs</span>
+                                            <span><t t-esc="build.layer_count"/> couches</span>
+                                            <span><t t-esc="build.size_x"/>×<t t-esc="build.size_y"/>×<t t-esc="build.size_z"/></span>
+                                        </div>
+                                        <t t-if="build.enroll == 'payment' and build.product_id">
+                                            <a t-att-href="build.sudo().product_id.product_tmpl_id.website_url"
+                                               class="bc-btn-achat">
                                                 Obtenir ce tutoriel ·
-                                                <span t-esc="'%.2f' % build.product_id.list_price"/> €
-                                            </button>
-                                        </form>
-                                        <span t-if="build.enroll == 'invite'" class="bc-verrou-s">
-                                            Sur invitation.
+                                                <t t-esc="'%.2f' % build.sudo().product_id.list_price"/> €
+                                            </a>
+                                            <span class="bc-paywall-note">La vue 3D, la liste cochable
+                                                et la notice couche par couche s'ouvrent aussitôt.</span>
+                                        </t>
+                                        <span t-else="" class="bc-paywall-note">
+                                            Ce tutoriel s'ouvre sur invitation.
                                         </span>
                                     </div>
                                 </div>
@@ -166,8 +175,8 @@
                         </span>
                     </section>
 
-                    <h2 class="bc-h2">La notice, couche par couche</h2>
-                    <div class="bc-notice-liste" id="bc_notice">
+                    <h2 t-if="accessible" class="bc-h2">La notice, couche par couche</h2>
+                    <div t-if="accessible" class="bc-notice-liste" id="bc_notice">
                         <t t-foreach="build.layer_ids" t-as="couche">
                             <article class="bc-couche-carte" t-att-data-seq="couche.sequence">
                                 <div class="bc-cc-num">
@@ -200,7 +209,7 @@
                             </article>
                         </t>
                     </div>
-                    <button type="button" class="bc-plus" id="bc_plus">Afficher les couches suivantes</button>
+                    <button t-if="accessible" type="button" class="bc-plus" id="bc_plus">Afficher les couches suivantes</button>
 
                     <section class="bc-legende">
                         <span class="bc-legende-t">Crédit</span>

@@ -353,6 +353,54 @@ $bc-sable: #C8AF8F;
         justify-content: center; gap: 14px; position: relative;
         img { max-width: 100%; max-height: 100%; object-fit: contain; }
     }
+
+    // Paywall : le build se devine derriere, on ne le cache pas derriere une porte close.
+    .bc-paywall {
+        position: relative; flex: 1; min-height: 0;
+        display: flex; align-items: center; justify-content: center; padding: 24px;
+        overflow: hidden;
+    }
+    .bc-paywall-fond {
+        position: absolute; inset: -40px;   // deborde : le flou mange les bords
+        background-size: cover; background-position: center;
+        filter: blur(18px) saturate(0.85);
+        transform: scale(1.06);
+    }
+    .bc-paywall-boite {
+        position: relative; z-index: 1; max-width: 460px; width: 100%;
+        display: flex; flex-direction: column; align-items: center; gap: 10px;
+        padding: 26px 28px 30px; text-align: center;
+        background: rgba(27, 31, 30, 0.72);
+        backdrop-filter: blur(6px);
+        border: 1px solid rgba(200, 175, 143, 0.4);
+        color: $bc-carte;
+    }
+    .bc-paywall-img {
+        width: 190px; height: 130px; object-fit: cover;
+        border: 2px solid $bc-sable;
+    }
+    .bc-paywall-serie {
+        font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: $bc-sable;
+        font-weight: 700;
+    }
+    .bc-paywall-titre { font-family: 'VT323', monospace; font-size: 44px; line-height: 0.95; }
+    .bc-paywall-accroche { font-size: 13px; color: #EDE6DA; }
+    .bc-paywall-stats {
+        display: flex; flex-wrap: wrap; justify-content: center; gap: 0;
+        margin: 4px 0 2px;
+        span {
+            padding: 0 14px; font-family: 'VT323', monospace; font-size: 22px;
+            & + span { border-left: 1px solid rgba(200, 175, 143, 0.4); }
+        }
+    }
+    .bc-paywall-note { font-size: 11px; color: $bc-sable; max-width: 34ch; }
+    a.bc-btn-achat {
+        display: inline-block; margin-top: 6px; text-decoration: none;
+        min-height: 48px; line-height: 44px; padding: 0 22px;
+        font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+        background: $bc-bronze; color: $bc-carte; border: 2px solid $bc-sable;
+        &:hover { background: $bc-bronze-sombre; color: $bc-carte; }
+    }
     .bc-verrou {
         position: absolute; left: 50%; bottom: 40px; transform: translateX(-50%);
         display: flex; flex-direction: column; align-items: center; gap: 8px;
