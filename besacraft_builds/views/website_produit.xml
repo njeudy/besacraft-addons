@@ -9,40 +9,12 @@
             <div t-if="build" class="bc-notice bc-produit">
                 <div class="bc-produit-haut">
 
-                    <div class="bc-boite3d">
-                        <div class="bc-boite3d-face">
-                            <div class="bc-boite3d-tete">
-                                <span class="bc-marque">BESACRAFT</span>
-                                <span class="bc-theme"
-                                      t-attf-style="background:#{build.serie_id.color};color:#{build.serie_id.badge_ink}">
-                                    <t t-esc="build.serie_id.name"/>
-                                </span>
-                            </div>
-                            <div class="bc-boite3d-image">
-                                <img t-attf-src="/web/image/besacraft.build/#{build.id}/overview_image"
-                                     t-att-alt="build.name"/>
-                            </div>
-                            <div class="bc-boite3d-pied">
-                                <span class="bc-age">
-                                    <t t-esc="dict(debutant='0+', confirme='6+',
-                                                   forgeron='9+').get(build.level, '0+')"/>
-                                </span>
-                                <span class="bc-boite3d-ref">
-                                    <span class="bc-boite3d-num" t-esc="build.code"/>
-                                    <span class="bc-boite3d-nom" t-field="build.name"/>
-                                </span>
-                                <span class="bc-boite3d-pcs">
-                                    <t t-esc="'{:,}'.format(build.block_count).replace(',', ' ')"/>
-                                    <span class="bc-boite3d-pcs-u">blocs</span>
-                                </span>
-                            </div>
-                        </div>
-                        <div class="bc-boite3d-tranche">
-                            <span class="bc-tranche-t" t-field="build.name"/>
-                            <span class="bc-tranche-n" t-esc="build.code"/>
-                        </div>
-                        <div class="bc-boite3d-dessus"/>
-                    </div>
+                    <!-- La boîte n'est pas redessinée ici : c'est l'image du produit,
+                         rendue dans Blender. Deux boîtes sur la même page, l'une dessinée
+                         et l'autre photographiée, ne racontaient pas la même chose. -->
+                    <img class="bc-produit-boite"
+                         t-attf-src="/web/image/product.template/#{product.id}/image_1024"
+                         t-att-alt="build.name"/>
 
                     <div class="bc-produit-texte">
                         <span class="bc-surtitre">
