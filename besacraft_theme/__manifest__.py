@@ -18,8 +18,11 @@
     "assets": {
         # Les variables primaires sont lues AVANT Bootstrap : c'est le seul endroit d'où on
         # peut changer les couleurs et les fontes de tout le site plutôt que de les répéter.
+        # En APPEND, pas en prepend : le site pose ses propres valeurs d'éditeur dans ce
+        # même bundle, et ce qui passe avant se fait écraser sans bruit -- le module semble
+        # installé et la page garde ses fontes d'origine.
         "web._assets_primary_variables": [
-            ("prepend", "besacraft_theme/static/src/scss/primary_variables.scss"),
+            "besacraft_theme/static/src/scss/primary_variables.scss",
         ],
         "web.assets_frontend": [
             "besacraft_theme/static/src/scss/theme.scss",

@@ -117,9 +117,15 @@ class BesacraftBuild(models.Model):
     # Ce qu'on achete, dit dans l'ordre ou on se pose les questions : ce que c'est, ce
     # qu'il y a dedans, et combien de temps ca prend. Les chiffres viennent du plan, pas
     # d'une estimation -- promettre 23 couches et en livrer 21 se voit a la premiere.
-    CASE = ('<div class="col-6 col-md-4 p-3 border">'
-            '<div class="small text-uppercase text-muted" style="letter-spacing:.16em">%s</div>'
-            '<div style="font-size:1.6rem;line-height:1.1">%s</div></div>')
+    # Une grille CSS, pas un `row` Bootstrap : le champ est rendu hors de tout `container`
+    # selon le gabarit de boutique, et les marges négatives d'un `row` débordent alors de la
+    # page -- le texte se retrouve coupé sur le bord droit.
+    GRILLE = ('<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));'
+              'gap:1px;background:#E4DFD3;border:1px solid #E4DFD3;margin:1.5rem 0">%s</div>')
+    CASE = ('<div style="background:#FBFAF7;padding:14px 16px">'
+            '<div style="font-size:11px;font-weight:700;letter-spacing:.16em;'
+            'text-transform:uppercase;color:#7A5D38">%s</div>'
+            '<div style="font-size:1.6rem;line-height:1.1;color:#323837">%s</div></div>')
 
     DESCRIPTION = """
 <p class="lead">%(accroche)s</p>
@@ -127,7 +133,7 @@ class BesacraftBuild(models.Model):
 suivante, jusqu'au toit. Pas de plan à déchiffrer, pas de vidéo à mettre en pause toutes les
 dix secondes — la visionneuse 3D tourne dans le navigateur et n'affiche que la couche en
 cours de construction.</p>
-<div class="row g-0 my-4">%(cases)s</div>
+%(cases)s
 <h4>Dans la boîte</h4>
 <ul>
   <li><strong>La vue 3D</strong> du build, à tourner et à parcourir couche par couche.</li>
@@ -161,14 +167,14 @@ Jouable en survie — aucun bloc inaccessible, aucune commande, aucun mod obliga
         self.ensure_one()
         emprise = ("%d × %d × %d" % (self.size_x, self.size_y, self.size_z)
                    if self.size_x else "—")
-        cases = "".join(self.CASE % paire for paire in (
+        cases = self.GRILLE % "".join(self.CASE % paire for paire in (
             ("Pièces", "{:,}".format(self.block_count).replace(",", " ")),
             ("Couches", self.layer_count),
             ("Emprise", emprise),
             ("Niveau", self.NIVEAUX_COURT.get(self.level, "—")),
             ("Palette", self.palette_label or "—"),
             ("Collection", self.serie_id.name),
-        ))
+        )))
         return self.DESCRIPTION % {
             "accroche": self.accroche or self.name,
             "cases": cases,

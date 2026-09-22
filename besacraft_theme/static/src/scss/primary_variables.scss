@@ -31,7 +31,10 @@ $bc-nuit:          #1B1F1E;
 $bc-nuit-panneau:  #323837;
 $bc-nuit-encre:    #EDE6DA;
 
-$o-user-theme-color-palette: map-merge((
+// L'ordre du merge compte : nos valeurs en SECOND argument, donc elles gagnent. Posées en
+// premier, elles seraient écrasées par ce que le site porte déjà -- c'est ce qui laissait la
+// page en fontes et couleurs d'origine alors que le module était bien installé.
+$o-user-theme-color-palette: map-merge($o-user-theme-color-palette, (
     'o-color-1': $bc-encre,          // primaire : boutons pleins, aplats forts
     'o-color-2': $bc-bronze-sombre,  // secondaire
     'o-color-3': $bc-page,           // fond clair de section
@@ -43,9 +46,9 @@ $o-user-theme-color-palette: map-merge((
     'danger':  $bc-rouge,
     'warning': $bc-bronze,
     'info':    $bc-bleu-sombre,
-), $o-user-theme-color-palette);
+));
 
-$o-user-website-values: map-merge((
+$o-user-website-values: map-merge($o-user-website-values, (
     // Deux familles, aucune autre : ni Inter, ni Roboto, ni Arial, ni police système.
     'font': 'Anonymous Pro',
     'headings-font': 'VT323',
@@ -66,4 +69,4 @@ $o-user-website-values: map-merge((
     'headings-line-height': 0.92,
     'header-template': 'default',
     'footer-template': 'descriptive',
-), $o-user-website-values);
+));
