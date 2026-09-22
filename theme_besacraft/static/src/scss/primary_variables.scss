@@ -34,6 +34,23 @@ $bc-nuit-encre:    #EDE6DA;
 // L'ordre du merge compte : nos valeurs en SECOND argument, donc elles gagnent. Posées en
 // premier, elles seraient écrasées par ce que le site porte déjà -- c'est ce qui laissait la
 // page en fontes et couleurs d'origine alors que le module était bien installé.
+
+// Les deux fontes, déclarées là où Odoo les attend. Une valeur de `headings-font` qui ne
+// correspond à aucune clé de cette map est ignorée sans bruit -- c'est ce qui laissait les
+// titres en Inter alors que la navbar, stylée à la main, passait bien en VT323. Déclarées
+// ici, Odoo pose lui-même le <link> Google Fonts : rien à charger à la main, et pas de
+// `@import url()` dans le SCSS, dont les `;` casseraient le bundle.
+$o-theme-font-configs: map-merge($o-theme-font-configs, (
+    'VT323': (
+        'family': ('VT323', monospace),
+        'url': 'VT323',
+    ),
+    'Anonymous Pro': (
+        'family': ('Anonymous Pro', monospace),
+        'url': 'Anonymous+Pro:400,400i,700,700i',
+    ),
+));
+
 $o-user-theme-color-palette: map-merge($o-user-theme-color-palette, (
     'o-color-1': $bc-encre,          // primaire : boutons pleins, aplats forts
     'o-color-2': $bc-bronze-sombre,  // secondaire

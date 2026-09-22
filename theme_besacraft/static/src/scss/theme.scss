@@ -127,6 +127,16 @@ $bc-rouge:         #A33A2C;
     .bc-badge-survie   { background: $bc-bleu-sombre; color: $bc-carte; }
     .bc-badge-hardcore { background: $bc-rouge;      color: $bc-carte; }
 
+    // La description d'un produit est rendue hors de tout conteneur par le gabarit de
+    // boutique : elle partait sur toute la largeur de la fenêtre, collée au bord, pendant
+    // que le haut de la fiche restait dans sa grille centrée -- la page semblait coupée en
+    // deux. On lui rend les mêmes marges qu'au reste.
+    #product_full_description {
+        max-width: 1320px;
+        margin-inline: auto;
+        padding-inline: var(--bs-gutter-x, 1.5rem);
+    }
+
     .bc-carte-notice {
         background: $bc-carte;
         border: 1px solid $bc-trait;
