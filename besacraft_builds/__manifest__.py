@@ -6,9 +6,10 @@
     "website": "https://besacraft.fr",
     "category": "Besacraft",
     "summary": "Build tutorials: catalogue, layers and 3D viewer",
-    "depends": ["besacraft_base", "product", "sale", "website"],
+    "depends": ["besacraft_base", "product", "sale", "website", "website_sale", "project"],
     "data": [
         "security/ir.model.access.csv",
+        "wizards/besacraft_vendre_views.xml",
         "data/besacraft_serie_data.xml",
         "views/besacraft_serie_views.xml",
         "views/besacraft_build_views.xml",

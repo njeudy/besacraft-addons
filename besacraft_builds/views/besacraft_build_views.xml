@@ -4,6 +4,12 @@
         <field name="model">besacraft.build</field>
         <field name="arch" type="xml">
             <form>
+                <header>
+                    <button name="action_vendre" type="object" string="Vendre"
+                            class="btn-primary" invisible="enroll == 'payment'"/>
+                    <button name="action_vendre" type="object" string="Modifier la vente"
+                            invisible="enroll != 'payment'"/>
+                </header>
                 <sheet>
                     <field name="overview_image" widget="image" class="oe_avatar"/>
                     <div class="oe_title">

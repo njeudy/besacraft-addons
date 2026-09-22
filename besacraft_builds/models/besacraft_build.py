@@ -102,6 +102,55 @@ class BesacraftBuild(models.Model):
                                 "member_status": member_status})
         return Member.create(a_creer) if a_creer else Member
 
+    def action_vendre(self):
+        """Open the wizard, pre-filled with what we already know."""
+        self.ensure_one()
+        return {
+            "type": "ir.actions.act_window",
+            "name": "Vendre ce build",
+            "res_model": "besacraft.vendre",
+            "view_mode": "form",
+            "target": "new",
+            "context": {"default_build_id": self.id,
+                        "default_price": self.product_id.list_price or 4.0},
+        }
+
+    def _demander_mission_media(self):
+        """Ask a PAO mission to attach what takes time: layer images and the short.
+
+        A dialog must not wait on several megabytes being rendered and uploaded, and the
+        video may not even exist yet. The task is picked up by the next poll.
+        """
+        Tache = self.env["project.task"].sudo()
+        projet = self.env["project.project"].sudo().search(
+            [("name", "ilike", "Besacraft")], limit=1)
+        for build in self:
+            Tache.create({
+                "name": "Médias de la fiche produit — tuto %s %s" % (build.code, build.name),
+                "project_id": projet.id if projet else False,
+                "ai_state": "pending",
+                "description": build._brief_media(),
+            })
+
+    def _brief_media(self):
+        self.ensure_one()
+        return (
+            "<h3>Compléter la fiche produit du tuto %(code)s</h3>"
+            "<p>Le build est en vente, son produit existe et porte déjà le rendu d'ensemble. "
+            "Il reste à l'habiller :</p><ul>"
+            "<li>Ajouter les <b>images de couches</b> (<code>images/step-NN.png</code> et "
+            "<code>plan-NN.png</code> du dossier buildplan) en galerie du produit.</li>"
+            "<li>Ajouter le <b>short vidéo</b> du tuto dans les médias de la fiche produit.</li>"
+            "<li>Vérifier que la boîte de construction s'affiche correctement sur "
+            "<code>%(url)s</code>.</li>"
+            "</ul><p>Build : %(nom)s · %(blocs)s blocs · %(couches)s couches · série %(serie)s.</p>"
+        ) % {
+            "code": self.code, "nom": self.name,
+            "blocs": self.block_count, "couches": self.layer_count,
+            "serie": self.serie_id.name,
+            "url": self.product_id.product_tmpl_id.website_url if self.product_id else "/shop",
+        }
+
     def is_accessible_by(self, partner):
         """True when this partner may see the viewer and the notice."""
         self.ensure_one()
