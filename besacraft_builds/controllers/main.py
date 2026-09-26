@@ -19,8 +19,12 @@ class BesacraftBuilds(http.Controller):
         Borner les ENREGISTREMENTS par `website_id` ne suffisait pas : les autres sites
         servaient /builds en rayon vide, habillage compris. Un catalogue qui existe et
         ne contient rien a l'air cassé — mieux vaut que la page n'existe pas du tout.
+
+        `get_current_website()` et non `request.website` : la route du viewer n'est pas
+        déclarée `website=True` (elle sert un fichier, pas une page), et `request.website`
+        n'y existe donc pas — la garde y répondait 500 au lieu de 404.
         """
-        return not request.website.besacraft_enabled
+        return not request.env["website"].get_current_website().besacraft_enabled
 
     def _filtre_publie(self):
         """`[]` pour un éditeur du site, le filtre de publication pour tout le monde.
