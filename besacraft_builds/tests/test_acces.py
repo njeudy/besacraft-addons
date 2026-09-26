@@ -74,10 +74,19 @@ class TestAcces(HttpCase):
             self.assertIn("Build payant", noms, "recherche « %s »" % terme)
 
     def test_la_recherche_ignore_les_tutos_hors_du_site(self):
-        """Proposer un résultat qui mène à un 404 est pire que ne rien proposer."""
+        """Proposer un résultat qui mène à un 404 est pire que ne rien proposer.
+
+        Interrogé sur « builds » et non sur « all » : `all` réveille aussi
+        `website_appointment`, dont le `_search_get_detail` lit `request.env` et casse
+        hors d'une requête HTTP. Ce n'est pas ce qu'on mesure ici.
+        """
+        self.assertIn("besacraft.build", [
+            d["model"] for d in
+            self.site._search_get_details("builds", "", self.OPTIONS_RECHERCHE)])
         self.site.besacraft_enabled = False
-        details = self.site._search_get_details("all", "", self.OPTIONS_RECHERCHE)
-        self.assertNotIn("besacraft.build", [d["model"] for d in details])
+        self.assertNotIn("besacraft.build", [
+            d["model"] for d in
+            self.site._search_get_details("builds", "", self.OPTIONS_RECHERCHE)])
 
     def test_hors_du_site_besacraft_les_pages_n_existent_pas(self):
         """Pas un rayon vide : la page ne doit pas exister du tout.
