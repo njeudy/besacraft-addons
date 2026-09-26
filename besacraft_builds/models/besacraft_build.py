@@ -24,7 +24,12 @@ class BesacraftBuild(models.Model):
     # publique qu'on partage, elle a besoin de son titre, de sa description et de son image
     # Open Graph. Sans ce mixin, la barre « Optimiser le référencement » de l'éditeur est
     # vide et un lien partagé sort sans vignette.
-    _inherit = ["website.seo.metadata", "website.published.multi.mixin"]
+    #
+    # `website.searchable.mixin` pour que la recherche du site trouve un tuto. Sans lui, le
+    # seul chemin vers /t/<n> est le catalogue : quelqu'un qui tape « hôtel de ville » dans
+    # la loupe ne trouve rien, alors que la page existe.
+    _inherit = ["website.seo.metadata", "website.published.multi.mixin",
+                "website.searchable.mixin"]
     _order = "code"
 
     def _default_website_id(self):
@@ -283,3 +288,27 @@ Jouable en survie — aucun bloc inaccessible, aucune commande, aucun mod obliga
         super()._compute_website_url()
         for build in self:
             build.website_url = "/t/%d" % int(build.code) if build.code else ""
+
+    def _search_get_detail(self, website, order, options):
+        """What the site's search box knows about a tutorial.
+
+        The number is searchable as well as the title: on the box it is the number that
+        is printed large, and that is what someone reads back to you.
+        """
+        domain = [website.website_domain()]
+        # Même règle que les pages : un rédacteur cherche aussi ce qu'il n'a pas publié.
+        if not self.env.user.has_group("website.group_website_designer"):
+            domain.append([("is_published", "=", True)])
+        return {
+            "model": "besacraft.build",
+            "base_domain": domain,
+            "search_fields": ["name", "code", "accroche"],
+            "fetch_fields": ["id", "name", "code", "accroche", "website_url"],
+            "mapping": {
+                "name": {"name": "name", "type": "text", "match": True},
+                "description": {"name": "accroche", "type": "text", "match": True},
+                "website_url": {"name": "website_url", "type": "text", "truncate": False},
+            },
+            "icon": "fa-cubes",
+            "order": "code asc" if "code" not in (order or "") else order,
+        }
