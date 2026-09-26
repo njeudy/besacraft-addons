@@ -34,8 +34,13 @@ class BesacraftBuild(models.Model):
         serves six. Thirty-seven builds had been created that way and showed up in the
         freelance shop. A default costs nothing and closes the hole at the source
         rather than in each caller.
+
+        Exactly one: with several candidates the answer would be arbitrary, and a
+        tutorial filed under the wrong site is harder to notice than one filed under
+        none. Ambiguity leaves the field empty and the human decides.
         """
-        return self.env["website"].search([("besacraft_enabled", "=", True)], limit=1)
+        sites = self.env["website"].search([("besacraft_enabled", "=", True)])
+        return sites if len(sites) == 1 else self.env["website"]
 
     # Redéclaré pour son seul défaut : le champ lui-même vient du mixin.
     website_id = fields.Many2one(default=lambda self: self._default_website_id())

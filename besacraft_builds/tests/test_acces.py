@@ -5,6 +5,11 @@ from odoo.tests import HttpCase, tagged
 class TestAcces(HttpCase):
     def setUp(self):
         super().setUp()
+        # url_open tape le site par défaut, et le catalogue ne se sert que là où il est
+        # activé. Sans ce drapeau les fiches répondent 404 — ce qui est le comportement
+        # voulu hors de Besacraft, mais pas ce que ces tests mesurent.
+        self.site = self.env.ref("website.default_website")
+        self.site.besacraft_enabled = True
         self.produit = self.env["product.product"].create({
             "name": "Tuto test", "type": "service",
             "is_besacraft_tutorial": True, "list_price": 4.0,
@@ -14,6 +19,9 @@ class TestAcces(HttpCase):
             "name": "Build payant", "code": "911", "enroll": "payment",
             "product_id": self.produit.id, "is_published": True,
             "serie_id": self.env.ref("besacraft_builds.serie_survie").id,
+            # Explicite : le défaut dépend de quel site porte le drapeau dans la base
+            # d'accueil, et ces tests interrogent celui-là précisément.
+            "website_id": self.site.id,
         })
 
     def test_une_fiche_payante_montre_le_voile_et_mene_au_produit(self):
@@ -44,3 +52,17 @@ class TestAcces(HttpCase):
         """Le viewer ne doit jamais partir par une URL devinable."""
         reponse = self.url_open("/besacraft/viewer/%d" % self.build.id, allow_redirects=False)
         self.assertIn(reponse.status_code, (303, 404))
+
+    def test_hors_du_site_besacraft_les_pages_n_existent_pas(self):
+        """Pas un rayon vide : la page ne doit pas exister du tout.
+
+        Borner les enregistrements par website_id laissait les autres sites servir
+        /builds avec leur propre habillage et zéro carte, ce qui a l'air cassé. Le
+        viewer est testé aussi : sa route n'est pas `website=True` et lisait un
+        `request.website` inexistant — elle répondait 500 au lieu de 404.
+        """
+        self.site.besacraft_enabled = False
+        for url in ("/builds", "/t/911", "/besacraft/viewer/%d" % self.build.id):
+            self.assertEqual(
+                self.url_open(url, allow_redirects=False).status_code, 404,
+                "%s devrait être introuvable hors du site Besacraft" % url)
