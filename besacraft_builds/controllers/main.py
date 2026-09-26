@@ -8,12 +8,23 @@ from odoo.http import request
 class BesacraftBuilds(http.Controller):
     """Public pages of the build catalogue."""
 
+    def _filtre_publie(self):
+        """`[]` pour un éditeur du site, le filtre de publication pour tout le monde.
+
+        Un tuto se relit en ligne avant d'être ouvert au public : sans cette exception,
+        « non publié » voudrait dire « invisible même pour son auteur », et la seule
+        façon de se relire serait de publier d'abord. C'est le comportement du blog.
+        """
+        if request.env.user.has_group("website.group_website_designer"):
+            return []
+        return [("is_published", "=", True)]
+
     @http.route("/builds", type="http", auth="public", website=True, sitemap=True)
     def catalogue(self, serie=None, **kw):
         """The catalogue, laid out as a shelf of construction boxes."""
         # website_domain() borne au site courant : le même Odoo sert aussi la boutique
         # freelance, et /builds y afficherait les tutos de Besacraft.
-        domaine = [("is_published", "=", True)] + request.website.website_domain()
+        domaine = self._filtre_publie() + request.website.website_domain()
         Build = request.env["besacraft.build"].sudo()
         series = request.env["besacraft.serie"].sudo().search([])
         if serie:
@@ -21,7 +32,7 @@ class BesacraftBuilds(http.Controller):
         builds = Build.search(domaine)
         # Le compteur de chaque filtre se lit sur la totalité, pas sur la sélection
         # courante : un filtre qui afficherait « 0 » une fois cliqué serait absurde.
-        publies = [("is_published", "=", True)] + request.website.website_domain()
+        publies = self._filtre_publie() + request.website.website_domain()
         tous = Build.search_count(publies)
         par_serie = {
             s.id: Build.search_count(publies + [("serie_id", "=", s.id)]) for s in series
@@ -35,7 +46,7 @@ class BesacraftBuilds(http.Controller):
     def tuto(self, code, **kw):
         """A build's tutorial sheet. The URL carries the number without padding zeros."""
         build = request.env["besacraft.build"].sudo().search(
-            [("code", "=", "%03d" % code), ("is_published", "=", True)]
+            [("code", "=", "%03d" % code)] + self._filtre_publie()
             + request.website.website_domain(), limit=1)
         if not build:
             return request.not_found()
@@ -53,6 +64,11 @@ class BesacraftBuilds(http.Controller):
         } for c in build.layer_ids]
         return request.render("besacraft_builds.tuto", {
             "build": build,
+            # `main_object` est la clé sur laquelle la barre d'édition du site se branche :
+            # c'est elle qui fait apparaître l'interrupteur « Publié / Non publié » et le
+            # panneau « Optimiser le référencement ». Sans elle, la page est éditable mais
+            # ne se publie que depuis le backend.
+            "main_object": build,
             "accessible": accessible,
             "couches_json": json.dumps(couches),
             "decalage": build.layer_offset,

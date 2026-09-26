@@ -19,7 +19,12 @@ class BesacraftBuild(models.Model):
     # Multi, pas simple : le même Odoo sert plusieurs sites, et un tuto Besacraft n'a
     # rien à faire dans la boutique du site freelance. Le mixin apporte website_id et le
     # filtrage par site courant.
-    _inherit = ["website.published.multi.mixin"]
+    #
+    # `website.seo.metadata` par-dessus, dans l'ordre de `blog.post` : un tuto est une page
+    # publique qu'on partage, elle a besoin de son titre, de sa description et de son image
+    # Open Graph. Sans ce mixin, la barre « Optimiser le référencement » de l'éditeur est
+    # vide et un lien partagé sort sans vignette.
+    _inherit = ["website.seo.metadata", "website.published.multi.mixin"]
     _order = "code"
 
     name = fields.Char(required=True, translate=True,
