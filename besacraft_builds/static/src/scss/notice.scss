@@ -276,6 +276,12 @@ $bc-sable: #C8AF8F;
         font-size: 12px; font-weight: 700; letter-spacing: 0.08em;
         background: $bc-bronze; color: $bc-carte; border: 2px solid $bc-bronze-sombre;
         &:hover { background: $bc-bronze-sombre; }
+        // L'étape 0 est l'état d'arrivée : sans ce repère, rien ne dit où l'on se trouve
+        // quand la liste montre le cumul de tout le build plutôt qu'une couche.
+        &.bc-tout-actif {
+            background: $bc-bronze-sombre;
+            box-shadow: inset 0 0 0 2px $bc-carte;
+        }
     }
     .bc-couche-next {
         background: $bc-encre; color: $bc-carte; border: 2px solid $bc-encre;

@@ -105,14 +105,18 @@ function demarrer() {
         });
         var prev = document.getElementById("bc_prev");
         var next = document.getElementById("bc_next");
-        prev.textContent = index > 0 ? "‹ Couche " + couches[index - 1].sequence : "‹ Début";
-        prev.disabled = index === 0;
+        // Reculer depuis la couche 1 ne bute pas sur un bouton mort : ça remonte à
+        // l'étape 0, le build entier, celle par laquelle on est arrivé.
+        prev.textContent = index > 0
+            ? "‹ Couche " + couches[index - 1].sequence : "‹ Le build complet";
+        prev.disabled = false;
         next.textContent = index < couches.length - 1
             ? "Couche " + couches[index + 1].sequence + " ›" : "Terminé";
         next.disabled = index === couches.length - 1;
 
         document.getElementById("bc_cur_n").textContent = c.sequence;
         document.getElementById("bc_curseur").value = c.sequence;
+        document.getElementById("bc_tout").classList.remove("bc-tout-actif");
 
         document.querySelectorAll(".bc-couche-carte").forEach(function (carte) {
             carte.classList.toggle("bc-cc-active",
@@ -130,7 +134,9 @@ function demarrer() {
     }
 
     function voirTout() {
-        // Avant de poser la première couche, on veut voir ce qu'on va construire.
+        // L'étape 0, et l'état d'arrivée sur la page : avant de poser la première couche,
+        // on veut voir ce qu'on va construire. C'est aussi ce que montre le viewer au
+        // chargement — commencer l'établi sur la couche 1 désaccordait les deux.
         vueEnsemble = true;
         var d = doc();
         var curseur = d && d.getElementById("slider");
@@ -161,14 +167,35 @@ function demarrer() {
         document.querySelectorAll(".bc-couche-carte").forEach(function (carte) {
             carte.classList.remove("bc-cc-active");
         });
+
+        var prev = document.getElementById("bc_prev");
+        var next = document.getElementById("bc_next");
+        prev.textContent = "‹ Début";
+        prev.disabled = true;
+        next.textContent = couches.length ? "Couche " + couches[0].sequence + " ›" : "Terminé";
+        next.disabled = !couches.length;
+
+        // Le curseur compte les couches posées : à l'étape 0 elles le sont toutes, donc
+        // il va au maximum. Le mettre à zéro montrerait un terrain nu, l'inverse de ce
+        // qu'on regarde.
+        if (couches.length) {
+            var derniere = couches[couches.length - 1].sequence;
+            document.getElementById("bc_curseur").value = derniere;
+            document.getElementById("bc_cur_n").textContent = derniere;
+        }
+        document.getElementById("bc_tout").classList.add("bc-tout-actif");
     }
 
     document.getElementById("bc_tout").addEventListener("click", voirTout);
     document.getElementById("bc_prev").addEventListener("click", function () {
-        allerA(index - 1, true);
+        if (index === 0 && !vueEnsemble) {
+            voirTout();
+        } else {
+            allerA(index - 1, true);
+        }
     });
     document.getElementById("bc_next").addEventListener("click", function () {
-        allerA(index + 1, true);
+        allerA(vueEnsemble ? 0 : index + 1, true);
     });
 
     /* ---------------------------------------------------------------- le viewer */
@@ -311,6 +338,14 @@ function demarrer() {
             if (!m) {
                 return;
             }
+            // Tant qu'on est à l'étape 0, on ne suit pas le viewer. Il fait défiler son
+            // étiquette pendant qu'il monte la scène, et chacune de ces valeurs de
+            // passage se lirait ici comme « l'utilisateur a choisi une couche » : la page
+            // basculait sur la liste de la couche 1 alors que la 3D montre tout le build.
+            // On quitte l'étape 0 par un geste, jamais parce que l'iframe a bougé.
+            if (vueEnsemble) {
+                return;
+            }
             var seq = parseInt(m[1], 10) - calerDecalage();
             var pos = couches.findIndex(function (c) { return c.sequence === seq; });
             if (pos >= 0 && pos !== index) {
@@ -387,6 +422,11 @@ function demarrer() {
             var play = d && d.getElementById("play");
             var enCours = play && play.classList.contains("on");
             this.textContent = enCours ? "❚❚ Pause" : "▶ Bloc par bloc";
+            // Lancer l'animation est le geste qui sort de l'étape 0 : à partir de là
+            // l'établi suit le viewer couche par couche.
+            if (enCours) {
+                vueEnsemble = false;
+            }
         });
 
         document.getElementById("bc_replay").addEventListener("click", function () {
@@ -514,5 +554,5 @@ function demarrer() {
         rendreNotice();
     }
 
-    rendreCouche();
+    voirTout();
 }
