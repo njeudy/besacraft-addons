@@ -5,8 +5,22 @@ from odoo import http
 from odoo.http import request
 
 
+def _site_besacraft(env):
+    """Sitemap hook: the catalogue is only crawled on the site that serves it."""
+    return env["website"].get_current_website().besacraft_enabled
+
+
 class BesacraftBuilds(http.Controller):
     """Public pages of the build catalogue."""
+
+    def _garde_site(self):
+        """404 hors du site Besacraft.
+
+        Borner les ENREGISTREMENTS par `website_id` ne suffisait pas : les autres sites
+        servaient /builds en rayon vide, habillage compris. Un catalogue qui existe et
+        ne contient rien a l'air cassé — mieux vaut que la page n'existe pas du tout.
+        """
+        return not request.website.besacraft_enabled
 
     def _filtre_publie(self):
         """`[]` pour un éditeur du site, le filtre de publication pour tout le monde.
@@ -19,9 +33,12 @@ class BesacraftBuilds(http.Controller):
             return []
         return [("is_published", "=", True)]
 
-    @http.route("/builds", type="http", auth="public", website=True, sitemap=True)
+    @http.route("/builds", type="http", auth="public", website=True,
+                sitemap=_site_besacraft)
     def catalogue(self, serie=None, **kw):
         """The catalogue, laid out as a shelf of construction boxes."""
+        if self._garde_site():
+            return request.not_found()
         # website_domain() borne au site courant : le même Odoo sert aussi la boutique
         # freelance, et /builds y afficherait les tutos de Besacraft.
         domaine = self._filtre_publie() + request.website.website_domain()
@@ -42,9 +59,12 @@ class BesacraftBuilds(http.Controller):
             "total": tous, "par_serie": par_serie,
         })
 
-    @http.route("/t/<int:code>", type="http", auth="public", website=True, sitemap=True)
+    @http.route("/t/<int:code>", type="http", auth="public", website=True,
+                sitemap=_site_besacraft)
     def tuto(self, code, **kw):
         """A build's tutorial sheet. The URL carries the number without padding zeros."""
+        if self._garde_site():
+            return request.not_found()
         build = request.env["besacraft.build"].sudo().search(
             [("code", "=", "%03d" % code)] + self._filtre_publie()
             + request.website.website_domain(), limit=1)
@@ -94,6 +114,8 @@ class BesacraftBuilds(http.Controller):
         Same origin is not a detail: the page injects a stylesheet into the iframe and
         reads the build data out of it, and neither is possible across origins.
         """
+        if self._garde_site():
+            return request.not_found()
         build = request.env["besacraft.build"].sudo().browse(build_id).exists()
         if not build or not build.viewer_attachment_id:
             return request.not_found()

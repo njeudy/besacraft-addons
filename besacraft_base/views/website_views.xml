@@ -1,0 +1,15 @@
+<odoo>
+    <!-- Le drapeau se pose sur le SITE, pas dans les réglages généraux : la base en sert
+         six, et « lequel est Besacraft » est une propriété du site, pas de la société.
+         C'est aussi le seul écran où l'on voit les six d'un coup. -->
+    <record id="view_website_form_besacraft" model="ir.ui.view">
+        <field name="name">website.form.besacraft</field>
+        <field name="model">website</field>
+        <field name="inherit_id" ref="website.view_website_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[@name='domain']" position="inside">
+                <field name="besacraft_enabled"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

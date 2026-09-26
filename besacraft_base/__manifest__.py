@@ -11,6 +11,7 @@
     "data": [
         "views/res_partner_view.xml",
         "views/portal_templates.xml",
+        "views/website_views.xml",
     ],
     "installable": True,
     "application": False,
