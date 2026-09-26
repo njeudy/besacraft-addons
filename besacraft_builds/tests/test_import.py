@@ -95,6 +95,9 @@ class TestImportDepuisBuildplan(TransactionCase):
 
     def test_le_build_atterrit_sur_le_site_besacraft(self):
         """Sans défaut, website_id vide veut dire « les six sites de la base »."""
+        # On part d'une base d'accueil qui porte peut-être déjà le drapeau ailleurs :
+        # le défaut ne tranche que s'il n'y a qu'un candidat, donc on en fabrique un.
+        self.env["website"].search([("besacraft_enabled", "=", True)]).besacraft_enabled = False
         site = self.env["website"].search([], limit=1)
         site.besacraft_enabled = True
         autre = self.env["besacraft.build"].create({
