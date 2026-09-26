@@ -53,6 +53,13 @@ class TestAcces(HttpCase):
         reponse = self.url_open("/besacraft/viewer/%d" % self.build.id, allow_redirects=False)
         self.assertIn(reponse.status_code, (303, 404))
 
+    # Les implémentations du cœur lisent ces clés sans défaut : un dict vide lève.
+    OPTIONS_RECHERCHE = {
+        "displayDescription": True, "displayDetail": False,
+        "displayExtraDetail": False, "displayExtraLink": False,
+        "displayImage": False, "allowFuzzy": False,
+    }
+
     def test_la_recherche_du_site_trouve_un_tuto(self):
         """Sans ça, le seul chemin vers /t/<n> est le catalogue.
 
@@ -61,11 +68,7 @@ class TestAcces(HttpCase):
         """
         for terme in ("Build payant", "911"):
             _count, trouves, _fuzzy = self.site._search_with_fuzzy(
-                "builds", terme, limit=5, order="", options={
-                    "displayDescription": True, "displayDetail": False,
-                    "displayExtraDetail": False, "displayExtraLink": False,
-                    "displayImage": False, "allowFuzzy": False,
-                })
+                "builds", terme, limit=5, order="", options=self.OPTIONS_RECHERCHE)
             resultats = self.site._search_render_results(trouves, limit=5)
             noms = [r["name"] for bloc in resultats for r in bloc["results_data"]]
             self.assertIn("Build payant", noms, "recherche « %s »" % terme)
@@ -73,7 +76,7 @@ class TestAcces(HttpCase):
     def test_la_recherche_ignore_les_tutos_hors_du_site(self):
         """Proposer un résultat qui mène à un 404 est pire que ne rien proposer."""
         self.site.besacraft_enabled = False
-        details = self.site._search_get_details("all", "", {})
+        details = self.site._search_get_details("all", "", self.OPTIONS_RECHERCHE)
         self.assertNotIn("besacraft.build", [d["model"] for d in details])
 
     def test_hors_du_site_besacraft_les_pages_n_existent_pas(self):
