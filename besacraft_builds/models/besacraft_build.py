@@ -27,6 +27,19 @@ class BesacraftBuild(models.Model):
     _inherit = ["website.seo.metadata", "website.published.multi.mixin"]
     _order = "code"
 
+    def _default_website_id(self):
+        """The site that carries the catalogue, when there is exactly one.
+
+        Left empty, website_id means « every site of this database », and this one
+        serves six. Thirty-seven builds had been created that way and showed up in the
+        freelance shop. A default costs nothing and closes the hole at the source
+        rather than in each caller.
+        """
+        return self.env["website"].search([("besacraft_enabled", "=", True)], limit=1)
+
+    # Redéclaré pour son seul défaut : le champ lui-même vient du mixin.
+    website_id = fields.Many2one(default=lambda self: self._default_website_id())
+
     name = fields.Char(required=True, translate=True,
                        help="Editorial title, accented. Not the schematic's technical name.")
     code = fields.Char(required=True, index=True, copy=False,

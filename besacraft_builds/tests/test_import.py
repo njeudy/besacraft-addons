@@ -1,3 +1,4 @@
+from odoo.exceptions import ValidationError
 from odoo.tests import TransactionCase, tagged
 
 BUILD_JSON = {
@@ -70,3 +71,34 @@ class TestImport(TransactionCase):
         build.layer_ids[0].title = "Les murs"
         self._import()
         self.assertEqual(build.layer_ids[0].title, "Les murs")
+
+
+@tagged("post_install", "-at_install")
+class TestImportDepuisBuildplan(TransactionCase):
+    """Le point d'entrée JSON-RPC : mêmes données, adressées par codes."""
+
+    def _import(self, serie_code="survie"):
+        return self.env["besacraft.build"].import_depuis_buildplan(
+            BUILD_JSON, PLAN_JSON, code="9343", serie_code=serie_code)
+
+    def test_il_resout_la_serie_par_son_code(self):
+        resultat = self._import()
+        self.assertEqual(resultat["code"], "9343")
+        self.assertEqual(resultat["serie"], "Survie & Schematics")
+        self.assertEqual(resultat["block_count"], 30)
+
+    def test_une_serie_inconnue_est_refusee(self):
+        """Plutôt que de classer le tuto au hasard : le message liste les codes connus."""
+        with self.assertRaises(ValidationError) as leve:
+            self._import(serie_code="mediévale")
+        self.assertIn("hardcore", str(leve.exception))
+
+    def test_le_build_atterrit_sur_le_site_besacraft(self):
+        """Sans défaut, website_id vide veut dire « les six sites de la base »."""
+        site = self.env["website"].search([], limit=1)
+        site.besacraft_enabled = True
+        autre = self.env["besacraft.build"].create({
+            "name": "Test", "code": "9344",
+            "serie_id": self.env.ref("besacraft_builds.serie_survie").id,
+        })
+        self.assertEqual(autre.website_id, site)

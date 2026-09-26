@@ -1,6 +1,6 @@
 {
     "name": "Besacraft Odoo Addons Base",
-    "version": "18.0.1.0.2",
+    "version": "18.0.1.1.0",
     "description": "Add Minecraft related features to Odoo",
     "summary": "Add Minecraft related features to Odoo",
     "author": "Nicolas JEUDY",

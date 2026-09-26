@@ -1,8 +1,35 @@
 from odoo import api, models
+from odoo.exceptions import ValidationError
 
 
 class BesacraftBuildImport(models.Model):
     _inherit = "besacraft.build"
+
+    @api.model
+    def import_depuis_buildplan(self, build_json, plan_json, code, serie_code):
+        """JSON-RPC entry point: the same import, addressed by codes.
+
+        `import_build_json` takes a besacraft.serie recordset and reads `.id` on it.
+        Over JSON-RPC there are no recordsets -- a caller can only send an integer, and
+        the first import of a build died on that. Resolving the series here also keeps
+        the caller honest: it names the series the tutorial belongs to, and a name that
+        matches nothing is refused instead of being filed under the wrong one.
+
+        Returns the build's id and its series, so the caller can log what it did without
+        a second round trip.
+        """
+        serie = self.env["besacraft.serie"].search([("code", "=", serie_code)], limit=1)
+        if not serie:
+            connues = self.env["besacraft.serie"].search([]).mapped("code")
+            raise ValidationError(
+                "Unknown series %r. Known series: %s."
+                % (serie_code, ", ".join(sorted(connues)) or "none")
+            )
+        build = self.import_build_json(build_json, plan_json, code, serie)
+        return {"id": build.id, "code": build.code, "name": build.name,
+                "serie": serie.name, "layer_count": build.layer_count,
+                "block_count": build.block_count,
+                "website_id": build.website_id.id or False}
 
     @api.model
     def import_build_json(self, build_json, plan_json, code, serie):
