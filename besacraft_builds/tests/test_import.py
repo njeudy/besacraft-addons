@@ -77,14 +77,14 @@ class TestImport(TransactionCase):
 class TestImportDepuisBuildplan(TransactionCase):
     """Le point d'entrée JSON-RPC : mêmes données, adressées par codes."""
 
-    def _import(self, serie_code="survie"):
+    def _import(self, serie_code="schematics"):
         return self.env["besacraft.build"].import_depuis_buildplan(
             BUILD_JSON, PLAN_JSON, code="9343", serie_code=serie_code)
 
     def test_il_resout_la_serie_par_son_code(self):
         resultat = self._import()
         self.assertEqual(resultat["code"], "9343")
-        self.assertEqual(resultat["serie"], "Survie & Schematics")
+        self.assertEqual(resultat["serie"], "Schematics")
         self.assertEqual(resultat["block_count"], 30)
 
     def test_une_serie_inconnue_est_refusee(self):
