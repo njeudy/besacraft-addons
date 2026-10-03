@@ -128,9 +128,10 @@ class BesacraftBuilds(http.Controller):
             return redirection
         piece = build.viewer_attachment_id
         contenu = base64.b64decode(piece.datas)
-        # The viewer is regenerated per build version: a long cache plus an ETag on the
-        # attachment id avoids shipping several megabytes on every layer change.
-        etag = '"%s-%s"' % (build.id, piece.id)
+        # A long cache plus an ETag avoids shipping several megabytes on every layer change.
+        # The ETag follows the CONTENT: the import refreshes the viewer by rewriting the same
+        # attachment, and an ETag on its id kept browsers on the old viewer for a day.
+        etag = '"%s-%s"' % (build.id, piece.checksum or piece.id)
         if request.httprequest.headers.get("If-None-Match") == etag:
             return request.make_response("", status=304, headers=[("ETag", etag)])
         return request.make_response(contenu, headers=[
