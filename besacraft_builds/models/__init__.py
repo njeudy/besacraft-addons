@@ -5,4 +5,5 @@ from . import besacraft_build_member
 from . import product_template
 from . import sale_order
 from . import besacraft_build_import
+from . import besacraft_build_recipe
 from . import website
