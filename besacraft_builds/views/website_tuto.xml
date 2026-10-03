@@ -154,6 +154,7 @@
                 </div>
 
                 <div t-if="accessible" class="bc-page">
+                    <t t-set="recettes" t-value="build.has_recipes and build.recipe_data"/>
                     <section class="bc-resume">
                         <span class="bc-stat">
                             <span class="bc-stat-l">Blocs</span>
@@ -206,10 +207,69 @@
                                         et <t t-esc="len(couche.line_ids) - 6"/> autres
                                     </span>
                                 </div>
+                                <!-- Recette unitaire de chaque bloc : l'arbre de recipes.json
+                                     est calculé pour le build entier, une couche n'a besoin
+                                     que de savoir comment le bloc se fabrique. Repliée par
+                                     défaut : on vient d'abord pour la liste des blocs. -->
+                                <t t-if="recettes">
+                                    <t t-set="recettes_couche" t-value="build._tuto_layer_recipes(couche)"/>
+                                    <details t-if="recettes_couche" class="bc-cc-recettes">
+                                        <summary class="bc-cc-recettes-t">Recettes de la couche</summary>
+                                        <t t-foreach="recettes_couche" t-as="entree">
+                                            <t t-set="ligne" t-value="entree['line']"/>
+                                            <t t-set="recette" t-value="entree['recipe']"/>
+                                            <details class="bc-recette">
+                                                <summary class="bc-recette-t">
+                                                    <img t-attf-src="/web/image/besacraft.build.layer.line/#{ligne.id}/icon"
+                                                         alt="" loading="lazy"/>
+                                                    <span class="bc-mini-nom" t-esc="ligne.name_fr or ligne.item_key"/>
+                                                    <span class="bc-mini-n">×<t t-esc="ligne.qty"/></span>
+                                                </summary>
+                                                <div class="bc-recette-c">
+                                                    <span t-if="recette['raw']" class="bc-recette-brut"
+                                                          t-esc="recette['hint'] or 'Matière première'"/>
+                                                    <t t-else="">
+                                                        <span class="bc-recette-station">
+                                                            <img t-if="recette['station_icon']"
+                                                                 t-att-src="recette['station_icon']" alt=""/>
+                                                            <t t-esc="recette['station'] or 'Sans station'"/>
+                                                        </span>
+                                                        <span class="bc-recette-entrees">
+                                                            <span t-foreach="recette['inputs']" t-as="ingredient"
+                                                                  class="bc-mini">
+                                                                <img t-if="ingredient['icon']"
+                                                                     t-att-src="ingredient['icon']" alt=""/>
+                                                                <span class="bc-mini-nom" t-esc="ingredient['name']"/>
+                                                                <span t-if="ingredient['count']" class="bc-mini-n">×<t t-esc="ingredient['count']"/></span>
+                                                                <span t-elif="ingredient['fluid_mb']" class="bc-mini-n"><t t-esc="ingredient['fluid_mb']"/> mB</span>
+                                                            </span>
+                                                        </span>
+                                                        <span class="bc-recette-donne">donne <t t-esc="recette['yield']"/></span>
+                                                        <span t-if="recette['alternatives']" class="bc-recette-alt">
+                                                            Aussi : <t t-esc="', '.join(recette['alternatives'])"/>
+                                                        </span>
+                                                    </t>
+                                                </div>
+                                            </details>
+                                        </t>
+                                    </details>
+                                </t>
                             </article>
                         </t>
                     </div>
                     <button t-if="accessible" type="button" class="bc-plus" id="bc_plus">Afficher les couches suivantes</button>
+
+                    <t t-set="matieres" t-value="recettes and build._tuto_raw_materials()"/>
+                    <section t-if="matieres" class="bc-matieres">
+                        <h2 class="bc-h2">Matières premières pour tout le build</h2>
+                        <div class="bc-matieres-grille">
+                            <span t-foreach="matieres" t-as="matiere" class="bc-mini">
+                                <img t-if="matiere['icon']" t-att-src="matiere['icon']" alt=""/>
+                                <span class="bc-mini-nom" t-esc="matiere['name']"/>
+                                <span class="bc-mini-n">×<t t-esc="'{:,}'.format(matiere['count']).replace(',', ' ')"/></span>
+                            </span>
+                        </div>
+                    </section>
 
                     <!-- Le crédit vient des champs du build, pas d'un texte écrit ici : une
                          structure d'un autre auteur ou sous une autre licence arriverait un
