@@ -33,7 +33,7 @@
                     <div class="bc-filtres">
                         <a href="/builds"
                            t-attf-class="bc-filtre#{not serie_active and ' bc-filtre-actif' or ''}">
-                            <span class="bc-puce" style="background:#323837"/>
+                            <span class="bc-puce bc-puce-toutes"/>
                             <span>Toutes les séries</span>
                             <span class="bc-filtre-n"><t t-esc="total"/></span>
                         </a>

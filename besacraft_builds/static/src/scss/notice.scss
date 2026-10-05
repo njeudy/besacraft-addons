@@ -1,21 +1,47 @@
-// Direction « Notice » de la charte Besacraft : fond crème, cartes claires, titres VT323.
-// Les valeurs viennent de la maquette validée et de la direction artistique — ne pas les
-// improviser : elles se retrouvent à l'identique dans les vidéos et la notice papier.
-$bc-page: #F4F1EA;
-$bc-carte: #FBFAF7;
-$bc-encre: #323837;
-$bc-encre-douce: #4A5250;
-$bc-trait: #E4DFD3;
-$bc-bleu: #478BB2;
-$bc-bleu-sombre: #2F6A8E;
-$bc-bronze: #98764B;
-$bc-bronze-sombre: #7A5D38;
-$bc-sable: #C8AF8F;
+// Gabarits du catalogue et des tutos. Ils prennent l'habillage du SITE qui les sert : la
+// même base publie le catalogue sur plusieurs sites, chacun avec son thème, et une page
+// peinte aux couleurs de Besacraft détonnerait sur le site de l'auteur.
+//
+// Chaque teinte et chaque fonte est une propriété CSS `--bc-*`. Un thème qui veut une
+// valeur précise la pose (theme_besacraft le fait pour la charte « Notice ») ; sinon elle
+// se déduit des variables du thème du site. Le bundle frontend est compilé par site, donc
+// `$body-bg`, `$primary` & co. sont bien ceux du site qui sert la page.
+//
+// Les propriétés sont LUES ici, jamais posées : posées sur `.bc-notice`, elles masqueraient
+// celles qu'un thème pose plus haut dans la page.
+$-bc-fond: $body-bg;
+$-bc-texte: $body-color;
+$-bc-police: if($font-family-base, $font-family-base, inherit);
+$-bc-police-titre: if($headings-font-family, $headings-font-family, $-bc-police);
+
+$bc-page: var(--bc-page, #{$-bc-fond});
+$bc-carte: var(--bc-carte, #{mix($white, $-bc-fond, 60%)});
+$bc-fond2: var(--bc-fond2, #{mix($-bc-texte, $-bc-fond, 6%)});
+$bc-trait: var(--bc-trait, #{mix($-bc-texte, $-bc-fond, 12%)});
+$bc-trait-fort: var(--bc-trait-fort, #{mix($-bc-texte, $-bc-fond, 20%)});
+$bc-encre: var(--bc-encre, #{$-bc-texte});
+$bc-encre-douce: var(--bc-encre-douce, #{mix($-bc-texte, $-bc-fond, 82%)});
+$bc-bleu: var(--bc-bleu, #{$primary});
+$bc-bleu-sombre: var(--bc-bleu-sombre, #{$link-color});
+$bc-bronze: var(--bc-bronze, #{$secondary});
+$bc-bronze-sombre: var(--bc-bronze-sombre, #{shade-color($secondary, 20%)});
+$bc-sable: var(--bc-sable, #{mix($secondary, $-bc-fond, 60%)});
+// Les panneaux sombres (rendu 3D, voile, barre du tuto) et le texte clair posé dessus.
+$bc-nuit: var(--bc-nuit, #{$dark});
+$bc-nuit-encre: var(--bc-nuit-encre, #{$light});
+$bc-police: var(--bc-police, #{inspect($-bc-police)});
+$bc-police-titre: var(--bc-police-titre, #{inspect($-bc-police-titre)});
+
+// Une transparence sur une couleur qui n'est connue qu'au rendu : rgba() exige une valeur
+// compilée, color-mix() accepte une propriété CSS.
+@function bc-voile($couleur, $opacite) {
+    @return color-mix(in srgb, #{$couleur} #{$opacite}, transparent);
+}
 
 .bc-notice {
     background: $bc-page;
     color: $bc-encre;
-    font-family: 'Anonymous Pro', monospace;
+    font-family: $bc-police;
 
     a { color: $bc-bleu-sombre; text-decoration: none; }
     a:hover { color: $bc-bronze-sombre; }
@@ -32,7 +58,7 @@ $bc-sable: #C8AF8F;
         color: $bc-bronze-sombre; font-weight: 700;
     }
     .bc-titre {
-        font-family: 'VT323', monospace; font-size: 68px; line-height: 0.9; margin: 0;
+        font-family: $bc-police-titre; font-size: 68px; line-height: 0.9; margin: 0;
     }
     .bc-chapo { margin: 0; font-size: 15px; line-height: 1.65; color: $bc-encre-douce; }
 
@@ -43,7 +69,7 @@ $bc-sable: #C8AF8F;
         color: $bc-encre-douce; font-weight: 700;
     }
     .bc-numero {
-        flex: 1; min-width: 88px; font-family: 'VT323', monospace; font-size: 30px;
+        flex: 1; min-width: 88px; font-family: $bc-police-titre; font-size: 30px;
         padding: 0 14px; min-height: 56px; background: $bc-carte;
         border: 2px solid $bc-encre; color: $bc-encre; letter-spacing: 0.08em;
     }
@@ -67,7 +93,8 @@ $bc-sable: #C8AF8F;
     }
     .bc-filtre-actif { border-color: $bc-encre; background: $bc-page; font-weight: 700; }
     .bc-puce { width: 10px; height: 10px; flex: none; border-radius: 50%; }
-    .bc-filtre-n { font-family: 'VT323', monospace; font-size: 19px; }
+    .bc-puce-toutes { background: $bc-encre; }
+    .bc-filtre-n { font-family: $bc-police-titre; font-size: 19px; }
 
     .bc-grille {
         display: grid; grid-template-columns: repeat(auto-fill, minmax(306px, 1fr)); gap: 26px;
@@ -86,11 +113,11 @@ $bc-sable: #C8AF8F;
         font-size: 11px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase;
     }
     .bc-numero-boite {
-        font-family: 'VT323', monospace; font-size: 25px; line-height: 1; letter-spacing: 0.06em;
+        font-family: $bc-police-titre; font-size: 25px; line-height: 1; letter-spacing: 0.06em;
     }
 
     .bc-rendu {
-        position: relative; background: #1B1F1E; aspect-ratio: 3 / 2; overflow: hidden;
+        position: relative; background: $bc-nuit; aspect-ratio: 3 / 2; overflow: hidden;
         img { width: 100%; height: 100%; object-fit: cover; display: block; }
     }
     .bc-ruban {
@@ -105,7 +132,7 @@ $bc-sable: #C8AF8F;
         padding: 7px 12px; background: $bc-bronze; color: $bc-carte;
         border: 2px solid $bc-bronze-sombre; border-radius: 999px;
     }
-    .bc-pastille-n { font-family: 'VT323', monospace; font-size: 29px; line-height: 0.9; }
+    .bc-pastille-n { font-family: $bc-police-titre; font-size: 29px; line-height: 0.9; }
     .bc-pastille-u { font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; }
 
     .bc-corps {
@@ -113,7 +140,7 @@ $bc-sable: #C8AF8F;
         padding: 16px 16px 18px; flex: 1;
     }
     .bc-titre-bloc { display: flex; flex-direction: column; gap: 5px; }
-    .bc-nom { font-family: 'VT323', monospace; font-size: 36px; line-height: 0.92; }
+    .bc-nom { font-family: $bc-police-titre; font-size: 36px; line-height: 0.92; }
     .bc-accroche { font-size: 13px; color: $bc-encre-douce; line-height: 1.55; }
 
     .bc-stats {
@@ -128,8 +155,8 @@ $bc-sable: #C8AF8F;
         font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase;
         color: $bc-encre-douce; font-weight: 700;
     }
-    .bc-stat-v { font-family: 'VT323', monospace; font-size: 24px; line-height: 1; }
-    .bc-sep { font-family: 'Anonymous Pro', monospace; font-size: 15px; padding: 0 3px; }
+    .bc-stat-v { font-family: $bc-police-titre; font-size: 24px; line-height: 1; }
+    .bc-sep { font-family: $bc-police; font-size: 15px; padding: 0 3px; }
 
     .bc-palette { display: flex; align-items: center; gap: 9px; flex-wrap: wrap; }
     .bc-palette-t { font-size: 12px; color: $bc-encre-douce; }
@@ -153,7 +180,7 @@ $bc-sable: #C8AF8F;
         border: 1px solid $bc-trait; border-left: 5px solid $bc-sable;
         p { margin: 7px 0 0; font-size: 14px; line-height: 1.65; color: $bc-encre-douce; }
     }
-    .bc-legende-t { font-family: 'VT323', monospace; font-size: 32px; line-height: 1; }
+    .bc-legende-t { font-family: $bc-police-titre; font-size: 32px; line-height: 1; }
 }
 
 
@@ -171,11 +198,11 @@ $bc-sable: #C8AF8F;
     }
     .bc-barre-g, .bc-barre-d { display: flex; align-items: center; gap: 14px; min-width: 0; }
     .bc-tuto-n {
-        font-family: 'VT323', monospace; font-size: 26px; line-height: 1;
+        font-family: $bc-police-titre; font-size: 26px; line-height: 1;
         color: $bc-sable; white-space: nowrap;
     }
     .bc-tuto-nom {
-        font-size: 13px; color: #EDE6DA; overflow: hidden;
+        font-size: 13px; color: $bc-nuit-encre; overflow: hidden;
         text-overflow: ellipsis; white-space: nowrap;
     }
     .bc-tuto-url {
@@ -186,10 +213,10 @@ $bc-sable: #C8AF8F;
     // sans defiler, comme au dos d'une boite.
     .bc-tuto-total {
         display: flex; align-items: baseline; gap: 6px; white-space: nowrap;
-        font-family: 'VT323', monospace; font-size: 30px; line-height: 1; color: $bc-carte;
+        font-family: $bc-police-titre; font-size: 30px; line-height: 1; color: $bc-carte;
     }
     .bc-tuto-total-u {
-        font-family: 'Anonymous Pro', monospace; font-size: 10px; letter-spacing: 0.16em;
+        font-family: $bc-police; font-size: 10px; letter-spacing: 0.16em;
         text-transform: uppercase; color: $bc-sable;
     }
     .bc-btn-fin {
@@ -219,11 +246,11 @@ $bc-sable: #C8AF8F;
         padding: 18px 22px 16px; border-bottom: 2px solid $bc-encre;
     }
     .bc-couche-num {
-        font-family: 'VT323', monospace; font-size: 96px; line-height: 0.72;
+        font-family: $bc-police-titre; font-size: 96px; line-height: 0.72;
         color: $bc-bleu-sombre; flex: none;
     }
     .bc-couche-txt { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
-    .bc-couche-titre { font-family: 'VT323', monospace; font-size: 34px; line-height: 0.95; }
+    .bc-couche-titre { font-family: $bc-police-titre; font-size: 34px; line-height: 0.95; }
     .bc-couche-total { font-size: 13px; color: $bc-encre-douce; }
 
     .bc-liste {
@@ -237,7 +264,7 @@ $bc-sable: #C8AF8F;
         padding: 11px 12px; background: $bc-page; border-bottom: 1px solid $bc-trait;
         break-inside: avoid;
         &.bc-pose {
-            background: #EDE7DA;
+            background: $bc-fond2;
             .bc-ligne-nom { color: $bc-bronze-sombre; text-decoration: line-through; }
             .bc-case { background: $bc-bronze; }
             .bc-case::after { content: '✓'; color: $bc-carte; font-size: 19px; line-height: 1; }
@@ -260,7 +287,7 @@ $bc-sable: #C8AF8F;
     .bc-ligne-mod { font-size: 11px; color: $bc-encre-douce; }
     .bc-ligne-q { display: flex; align-items: baseline; gap: 3px; flex: none; }
     .bc-x { font-size: 17px; font-weight: 700; }
-    .bc-qte { font-family: 'VT323', monospace; font-size: 34px; color: $bc-bleu-sombre; }
+    .bc-qte { font-family: $bc-police-titre; font-size: 34px; color: $bc-bleu-sombre; }
 
     &.bc-sans-recettes .bc-ligne-n { cursor: default; pointer-events: none; }
 
@@ -289,7 +316,7 @@ $bc-sable: #C8AF8F;
     }
 
     .bc-scene {
-        display: flex; flex-direction: column; min-height: 0; background: #EDE7DA;
+        display: flex; flex-direction: column; min-height: 0; background: $bc-fond2;
         // Plein ecran = la SCENE 3D occupe l'ecran, pas la page : c'est la 3D qu'on veut
         // regarder en grand. La superposition ne demonte jamais l'iframe, sinon le viewer
         // rechargerait ses megaoctets.
@@ -298,20 +325,20 @@ $bc-sable: #C8AF8F;
     .bc-cadre { position: relative; flex: 1; min-height: 0; }
     .bc-viewer { width: 100%; height: 100%; border: 0; display: block; }
     .bc-voile {
-        position: absolute; inset: 0; pointer-events: none; background: #1B1F1E;
+        position: absolute; inset: 0; pointer-events: none; background: $bc-nuit;
         display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
     }
-    .bc-voile-t { font-family: 'VT323', monospace; font-size: 34px; color: $bc-sable; }
-    .bc-voile-s { font-size: 12px; color: #EDE6DA; }
+    .bc-voile-t { font-family: $bc-police-titre; font-size: 34px; color: $bc-sable; }
+    .bc-voile-s { font-size: 12px; color: $bc-nuit-encre; }
 
     .bc-commandes {
         flex: none; display: flex; flex-direction: column; gap: 8px;
-        padding: 10px 12px; background: #EDE7DA; max-height: 46%; overflow-y: auto;
+        padding: 10px 12px; background: $bc-fond2; max-height: 46%; overflow-y: auto;
     }
     .bc-angles { display: flex; flex-wrap: wrap; gap: 6px; }
     .bc-angle {
         min-height: 44px; padding: 0 12px; font-size: 11px; font-weight: 700;
-        background: $bc-carte; color: $bc-encre; border: 1px solid #D8D2C4; cursor: pointer;
+        background: $bc-carte; color: $bc-encre; border: 1px solid $bc-trait-fort; cursor: pointer;
         &:hover { border-color: $bc-sable; }
     }
     .bc-lecture {
@@ -323,16 +350,16 @@ $bc-sable: #C8AF8F;
     .bc-curseur { flex: 1; accent-color: $bc-bleu-sombre; }
     .bc-curseur-t { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
         color: $bc-encre-douce; font-weight: 700; white-space: nowrap; }
-    .bc-curseur-v { font-family: 'VT323', monospace; font-size: 24px; flex: none; }
+    .bc-curseur-v { font-family: $bc-police-titre; font-size: 24px; flex: none; }
 
-    .bc-tiroir { border-top: 1px solid #D8D2C4; padding-top: 8px; }
+    .bc-tiroir { border-top: 1px solid $bc-trait-fort; padding-top: 8px; }
     .bc-tiroir-b {
         width: 100%; min-height: 48px; display: flex; align-items: center;
         justify-content: space-between; gap: 10px; padding: 0 12px; cursor: pointer;
         background: $bc-carte; border: 1px solid $bc-trait;
         font-size: 12px; font-weight: 700; color: $bc-encre;
     }
-    .bc-chevron { font-family: 'VT323', monospace; font-size: 22px; }
+    .bc-chevron { font-family: $bc-police-titre; font-size: 22px; }
     .bc-tiroir-c {
         display: flex; flex-direction: column; gap: 10px; padding: 12px;
         background: $bc-carte; border: 1px solid $bc-trait; border-top: 0;
@@ -378,9 +405,9 @@ $bc-sable: #C8AF8F;
         position: relative; max-width: 470px; width: 100%;
         display: flex; flex-direction: column; align-items: center; gap: 10px;
         padding: 26px 28px 30px; text-align: center;
-        background: rgba(27, 31, 30, 0.72);
+        background: bc-voile($bc-nuit, 72%);
         backdrop-filter: blur(6px);
-        border: 1px solid rgba(200, 175, 143, 0.4);
+        border: 1px solid bc-voile($bc-sable, 40%);
         color: $bc-carte;
     }
     .bc-paywall-img {
@@ -391,19 +418,19 @@ $bc-sable: #C8AF8F;
         font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: $bc-sable;
         font-weight: 700;
     }
-    .bc-paywall-titre { font-family: 'VT323', monospace; font-size: 44px; line-height: 0.95; }
-    .bc-paywall-accroche { font-size: 13px; color: #EDE6DA; }
+    .bc-paywall-titre { font-family: $bc-police-titre; font-size: 44px; line-height: 0.95; }
+    .bc-paywall-accroche { font-size: 13px; color: $bc-nuit-encre; }
     .bc-paywall-stats {
         display: flex; flex-wrap: wrap; justify-content: center; gap: 0;
         margin: 4px 0 2px;
         span {
-            padding: 0 14px; font-family: 'VT323', monospace; font-size: 22px;
-            & + span { border-left: 1px solid rgba(200, 175, 143, 0.4); }
+            padding: 0 14px; font-family: $bc-police-titre; font-size: 22px;
+            & + span { border-left: 1px solid bc-voile($bc-sable, 40%); }
         }
     }
     .bc-paywall-note { font-size: 11px; color: $bc-sable; max-width: 34ch; }
     .bc-paywall-retour {
-        margin-top: 6px; font-size: 12px; color: #EDE6DA;
+        margin-top: 6px; font-size: 12px; color: $bc-nuit-encre;
         &:hover { color: $bc-sable; }
     }
     a.bc-btn-achat {
@@ -417,10 +444,10 @@ $bc-sable: #C8AF8F;
         position: absolute; left: 50%; bottom: 40px; transform: translateX(-50%);
         display: flex; flex-direction: column; align-items: center; gap: 8px;
         max-width: 420px; padding: 18px 22px; text-align: center;
-        background: rgba(50, 56, 55, 0.94); color: $bc-carte;
+        background: bc-voile($bc-encre, 94%); color: $bc-carte;
     }
-    .bc-verrou-t { font-family: 'VT323', monospace; font-size: 28px; line-height: 1; }
-    .bc-verrou-s { font-size: 13px; color: #EDE6DA; }
+    .bc-verrou-t { font-family: $bc-police-titre; font-size: 28px; line-height: 1; }
+    .bc-verrou-s { font-size: 13px; color: $bc-nuit-encre; }
     .bc-achat { margin: 4px 0 0; }
     .bc-btn-achat {
         min-height: 48px; padding: 0 22px; cursor: pointer;
@@ -433,8 +460,8 @@ $bc-sable: #C8AF8F;
         display: flex; flex-wrap: wrap; gap: 1px; margin: 34px 0 0;
         background: $bc-trait; border: 1px solid $bc-trait;
     }
-    .bc-stat-texte { font-family: 'Anonymous Pro', monospace; font-size: 15px; }
-    .bc-h2 { font-family: 'VT323', monospace; font-size: 40px; line-height: 0.95; margin: 38px 0 18px; }
+    .bc-stat-texte { font-family: $bc-police; font-size: 15px; }
+    .bc-h2 { font-family: $bc-police-titre; font-size: 40px; line-height: 0.95; margin: 38px 0 18px; }
 
     .bc-notice-liste { display: flex; flex-direction: column; gap: 12px; }
     .bc-couche-carte {
@@ -445,7 +472,7 @@ $bc-sable: #C8AF8F;
         @media (max-width: 899px) { grid-template-columns: 1fr 1fr; }
     }
     .bc-cc-num { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; }
-    .bc-cc-n { font-family: 'VT323', monospace; font-size: 68px; line-height: 0.8; color: $bc-bleu-sombre; }
+    .bc-cc-n { font-family: $bc-police-titre; font-size: 68px; line-height: 0.8; color: $bc-bleu-sombre; }
     .bc-cc-total { font-size: 12px; color: $bc-encre-douce; }
     .bc-cc-voir {
         margin-top: 4px; padding: 7px 12px; font-size: 11px; font-weight: 700;
@@ -456,7 +483,7 @@ $bc-sable: #C8AF8F;
     .bc-cc-iso, .bc-cc-plan {
         min-height: 100px; display: flex; align-items: flex-end; justify-content: center;
         padding: 6px; border: 1px dashed $bc-sable;
-        background: repeating-linear-gradient(135deg, #EDE7DA 0 6px, $bc-page 6px 12px);
+        background: repeating-linear-gradient(135deg, $bc-fond2 0 6px, $bc-page 6px 12px);
     }
     .bc-cc-fichier { font-size: 11px; color: $bc-encre-douce; }
     .bc-cc-blocs { display: flex; flex-wrap: wrap; align-content: flex-start; gap: 8px; }
@@ -467,7 +494,7 @@ $bc-sable: #C8AF8F;
         img { width: 24px; height: 24px; image-rendering: pixelated; }
     }
     .bc-mini-nom { font-size: 12px; }
-    .bc-mini-n { font-family: 'VT323', monospace; font-size: 18px; color: $bc-bleu-sombre; }
+    .bc-mini-n { font-family: $bc-police-titre; font-size: 18px; color: $bc-bleu-sombre; }
     .bc-mini-plus { font-size: 12px; color: $bc-encre-douce; align-self: center; }
 
     .bc-cc-recettes {
@@ -514,7 +541,7 @@ $bc-sable: #C8AF8F;
     position: absolute; top: 14px; right: 14px; z-index: 2;
     padding: 10px 16px; cursor: pointer;
     font-size: 12px; font-weight: 700; letter-spacing: 0.08em;
-    background: #323837; color: #FBFAF7; border: 1px solid #98764B;
-    &:hover { background: #98764B; }
+    background: $bc-encre; color: $bc-carte; border: 1px solid $bc-bronze;
+    &:hover { background: $bc-bronze; }
 }
 

@@ -22,6 +22,26 @@ $bc-rouge:         #A33A2C;
     background: $bc-page;
     color: $bc-encre;
 
+    // Les pages du catalogue (besacraft_builds) lisent leurs teintes et leurs fontes dans
+    // ces propriétés, et se rabattent sur le thème du site quand elles manquent. Les poser
+    // ici garde la charte « Notice » à l'identique sur besacraft.fr.
+    --bc-page: #{$bc-page};
+    --bc-carte: #{$bc-carte};
+    --bc-fond2: #{$bc-fond2};
+    --bc-trait: #{$bc-trait};
+    --bc-trait-fort: #{$bc-trait-fort};
+    --bc-encre: #{$bc-encre};
+    --bc-encre-douce: #{$bc-encre-douce};
+    --bc-bleu: #{$bc-bleu};
+    --bc-bleu-sombre: #{$bc-bleu-sombre};
+    --bc-bronze: #{$bc-bronze};
+    --bc-bronze-sombre: #{$bc-bronze-sombre};
+    --bc-sable: #{$bc-sable};
+    --bc-nuit: #1B1F1E;
+    --bc-nuit-encre: #EDE6DA;
+    --bc-police: 'Anonymous Pro', monospace;
+    --bc-police-titre: 'VT323', monospace;
+
     // VT323 rend mieux légèrement espacé : sans cela les chiffres se collent.
     h1, h2, h3, h4, h5, .h1, .h2, .h3, .h4 {
         letter-spacing: 0.01em;
