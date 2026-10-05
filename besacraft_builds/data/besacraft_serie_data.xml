@@ -1,4 +1,7 @@
 <odoo>
+    <!-- Les sites de chaque série (`website_ids`) ne sont PAS posés ici : ce sont des
+         identifiants propres à chaque base, et un module ne sait pas lequel de ses sites
+         est celui de l'auteur. Ils se règlent dans Besacraft > Séries. -->
     <record id="serie_1722" model="besacraft.serie">
         <field name="name">Besacraft</field>
         <field name="code">1722</field>
@@ -8,7 +11,7 @@
         <field name="visual_mode">chronique</field>
     </record>
     <record id="serie_survie" model="besacraft.serie">
-        <field name="name">Schematics</field>
+        <field name="name">Schematics / créatif</field>
         <field name="code">schematics</field>
         <field name="sequence">30</field>
         <field name="color">#478BB2</field>
@@ -16,11 +19,20 @@
         <field name="visual_mode">notice</field>
     </record>
     <record id="serie_hardcore" model="besacraft.serie">
-        <field name="name">Survie / Hardcore</field>
+        <field name="name">Les aventures de Zunk</field>
         <field name="code">hardcore</field>
         <field name="sequence">20</field>
         <field name="color">#C4583F</field>
         <field name="badge_ink">#EAD9B0</field>
+        <field name="visual_mode">airain</field>
+    </record>
+    <!-- Vide pour l'instant : la série existe pour qu'un premier build puisse s'y ranger. -->
+    <record id="serie_steampunk" model="besacraft.serie">
+        <field name="name">Steampunk</field>
+        <field name="code">steampunk</field>
+        <field name="sequence">40</field>
+        <field name="color">#7A5D38</field>
+        <field name="badge_ink">#FBFAF7</field>
         <field name="visual_mode">airain</field>
     </record>
 </odoo>
