@@ -112,7 +112,7 @@ class TestAcces(HttpCase):
             "name": "viewer.html", "datas": "PGh0bWw+PC9odG1sPg==",
             "mimetype": "text/html"})
         return self.env["besacraft.build"].create({
-            "name": "Build d'une autre serie", "code": "912", "enroll": "public",
+            "name": "Build voisin", "code": "912", "enroll": "public",
             "is_published": True, "serie_id": autre.id,
             "viewer_attachment_id": piece.id,
         })
