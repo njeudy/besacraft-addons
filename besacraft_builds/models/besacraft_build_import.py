@@ -29,7 +29,9 @@ class BesacraftBuildImport(models.Model):
         return {"id": build.id, "code": build.code, "name": build.name,
                 "serie": serie.name, "layer_count": build.layer_count,
                 "block_count": build.block_count,
-                "website_id": build.website_id.id or False}
+                # Where the build will show, so the caller can say it: no site at all means
+                # the series is published nowhere yet, and the build reaches no reader.
+                "websites": serie.website_ids.mapped("name")}
 
     @api.model
     def import_build_json(self, build_json, plan_json, code, serie):

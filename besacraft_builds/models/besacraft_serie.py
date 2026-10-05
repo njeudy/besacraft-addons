@@ -2,7 +2,7 @@ from odoo import fields, models
 
 
 class BesacraftSerie(models.Model):
-    """One of the channel's three series. Drives the badge colour and the visual mode.
+    """One of the channel's series. Drives the badge colour and the visual mode.
 
     The visual mode is not decoration: it selects which of the three validated art
     directions a page renders in, so it belongs to the data, not to a template.
@@ -21,5 +21,13 @@ class BesacraftSerie(models.Model):
         [("notice", "Notice"), ("chronique", "Chronique"), ("airain", "Coeur d'Airain")],
         required=True, default="notice",
     )
+    # The series, not the build, says where a tutorial is shown: the same database serves
+    # several sites, and a site carries whole series -- the author's own site shows them
+    # all, the Besacraft site only its own. Filing each build under one site could not say
+    # « both », and left the choice to whoever imported the build.
+    website_ids = fields.Many2many(
+        "website", string="Websites",
+        help="Sites whose catalogue lists this series. A site with no series has no "
+             "catalogue at all: /builds and the tutorial pages answer 404 there.")
 
     _sql_constraints = [("code_uniq", "unique(code)", "A series code must be unique.")]

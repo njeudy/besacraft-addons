@@ -28,7 +28,7 @@ class BesacraftVendre(models.TransientModel):
         return "Tuto %s — %s" % (build.code, build.name)
 
     def _site_besacraft(self):
-        """The Besacraft website, when the build does not name one itself.
+        """The Besacraft website, where the tutorials are sold.
 
         Cherché par son nom : sur une base où il n'existe pas encore -- une base de tests,
         par exemple -- le produit reste sans site plutôt que d'échouer, ce qui le rend
@@ -36,6 +36,20 @@ class BesacraftVendre(models.TransientModel):
         """
         site = self.env["website"].sudo().search([("name", "=ilike", "besacraft")], limit=1)
         return site.id or False
+
+    def _site_de_vente(self, build):
+        """The one site a tutorial's product is sold on.
+
+        A product has a single site, a series may have several. The Besacraft site wins
+        when it carries the series -- that is where the shop is -- otherwise the series'
+        own site. A series published nowhere falls back to the Besacraft site: empty, the
+        product would show in every shop of the database, the freelance one included.
+        """
+        sites = build.serie_id.website_ids
+        besacraft = self._site_besacraft()
+        if besacraft in sites.ids or not sites:
+            return besacraft
+        return sites[:1].id
 
     def _compute_product_name(self):
         for wizard in self:
@@ -58,7 +72,7 @@ class BesacraftVendre(models.TransientModel):
             "image_1920": build.box_image or build.overview_image,
             # Le meme Odoo sert plusieurs sites : sans ca le tuto apparait dans la boutique
             # du site freelance, ou il n'a rien a faire.
-            "website_id": build.website_id.id or self._site_besacraft(),
+            "website_id": self._site_de_vente(build),
         }
         if produit:
             produit.product_tmpl_id.write(valeurs)

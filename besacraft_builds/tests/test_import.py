@@ -84,7 +84,7 @@ class TestImportDepuisBuildplan(TransactionCase):
     def test_il_resout_la_serie_par_son_code(self):
         resultat = self._import()
         self.assertEqual(resultat["code"], "9343")
-        self.assertEqual(resultat["serie"], "Schematics")
+        self.assertEqual(resultat["serie"], "Schematics / créatif")
         self.assertEqual(resultat["block_count"], 30)
 
     def test_une_serie_inconnue_est_refusee(self):
@@ -93,15 +93,14 @@ class TestImportDepuisBuildplan(TransactionCase):
             self._import(serie_code="mediévale")
         self.assertIn("hardcore", str(leve.exception))
 
-    def test_le_build_atterrit_sur_le_site_besacraft(self):
-        """Sans défaut, website_id vide veut dire « les six sites de la base »."""
-        # On part d'une base d'accueil qui porte peut-être déjà le drapeau ailleurs :
-        # le défaut ne tranche que s'il n'y a qu'un candidat, donc on en fabrique un.
-        self.env["website"].search([("besacraft_enabled", "=", True)]).besacraft_enabled = False
+    def test_l_import_dit_ou_le_build_se_montre_sans_choisir_le_site(self):
+        """La série décide du site : l'import le rapporte, il ne le pose pas."""
+        serie = self.env.ref("besacraft_builds.serie_survie")
         site = self.env["website"].search([], limit=1)
-        site.besacraft_enabled = True
-        autre = self.env["besacraft.build"].create({
-            "name": "Test", "code": "9344",
-            "serie_id": self.env.ref("besacraft_builds.serie_survie").id,
-        })
-        self.assertEqual(autre.website_id, site)
+        serie.website_ids = [(6, 0, site.ids)]
+        self.assertEqual(self._import()["websites"], [site.name])
+
+    def test_une_serie_publiee_nulle_part_le_dit(self):
+        """Une liste vide : l'appelant prévient que le build n'atteint aucun lecteur."""
+        self.env.ref("besacraft_builds.serie_survie").website_ids = [(5,)]
+        self.assertEqual(self._import()["websites"], [])

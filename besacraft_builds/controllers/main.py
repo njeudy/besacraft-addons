@@ -6,15 +6,18 @@ from odoo.http import request
 
 
 def _site_besacraft(env):
-    """Sitemap hook: the catalogue is only crawled on the site that serves it."""
-    return env["website"].get_current_website().besacraft_enabled
+    """Sitemap hook: the catalogue is only crawled on the sites that serve it."""
+    return bool(env["website"].get_current_website()._besacraft_series())
 
 
 class BesacraftBuilds(http.Controller):
     """Public pages of the build catalogue."""
 
+    def _site(self):
+        return request.env["website"].get_current_website()
+
     def _garde_site(self):
-        """404 hors du site Besacraft.
+        """404 sur un site qui ne publie aucune série.
 
         Borner les ENREGISTREMENTS par `website_id` ne suffisait pas : les autres sites
         servaient /builds en rayon vide, habillage compris. Un catalogue qui existe et
@@ -24,7 +27,7 @@ class BesacraftBuilds(http.Controller):
         déclarée `website=True` (elle sert un fichier, pas une page), et `request.website`
         n'y existe donc pas — la garde y répondait 500 au lieu de 404.
         """
-        return not request.env["website"].get_current_website().besacraft_enabled
+        return not self._site()._besacraft_series()
 
     def _filtre_publie(self):
         """`[]` pour un éditeur du site, le filtre de publication pour tout le monde.
@@ -43,17 +46,17 @@ class BesacraftBuilds(http.Controller):
         """The catalogue, laid out as a shelf of construction boxes."""
         if self._garde_site():
             return request.not_found()
-        # website_domain() borne au site courant : le même Odoo sert aussi la boutique
-        # freelance, et /builds y afficherait les tutos de Besacraft.
-        domaine = self._filtre_publie() + request.website.website_domain()
+        # Borné aux séries que ce site publie : le même Odoo sert plusieurs sites, et
+        # chacun ne montre que les siennes -- filtres compris.
         Build = request.env["besacraft.build"].sudo()
-        series = request.env["besacraft.serie"].sudo().search([])
+        publies = self._filtre_publie() + Build._domaine_site(request.website)
+        domaine = list(publies)
+        series = request.website._besacraft_series()
         if serie:
             domaine.append(("serie_id.code", "=", serie))
         builds = Build.search(domaine)
         # Le compteur de chaque filtre se lit sur la totalité, pas sur la sélection
         # courante : un filtre qui afficherait « 0 » une fois cliqué serait absurde.
-        publies = self._filtre_publie() + request.website.website_domain()
         tous = Build.search_count(publies)
         par_serie = {
             s.id: Build.search_count(publies + [("serie_id", "=", s.id)]) for s in series
@@ -71,7 +74,7 @@ class BesacraftBuilds(http.Controller):
             return request.not_found()
         build = request.env["besacraft.build"].sudo().search(
             [("code", "=", "%03d" % code)] + self._filtre_publie()
-            + request.website.website_domain(), limit=1)
+            + request.env["besacraft.build"]._domaine_site(request.website), limit=1)
         if not build:
             return request.not_found()
         # Les couches partent en JSON : la page change de couche sans aller-retour serveur,
@@ -121,7 +124,7 @@ class BesacraftBuilds(http.Controller):
         if self._garde_site():
             return request.not_found()
         build = request.env["besacraft.build"].sudo().browse(build_id).exists()
-        if not build or not build.viewer_attachment_id:
+        if not build or not build.viewer_attachment_id or not build.is_shown_on(self._site()):
             return request.not_found()
         redirection = self._vers_le_produit(build)
         if redirection:

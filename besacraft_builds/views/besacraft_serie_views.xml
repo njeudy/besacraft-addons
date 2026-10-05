@@ -10,6 +10,7 @@
                 <field name="visual_mode"/>
                 <field name="color"/>
                 <field name="badge_ink"/>
+                <field name="website_ids" widget="many2many_tags" options="{'no_create': True}"/>
             </list>
         </field>
     </record>
