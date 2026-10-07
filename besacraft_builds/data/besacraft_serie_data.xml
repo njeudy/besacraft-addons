@@ -1,7 +1,7 @@
 <odoo>
-    <!-- Les sites de chaque série (`website_ids`) ne sont PAS posés ici : ce sont des
-         identifiants propres à chaque base, et un module ne sait pas lequel de ses sites
-         est celui de l'auteur. Ils se règlent dans Besacraft > Séries. -->
+    <!-- Each series' sites (`website_ids`) are NOT set here: they are ids local to every
+         database, and a module cannot know which of its sites belongs to the author. They
+         are set from Besacraft > Series. -->
     <record id="serie_1722" model="besacraft.serie">
         <field name="name">Besacraft</field>
         <field name="code">1722</field>
@@ -26,12 +26,16 @@
         <field name="badge_ink">#EAD9B0</field>
         <field name="visual_mode">airain</field>
     </record>
-    <!-- Vide pour l'instant : la série existe pour qu'un premier build puisse s'y ranger. -->
+    <!-- Empty for now: the series exists so that a first build has somewhere to go.
+         The badge carries the average tone of the game's copper block (#C06C50), measured
+         on its texture: the series' machines are made of copper, so the badge says so. It
+         sits close to Zunk's red (#C4583F) because the two series overlap (the machines are
+         used in the hardcore run), but the more orange cast keeps them apart. -->
     <record id="serie_steampunk" model="besacraft.serie">
         <field name="name">Steampunk</field>
         <field name="code">steampunk</field>
         <field name="sequence">40</field>
-        <field name="color">#7A5D38</field>
+        <field name="color">#C06C50</field>
         <field name="badge_ink">#FBFAF7</field>
         <field name="visual_mode">airain</field>
     </record>
