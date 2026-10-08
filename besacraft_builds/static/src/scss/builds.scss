@@ -134,7 +134,7 @@
     }
     .bc-puce { width: 10px; height: 10px; flex: none; border-radius: 50%; }
     .bc-recherche {
-        min-width: min(100%, 280px); min-height: 40px; padding: 0 12px; font-size: 14px;
+        min-width: #{"min(100%, 280px)"}; min-height: 40px; padding: 0 12px; font-size: 14px;
         background: $bc-carte; border: 1px solid $bc-trait-fort; color: $bc-encre;
     }
     .bc-lecteur { margin: 0; font-size: 12px; color: $bc-encre-douce; b { color: $bc-encre; } }
@@ -222,7 +222,7 @@
     }
 
     .bc-court-grille { display: flex; flex-wrap: wrap; gap: 28px; align-items: flex-start; }
-    .bc-court { margin: 0; width: min(100%, 320px); }
+    .bc-court { margin: 0; width: #{"min(100%, 320px)"}; }
     // Le cadre prend le format réel de la vidéo : un cadre plus haut laisserait une bande.
     .bc-court-cadre {
         aspect-ratio: 9 / 16; background: $bc-nuit; border: 1px solid $bc-trait; overflow: hidden;
@@ -311,7 +311,7 @@
         display: flex; flex-wrap: wrap; align-items: center; gap: 28px 44px;
         padding: 38px 0 20px; border-left: 0;
     }
-    .bc-serie-logo { width: min(100%, 300px); height: auto; flex: none; object-fit: contain; }
+    .bc-serie-logo { width: #{"min(100%, 300px)"}; height: auto; flex: none; object-fit: contain; }
     .bc-serie-texte { flex: 1; min-width: 260px; max-width: 70ch; display: flex; flex-direction: column; gap: 10px;
         .bc-surtitre { color: var(--serie, #{$bc-bronze-sombre}); } }
     .bc-serie-sous { margin: 0; font-size: 18px; color: $bc-encre-douce; }
