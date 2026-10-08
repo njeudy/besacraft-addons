@@ -335,7 +335,9 @@ $bc-police-titre: var(--bc-police-titre, #{inspect($-bc-police-titre)});
         background: bc-voile($bc-nuit, 72%);
         backdrop-filter: blur(6px);
         border: 1px solid bc-voile($bc-sable, 40%);
-        color: $bc-carte;
+        // Le texte d'un panneau sombre est le texte clair du thème : `--bc-carte` est sombre
+        // sous un thème sombre, et le titre y devenait invisible.
+        color: $bc-nuit-encre;
     }
     .bc-paywall-img {
         width: 190px; height: 130px; object-fit: cover;

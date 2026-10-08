@@ -297,13 +297,17 @@
     .bc-paywall-boite { max-width: 560px; }
     .bc-apercu-verrou {
         display: grid; gap: 8px; width: 100%; margin-top: 8px;
-        .bc-couche-ap { background: bc-voile($bc-carte, 12%); border-color: bc-voile($bc-sable, 40%); }
-        .bc-mini-liste li { color: $bc-carte; }
+        .bc-couche-ap {
+            background: bc-voile($bc-nuit-encre, 8%); border-color: bc-voile($bc-sable, 40%);
+            color: $bc-nuit-encre;
+        }
+        .bc-couche-ap-n { color: $bc-sable; }
+        .bc-mini-liste li b { color: $bc-sable; }
     }
     // Les couches suivantes : leur numéro et des barres, jamais leur contenu.
     .bc-couche-flou {
         filter: blur(3px); opacity: 0.7;
-        .bc-flou-barre { display: block; height: 10px; margin-top: 8px; background: bc-voile($bc-carte, 35%); }
+        .bc-flou-barre { display: block; height: 10px; margin-top: 8px; background: bc-voile($bc-nuit-encre, 30%); }
     }
 
     // --- Page de série ---------------------------------------------------------------------------------
