@@ -26,13 +26,20 @@ class TestPages(HttpCase):
             "block_count": 80, "layer_count": 2,
             "holo_data": json.dumps({"taille": [2, 2, 2], "couches": [[0, 0, 1, 1]]})})
 
-    def _editeur(self):
-        """A logged-in website designer: the only one who sees what is not published."""
-        groupes = self.env.ref("website.group_website_designer") | self.env.ref("base.group_user")
-        self.env["res.users"].create({
-            "name": "Editeur test", "login": "editeur_test", "password": "editeur_test",
-            "groups_id": [(6, 0, groupes.ids)]})
-        self.authenticate("editeur_test", "editeur_test")
+    def _connecter_admin(self):
+        """Log in as an existing website designer.
+
+        Creating a user here is not an option: the base is multi-company and a new user's
+        default company is not always one it may use. The test session skips the password
+        check, so any active internal designer will do -- `base.user_admin` is archived or
+        renamed on some bases.
+        """
+        designer = self.env.ref("website.group_website_designer")
+        user = self.env["res.users"].search(
+            [("share", "=", False), ("groups_id", "in", designer.id)], limit=1)
+        self.assertTrue(user, "no active website designer on this database")
+        self.authenticate(user.login, "sans-importance")
+        return user
 
     def _statut(self, url):
         return self.url_open(url, allow_redirects=False).status_code
@@ -62,11 +69,8 @@ class TestPages(HttpCase):
         self.assertIn("Ouvrir le tuto", gratuit)
 
     def test_un_acquereur_voit_le_badge_et_plus_l_achat(self):
-        acheteur = self.env["res.users"].create({
-            "name": "Acheteur test", "login": "acheteur_test", "password": "acheteur_test",
-            "groups_id": [(6, 0, self.env.ref("base.group_user").ids)]})
-        self.payant._action_add_members(acheteur.partner_id)
-        self.authenticate("acheteur_test", "acheteur_test")
+        admin = self._connecter_admin()
+        self.payant._action_add_members(admin.partner_id)
         page = self.url_open("/builds/9921").text
         self.assertNotIn("/shop/cart/update", page)
         self.assertIn("Acheté", page)
@@ -124,7 +128,7 @@ class TestPages(HttpCase):
             "youtube_url": "https://youtu.be/dQw4w9WgXcQ", "build_ids": [(4, self.gratuit.id)]})
         page = self.url_open("/builds/serie/schematics/episodes").text
         self.assertNotIn("Episode secret", page)
-        self._editeur()
+        self._connecter_admin()
         page = self.url_open("/builds/serie/schematics/episodes").text
         self.assertIn("Episode secret", page)
         self.assertIn("youtube-nocookie.com/embed/dQw4w9WgXcQ", page)
