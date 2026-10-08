@@ -48,7 +48,7 @@
                 <span class="bc-carte-niv" t-out="build.NIVEAUX_COURT.get(build.level, '—')"/>
             </span>
             <span class="bc-carte-vis">
-                <img t-attf-src="/web/image/besacraft.build/#{build.id}/#{build.id in avec_boite and 'box_image' or 'overview_image'}"
+                <img t-attf-src="/web/image/besacraft.build/#{build.id}/#{build.id in avec_boite and 'box_image' or 'overview_image'}/700x700"
                      t-att-alt="'Boîte du build N°%s, %s' % (build.code, build.name)"
                      width="700" height="700" loading="lazy"/>
             </span>
