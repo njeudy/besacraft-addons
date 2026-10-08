@@ -1,3 +1,5 @@
+import json
+
 from odoo.exceptions import ValidationError
 from odoo.tests import TransactionCase, tagged
 
@@ -73,6 +75,50 @@ class TestImport(TransactionCase):
         self.assertEqual(build.layer_ids[0].title, "Les murs")
 
 
+# Palette avec de l'air (index 0) et de cave_air, que seul « :air » exclut (index 3 reste posé) ; deux couches données dans le désordre, la plus basse
+# (y = 0) en second pour vérifier le tri.
+BUILD_AVEC_BLOCS = {
+    "name": "Hologramme",
+    "size": [3, 2, 3],
+    "palette": [{"id": "minecraft:air"}, {"id": "minecraft:dirt"},
+                {"id": "minecraft:oak_log"}, {"id": "minecraft:cave_air"}],
+    "layers": [
+        {"y": 1, "counts": {"minecraft:oak_log": 2},
+         "blocks": [[2, 2, 2], [0, 1, 0], [1, 1, 3]]},
+        {"y": 0, "counts": {"minecraft:dirt": 3},
+         "blocks": [[0, 0, 1], [1, 0, 0], [2, 0, 1], [1, 1, 1]]},
+    ],
+    "items": {},
+}
+
+
+@tagged("post_install", "-at_install")
+class TestHologramme(TransactionCase):
+    def _import(self, donnees):
+        return self.env["besacraft.build"].import_build_json(
+            donnees, None, code="9344", serie=self.env.ref("besacraft_builds.serie_survie"))
+
+    def test_l_hologramme_garde_l_ordre_de_pose_sans_l_air(self):
+        build = self._import(BUILD_AVEC_BLOCS)
+        donnees = json.loads(build.holo_data)
+        self.assertEqual(donnees["taille"], [3, 2, 3])
+        # Couches triées par y ; seul « :air » retiré ; ordre des blocs conservé.
+        self.assertEqual(donnees["couches"], [[0, 0, 2, 0, 1, 1], [2, 2, 1, 1]])
+
+    def test_le_json_est_compact(self):
+        build = self._import(BUILD_AVEC_BLOCS)
+        self.assertNotIn(" ", build.holo_data)
+
+    def test_un_build_json_sans_positions_ne_pose_rien(self):
+        build = self._import(BUILD_JSON)
+        self.assertFalse(build.holo_data)
+
+    def test_un_reimport_sans_positions_garde_l_hologramme(self):
+        build = self._import(BUILD_AVEC_BLOCS)
+        self._import(BUILD_JSON)
+        self.assertTrue(build.holo_data)
+
+
 @tagged("post_install", "-at_install")
 class TestImportDepuisBuildplan(TransactionCase):
     """Le point d'entrée JSON-RPC : mêmes données, adressées par codes."""
@@ -84,7 +130,7 @@ class TestImportDepuisBuildplan(TransactionCase):
     def test_il_resout_la_serie_par_son_code(self):
         resultat = self._import()
         self.assertEqual(resultat["code"], "9343")
-        self.assertEqual(resultat["serie"], "Schematics")
+        self.assertEqual(resultat["serie"], "Schematics / créatif")
         self.assertEqual(resultat["block_count"], 30)
 
     def test_une_serie_inconnue_est_refusee(self):
@@ -93,15 +139,14 @@ class TestImportDepuisBuildplan(TransactionCase):
             self._import(serie_code="mediévale")
         self.assertIn("hardcore", str(leve.exception))
 
-    def test_le_build_atterrit_sur_le_site_besacraft(self):
-        """Sans défaut, website_id vide veut dire « les six sites de la base »."""
-        # On part d'une base d'accueil qui porte peut-être déjà le drapeau ailleurs :
-        # le défaut ne tranche que s'il n'y a qu'un candidat, donc on en fabrique un.
-        self.env["website"].search([("besacraft_enabled", "=", True)]).besacraft_enabled = False
+    def test_l_import_dit_ou_le_build_se_montre_sans_choisir_le_site(self):
+        """La série décide du site : l'import le rapporte, il ne le pose pas."""
+        serie = self.env.ref("besacraft_builds.serie_survie")
         site = self.env["website"].search([], limit=1)
-        site.besacraft_enabled = True
-        autre = self.env["besacraft.build"].create({
-            "name": "Test", "code": "9344",
-            "serie_id": self.env.ref("besacraft_builds.serie_survie").id,
-        })
-        self.assertEqual(autre.website_id, site)
+        serie.website_ids = [(6, 0, site.ids)]
+        self.assertEqual(self._import()["websites"], [site.name])
+
+    def test_une_serie_publiee_nulle_part_le_dit(self):
+        """Une liste vide : l'appelant prévient que le build n'atteint aucun lecteur."""
+        self.env.ref("besacraft_builds.serie_survie").website_ids = [(5,)]
+        self.assertEqual(self._import()["websites"], [])

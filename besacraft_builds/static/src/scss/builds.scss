@@ -1,0 +1,369 @@
+// Pages du catalogue : barre de section, carte, écran d'un build, série, épisodes.
+//
+// Même règle que notice.scss, dont ce fichier reprend les variables ($bc-*, qui lisent les
+// propriétés `--bc-*`) : on LIT les propriétés, on ne les pose jamais sur un élément du
+// module, sinon elles masqueraient celles du thème. La couleur d'une série (`--serie`) est
+// la seule exception, posée en ligne : c'est une donnée de l'enregistrement.
+
+// L'icône de cadenas des cartes et des plaques de prix hérite de la couleur du texte.
+.bc-notice {
+
+    // --- Survol ---------------------------------------------------------------------------
+    // Un léger soulèvement et un liseré de la couleur de lueur. Le thème peut faire plus
+    // (reflet, halo) en s'accrochant à `.bc-lueur` ; ici le strict nécessaire, qui ne dépend
+    // d'aucun mouvement pour être lisible.
+    .bc-lueur {
+        transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+        &:hover, &:focus-visible {
+            transform: translateY(-4px);
+            border-color: $bc-lueur;
+            box-shadow: 0 0 0 1px $bc-lueur;
+        }
+        @media (prefers-reduced-motion: reduce) {
+            transition: none;
+            &:hover, &:focus-visible { transform: none; }
+        }
+    }
+
+    // --- Barre de section -------------------------------------------------------------------
+    // Sticky sous l'en-tête du site ; sur mobile elle défile dans elle-même plutôt que de
+    // passer à la ligne ou d'élargir la page.
+    .bc-barre-section {
+        position: sticky; top: 0; z-index: 10;
+        background: $bc-carte; border-bottom: 1px solid $bc-trait;
+    }
+    .bc-barre-in {
+        display: flex; align-items: center; gap: 18px;
+        max-width: 1440px; margin: 0 auto; padding: 0 24px;
+        ul {
+            display: flex; gap: 4px; margin: 0; padding: 0; list-style: none;
+            overflow-x: auto; scrollbar-width: thin; flex: 1; min-width: 0;
+        }
+        li { flex: none; }
+        a {
+            display: block; padding: 14px 14px 12px; white-space: nowrap;
+            font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase;
+            color: $bc-encre-douce; border-bottom: 2px solid transparent;
+            &:hover { color: $bc-encre; }
+            &.bc-actif { color: $bc-encre; border-bottom-color: $bc-laiton; }
+        }
+    }
+    .bc-barre-marque {
+        flex: none; font-family: $bc-police-titre; font-size: 22px; color: $bc-bronze-sombre;
+    }
+
+    // --- Éléments communs -------------------------------------------------------------------
+    .bc-sec { padding: 28px 0 8px; }
+    .bc-h2 { font-family: $bc-police-titre; font-size: 40px; line-height: 0.95; margin: 38px 0 18px; }
+    .bc-sec > .bc-h2:first-child { margin-top: 10px; }
+    .bc-actions { display: flex; flex-wrap: wrap; gap: 10px; margin: 8px 0 0; }
+    .bc-btn-second {
+        display: inline-block; text-align: center; font-size: 12px; font-weight: 700;
+        letter-spacing: 0.08em; padding: 10px 16px; background: transparent;
+        color: $bc-encre; border: 1px solid $bc-trait-fort;
+        &:hover { border-color: $bc-lueur; color: $bc-encre; }
+    }
+    // Le bouton d'achat : le même partout (écran du build, tuto verrouillé, page de série).
+    .bc-btn-achat {
+        display: inline-flex; align-items: center; justify-content: center; text-decoration: none;
+        min-height: 48px; padding: 0 22px; cursor: pointer;
+        font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+        background: $bc-laiton; color: $bc-carte; border: 2px solid $bc-sable;
+        &:hover { background: $bc-bronze-sombre; color: $bc-carte; }
+    }
+    .bc-suite { margin: 18px 0 0; }
+    .bc-compteur {
+        display: flex; gap: 10px; margin: 0; font-size: 14px; color: $bc-encre-douce;
+        b { font-family: $bc-police-titre; font-size: 26px; color: $bc-encre; font-weight: 400; }
+    }
+
+    .bc-ariane ol {
+        display: flex; flex-wrap: wrap; gap: 6px; margin: 0; padding: 18px 0 0; list-style: none;
+        font-size: 12px; letter-spacing: 0.06em;
+        li + li::before { content: '›'; margin-right: 6px; color: $bc-encre-douce; }
+        [aria-current] { color: $bc-encre-douce; }
+    }
+    .bc-ariane-barre ol { padding: 0; font-size: 11px; color: $bc-nuit-encre; }
+    .bc-ariane-barre a { color: $bc-sable; }
+    @media (max-width: 1100px) { .bc-ariane-barre { display: none; } }
+
+    .bc-pastille-serie {
+        display: inline-flex; align-items: center; gap: 7px; width: fit-content;
+        font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+        color: $bc-encre-douce;
+        i { width: 10px; height: 10px; flex: none; border-radius: 50%; background: var(--serie, #{$bc-sable}); }
+    }
+
+    // --- Prix, cadenas, achat -----------------------------------------------------------------
+    .bc-prix {
+        display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px;
+        background: $bc-laiton; color: $bc-carte; border: 1px solid $bc-bronze-sombre;
+        font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+        box-shadow: inset 0 0 0 2px bc-voile($bc-carte, 22%);
+    }
+    .bc-prix-val { font-family: $bc-police-titre; font-size: 22px; line-height: 1; letter-spacing: 0.04em; }
+    .bc-cadenas { flex: none; }
+    .bc-acces {
+        font-size: 10px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase;
+        color: $bc-encre-douce;
+    }
+    .bc-acces-gratuit { color: $bc-bleu-sombre; }
+    .bc-acces-invite { color: $bc-bronze-sombre; }
+    .bc-badge-achete {
+        display: inline-block; padding: 4px 10px; width: fit-content;
+        font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase;
+        color: $bc-bleu-sombre; border: 2px solid $bc-bleu-sombre;
+    }
+    .bc-achat-form { margin: 6px 0 0; }
+    .bc-achat-note { display: block; font-size: 12px; color: $bc-encre-douce; max-width: 38ch; }
+    .bc-achat-fiche { display: inline-block; margin-top: 4px; font-size: 12px; }
+
+    // --- Filtres du catalogue -----------------------------------------------------------------
+    .bc-pupitre {
+        display: grid; gap: 14px; padding: 20px 0 24px; border-top: 1px solid $bc-trait;
+    }
+    .bc-rangee { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; }
+    .bc-rangee .bc-label { min-width: 78px; }
+    .bc-boutons { display: flex; flex-wrap: wrap; gap: 8px; }
+    .bc-f {
+        display: inline-flex; align-items: center; gap: 8px; padding: 8px 13px; cursor: pointer;
+        background: $bc-carte; border: 1px solid $bc-trait; color: $bc-encre; font-size: 13px;
+        &:hover { border-color: $bc-lueur; }
+        &[aria-pressed='true'] { border-color: $bc-encre; background: $bc-page; font-weight: 700; }
+        b { font-family: $bc-police-titre; font-size: 19px; font-weight: 400; }
+    }
+    .bc-puce { width: 10px; height: 10px; flex: none; border-radius: 50%; }
+    .bc-recherche {
+        min-width: #{"min(100%, 280px)"}; min-height: 40px; padding: 0 12px; font-size: 14px;
+        background: $bc-carte; border: 1px solid $bc-trait-fort; color: $bc-encre;
+    }
+    .bc-lecteur { margin: 0; font-size: 12px; color: $bc-encre-douce; b { color: $bc-encre; } }
+
+    // --- Grille et carte ------------------------------------------------------------------------
+    .bc-grille {
+        display: grid; grid-template-columns: repeat(auto-fill, minmax(236px, 1fr)); gap: 22px;
+        margin: 0; padding: 0; list-style: none;
+    }
+    .bc-cell { display: flex; min-width: 0; &[hidden] { display: none; } }
+
+    .bc-carte {
+        display: flex; flex-direction: column; width: 100%; color: $bc-encre;
+        background: $bc-carte; border: 1px solid $bc-trait; overflow: hidden;
+        &:hover { color: $bc-encre; }
+    }
+    .bc-carte-tete {
+        display: flex; align-items: center; justify-content: space-between; padding: 9px 14px;
+        border-bottom: 1px solid $bc-trait;
+    }
+    .bc-carte-code { font-family: $bc-police-titre; font-size: 25px; line-height: 1; letter-spacing: 0.06em; }
+    .bc-carte-niv {
+        font-size: 10px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase;
+        color: $bc-encre-douce;
+    }
+    .bc-carte-vis {
+        display: block; aspect-ratio: 1 / 1; background: $bc-nuit; overflow: hidden;
+        img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    }
+    .bc-carte-corps { display: flex; flex-direction: column; gap: 9px; padding: 14px; flex: 1; }
+    .bc-carte-nom { font-family: $bc-police-titre; font-size: 30px; line-height: 0.95; }
+    .bc-carte-kv {
+        display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 12px; color: $bc-encre-douce;
+        b { font-family: $bc-police-titre; font-size: 20px; font-weight: 400; color: $bc-encre; }
+    }
+    .bc-carte-pied {
+        display: flex; align-items: center; justify-content: space-between; gap: 8px;
+        margin-top: auto; padding-top: 6px; border-top: 1px dashed $bc-trait;
+    }
+
+    // --- États vides ------------------------------------------------------------------------------
+    .bc-vide {
+        margin: 26px 0 0; padding: 28px; text-align: center;
+        background: $bc-carte; border: 1px dashed $bc-sable;
+        &[hidden] { display: none; }
+        p { margin: 8px 0 12px; color: $bc-encre-douce; }
+    }
+    .bc-vide-t { font-family: $bc-police-titre; font-size: 32px; line-height: 1; }
+
+    // --- Écran d'un build ---------------------------------------------------------------------------
+    .bc-tete-grille {
+        display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between;
+        gap: 20px 40px; padding: 14px 0 6px;
+    }
+    .bc-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 18px; margin: 14px 0 0; }
+    .bc-total { display: flex; flex-direction: column; align-items: flex-end; margin: 0; }
+    .bc-total-n { font-family: $bc-police-titre; font-size: 64px; line-height: 0.9; }
+    .bc-total-u { font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: $bc-encre-douce; }
+
+    .bc-boite-grille {
+        display: grid; grid-template-columns: minmax(0, 360px) minmax(0, 1fr); gap: 28px;
+        @media (max-width: 767px) { grid-template-columns: 1fr; }
+    }
+    .bc-boite-objet {
+        margin: 0; background: $bc-carte; border: 1px solid $bc-trait;
+        img { display: block; width: 100%; height: auto; }
+        figcaption {
+            padding: 8px 12px; font-size: 11px; font-weight: 700; letter-spacing: 0.14em;
+            text-transform: uppercase; color: $bc-encre-douce;
+        }
+    }
+    // Registre clé / valeur : une ligne par fait, filets entre les lignes.
+    .bc-kv {
+        display: grid; align-content: start; margin: 0; background: $bc-carte;
+        border: 1px solid $bc-trait;
+        > div {
+            display: flex; justify-content: space-between; gap: 16px; padding: 11px 16px;
+            & + div { border-top: 1px solid $bc-trait; }
+        }
+        dt {
+            font-size: 11px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase;
+            color: $bc-encre-douce;
+        }
+        dd { margin: 0; font-family: $bc-police-titre; font-size: 22px; line-height: 1; text-align: right; }
+    }
+
+    .bc-court-grille { display: flex; flex-wrap: wrap; gap: 28px; align-items: flex-start; }
+    .bc-court { margin: 0; width: #{"min(100%, 320px)"}; }
+    // Le cadre prend le format réel de la vidéo : un cadre plus haut laisserait une bande.
+    .bc-court-cadre {
+        aspect-ratio: 9 / 16; background: $bc-nuit; border: 1px solid $bc-trait; overflow: hidden;
+        video { display: block; width: 100%; height: 100%; object-fit: cover; }
+    }
+    .bc-court figcaption { margin-top: 6px; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: $bc-encre-douce; }
+    .bc-court-info { flex: 1; min-width: 240px; max-width: 54ch; }
+
+    .bc-contenu-grille { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 28px;
+        @media (max-width: 767px) { grid-template-columns: 1fr; } }
+    .bc-contenu {
+        margin: 0; padding: 0; list-style: none; counter-reset: contenu;
+        background: $bc-carte; border: 1px solid $bc-trait;
+        li {
+            counter-increment: contenu; position: relative; padding: 14px 16px 14px 56px;
+            font-size: 14px; line-height: 1.55; color: $bc-encre-douce;
+            & + li { border-top: 1px solid $bc-trait; }
+            &::before {
+                content: counter(contenu); position: absolute; left: 16px; top: 10px;
+                font-family: $bc-police-titre; font-size: 28px; line-height: 1; color: $bc-bleu-sombre;
+            }
+            b { display: block; color: $bc-encre; }
+        }
+    }
+    .bc-regle {
+        padding: 18px 20px; background: $bc-fond2; border-left: 5px solid $bc-sable;
+        p { margin: 0 0 10px; color: $bc-encre-douce; line-height: 1.6; &:last-child { margin: 0; } }
+    }
+
+    .bc-guichet {
+        display: flex; flex-wrap: wrap; align-items: center; gap: 24px 48px; padding: 22px;
+        background: $bc-carte; border: 1px solid $bc-trait;
+    }
+    .bc-guichet-action { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
+    // La plaque de prix : un rectangle de laiton aux coins rivetés.
+    .bc-plaque-prix {
+        position: relative; display: inline-flex; flex-direction: column; align-items: center;
+        gap: 2px; margin: 0; padding: 14px 30px;
+        background: $bc-laiton; color: $bc-carte; border: 2px solid $bc-bronze-sombre;
+        box-shadow: inset 0 0 0 3px bc-voile($bc-carte, 24%);
+        &::before, &::after {
+            content: ''; position: absolute; top: 8px; width: 6px; height: 6px; border-radius: 50%;
+            background: bc-voile($bc-carte, 55%);
+        }
+        &::before { left: 8px; }
+        &::after { right: 8px; }
+    }
+    .bc-plaque-lib { font-size: 10px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; }
+    .bc-plaque-val { font-family: $bc-police-titre; font-size: 46px; line-height: 0.95; }
+    .bc-plaque-libre { background: $bc-fond2; color: $bc-encre; border-color: $bc-trait-fort; }
+
+    // Aperçu de couches : même gabarit sur l'écran du build et dans le tuto verrouillé.
+    .bc-apercu {
+        display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px;
+        margin: 0; padding: 0; list-style: none;
+    }
+    .bc-couche-ap {
+        padding: 14px; background: $bc-carte; border: 1px solid $bc-trait; text-align: left;
+        color: $bc-encre;
+    }
+    .bc-couche-ap-tete { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
+    .bc-couche-ap-n { font-family: $bc-police-titre; font-size: 40px; line-height: 0.85; color: $bc-bleu-sombre; }
+    .bc-couche-ap-role { margin: 6px 0 10px; font-size: 12px; color: $bc-encre-douce; }
+    .bc-mini-liste {
+        display: grid; gap: 6px; margin: 0; padding: 0; list-style: none;
+        li { display: flex; align-items: center; gap: 8px; font-size: 13px;
+            img { width: 32px; height: 32px; flex: none; image-rendering: pixelated; }
+            b { margin-left: auto; font-family: $bc-police-titre; font-size: 20px; font-weight: 400; color: $bc-bleu-sombre; } }
+    }
+
+    // --- Tuto verrouillé : l'aperçu --------------------------------------------------------------------
+    .bc-paywall-boite { max-width: 560px; }
+    .bc-apercu-verrou {
+        display: grid; gap: 8px; width: 100%; margin-top: 8px;
+        .bc-couche-ap {
+            background: bc-voile($bc-nuit-encre, 8%); border-color: bc-voile($bc-sable, 40%);
+            color: $bc-nuit-encre;
+        }
+        .bc-couche-ap-n { color: $bc-sable; }
+        .bc-mini-liste li b { color: $bc-sable; }
+    }
+    // Les couches suivantes : leur numéro et des barres, jamais leur contenu.
+    .bc-couche-flou {
+        filter: blur(3px); opacity: 0.7;
+        .bc-flou-barre { display: block; height: 10px; margin-top: 8px; background: bc-voile($bc-nuit-encre, 30%); }
+    }
+
+    // --- Page de série ---------------------------------------------------------------------------------
+    .bc-serie-hero {
+        display: flex; flex-wrap: wrap; align-items: center; gap: 28px 44px;
+        padding: 38px 0 20px; border-left: 0;
+    }
+    .bc-serie-logo { width: #{"min(100%, 300px)"}; height: auto; flex: none; object-fit: contain; }
+    .bc-serie-texte { flex: 1; min-width: 260px; max-width: 70ch; display: flex; flex-direction: column; gap: 10px;
+        .bc-surtitre { color: var(--serie, #{$bc-bronze-sombre}); } }
+    .bc-serie-sous { margin: 0; font-size: 18px; color: $bc-encre-douce; }
+    .bc-serie-desc { line-height: 1.7; color: $bc-encre-douce; p { margin: 0 0 10px; } }
+
+    // --- Épisodes ------------------------------------------------------------------------------------------
+    .bc-episodes-grille {
+        display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px;
+        margin: 0; padding: 0; list-style: none;
+    }
+    .bc-episode-carte {
+        display: flex; flex-direction: column; height: 100%; color: $bc-encre;
+        background: $bc-carte; border: 1px solid $bc-trait; overflow: hidden;
+        &:hover { color: $bc-encre; }
+    }
+    .bc-episode-vis {
+        display: block; aspect-ratio: 16 / 9; background: $bc-nuit;
+        img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    }
+    .bc-episode-sans {
+        display: flex; align-items: center; justify-content: center; width: 100%; height: 100%;
+        font-size: 38px; color: $bc-sable;
+    }
+    .bc-episode-corps { display: flex; flex-direction: column; gap: 6px; padding: 14px; }
+    .bc-episode-n { font-size: 11px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: $bc-bronze-sombre; }
+    .bc-episode-titre { font-family: $bc-police-titre; font-size: 28px; line-height: 0.95; }
+    .bc-episode-meta { display: flex; gap: 14px; margin: 0; font-size: 12px; color: $bc-encre-douce; }
+
+    .bc-episodes-liste { display: grid; gap: 44px; }
+    .bc-episode {
+        display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 28px;
+        padding-bottom: 44px; border-bottom: 1px solid $bc-trait; scroll-margin-top: 80px;
+        @media (max-width: 899px) { grid-template-columns: 1fr; }
+        &:target .bc-lecteur-16-9 { border-color: $bc-lueur; }
+    }
+    .bc-lecteur-16-9 {
+        margin: 0; aspect-ratio: 16 / 9; background: $bc-nuit; border: 1px solid $bc-trait; overflow: hidden;
+        iframe, img { display: block; width: 100%; height: 100%; border: 0; object-fit: cover; }
+    }
+    .bc-episode-texte { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; min-width: 0;
+        .bc-h2 { margin: 0; } }
+    .bc-episode-resume { margin: 0; line-height: 1.7; color: $bc-encre-douce; white-space: pre-line; }
+    .bc-vus { width: 100%;
+        ul { display: flex; flex-wrap: wrap; gap: 10px; margin: 8px 0 0; padding: 0; list-style: none; } }
+    .bc-mini-carte {
+        display: flex; align-items: center; gap: 10px; padding: 6px 12px 6px 6px; max-width: 260px;
+        background: $bc-carte; border: 1px solid $bc-trait; font-size: 12px; color: $bc-encre;
+        &:hover { color: $bc-encre; }
+        img { width: 48px; height: 48px; flex: none; object-fit: cover; }
+    }
+}

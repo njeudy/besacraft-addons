@@ -65,17 +65,30 @@ class TestVendre(TransactionCase):
         self.assertIn("2 177", modele.website_description)
         self.assertIn("15 × 26 × 22", modele.website_description)
 
+    def _site_besacraft(self):
+        site = self.env["website"].search([("name", "=ilike", "besacraft")], limit=1)
+        return site or self.env["website"].create({"name": "Besacraft"})
+
     def test_le_produit_est_rattache_au_site_besacraft(self):
         """Le même Odoo sert la boutique freelance : un tuto n'y a rien à faire."""
-        site = self.env["website"].search([("name", "=ilike", "besacraft")], limit=1)
-        if not site:
-            site = self.env["website"].create({"name": "Besacraft"})
+        site = self._site_besacraft()
+        self.build.serie_id.website_ids = [(5,)]
         self._vendre().action_vendre()
         self.assertEqual(self.build.product_id.product_tmpl_id.website_id, site)
 
-    def test_le_site_du_build_prime_sur_la_recherche_par_nom(self):
-        autre = self.env["website"].create({"name": "Boutique d'essai"})
-        self.build.website_id = autre
+    def test_besacraft_prime_quand_la_serie_y_est_publiee(self):
+        """Une série sur deux sites : le produit va là où est la boutique."""
+        site = self._site_besacraft()
+        autre = self.env["website"].create({"name": "Site de l'auteur"})
+        self.build.serie_id.website_ids = [(6, 0, (autre | site).ids)]
+        self._vendre().action_vendre()
+        self.assertEqual(self.build.product_id.product_tmpl_id.website_id, site)
+
+    def test_une_serie_hors_besacraft_vend_sur_son_site(self):
+        """Sinon le produit serait en vente sur un site qui ne montre pas le tuto."""
+        self._site_besacraft()
+        autre = self.env["website"].create({"name": "Site de l'auteur"})
+        self.build.serie_id.website_ids = [(6, 0, autre.ids)]
         self._vendre().action_vendre()
         self.assertEqual(self.build.product_id.product_tmpl_id.website_id, autre)
 

@@ -1,3 +1,5 @@
+import json
+
 from odoo import api, models
 from odoo.exceptions import ValidationError
 
@@ -29,7 +31,33 @@ class BesacraftBuildImport(models.Model):
         return {"id": build.id, "code": build.code, "name": build.name,
                 "serie": serie.name, "layer_count": build.layer_count,
                 "block_count": build.block_count,
-                "website_id": build.website_id.id or False}
+                # Where the build will show, so the caller can say it: no site at all means
+                # the series is published nowhere yet, and the build reaches no reader.
+                "websites": serie.website_ids.mapped("name")}
+
+    @staticmethod
+    def _holo_depuis_build_json(build_json):
+        """The hologram's compact JSON, or False when build.json carries no block positions.
+
+        Same logic as the design folder's `hologrammes()`: layers sorted by `y`, air taken out,
+        blocks kept in the order build.json lists them -- which is the laying order of the
+        tutorial. ALL layers of the structure go in, including the foundations the tutorial
+        skips: the hologram shows the whole building, not the reader's share of it.
+        """
+        palette = build_json.get("palette") or []
+        couches = build_json.get("layers") or []
+        if not palette or not any("blocks" in c for c in couches):
+            return False
+        air = {i for i, bloc in enumerate(palette) if str(bloc.get("id", "")).endswith(":air")}
+        plats = []
+        for couche in sorted(couches, key=lambda c: c.get("y", 0)):
+            ligne = []
+            for x, z, bloc in couche.get("blocks") or []:
+                if bloc not in air:
+                    ligne += [x, z]
+            plats.append(ligne)
+        return json.dumps({"taille": build_json.get("size") or [0, 0, 0], "couches": plats},
+                          separators=(",", ":"))
 
     @api.model
     def import_build_json(self, build_json, plan_json, code, serie):
@@ -65,6 +93,9 @@ class BesacraftBuildImport(models.Model):
             "source_license": credits.get("license") or "",
             "source_url": credits.get("website") or "",
         }
+        holo = self._holo_depuis_build_json(build_json)
+        if holo:
+            valeurs["holo_data"] = holo
         if build:
             build.write(valeurs)
         else:

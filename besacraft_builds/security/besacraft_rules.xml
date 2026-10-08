@@ -1,0 +1,10 @@
+<odoo>
+    <!-- Un épisode non publié ne se lit que côté interne : le contrôleur sert les pages en
+         sudo, mais /web/image/besacraft.episode/<id>/poster suit les droits du visiteur. -->
+    <record id="rule_besacraft_episode_public" model="ir.rule">
+        <field name="name">Besacraft episode: only published ones for the public</field>
+        <field name="model_id" ref="model_besacraft_episode"/>
+        <field name="groups" eval="[(4, ref('base.group_public')), (4, ref('base.group_portal'))]"/>
+        <field name="domain_force">[('is_published', '=', True)]</field>
+    </record>
+</odoo>

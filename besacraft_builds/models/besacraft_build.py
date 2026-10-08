@@ -16,9 +16,10 @@ class BesacraftBuild(models.Model):
 
     _name = "besacraft.build"
     _description = "Build Tutorial"
-    # Multi, pas simple : le même Odoo sert plusieurs sites, et un tuto Besacraft n'a
-    # rien à faire dans la boutique du site freelance. Le mixin apporte website_id et le
-    # filtrage par site courant.
+    # Simple, plus multi : un tuto ne choisit plus son site, c'est sa série qui dit où il
+    # se montre (`besacraft.serie.website_ids`). Un `website_id` par build ne savait pas
+    # dire « sur le site de l'auteur ET sur Besacraft », et laissait la décision à celui
+    # qui importait le build.
     #
     # `website.seo.metadata` par-dessus, dans l'ordre de `blog.post` : un tuto est une page
     # publique qu'on partage, elle a besoin de son titre, de sa description et de son image
@@ -28,27 +29,9 @@ class BesacraftBuild(models.Model):
     # `website.searchable.mixin` pour que la recherche du site trouve un tuto. Sans lui, le
     # seul chemin vers /t/<n> est le catalogue : quelqu'un qui tape « hôtel de ville » dans
     # la loupe ne trouve rien, alors que la page existe.
-    _inherit = ["website.seo.metadata", "website.published.multi.mixin",
+    _inherit = ["website.seo.metadata", "website.published.mixin",
                 "website.searchable.mixin"]
     _order = "code"
-
-    def _default_website_id(self):
-        """The site that carries the catalogue, when there is exactly one.
-
-        Left empty, website_id means « every site of this database », and this one
-        serves six. Thirty-seven builds had been created that way and showed up in the
-        freelance shop. A default costs nothing and closes the hole at the source
-        rather than in each caller.
-
-        Exactly one: with several candidates the answer would be arbitrary, and a
-        tutorial filed under the wrong site is harder to notice than one filed under
-        none. Ambiguity leaves the field empty and the human decides.
-        """
-        sites = self.env["website"].search([("besacraft_enabled", "=", True)])
-        return sites if len(sites) == 1 else self.env["website"]
-
-    # Redéclaré pour son seul défaut : le champ lui-même vient du mixin.
-    website_id = fields.Many2one(default=lambda self: self._default_website_id())
 
     name = fields.Char(required=True, translate=True,
                        help="Editorial title, accented. Not the schematic's technical name.")
@@ -81,6 +64,17 @@ class BesacraftBuild(models.Model):
         help="The build's box, rendered by buildplan. This is what the shop shows: a "
              "bare render looks like a screenshot, a box looks like something you buy.")
     youtube_url = fields.Char()
+    short_video = fields.Binary(
+        "Vertical Short", attachment=True,
+        help="The 9:16 video of the build, played on the build page.")
+    # Les positions de tous les blocs, couche par couche, pour l'hologramme du site. Jamais
+    # lu avec la fiche : `prefetch=False` garde ce texte (plusieurs centaines de Ko sur un
+    # gros build) hors des chargements de listes.
+    holo_data = fields.Text(
+        "Hologram Data", prefetch=False, copy=False,
+        help='Compact JSON {"taille": [x, y, z], "couches": [[x, z, x, z, ...], ...]}: '
+             'real block positions in laying order, air removed.')
+    price_label = fields.Char(compute="_compute_price_label")
     # Crédit de la structure d'origine. Les blueprints du pack sont sous GPL-3.0 : le nom,
     # la licence et le lien doivent voyager avec elle partout où on la montre ou la vend.
     source_author = fields.Char("Original Author")
@@ -273,6 +267,27 @@ Jouable en survie — aucun bloc inaccessible, aucune commande, aucun mod obliga
             "url": self.product_id.product_tmpl_id.website_url if self.product_id else "/shop",
         }
 
+    def _prix(self):
+        """The price of the product that unlocks this build, 0.0 when there is none.
+
+        `sudo`: a visitor may not read product.product, but may know what a tutorial costs.
+        """
+        self.ensure_one()
+        return self.sudo().product_id.list_price if self.product_id else 0.0
+
+    @api.depends("product_id.list_price", "enroll")
+    def _compute_price_label(self):
+        for build in self:
+            produit = build.sudo().product_id
+            if build.enroll != "payment" or not produit:
+                build.price_label = False
+                continue
+            symbole = produit.currency_id.symbol or "€"
+            montant = "{:,.2f}".format(produit.list_price)
+            # Format français : espace insécable pour les milliers, virgule décimale.
+            montant = montant.replace(",", "\u202f").replace(".", ",")
+            build.price_label = "%s\u00a0%s" % (montant, symbole)
+
     def is_accessible_by(self, partner):
         """True when this partner may see the viewer and the notice."""
         self.ensure_one()
@@ -289,13 +304,23 @@ Jouable en survie — aucun bloc inaccessible, aucune commande, aucun mod obliga
         for build in self:
             build.website_url = "/t/%d" % int(build.code) if build.code else ""
 
+    @api.model
+    def _domaine_site(self, website):
+        """The builds a site shows: those whose series it publishes."""
+        return [("serie_id.website_ids", "in", website.id)]
+
+    def is_shown_on(self, website):
+        """True when this build's series is published on that site."""
+        self.ensure_one()
+        return website in self.serie_id.website_ids
+
     def _search_get_detail(self, website, order, options):
         """What the site's search box knows about a tutorial.
 
         The number is searchable as well as the title: on the box it is the number that
         is printed large, and that is what someone reads back to you.
         """
-        domain = [website.website_domain()]
+        domain = [self._domaine_site(website)]
         # Même règle que les pages : un rédacteur cherche aussi ce qu'il n'a pas publié.
         if not self.env.user.has_group("website.group_website_designer"):
             domain.append([("is_published", "=", True)])

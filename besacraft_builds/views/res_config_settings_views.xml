@@ -1,0 +1,15 @@
+<odoo>
+    <record id="res_config_settings_view_form_besacraft" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.besacraft</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="website.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//block[@id='website_info_settings']" position="inside">
+                <setting string="Builds project page"
+                         help="Adds a « Le projet » entry at the start of the builds section bar.">
+                    <field name="besacraft_projet_url" placeholder="/builds-minecraft"/>
+                </setting>
+            </xpath>
+        </field>
+    </record>
+</odoo>

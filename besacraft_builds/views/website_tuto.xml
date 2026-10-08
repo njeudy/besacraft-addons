@@ -29,18 +29,35 @@
                                 <span><t t-esc="build.layer_count"/> couches</span>
                                 <span><t t-esc="build.size_x"/>×<t t-esc="build.size_y"/>×<t t-esc="build.size_z"/></span>
                             </div>
-                            <t t-if="build.enroll == 'payment' and build.product_id">
-                                <a t-att-href="build.sudo().product_id.product_tmpl_id.website_url"
-                                   class="bc-btn-achat">
-                                    Obtenir ce tutoriel ·
-                                    <t t-esc="'%.2f' % build.sudo().product_id.list_price"/> €
-                                </a>
-                                <span class="bc-paywall-note">La vue 3D, la liste cochable et la
-                                    notice couche par couche s'ouvrent aussitôt.</span>
-                            </t>
-                            <span t-else="" class="bc-paywall-note">
-                                Ce tutoriel s'ouvre sur invitation.
-                            </span>
+                            <t t-call="besacraft_builds.achat"/>
+                            <!-- L'aperçu : la couche 1 en clair, les suivantes réduites à leur
+                                 numéro. Leurs blocs ne sont pas dans la page, floutés ou non. -->
+                            <div t-if="apercu" class="bc-apercu-verrou">
+                                <div class="bc-couche-ap">
+                                    <div class="bc-couche-ap-tete">
+                                        <span class="bc-couche-ap-n">C<t t-out="'%02d' % apercu['sequence']"/></span>
+                                        <span><b t-out="apercu['block_count']"/> blocs</span>
+                                    </div>
+                                    <ul class="bc-mini-liste">
+                                        <li t-foreach="apercu['lines']" t-as="ligne">
+                                            <img t-attf-src="/web/image/besacraft.build.layer.line/#{ligne.id}/icon"
+                                                 alt="" width="48" height="48" loading="lazy"/>
+                                            <span t-out="ligne.name_fr or ligne.item_key"/>
+                                            <b>×<t t-out="ligne.qty"/></b>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div t-foreach="masquees" t-as="n" class="bc-couche-ap bc-couche-flou"
+                                     aria-hidden="true">
+                                    <div class="bc-couche-ap-tete">
+                                        <span class="bc-couche-ap-n">C<t t-out="'%02d' % n"/></span>
+                                        <svg class="bc-cadenas" viewBox="0 0 16 16" width="16" height="16"><path fill="currentColor" d="M8 1a3.5 3.5 0 0 0-3.5 3.5V7H3.5A1.5 1.5 0 0 0 2 8.5v5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5v-5A1.5 1.5 0 0 0 12.5 7h-1V4.5A3.5 3.5 0 0 0 8 1m2 6H6V4.5a2 2 0 1 1 4 0z"/></svg>
+                                    </div>
+                                    <span class="bc-flou-barre"/><span class="bc-flou-barre"/><span class="bc-flou-barre"/>
+                                </div>
+                            </div>
+                            <a t-attf-href="/builds/#{int(build.code)}" class="bc-paywall-retour">
+                                Fiche du build N°<t t-out="build.code"/></a>
                             <a href="/builds" class="bc-paywall-retour">‹ Retour au catalogue</a>
                         </div>
                     </div>
@@ -53,6 +70,14 @@
                             <span class="bc-tuto-nom">
                                 <t t-esc="build.name"/> · <t t-esc="build.serie_id.name"/>
                             </span>
+                            <nav class="bc-ariane bc-ariane-barre" aria-label="Fil d'Ariane">
+                                <ol>
+                                    <li><a href="/builds">Catalogue</a></li>
+                                    <li><a t-attf-href="/builds/serie/#{build.serie_id.code}" t-out="build.serie_id.name"/></li>
+                                    <li><a t-attf-href="/builds/#{int(build.code)}">N°<t t-out="build.code"/></a></li>
+                                </ol>
+                            </nav>
+                            <span t-if="build.enroll != 'public'" class="bc-badge-achete">Tuto débloqué</span>
                         </div>
                         <div class="bc-barre-d">
                             <span class="bc-tuto-total">

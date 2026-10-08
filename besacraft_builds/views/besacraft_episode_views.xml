@@ -1,0 +1,64 @@
+<odoo>
+    <record id="view_besacraft_episode_list" model="ir.ui.view">
+        <field name="name">besacraft.episode.list</field>
+        <field name="model">besacraft.episode</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="sequence" widget="handle"/>
+                <field name="serie_id"/>
+                <field name="number"/>
+                <field name="name"/>
+                <field name="date"/>
+                <field name="duration_minutes"/>
+                <field name="is_published" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_besacraft_episode_form" model="ir.ui.view">
+        <field name="name">besacraft.episode.form</field>
+        <field name="model">besacraft.episode</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <field name="poster" widget="image" class="oe_avatar"/>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" placeholder="15 morts avant de comprendre"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="serie_id"/>
+                            <field name="number"/>
+                            <field name="date"/>
+                            <field name="duration_minutes"/>
+                            <field name="is_published"/>
+                        </group>
+                        <group>
+                            <field name="youtube_url" widget="url"/>
+                            <field name="embed_url" readonly="1"/>
+                        </group>
+                    </group>
+                    <field name="summary" placeholder="Résumé de l'épisode"/>
+                    <notebook>
+                        <page string="Builds Seen" name="builds">
+                            <field name="build_ids" options="{'no_create': True}">
+                                <list>
+                                    <field name="code"/>
+                                    <field name="name"/>
+                                    <field name="serie_id"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_episode" model="ir.actions.act_window">
+        <field name="name">Episodes</field>
+        <field name="res_model">besacraft.episode</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>
