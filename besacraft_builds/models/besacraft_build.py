@@ -64,6 +64,17 @@ class BesacraftBuild(models.Model):
         help="The build's box, rendered by buildplan. This is what the shop shows: a "
              "bare render looks like a screenshot, a box looks like something you buy.")
     youtube_url = fields.Char()
+    short_video = fields.Binary(
+        "Vertical Short", attachment=True,
+        help="The 9:16 video of the build, played on the build page.")
+    # Les positions de tous les blocs, couche par couche, pour l'hologramme du site. Jamais
+    # lu avec la fiche : `prefetch=False` garde ce texte (plusieurs centaines de Ko sur un
+    # gros build) hors des chargements de listes.
+    holo_data = fields.Text(
+        "Hologram Data", prefetch=False, copy=False,
+        help='Compact JSON {"taille": [x, y, z], "couches": [[x, z, x, z, ...], ...]}: '
+             'real block positions in laying order, air removed.')
+    price_label = fields.Char(compute="_compute_price_label")
     # Crédit de la structure d'origine. Les blueprints du pack sont sous GPL-3.0 : le nom,
     # la licence et le lien doivent voyager avec elle partout où on la montre ou la vend.
     source_author = fields.Char("Original Author")
@@ -255,6 +266,27 @@ Jouable en survie — aucun bloc inaccessible, aucune commande, aucun mod obliga
             "serie": self.serie_id.name,
             "url": self.product_id.product_tmpl_id.website_url if self.product_id else "/shop",
         }
+
+    def _prix(self):
+        """The price of the product that unlocks this build, 0.0 when there is none.
+
+        `sudo`: a visitor may not read product.product, but may know what a tutorial costs.
+        """
+        self.ensure_one()
+        return self.sudo().product_id.list_price if self.product_id else 0.0
+
+    @api.depends("product_id.list_price", "enroll")
+    def _compute_price_label(self):
+        for build in self:
+            produit = build.sudo().product_id
+            if build.enroll != "payment" or not produit:
+                build.price_label = False
+                continue
+            symbole = produit.currency_id.symbol or "€"
+            montant = "{:,.2f}".format(produit.list_price)
+            # Format français : espace insécable pour les milliers, virgule décimale.
+            montant = montant.replace(",", "\u202f").replace(".", ",")
+            build.price_label = "%s\u00a0%s" % (montant, symbole)
 
     def is_accessible_by(self, partner):
         """True when this partner may see the viewer and the notice."""

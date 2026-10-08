@@ -1,10 +1,15 @@
-from odoo import models
+from odoo import fields, models
 
 
 class Website(models.Model):
     """Register the tutorials with the site's search box."""
 
     _inherit = "website"
+
+    besacraft_projet_url = fields.Char(
+        "Builds project page",
+        help="Page presenting the builds project. When set, the section bar of the "
+             "catalogue starts with a « Le projet » entry pointing at it.")
 
     def _besacraft_series(self):
         """The series this site publishes. Empty means the site has no catalogue.

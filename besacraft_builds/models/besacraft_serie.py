@@ -30,4 +30,19 @@ class BesacraftSerie(models.Model):
         help="Sites whose catalogue lists this series. A site with no series has no "
              "catalogue at all: /builds and the tutorial pages answer 404 there.")
 
+    subtitle = fields.Char(translate=True, help="One line under the series name.")
+    # Éditable sur le site (t-field) : la page de série est un texte qu'on retouche en ligne,
+    # pas un gabarit à redéployer.
+    description = fields.Html(translate=True)
+    logo = fields.Image(max_width=1024, max_height=1024)
+    episode_ids = fields.One2many("besacraft.episode", "serie_id")
+    episode_count = fields.Integer(compute="_compute_episode_count")
+
+    def _compute_episode_count(self):
+        groupes = self.env["besacraft.episode"].sudo()._read_group(
+            [("serie_id", "in", self.ids)], ["serie_id"], ["__count"])
+        par_serie = {serie.id: n for serie, n in groupes}
+        for serie in self:
+            serie.episode_count = par_serie.get(serie.id, 0)
+
     _sql_constraints = [("code_uniq", "unique(code)", "A series code must be unique.")]

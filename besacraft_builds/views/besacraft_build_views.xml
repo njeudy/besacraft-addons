@@ -40,6 +40,9 @@
                         </group>
                     </group>
                     <field name="accroche" placeholder="Phrase du catalogue"/>
+                    <group>
+                        <field name="short_video"/>
+                    </group>
                     <notebook>
                         <page string="Layers" name="layers">
                             <field name="layer_ids">

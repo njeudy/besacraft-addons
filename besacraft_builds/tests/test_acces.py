@@ -33,13 +33,20 @@ class TestAcces(HttpCase):
         self.assertIn(self.produit.product_tmpl_id.website_url, reponse.text)
 
     def test_la_notice_ne_part_pas_dans_la_page_sans_acces(self):
-        """Un voile devant une liste lisible dans le code source serait une serrure en carton."""
-        couche = self.env["besacraft.build.layer"].create({
-            "build_id": self.build.id, "sequence": 1, "title": "Fondations"})
-        self.env["besacraft.build.layer.line"].create({
-            "layer_id": couche.id, "item_key": "minecraft:oak_planks",
-            "name_fr": "Planches de chene", "qty": 64})
-        self.assertNotIn("Planches de chene", self.url_open("/t/911").text)
+        """Un voile devant une liste lisible dans le code source serait une serrure en carton.
+
+        Seule la couche 1 est montrée, comme aperçu ; la suivante ne doit pas y être.
+        """
+        for sequence, nom in ((1, "Planches de chene"), (2, "Pierre taillee")):
+            couche = self.env["besacraft.build.layer"].create({
+                "build_id": self.build.id, "sequence": sequence, "block_count": 64})
+            self.env["besacraft.build.layer.line"].create({
+                "layer_id": couche.id, "item_key": "minecraft:block_%d" % sequence,
+                "name_fr": nom, "qty": 64})
+        self.build.layer_count = 2
+        page = self.url_open("/t/911").text
+        self.assertIn("Planches de chene", page)
+        self.assertNotIn("Pierre taillee", page)
 
     def test_un_build_gratuit_s_ouvre_directement(self):
         self.build.write({"enroll": "public", "product_id": False})

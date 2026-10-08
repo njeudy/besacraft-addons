@@ -9,12 +9,34 @@
 //
 // Les propriétés sont LUES ici, jamais posées : posées sur `.bc-notice`, elles masqueraient
 // celles qu'un thème pose plus haut dans la page.
+//
+// Liste complète des propriétés lues (aucune n'est obligatoire, chacune a son repli) :
+//   --bc-page            fond des cartes « creuses », des champs, des états posés
+//   --bc-fond-page       fond de toute la zone builds (repli --bc-page) : un thème peut y
+//                        mettre un dégradé, c'est un `background`, pas une couleur
+//   --bc-carte           fond d'une carte, d'un panneau
+//   --bc-fond2           fond d'un bandeau, d'une zone calme
+//   --bc-trait           filet léger         --bc-trait-fort   filet appuyé
+//   --bc-encre           texte principal     --bc-encre-douce  texte secondaire
+//   --bc-bleu            accent             --bc-bleu-sombre  accent sur fond clair, liens
+//   --bc-bronze          métal de l'interface (cases cochées, pastilles)
+//   --bc-bronze-sombre   le même, assez foncé pour du texte
+//   --bc-laiton          plaque de prix (repli --bc-bronze)
+//   --bc-lueur           liseré et halo au survol (repli --bc-bleu)
+//   --bc-sable           liserés discrets, texte secondaire sur fond sombre
+//   --bc-nuit            panneaux sombres (3D, voile, barre du tuto)
+//   --bc-nuit-encre      texte clair posé sur --bc-nuit
+//   --bc-police          fonte courante    --bc-police-titre  fonte des titres et des chiffres
+//
+// Chaque série apporte en plus sa couleur, posée en ligne sur l'élément qui la montre
+// (`--serie`) : c'est une donnée de l'enregistrement, pas une teinte du thème.
 $-bc-fond: $body-bg;
 $-bc-texte: $body-color;
 $-bc-police: if($font-family-base, $font-family-base, inherit);
 $-bc-police-titre: if($headings-font-family, $headings-font-family, $-bc-police);
 
 $bc-page: var(--bc-page, #{$-bc-fond});
+$bc-fond-page: var(--bc-fond-page, #{$bc-page});
 $bc-carte: var(--bc-carte, #{mix($white, $-bc-fond, 60%)});
 $bc-fond2: var(--bc-fond2, #{mix($-bc-texte, $-bc-fond, 6%)});
 $bc-trait: var(--bc-trait, #{mix($-bc-texte, $-bc-fond, 12%)});
@@ -25,6 +47,8 @@ $bc-bleu: var(--bc-bleu, #{$primary});
 $bc-bleu-sombre: var(--bc-bleu-sombre, #{$link-color});
 $bc-bronze: var(--bc-bronze, #{$secondary});
 $bc-bronze-sombre: var(--bc-bronze-sombre, #{shade-color($secondary, 20%)});
+$bc-laiton: var(--bc-laiton, #{$bc-bronze});
+$bc-lueur: var(--bc-lueur, #{$bc-bleu});
 $bc-sable: var(--bc-sable, #{mix($secondary, $-bc-fond, 60%)});
 // Les panneaux sombres (rendu 3D, voile, barre du tuto) et le texte clair posé dessus.
 $bc-nuit: var(--bc-nuit, #{$dark});
@@ -39,7 +63,7 @@ $bc-police-titre: var(--bc-police-titre, #{inspect($-bc-police-titre)});
 }
 
 .bc-notice {
-    background: $bc-page;
+    background: $bc-fond-page;
     color: $bc-encre;
     font-family: $bc-police;
 
@@ -62,91 +86,11 @@ $bc-police-titre: var(--bc-police-titre, #{inspect($-bc-police-titre)});
     }
     .bc-chapo { margin: 0; font-size: 15px; line-height: 1.65; color: $bc-encre-douce; }
 
-    .bc-aller { display: flex; flex-direction: column; gap: 9px; min-width: 252px; }
-    .bc-aller-champs { display: flex; gap: 8px; }
     .bc-label {
         font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
         color: $bc-encre-douce; font-weight: 700;
     }
-    .bc-numero {
-        flex: 1; min-width: 88px; font-family: $bc-police-titre; font-size: 30px;
-        padding: 0 14px; min-height: 56px; background: $bc-carte;
-        border: 2px solid $bc-encre; color: $bc-encre; letter-spacing: 0.08em;
-    }
-    .bc-btn-sombre {
-        font-size: 13px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
-        padding: 0 18px; min-height: 56px; background: $bc-encre; color: $bc-carte;
-        border: 2px solid $bc-encre; cursor: pointer;
-        &:hover { background: $bc-bleu-sombre; border-color: $bc-bleu-sombre; }
-    }
-    .bc-aide { font-size: 12px; color: $bc-encre-douce; }
 
-    .bc-filtres {
-        display: flex; flex-wrap: wrap; gap: 10px;
-        border-top: 1px solid $bc-trait; padding: 22px 0 26px;
-    }
-    .bc-filtre {
-        display: inline-flex; align-items: center; gap: 9px; padding: 9px 14px;
-        background: $bc-carte; border: 1px solid $bc-trait; font-size: 13px;
-        color: $bc-encre;
-        &:hover { border-color: $bc-sable; color: $bc-encre; }
-    }
-    .bc-filtre-actif { border-color: $bc-encre; background: $bc-page; font-weight: 700; }
-    .bc-puce { width: 10px; height: 10px; flex: none; border-radius: 50%; }
-    .bc-puce-toutes { background: $bc-encre; }
-    .bc-filtre-n { font-family: $bc-police-titre; font-size: 19px; }
-
-    .bc-grille {
-        display: grid; grid-template-columns: repeat(auto-fill, minmax(306px, 1fr)); gap: 26px;
-    }
-
-    .bc-boite {
-        display: flex; flex-direction: column; background: $bc-carte;
-        border: 1px solid $bc-trait; overflow: hidden;
-        &:hover { border-color: $bc-sable; }
-    }
-    .bc-bandeau {
-        display: flex; align-items: center; justify-content: space-between;
-        padding: 9px 14px;
-    }
-    .bc-serie {
-        font-size: 11px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase;
-    }
-    .bc-numero-boite {
-        font-family: $bc-police-titre; font-size: 25px; line-height: 1; letter-spacing: 0.06em;
-    }
-
-    .bc-rendu {
-        position: relative; background: $bc-nuit; aspect-ratio: 3 / 2; overflow: hidden;
-        img { width: 100%; height: 100%; object-fit: cover; display: block; }
-    }
-    .bc-ruban {
-        position: absolute; left: 0; top: 12px; z-index: 1;
-        padding: 5px 12px; background: $bc-bronze; color: $bc-carte;
-        font-size: 10px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase;
-    }
-    .bc-ruban-invite { background: $bc-bleu-sombre; }
-    .bc-pastille {
-        position: absolute; right: 12px; bottom: 12px;
-        display: flex; flex-direction: column; align-items: center; gap: 1px;
-        padding: 7px 12px; background: $bc-bronze; color: $bc-carte;
-        border: 2px solid $bc-bronze-sombre; border-radius: 999px;
-    }
-    .bc-pastille-n { font-family: $bc-police-titre; font-size: 29px; line-height: 0.9; }
-    .bc-pastille-u { font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; }
-
-    .bc-corps {
-        display: flex; flex-direction: column; gap: 13px;
-        padding: 16px 16px 18px; flex: 1;
-    }
-    .bc-titre-bloc { display: flex; flex-direction: column; gap: 5px; }
-    .bc-nom { font-family: $bc-police-titre; font-size: 36px; line-height: 0.92; }
-    .bc-accroche { font-size: 13px; color: $bc-encre-douce; line-height: 1.55; }
-
-    .bc-stats {
-        display: flex; flex-wrap: wrap; gap: 1px;
-        background: $bc-trait; border: 1px solid $bc-trait;
-    }
     .bc-stat {
         display: flex; flex-direction: column; gap: 1px; padding: 8px 11px;
         background: $bc-page; flex: 1 1 82px;
@@ -157,23 +101,6 @@ $bc-police-titre: var(--bc-police-titre, #{inspect($-bc-police-titre)});
     }
     .bc-stat-v { font-family: $bc-police-titre; font-size: 24px; line-height: 1; }
     .bc-sep { font-family: $bc-police; font-size: 15px; padding: 0 3px; }
-
-    .bc-palette { display: flex; align-items: center; gap: 9px; flex-wrap: wrap; }
-    .bc-palette-t { font-size: 12px; color: $bc-encre-douce; }
-
-    .bc-actions { display: flex; flex-direction: column; gap: 8px; margin-top: auto; }
-    .bc-btn {
-        display: block; text-align: center; font-size: 13px; font-weight: 700;
-        letter-spacing: 0.1em; text-transform: uppercase; padding: 13px 16px;
-        background: $bc-bleu-sombre; color: $bc-carte; border: 2px solid $bc-bleu-sombre;
-        &:hover { background: $bc-encre; border-color: $bc-encre; color: $bc-carte; }
-    }
-    .bc-btn-second {
-        display: block; text-align: center; font-size: 12px; font-weight: 700;
-        letter-spacing: 0.08em; padding: 10px 16px; background: transparent;
-        color: $bc-encre; border: 1px solid $bc-trait;
-        &:hover { border-color: $bc-sable; color: $bc-encre; }
-    }
 
     .bc-legende {
         margin-top: 46px; padding: 26px; background: $bc-carte;

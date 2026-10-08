@@ -1,3 +1,5 @@
+import json
+
 from odoo.exceptions import ValidationError
 from odoo.tests import TransactionCase, tagged
 
@@ -71,6 +73,50 @@ class TestImport(TransactionCase):
         build.layer_ids[0].title = "Les murs"
         self._import()
         self.assertEqual(build.layer_ids[0].title, "Les murs")
+
+
+# Palette avec de l'air (index 0) ; deux couches données dans le désordre, la plus basse
+# (y = 0) en second pour vérifier le tri.
+BUILD_AVEC_BLOCS = {
+    "name": "Hologramme",
+    "size": [3, 2, 3],
+    "palette": [{"id": "minecraft:air"}, {"id": "minecraft:dirt"},
+                {"id": "minecraft:oak_log"}, {"id": "minecraft:cave_air"}],
+    "layers": [
+        {"y": 1, "counts": {"minecraft:oak_log": 2},
+         "blocks": [[2, 2, 2], [0, 1, 0], [1, 1, 3]]},
+        {"y": 0, "counts": {"minecraft:dirt": 3},
+         "blocks": [[0, 0, 1], [1, 0, 0], [2, 0, 1], [1, 1, 1]]},
+    ],
+    "items": {},
+}
+
+
+@tagged("post_install", "-at_install")
+class TestHologramme(TransactionCase):
+    def _import(self, donnees):
+        return self.env["besacraft.build"].import_build_json(
+            donnees, None, code="9344", serie=self.env.ref("besacraft_builds.serie_survie"))
+
+    def test_l_hologramme_garde_l_ordre_de_pose_sans_l_air(self):
+        build = self._import(BUILD_AVEC_BLOCS)
+        donnees = json.loads(build.holo_data)
+        self.assertEqual(donnees["taille"], [3, 2, 3])
+        # Couches triées par y ; air et cave_air retirés ; ordre des blocs conservé.
+        self.assertEqual(donnees["couches"], [[0, 0, 2, 0, 1, 1], [2, 2]])
+
+    def test_le_json_est_compact(self):
+        build = self._import(BUILD_AVEC_BLOCS)
+        self.assertNotIn(" ", build.holo_data)
+
+    def test_un_build_json_sans_positions_ne_pose_rien(self):
+        build = self._import(BUILD_JSON)
+        self.assertFalse(build.holo_data)
+
+    def test_un_reimport_sans_positions_garde_l_hologramme(self):
+        build = self._import(BUILD_AVEC_BLOCS)
+        self._import(BUILD_JSON)
+        self.assertTrue(build.holo_data)
 
 
 @tagged("post_install", "-at_install")
