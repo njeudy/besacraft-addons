@@ -75,7 +75,7 @@ class TestImport(TransactionCase):
         self.assertEqual(build.layer_ids[0].title, "Les murs")
 
 
-# Palette avec de l'air (index 0) ; deux couches données dans le désordre, la plus basse
+# Palette avec de l'air (index 0) et de cave_air, que seul « :air » exclut (index 3 reste posé) ; deux couches données dans le désordre, la plus basse
 # (y = 0) en second pour vérifier le tri.
 BUILD_AVEC_BLOCS = {
     "name": "Hologramme",
@@ -102,8 +102,8 @@ class TestHologramme(TransactionCase):
         build = self._import(BUILD_AVEC_BLOCS)
         donnees = json.loads(build.holo_data)
         self.assertEqual(donnees["taille"], [3, 2, 3])
-        # Couches triées par y ; air et cave_air retirés ; ordre des blocs conservé.
-        self.assertEqual(donnees["couches"], [[0, 0, 2, 0, 1, 1], [2, 2]])
+        # Couches triées par y ; seul « :air » retiré ; ordre des blocs conservé.
+        self.assertEqual(donnees["couches"], [[0, 0, 2, 0, 1, 1], [2, 2, 1, 1]])
 
     def test_le_json_est_compact(self):
         build = self._import(BUILD_AVEC_BLOCS)

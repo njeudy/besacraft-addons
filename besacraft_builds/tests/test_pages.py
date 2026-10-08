@@ -26,6 +26,14 @@ class TestPages(HttpCase):
             "block_count": 80, "layer_count": 2,
             "holo_data": json.dumps({"taille": [2, 2, 2], "couches": [[0, 0, 1, 1]]})})
 
+    def _editeur(self):
+        """A logged-in website designer: the only one who sees what is not published."""
+        groupes = self.env.ref("website.group_website_designer") | self.env.ref("base.group_user")
+        self.env["res.users"].create({
+            "name": "Editeur test", "login": "editeur_test", "password": "editeur_test",
+            "groups_id": [(6, 0, groupes.ids)]})
+        self.authenticate("editeur_test", "editeur_test")
+
     def _statut(self, url):
         return self.url_open(url, allow_redirects=False).status_code
 
@@ -54,9 +62,11 @@ class TestPages(HttpCase):
         self.assertIn("Ouvrir le tuto", gratuit)
 
     def test_un_acquereur_voit_le_badge_et_plus_l_achat(self):
-        acheteur = self.env.ref("base.partner_admin")
-        self.payant._action_add_members(acheteur)
-        self.authenticate("admin", "admin")
+        acheteur = self.env["res.users"].create({
+            "name": "Acheteur test", "login": "acheteur_test", "password": "acheteur_test",
+            "groups_id": [(6, 0, self.env.ref("base.group_user").ids)]})
+        self.payant._action_add_members(acheteur.partner_id)
+        self.authenticate("acheteur_test", "acheteur_test")
         page = self.url_open("/builds/9921").text
         self.assertNotIn("/shop/cart/update", page)
         self.assertIn("Acheté", page)
@@ -100,6 +110,7 @@ class TestPages(HttpCase):
         self.assertEqual(self._statut("/builds/serie/schematics/episodes"), 200)
 
     def test_une_serie_non_publiee_sur_le_site_est_introuvable(self):
+        self.env.ref("besacraft_builds.serie_hardcore").website_ids = [(3, self.site.id)]
         self.assertEqual(self._statut("/builds/serie/hardcore"), 404)
         self.assertEqual(self._statut("/builds/serie/hardcore/episodes"), 404)
         self.assertEqual(self._statut("/builds/serie/inconnue"), 404)
@@ -113,7 +124,7 @@ class TestPages(HttpCase):
             "youtube_url": "https://youtu.be/dQw4w9WgXcQ", "build_ids": [(4, self.gratuit.id)]})
         page = self.url_open("/builds/serie/schematics/episodes").text
         self.assertNotIn("Episode secret", page)
-        self.authenticate("admin", "admin")
+        self._editeur()
         page = self.url_open("/builds/serie/schematics/episodes").text
         self.assertIn("Episode secret", page)
         self.assertIn("youtube-nocookie.com/embed/dQw4w9WgXcQ", page)
