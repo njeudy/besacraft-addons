@@ -164,6 +164,8 @@ class TestPages(HttpCase):
         self.assertIn("Tuto payant", page)
 
     def test_la_barre_porte_le_projet_quand_il_est_renseigne(self):
+        # Une base de dev peut déjà porter l'adresse : on part d'un site sans projet.
+        self.site.besacraft_projet_url = False
         self.assertNotIn(">Le projet<", self.url_open("/builds").text)
         self.site.besacraft_projet_url = "/builds-minecraft"
         page = self.url_open("/builds").text
