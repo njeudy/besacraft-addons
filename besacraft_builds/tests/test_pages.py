@@ -44,6 +44,18 @@ class TestPages(HttpCase):
     def _statut(self, url):
         return self.url_open(url, allow_redirects=False).status_code
 
+    def test_la_feuille_de_style_du_site_compile(self):
+        """Une erreur Sass ne casse pas l'installation : le bundle compilé devient un message
+        d'erreur, et toutes les pages du site perdent leur style sans qu'aucun test ne rougisse."""
+        import re
+        page = self.url_open("/builds").text
+        feuille = re.search(r'/web/assets/[^"]*frontend[^"]*\.css', page)
+        self.assertTrue(feuille, "pas de feuille de style frontend dans la page")
+        css = self.url_open(feuille.group(0)).text
+        self.assertNotIn("Internal Error", css)
+        for classe in (".bc-carte", ".bc-barre-section", ".bc-plaque-prix", ".bc-lueur"):
+            self.assertIn(classe, css)
+
     # --- écran d'un build -----------------------------------------------------------------
 
     def test_l_ecran_d_un_build_repond(self):
