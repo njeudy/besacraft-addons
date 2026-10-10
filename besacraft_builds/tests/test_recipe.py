@@ -144,11 +144,10 @@ class TestRecettesPage(HttpCase):
     def setUp(self):
         super().setUp()
         self.site = self.env.ref("website.default_website")
-        self.site.besacraft_enabled = True
+        self.env.ref("besacraft_builds.serie_survie").website_ids = [(4, self.site.id)]
         self.build = self.env["besacraft.build"].create({
             "name": "Moulin", "code": "9912", "enroll": "public", "is_published": True,
             "serie_id": self.env.ref("besacraft_builds.serie_survie").id,
-            "website_id": self.site.id,
             "recipe_data": RECETTES,
         })
         self.env["besacraft.build.layer"].create({

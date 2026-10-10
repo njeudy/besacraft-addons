@@ -8,3 +8,5 @@ from . import test_views
 from . import test_acces
 from . import test_vendre
 from . import test_recipe
+from . import test_episode
+from . import test_pages

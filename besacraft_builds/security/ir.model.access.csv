@@ -18,3 +18,9 @@ access_besacraft_build_portal,besacraft.build.portal,model_besacraft_build,base.
 access_besacraft_build_layer_portal,besacraft.build.layer.portal,model_besacraft_build_layer,base.group_portal,1,0,0,0
 access_besacraft_build_layer_line_portal,besacraft.build.layer.line.portal,model_besacraft_build_layer_line,base.group_portal,1,0,0,0
 access_besacraft_vendre,besacraft.vendre,model_besacraft_vendre,base.group_system,1,1,1,1
+access_besacraft_episode_user,besacraft.episode.user,model_besacraft_episode,base.group_user,1,0,0,0
+access_besacraft_episode_manager,besacraft.episode.manager,model_besacraft_episode,base.group_system,1,1,1,1
+access_besacraft_episode_designer,besacraft.episode.designer,model_besacraft_episode,website.group_website_designer,1,1,1,1
+access_besacraft_episode_public,besacraft.episode.public,model_besacraft_episode,base.group_public,1,0,0,0
+access_besacraft_episode_portal,besacraft.episode.portal,model_besacraft_episode,base.group_portal,1,0,0,0
+access_besacraft_serie_designer,besacraft.serie.designer,model_besacraft_serie,website.group_website_designer,1,1,0,0

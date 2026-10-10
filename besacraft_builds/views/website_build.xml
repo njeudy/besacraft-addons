@@ -1,0 +1,187 @@
+<odoo>
+    <!-- L'écran d'un build : ce que c'est, ce qu'il y a dedans, comment l'obtenir. Il
+         précède le tuto (/t/<n>), qui reste l'établi. -->
+    <template id="build" name="Besacraft — Écran d'un build">
+        <t t-call="website.layout">
+            <t t-set="additional_title"><t t-out="build.name"/></t>
+            <t t-set="payant" t-value="build.enroll == 'payment'"/>
+            <div id="wrap" class="bc-notice bc-ecran">
+                <t t-call="besacraft_builds.barre"/>
+                <div class="bc-page">
+
+                    <section class="bc-sec bc-tete">
+                        <nav class="bc-ariane" aria-label="Fil d'Ariane">
+                            <ol>
+                                <li><a href="/builds">Catalogue</a></li>
+                                <li><a t-attf-href="/builds/serie/#{build.serie_id.code}" t-out="build.serie_id.name"/></li>
+                                <li><span aria-current="page">N°<t t-out="build.code"/></span></li>
+                            </ol>
+                        </nav>
+                        <div class="bc-tete-grille">
+                            <div>
+                                <span class="bc-surtitre">Build N°<t t-out="build.code"/></span>
+                                <h1 class="bc-titre" t-field="build.name"/>
+                                <p class="bc-meta">
+                                    <span class="bc-pastille-serie" t-attf-style="--serie:#{build.serie_id.color}">
+                                        <i aria-hidden="true"/><t t-out="build.serie_id.name"/>
+                                    </span>
+                                    <span t-out="build.NIVEAUX_COURT.get(build.level, '—')"/>
+                                    <span t-if="payant" class="bc-prix">
+                                        <svg class="bc-cadenas" viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path fill="currentColor" d="M8 1a3.5 3.5 0 0 0-3.5 3.5V7H3.5A1.5 1.5 0 0 0 2 8.5v5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5v-5A1.5 1.5 0 0 0 12.5 7h-1V4.5A3.5 3.5 0 0 0 8 1m2 6H6V4.5a2 2 0 1 1 4 0z"/></svg>
+                                        Tuto payant
+                                    </span>
+                                    <span t-if="build.enroll == 'invite'" class="bc-acces bc-acces-invite">Sur invitation</span>
+                                </p>
+                                <p t-if="build.accroche" class="bc-chapo" t-field="build.accroche"/>
+                            </div>
+                            <p class="bc-total">
+                                <span class="bc-total-n" t-out="'{:,}'.format(build.block_count).replace(',', ' ')"/>
+                                <span class="bc-total-u">blocs au total</span>
+                            </p>
+                        </div>
+                    </section>
+
+                    <section class="bc-sec bc-boite-sec">
+                        <h2 class="bc-h2">La boîte</h2>
+                        <div class="bc-boite-grille">
+                            <figure class="bc-boite-objet bc-lueur">
+                                <img t-attf-src="/web/image/besacraft.build/#{build.id}/#{build.id in avec_boite and 'box_image' or 'overview_image'}/1024x1024"
+                                     t-att-alt="'Boîte du build N°%s, %s' % (build.code, build.name)"
+                                     width="700" height="700" loading="lazy"/>
+                                <figcaption>Boîte N°<t t-out="build.code"/></figcaption>
+                            </figure>
+                            <dl class="bc-kv">
+                                <div><dt>Blocs</dt><dd t-out="'{:,}'.format(build.block_count).replace(',', ' ')"/></div>
+                                <div><dt>Couches</dt><dd t-out="build.layer_count"/></div>
+                                <div><dt>Emprise</dt><dd><t t-out="build.size_x"/> × <t t-out="build.size_y"/> × <t t-out="build.size_z"/></dd></div>
+                                <div t-if="build.palette_label"><dt>Palette</dt><dd t-out="build.palette_label"/></div>
+                                <div><dt>Niveau</dt><dd t-out="build.NIVEAUX_COURT.get(build.level, '—')"/></div>
+                                <div><dt>Série</dt><dd t-out="build.serie_id.name"/></div>
+                                <div><dt>Adresse</dt><dd>/t/<t t-out="int(build.code)"/></dd></div>
+                            </dl>
+                        </div>
+                    </section>
+
+                    <section t-if="a_un_court" class="bc-sec bc-court-sec">
+                        <h2 class="bc-h2">Le court</h2>
+                        <div class="bc-court-grille">
+                            <figure class="bc-court">
+                                <div class="bc-court-cadre">
+                                    <video controls="controls" preload="metadata" playsinline="playsinline"
+                                           t-attf-poster="/web/image/besacraft.build/#{build.id}/overview_image/1024x1024"
+                                           t-att-aria-label="'Court vertical du build N°%s, %s' % (build.code, build.name)">
+                                        <source t-attf-src="/builds/#{int(build.code)}/court" type="video/mp4"/>
+                                    </video>
+                                </div>
+                                <figcaption>Court N°<t t-out="build.code"/></figcaption>
+                            </figure>
+                            <div class="bc-court-info">
+                                <p class="bc-chapo">Le bâtiment se pose couche par couche, avec la liste
+                                    des blocs à l'écran. La notice complète est dans le tuto.</p>
+                                <a t-if="build.youtube_url" t-att-href="build.youtube_url" target="_blank"
+                                   rel="noopener" class="bc-btn-second">Voir l'épisode sur YouTube</a>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="bc-sec">
+                        <h2 class="bc-h2">Ce que contient le tuto</h2>
+                        <div class="bc-contenu-grille">
+                            <ol class="bc-contenu">
+                                <li><b>La vue 3D</b> du build, à tourner et à parcourir couche par couche.</li>
+                                <li><b>La liste des blocs</b> de chaque couche, cochable pendant que tu poses.</li>
+                                <li><b>La notice complète</b>, de la fondation au faîtage.</li>
+                                <li><b>Les recettes de fabrication</b> et les matières premières à réunir.</li>
+                                <li><b>La vidéo courte</b> de la construction, du premier bloc à la vue finale.</li>
+                            </ol>
+                            <div class="bc-regle">
+                                <p>Pas de schematic : on construit soi-même, c'est le principe.</p>
+                                <p>Jouable en survie — aucun bloc inaccessible, aucune commande, aucun mod obligatoire.</p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="bc-sec bc-acces-sec" id="bc-acces">
+                        <h2 class="bc-h2">Accès et achat</h2>
+                        <div class="bc-guichet">
+                            <div class="bc-guichet-prix">
+                                <p t-if="payant" class="bc-plaque-prix">
+                                    <span class="bc-plaque-lib">Tuto payant</span>
+                                    <span class="bc-plaque-val" t-out="build.price_label"/>
+                                </p>
+                                <p t-else="" class="bc-plaque-prix bc-plaque-libre">
+                                    <span class="bc-plaque-lib">Accès</span>
+                                    <span class="bc-plaque-val" t-out="build.enroll == 'invite' and 'Sur invitation' or 'Gratuit'"/>
+                                </p>
+                            </div>
+                            <div class="bc-guichet-action">
+                                <t t-if="accessible">
+                                    <span t-if="payant" class="bc-badge-achete">Acheté</span>
+                                    <a t-attf-href="/t/#{int(build.code)}" class="bc-btn-achat">Ouvrir le tuto</a>
+                                </t>
+                                <t t-else="">
+                                    <t t-call="besacraft_builds.achat"/>
+                                    <a t-if="payant" t-attf-href="/t/#{int(build.code)}" class="bc-achat-fiche">
+                                        Voir l'aperçu du tuto ›</a>
+                                </t>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section t-if="apercu" class="bc-sec">
+                        <h2 class="bc-h2">Aperçu de trois couches</h2>
+                        <p class="bc-chapo"><t t-out="build.layer_count"/> couches ·
+                            <t t-out="'{:,}'.format(build.block_count).replace(',', ' ')"/> blocs.
+                            Voici la première, celle du milieu et la dernière.</p>
+                        <ol class="bc-apercu">
+                            <li t-foreach="apercu" t-as="couche" class="bc-couche-ap bc-lueur">
+                                <div class="bc-couche-ap-tete">
+                                    <span class="bc-couche-ap-n">C<t t-out="'%02d' % couche['sequence']"/></span>
+                                    <span><b t-out="couche['block_count']"/> blocs</span>
+                                </div>
+                                <p class="bc-couche-ap-role">
+                                    <t t-out="couche['role']"/> · couche <t t-out="couche['sequence']"/>
+                                    sur <t t-out="build.layer_count"/> · <t t-out="couche['types']"/> types de blocs
+                                </p>
+                                <ul class="bc-mini-liste">
+                                    <li t-foreach="couche['lines']" t-as="ligne">
+                                        <img t-attf-src="/web/image/besacraft.build.layer.line/#{ligne.id}/icon"
+                                             alt="" width="48" height="48" loading="lazy"/>
+                                        <span t-out="ligne.name_fr or ligne.item_key"/>
+                                        <b>×<t t-out="ligne.qty"/></b>
+                                    </li>
+                                </ul>
+                                <p t-if="couche['types'] &gt; len(couche['lines'])" class="bc-mini-plus">
+                                    et <t t-out="couche['types'] - len(couche['lines'])"/> autres
+                                </p>
+                            </li>
+                        </ol>
+                    </section>
+
+                    <section class="bc-legende">
+                        <span class="bc-legende-t">Crédit</span>
+                        <p>
+                            <t t-if="build.source_author">
+                                Structure : <t t-out="build.source_author"/><t
+                                    t-if="build.source_license"> — <t t-out="build.source_license"/></t>.
+                                <a t-if="build.source_url" t-att-href="build.source_url"
+                                   target="_blank" rel="noopener">Voir la source</a>
+                            </t>
+                            Ces tutoriels apprennent à construire ; ils ne distribuent pas le schematic.
+                        </p>
+                    </section>
+
+                    <section t-if="voisins" class="bc-sec">
+                        <h2 class="bc-h2">Builds voisins</h2>
+                        <ul class="bc-grille bc-grille-voisins">
+                            <li t-foreach="voisins" t-as="voisin" class="bc-cell">
+                                <t t-call="besacraft_builds.carte"><t t-set="build" t-value="voisin"/></t>
+                            </li>
+                        </ul>
+                    </section>
+
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>

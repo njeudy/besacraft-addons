@@ -5,11 +5,12 @@ from odoo.tests import HttpCase, tagged
 class TestAcces(HttpCase):
     def setUp(self):
         super().setUp()
-        # url_open tape le site par défaut, et le catalogue ne se sert que là où il est
-        # activé. Sans ce drapeau les fiches répondent 404 — ce qui est le comportement
-        # voulu hors de Besacraft, mais pas ce que ces tests mesurent.
+        # url_open tape le site par défaut, et le catalogue ne se sert que là où une
+        # série est publiée. Sans elle les fiches répondent 404 — ce qui est le
+        # comportement voulu ailleurs, mais pas ce que ces tests mesurent.
         self.site = self.env.ref("website.default_website")
-        self.site.besacraft_enabled = True
+        self.serie = self.env.ref("besacraft_builds.serie_survie")
+        self.serie.website_ids = [(4, self.site.id)]
         self.produit = self.env["product.product"].create({
             "name": "Tuto test", "type": "service",
             "is_besacraft_tutorial": True, "list_price": 4.0,
@@ -18,10 +19,7 @@ class TestAcces(HttpCase):
         self.build = self.env["besacraft.build"].create({
             "name": "Build payant", "code": "911", "enroll": "payment",
             "product_id": self.produit.id, "is_published": True,
-            "serie_id": self.env.ref("besacraft_builds.serie_survie").id,
-            # Explicite : le défaut dépend de quel site porte le drapeau dans la base
-            # d'accueil, et ces tests interrogent celui-là précisément.
-            "website_id": self.site.id,
+            "serie_id": self.serie.id,
         })
 
     def test_une_fiche_payante_montre_le_voile_et_mene_au_produit(self):
@@ -35,13 +33,20 @@ class TestAcces(HttpCase):
         self.assertIn(self.produit.product_tmpl_id.website_url, reponse.text)
 
     def test_la_notice_ne_part_pas_dans_la_page_sans_acces(self):
-        """Un voile devant une liste lisible dans le code source serait une serrure en carton."""
-        couche = self.env["besacraft.build.layer"].create({
-            "build_id": self.build.id, "sequence": 1, "title": "Fondations"})
-        self.env["besacraft.build.layer.line"].create({
-            "layer_id": couche.id, "item_key": "minecraft:oak_planks",
-            "name_fr": "Planches de chene", "qty": 64})
-        self.assertNotIn("Planches de chene", self.url_open("/t/911").text)
+        """Un voile devant une liste lisible dans le code source serait une serrure en carton.
+
+        Seule la couche 1 est montrée, comme aperçu ; la suivante ne doit pas y être.
+        """
+        for sequence, nom in ((1, "Planches de chene"), (2, "Pierre taillee")):
+            couche = self.env["besacraft.build.layer"].create({
+                "build_id": self.build.id, "sequence": sequence, "block_count": 64})
+            self.env["besacraft.build.layer.line"].create({
+                "layer_id": couche.id, "item_key": "minecraft:block_%d" % sequence,
+                "name_fr": nom, "qty": 64})
+        self.build.layer_count = 2
+        page = self.url_open("/t/911").text
+        self.assertIn("Planches de chene", page)
+        self.assertNotIn("Pierre taillee", page)
 
     def test_un_build_gratuit_s_ouvre_directement(self):
         self.build.write({"enroll": "public", "product_id": False})
@@ -83,21 +88,57 @@ class TestAcces(HttpCase):
         self.assertIn("besacraft.build", [
             d["model"] for d in
             self.site._search_get_details("builds", "", self.OPTIONS_RECHERCHE)])
-        self.site.besacraft_enabled = False
+        self._retirer_le_site()
         self.assertNotIn("besacraft.build", [
             d["model"] for d in
             self.site._search_get_details("builds", "", self.OPTIONS_RECHERCHE)])
 
-    def test_hors_du_site_besacraft_les_pages_n_existent_pas(self):
+    def _retirer_le_site(self):
+        """No series on the test site any more, whatever the host database carries."""
+        self.site._besacraft_series().write({"website_ids": [(3, self.site.id)]})
+
+    def test_sans_serie_publiee_les_pages_n_existent_pas(self):
         """Pas un rayon vide : la page ne doit pas exister du tout.
 
-        Borner les enregistrements par website_id laissait les autres sites servir
-        /builds avec leur propre habillage et zéro carte, ce qui a l'air cassé. Le
-        viewer est testé aussi : sa route n'est pas `website=True` et lisait un
-        `request.website` inexistant — elle répondait 500 au lieu de 404.
+        Borner les enregistrements par site laissait les autres sites servir /builds
+        avec leur propre habillage et zéro carte, ce qui a l'air cassé. Le viewer est
+        testé aussi : sa route n'est pas `website=True` et lisait un `request.website`
+        inexistant — elle répondait 500 au lieu de 404.
         """
-        self.site.besacraft_enabled = False
+        self._retirer_le_site()
         for url in ("/builds", "/t/911", "/besacraft/viewer/%d" % self.build.id):
             self.assertEqual(
                 self.url_open(url, allow_redirects=False).status_code, 404,
-                "%s devrait être introuvable hors du site Besacraft" % url)
+                "%s devrait être introuvable sur un site sans série" % url)
+
+    def _build_d_une_autre_serie(self):
+        """A public build whose series is NOT published on the test site."""
+        autre = self.env.ref("besacraft_builds.serie_hardcore")
+        autre.website_ids = [(3, self.site.id)]
+        piece = self.env["ir.attachment"].create({
+            "name": "viewer.html", "datas": "PGh0bWw+PC9odG1sPg==",
+            "mimetype": "text/html"})
+        return self.env["besacraft.build"].create({
+            "name": "Build voisin", "code": "912", "enroll": "public",
+            "is_published": True, "serie_id": autre.id,
+            "viewer_attachment_id": piece.id,
+        })
+
+    def test_un_site_ne_montre_que_les_series_qu_il_publie(self):
+        """Le catalogue est servi, mais la série d'à côté n'y est ni listée ni ouverte."""
+        autre = self._build_d_une_autre_serie()
+        catalogue = self.url_open("/builds").text
+        self.assertIn("Build payant", catalogue)
+        self.assertNotIn(autre.name, catalogue)
+        self.assertNotIn(autre.serie_id.name, catalogue, "son filtre non plus")
+        for url in ("/t/912", "/besacraft/viewer/%d" % autre.id):
+            self.assertEqual(
+                self.url_open(url, allow_redirects=False).status_code, 404, url)
+
+    def test_publier_la_serie_sur_le_site_ouvre_ses_builds(self):
+        autre = self._build_d_une_autre_serie()
+        autre.serie_id.website_ids = [(4, self.site.id)]
+        self.assertIn(autre.name, self.url_open("/builds").text)
+        self.assertEqual(self.url_open("/t/912", allow_redirects=False).status_code, 200)
+        self.assertEqual(self.url_open(
+            "/besacraft/viewer/%d" % autre.id, allow_redirects=False).status_code, 200)
