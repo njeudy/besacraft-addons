@@ -37,7 +37,19 @@ class BesacraftBuild(models.Model):
                        help="Editorial title, accented. Not the schematic's technical name.")
     code = fields.Char(required=True, index=True, copy=False,
                        help="Tutorial number, zero-padded to three digits: 043 -> /t/43.")
-    serie_id = fields.Many2one("besacraft.serie", required=True, ondelete="restrict")
+    # La série PRINCIPALE : celle dont le build porte la pastille et la couleur, et dont
+    # le mode visuel habille sa page. Un build appartient toujours à une série -- c'est sa
+    # maison -- mais il peut se montrer dans d'autres.
+    serie_id = fields.Many2one("besacraft.serie", "Main Series",
+                               required=True, ondelete="restrict")
+    # Les séries SUPPLÉMENTAIRES. Une ferme Create est un bâtiment de la survie et une
+    # machine du steampunk : la ranger dans une seule obligeait à choisir, et le lecteur
+    # qui parcourt l'autre série ne la trouvait pas. Les sites suivent : un build se montre
+    # partout où l'une de ses séries est publiée.
+    serie_ids = fields.Many2many(
+        "besacraft.serie", "besacraft_build_serie_extra_rel", "build_id", "serie_id",
+        string="Also In", domain="[('id', '!=', serie_id)]",
+        help="Further series whose catalogue lists this build, besides its main one.")
     accroche = fields.Text("Tagline", translate=True)
     level = fields.Selection(
         [("debutant", "Beginner"), ("confirme", "Confident"), ("forgeron", "Blacksmith")],
@@ -305,14 +317,33 @@ Jouable en survie — aucun bloc inaccessible, aucune commande, aucun mod obliga
             build.website_url = "/t/%d" % int(build.code) if build.code else ""
 
     @api.model
+    def series(self):
+        """Every series this build belongs to, its main one first.
+
+        Read through this rather than `serie_id` wherever the question is "does this build
+        belong to that series": a build shown in several series answers yes to each.
+        """
+        return self.serie_id | self.serie_ids
+
+    @api.model
+    def _domaine_series(self, series):
+        """Builds filed under any of `series`, as a main series or as an extra one.
+
+        Takes a recordset rather than one series: a build's neighbours are the ones sharing
+        ANY of its series, and a farm filed in both survival and steampunk has neighbours
+        on both shelves.
+        """
+        return ["|", ("serie_id", "in", series.ids), ("serie_ids", "in", series.ids)]
+
     def _domaine_site(self, website):
-        """The builds a site shows: those whose series it publishes."""
-        return [("serie_id.website_ids", "in", website.id)]
+        """The builds a site shows: those one of whose series it publishes."""
+        return ["|", ("serie_id.website_ids", "in", website.id),
+                ("serie_ids.website_ids", "in", website.id)]
 
     def is_shown_on(self, website):
-        """True when this build's series is published on that site."""
+        """True when one of this build's series is published on that site."""
         self.ensure_one()
-        return website in self.serie_id.website_ids
+        return bool(website & self.series().website_ids)
 
     def _search_get_detail(self, website, order, options):
         """What the site's search box knows about a tutorial.

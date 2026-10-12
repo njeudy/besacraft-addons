@@ -40,7 +40,8 @@
         <t t-set="payant" t-value="build.enroll == 'payment'"/>
         <t t-set="acces" t-value="payant and 'payant' or (build.enroll == 'invite' and 'invite' or 'gratuit')"/>
         <a t-attf-href="/builds/#{int(build.code)}" class="bc-carte bc-lueur"
-           t-att-data-code="build.code" t-att-data-serie="build.serie_id.code"
+           t-att-data-code="build.code"
+           t-att-data-series="' '.join(build.series().mapped('code'))"
            t-att-data-blocs="build.block_count" t-att-data-couches="build.layer_count"
            t-att-data-acces="acces" t-att-data-nom="(build.name or '').lower()">
             <span class="bc-carte-tete">

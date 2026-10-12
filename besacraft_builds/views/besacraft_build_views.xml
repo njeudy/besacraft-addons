@@ -21,6 +21,8 @@
                         <group>
                             <field name="code"/>
                             <field name="serie_id"/>
+                            <field name="serie_ids" widget="many2many_tags"
+                                   options="{'no_create': True}"/>
                             <field name="level"/>
                             <field name="state"/>
                             <field name="is_published"/>
@@ -92,6 +94,7 @@
                 <field name="code"/>
                 <field name="name"/>
                 <field name="serie_id"/>
+                <field name="serie_ids" widget="many2many_tags" optional="hide"/>
                 <field name="block_count"/>
                 <field name="layer_count"/>
                 <field name="enroll"/>
