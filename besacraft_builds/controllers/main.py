@@ -114,7 +114,7 @@ class BesacraftBuilds(http.Controller):
         series = request.website._besacraft_series()
         # Le compteur de chaque filtre se lit sur la totalité, pas sur la sélection
         # courante : un filtre qui afficherait « 0 » une fois cliqué serait absurde.
-        par_serie = {s.id: len(builds.filtered(lambda b, s=s: b.serie_id == s)) for s in series}
+        par_serie = {s.id: len(builds.filtered(lambda b, s=s: s in b.series())) for s in series}
         valeurs = {
             "builds": builds, "series": series,
             "serie_active": serie if serie in series.mapped("code") else None,
@@ -148,9 +148,11 @@ class BesacraftBuilds(http.Controller):
                 if couche not in vus:
                     vus.append(couche)
                     apercu.append(self._couche_apercu(couche, role))
-        voisins = request.env["besacraft.build"].sudo().search(
-            [("serie_id", "=", build.serie_id.id), ("id", "!=", build.id)]
-            + self._domaine_builds())
+        # Le OR des séries vient en tête : un domaine Odoo ANDe implicitement les
+        # expressions qui suivent, donc l'ordre inverse ferait porter le OR sur le reste.
+        voisins = build.sudo().search(
+            build._domaine_series(build.series())
+            + [("id", "!=", build.id)] + self._domaine_builds())
         voisins = sorted(voisins, key=lambda b: abs(int(b.code) - int(build.code)))[:4]
         voisins = request.env["besacraft.build"].sudo().browse(
             [b.id for b in sorted(voisins, key=lambda b: b.code)])
@@ -233,7 +235,7 @@ class BesacraftBuilds(http.Controller):
         if not serie:
             return request.not_found()
         Build = request.env["besacraft.build"].sudo()
-        domaine = self._domaine_builds() + [("serie_id", "=", serie.id)]
+        domaine = self._domaine_builds() + Build._domaine_series(serie)
         builds = Build.search(domaine, limit=8)
         episodes = request.env["besacraft.episode"].sudo().search(
             self._filtre_publie() + [("serie_id", "=", serie.id)])

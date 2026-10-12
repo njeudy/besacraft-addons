@@ -66,6 +66,13 @@ $bc-police-titre: var(--bc-police-titre, #{inspect($-bc-police-titre)});
     background: $bc-fond-page;
     color: $bc-encre;
     font-family: $bc-police;
+    // Le coeur pose `color: var(--heading-color)` sur tous les h1..h6, et un thème qui
+    // donne une valeur à cette propriété repeint donc NOS titres par-dessus l'encre du
+    // bloc : sur le site de l'auteur le titre du catalogue sortait en blanc Bootstrap
+    // quand tout le reste était crème. On la ramène sur l'héritage, exactement comme le
+    // coeur le fait dans ses combinaisons de couleurs -- un titre suit la couleur de la
+    // zone qui le porte, et les zones inversées du module gardent la leur.
+    --heading-color: inherit;
 
     a { color: $bc-bleu-sombre; text-decoration: none; }
     a:hover { color: $bc-bronze-sombre; }
