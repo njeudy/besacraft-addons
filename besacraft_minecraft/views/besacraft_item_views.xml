@@ -74,8 +74,9 @@
     </field>
   </record>
 
-  <menuitem id="besacraft_menu_root" name="Besacraft" web_icon="besacraft_minecraft,static/description/icon.png" sequence="90"/>
-  <menuitem id="besacraft_menu_items" name="Blocs" parent="besacraft_menu_root"
+  <!-- Pas de racine ici : celle de `besacraft_base` suffit, et deux racines du même
+       nom donnaient deux applications « Besacraft », dont une muette. -->
+  <menuitem id="besacraft_menu_items" name="Blocs" parent="besacraft_base.menu_root"
             action="besacraft_item_action" sequence="10"/>
 
 </odoo>
