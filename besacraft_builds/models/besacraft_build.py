@@ -3,6 +3,8 @@ import re
 from odoo import api, fields, models
 from odoo.exceptions import ValidationError
 
+from .youtube import youtube_id
+
 CODE_RE = re.compile(r"^\d+$")
 
 
@@ -75,10 +77,17 @@ class BesacraftBuild(models.Model):
         "Box",
         help="The build's box, rendered by buildplan. This is what the shop shows: a "
              "bare render looks like a screenshot, a box looks like something you buy.")
-    youtube_url = fields.Char()
+    youtube_url = fields.Char(help="The series episode this build was built in.")
     short_video = fields.Binary(
         "Vertical Short", attachment=True,
         help="The 9:16 video of the build, played on the build page.")
+    # Le short reste servi depuis Odoo : la page d'un tuto payant n'emprunte pas son
+    # lecteur à YouTube, qui demanderait des cookies tiers et proposerait la concurrence
+    # à la fin. L'adresse YouTube n'est là que pour renvoyer vers la publication.
+    short_youtube_url = fields.Char(
+        "Short on YouTube", help="Where the vertical short was published. Any YouTube "
+                                 "address form works; the id is read from it.")
+    short_youtube_id = fields.Char(compute="_compute_short_youtube_id")
     # Les positions de tous les blocs, couche par couche, pour l'hologramme du site. Jamais
     # lu avec la fiche : `prefetch=False` garde ce texte (plusieurs centaines de Ko sur un
     # gros build) hors des chargements de listes.
@@ -299,6 +308,11 @@ Jouable en survie — aucun bloc inaccessible, aucune commande, aucun mod obliga
             # Format français : espace insécable pour les milliers, virgule décimale.
             montant = montant.replace(",", "\u202f").replace(".", ",")
             build.price_label = "%s\u00a0%s" % (montant, symbole)
+
+    @api.depends("short_youtube_url")
+    def _compute_short_youtube_id(self):
+        for build in self:
+            build.short_youtube_id = youtube_id(build.short_youtube_url)
 
     def is_accessible_by(self, partner):
         """True when this partner may see the viewer and the notice."""
