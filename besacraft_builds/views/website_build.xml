@@ -78,6 +78,9 @@
                             <div class="bc-court-info">
                                 <p class="bc-chapo">Le bâtiment se pose couche par couche, avec la liste
                                     des blocs à l'écran. La notice complète est dans le tuto.</p>
+                                <a t-if="build.short_youtube_id"
+                                   t-attf-href="https://www.youtube.com/shorts/#{build.short_youtube_id}"
+                                   target="_blank" rel="noopener" class="bc-btn-second">Voir le short sur YouTube</a>
                                 <a t-if="build.youtube_url" t-att-href="build.youtube_url" target="_blank"
                                    rel="noopener" class="bc-btn-second">Voir l'épisode sur YouTube</a>
                             </div>

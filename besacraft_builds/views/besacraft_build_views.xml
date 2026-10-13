@@ -44,6 +44,7 @@
                     <field name="accroche" placeholder="Phrase du catalogue"/>
                     <group>
                         <field name="short_video"/>
+                        <field name="short_youtube_url" widget="url"/>
                     </group>
                     <notebook>
                         <page string="Layers" name="layers">

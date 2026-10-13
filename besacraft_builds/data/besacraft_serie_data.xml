@@ -1,7 +1,9 @@
 <odoo>
     <!-- Each series' sites (`website_ids`) are NOT set here: they are ids local to every
          database, and a module cannot know which of its sites belongs to the author. They
-         are set from Besacraft > Series. -->
+         are set from Besacraft > Series. The YouTube playlist names are left out for the
+         same reason, plus one of their own: an update would overwrite a name changed by
+         hand, which is exactly what happens to the series names below. -->
     <record id="serie_1722" model="besacraft.serie">
         <field name="name">Besacraft</field>
         <field name="code">1722</field>
