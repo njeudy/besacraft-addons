@@ -1,6 +1,6 @@
 {
     "name": "Besacraft — ressources Minecraft",
-    "version": "18.0.1.1.0",
+    "version": "18.0.1.1.1",
     "license": "LGPL-3",
     "author": "Nicolas JEUDY",
     "website": "https://besacraft.fr",
