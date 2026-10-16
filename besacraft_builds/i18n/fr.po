@@ -1,0 +1,801 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* besacraft_builds
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 18.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-16 16:45+0000\n"
+"PO-Revision-Date: 2026-10-16 16:45+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build_member__completion
+msgid "% Completed"
+msgstr "% terminé"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build__member_ids
+msgid "Access Lines"
+msgstr "Lignes d'accès"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.res_config_settings_view_form_besacraft
+msgid "Adds a « Le projet » entry at the start of the builds section bar."
+msgstr "Ajoute une entrée « Le projet » en tête de la barre de sections des builds."
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build__serie_ids
+msgid "Also In"
+msgstr "Aussi dans"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_vendre__with_media
+msgid "Attach media"
+msgstr "Joindre les médias"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_serie__color
+msgid "Badge Colour"
+msgstr "Couleur du badge"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_serie__badge_ink
+msgid "Badge Ink"
+msgstr "Encre du badge"
+
+#. module: besacraft_builds
+#: model:ir.model.fields.selection,name:besacraft_builds.selection__besacraft_build__level__debutant
+msgid "Beginner"
+msgstr "Débutant"
+
+#. module: besacraft_builds
+#: model:besacraft.serie,name:besacraft_builds.serie_1722
+msgid "Besacraft"
+msgstr "Besacraft"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_product_template__besacraft_build_id
+#: model:ir.model.fields,field_description:besacraft_builds.field_product_product__besacraft_build_id
+msgid "Besacraft Build"
+msgstr "Build Besacraft"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_product_template__is_besacraft_tutorial
+#: model:ir.model.fields,field_description:besacraft_builds.field_product_product__is_besacraft_tutorial
+msgid "Besacraft Tutorial"
+msgstr "Tutoriel Besacraft"
+
+#. module: besacraft_builds
+#: model:ir.model.fields.selection,name:besacraft_builds.selection__besacraft_build__level__forgeron
+msgid "Blacksmith"
+msgstr "Forgeron"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build_layer__block_count
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_vendre__block_count
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build__block_count
+msgid "Block Count"
+msgstr "Nombre de blocs"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build__box_image
+msgid "Box"
+msgstr "Boîte"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build_layer__build_id
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build_member__build_id
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_vendre__build_id
+msgid "Build"
+msgstr "Build"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build__build_json_attachment_id
+msgid "Build Json Attachment"
+msgstr "Pièce jointe build.json"
+
+#. module: besacraft_builds
+#: model:ir.actions.act_window,name:besacraft_builds.action_build
+#: model:ir.ui.menu,name:besacraft_builds.menu_build
+msgid "Builds"
+msgstr "Builds"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_res_config_settings__besacraft_projet_url
+#: model:ir.model.fields,field_description:besacraft_builds.field_website__besacraft_projet_url
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.res_config_settings_view_form_besacraft
+msgid "Builds project page"
+msgstr "Page de présentation des builds"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.view_besacraft_episode_form
+msgid "Builds Seen"
+msgstr "Builds vus"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_episode__build_ids
+msgid "Builds Seen in the Episode"
+msgstr "Builds vus dans l'épisode"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_episode__can_publish
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build__can_publish
+msgid "Can Publish"
+msgstr "Peut publier"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,help:besacraft_builds.field_besacraft_build__holo_data
+msgid "Compact JSON {\"taille\": [x, y, z], \"couches\": [[x, z, x, z, ...], ...]}: real block positions in laying order, air removed."
+msgstr "JSON compact {\"taille\": [x, y, z], \"couches\": [[x, z, x, z, ...], ...]} : positions réelles des blocs dans l'ordre de pose, l'air retiré."
+
+#. module: besacraft_builds
+#: model:ir.model.fields.selection,name:besacraft_builds.selection__besacraft_build_member__member_status__completed
+msgid "Completed"
+msgstr "Terminé"
+
+#. module: besacraft_builds
+#: model:ir.model.fields.selection,name:besacraft_builds.selection__besacraft_build__level__confirme
+msgid "Confident"
+msgstr "Confirmé"
+
+#. module: besacraft_builds
+#: model:ir.ui.menu,name:besacraft_builds.menu_configuration
+msgid "Configuration"
+msgstr "Configuration"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build_layer_line__create_uid
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build_member__create_uid
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_episode__create_uid
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_serie__create_uid
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build_layer__create_uid
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_vendre__create_uid
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build__create_uid
+msgid "Created by"
+msgstr "Créé par"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_episode__create_date
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build__create_date
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build_layer_line__create_date
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_serie__create_date
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build_layer__create_date
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build_member__create_date
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_vendre__create_date
+msgid "Created on"
+msgstr "Créé le"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_episode__date
+msgid "Date"
+msgstr "Date"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_serie__description
+msgid "Description"
+msgstr "Description"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build_layer_line__display_name
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_episode__display_name
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_serie__display_name
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_vendre__display_name
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build__display_name
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build_member__display_name
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build_layer__display_name
+msgid "Display Name"
+msgstr "Nom affiché"
+
+#. module: besacraft_builds
+#: model:ir.model.fields.selection,name:besacraft_builds.selection__besacraft_build__state__brouillon
+msgid "Draft"
+msgstr "Brouillon"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_episode__duration_minutes
+msgid "Duration (min)"
+msgstr "Durée (min)"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,help:besacraft_builds.field_besacraft_build__name
+msgid "Editorial title, accented. Not the schematic's technical name."
+msgstr "Titre éditorial, avec les accents. Pas le nom technique du schematic."
+
+#. module: besacraft_builds
+#: model:ir.model.fields,help:besacraft_builds.field_besacraft_build_layer__title
+msgid "Editorial title, e.g. \"Gallery and lintels\"."
+msgstr "Titre éditorial, par exemple « Galerie et linteaux »."
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_episode__embed_url
+msgid "Embed Url"
+msgstr "URL d'intégration"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build__enroll
+msgid "Enroll"
+msgstr "Accès"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_serie__episode_ids
+msgid "Episode"
+msgstr "Épisodes"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_serie__episode_count
+msgid "Episode Count"
+msgstr "Nombre d'épisodes"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_episode__number
+msgid "Episode Number"
+msgstr "Numéro d'épisode"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_serie__youtube_playlist
+msgid "Episode Playlist"
+msgstr "Playlist des épisodes"
+
+#. module: besacraft_builds
+#: model:ir.actions.act_window,name:besacraft_builds.action_episode
+#: model:ir.ui.menu,name:besacraft_builds.menu_episode
+msgid "Episodes"
+msgstr "Épisodes"
+
+#. module: besacraft_builds
+#: model:ir.model.fields.selection,name:besacraft_builds.selection__besacraft_build__state__tourne
+msgid "Filmed"
+msgstr "Tourné"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,help:besacraft_builds.field_besacraft_build__layer_offset
+msgid "Foundation layers sunk below ground level, which the tutorial skips but the viewer still counts. Layer 1 here is layer 1+offset there."
+msgstr "Couches de fondation enfouies sous le niveau du sol, que le tutoriel saute mais que la visionneuse compte quand même. La couche 1 ici est la couche 1+décalage là-bas."
+
+#. module: besacraft_builds
+#: model:ir.model.fields.selection,name:besacraft_builds.selection__besacraft_build__enroll__public
+msgid "Free"
+msgstr "Gratuit"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,help:besacraft_builds.field_besacraft_build__palette_label
+msgid "Free text, e.g. \"11 block types\"."
+msgstr "Texte libre, par exemple « 11 types de blocs »."
+
+#. module: besacraft_builds
+#: model:ir.model.fields,help:besacraft_builds.field_besacraft_build__enroll
+msgid "Free: anyone. On payment: access is granted when the order is confirmed."
+msgstr "Gratuit : tout le monde. Payant : l'accès est accordé à la confirmation de la commande."
+
+#. module: besacraft_builds
+#: model:ir.model.fields,help:besacraft_builds.field_besacraft_build_layer__block_count
+msgid "From build.json. Never recomputed."
+msgstr "Vient de build.json. Jamais recalculé."
+
+#. module: besacraft_builds
+#: model:ir.model.fields,help:besacraft_builds.field_besacraft_vendre__block_count
+#: model:ir.model.fields,help:besacraft_builds.field_besacraft_build__block_count
+#: model:ir.model.fields,help:besacraft_builds.field_besacraft_build__layer_count
+msgid "From the plan. Never recomputed."
+msgstr "Vient du plan. Jamais recalculé."
+
+#. module: besacraft_builds
+#: model:ir.model.fields,help:besacraft_builds.field_besacraft_build__serie_ids
+msgid "Further series whose catalogue lists this build, besides its main one."
+msgstr "Autres séries dont le catalogue affiche ce build, en plus de sa série principale."
+
+#. module: besacraft_builds
+#: model:ir.model.fields,help:besacraft_builds.field_besacraft_build_layer_line__item_key
+msgid "Game key, e.g. \"minecraft:oak_log\"."
+msgstr "Identifiant dans le jeu, par exemple « minecraft:oak_log »."
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build__has_recipes
+msgid "Has Recipes"
+msgstr "Recettes disponibles"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,help:besacraft_builds.field_besacraft_serie__color
+msgid "Hex, e.g. #478BB2."
+msgstr "Hexadécimal, par exemple #478BB2."
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build__holo_data
+msgid "Hologram Data"
+msgstr "Données de l'hologramme"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build_layer_line__icon
+msgid "Icon"
+msgstr "Icône"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build_layer__instruction
+msgid "Instruction"
+msgstr "Consigne"
+
+#. module: besacraft_builds
+#: model:ir.model.fields.selection,name:besacraft_builds.selection__besacraft_build_member__member_status__invited
+msgid "Invited"
+msgstr "Invité"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_episode__is_published
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build__is_published
+msgid "Is Published"
+msgstr "Publié"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build_layer__iso_image
+msgid "Isometric View"
+msgstr "Vue isométrique"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build_layer_line__item_key
+msgid "Item Key"
+msgstr "Identifiant du bloc"
+
+#. module: besacraft_builds
+#: model:ir.model.fields.selection,name:besacraft_builds.selection__besacraft_build_member__member_status__joined
+msgid "Joined"
+msgstr "Inscrit"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,help:besacraft_builds.field_besacraft_build_member__layer_reached
+msgid "Last layer the member reached."
+msgstr "Dernière couche atteinte par le membre."
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_serie__write_uid
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_episode__write_uid
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build_layer__write_uid
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build__write_uid
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build_member__write_uid
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_vendre__write_uid
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build_layer_line__write_uid
+msgid "Last Updated by"
+msgstr "Dernière modification par"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_vendre__write_date
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build_layer__write_date
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build_layer_line__write_date
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build_member__write_date
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build__write_date
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_episode__write_date
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_serie__write_date
+msgid "Last Updated on"
+msgstr "Dernière modification le"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build_layer_line__layer_id
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build__layer_ids
+msgid "Layer"
+msgstr "Couches"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build__layer_count
+msgid "Layer Count"
+msgstr "Nombre de couches"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,help:besacraft_builds.field_besacraft_vendre__with_media
+msgid "Layer images and the tutorial short, through a PAO mission."
+msgstr "Les images des couches et le short du tutoriel, via une mission PAO."
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build_member__layer_reached
+msgid "Layer Reached"
+msgstr "Couche atteinte"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.view_besacraft_build_form
+msgid "Layers"
+msgstr "Couches"
+
+#. module: besacraft_builds
+#: model:besacraft.serie,name:besacraft_builds.serie_hardcore
+msgid "Les aventures de Zunk"
+msgstr "Les aventures de Zunk"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build__level
+msgid "Level"
+msgstr "Niveau"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build__source_license
+msgid "Licence"
+msgstr "Licence"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build_layer__line_ids
+msgid "Line"
+msgstr "Lignes"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_serie__logo
+msgid "Logo"
+msgstr "Logo"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_vendre__serie_id
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build__serie_id
+msgid "Main Series"
+msgstr "Série principale"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build_member__member_status
+msgid "Member Status"
+msgstr "Statut du membre"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build__partner_ids
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.view_besacraft_build_form
+msgid "Members"
+msgstr "Membres"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build_layer_line__mod
+msgid "Mod"
+msgstr "Mod"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build__name
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_episode__name
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_serie__name
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build_layer_line__name_fr
+msgid "Name"
+msgstr "Nom"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,help:besacraft_builds.field_besacraft_serie__youtube_shorts_playlist
+msgid "Name of the YouTube playlist the build shorts go to. Several series may share one until a series has enough shorts of its own."
+msgstr "Nom de la playlist YouTube où vont les shorts des builds. Plusieurs séries peuvent en partager une tant qu'une série n'a pas assez de shorts à elle."
+
+#. module: besacraft_builds
+#: model:ir.model.fields,help:besacraft_builds.field_besacraft_serie__youtube_playlist
+msgid "Name of the YouTube playlist the series episodes go to."
+msgstr "Nom de la playlist YouTube où vont les épisodes de la série."
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build_layer__note
+msgid "Note"
+msgstr "Note"
+
+#. module: besacraft_builds
+#: model:ir.model.fields.selection,name:besacraft_builds.selection__besacraft_build__enroll__invite
+msgid "On invitation"
+msgstr "Sur invitation"
+
+#. module: besacraft_builds
+#: model:ir.model.fields.selection,name:besacraft_builds.selection__besacraft_build__enroll__payment
+msgid "On payment"
+msgstr "Payant"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,help:besacraft_builds.field_besacraft_serie__subtitle
+msgid "One line under the series name."
+msgstr "Une ligne sous le nom de la série."
+
+#. module: besacraft_builds
+#: model:ir.model.fields.selection,name:besacraft_builds.selection__besacraft_build_member__member_status__ongoing
+msgid "Ongoing"
+msgstr "En cours"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build__source_author
+msgid "Original Author"
+msgstr "Auteur d'origine"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build__overview_image
+msgid "Overview"
+msgstr "Vue d'ensemble"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,help:besacraft_builds.field_res_config_settings__besacraft_projet_url
+#: model:ir.model.fields,help:besacraft_builds.field_website__besacraft_projet_url
+msgid "Page presenting the builds project. When set, the section bar of the catalogue starts with a « Le projet » entry pointing at it."
+msgstr "Page qui présente le projet des builds. Quand elle est renseignée, la barre de sections du catalogue commence par une entrée « Le projet » qui pointe dessus."
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build__palette_label
+msgid "Palette Label"
+msgstr "Palette"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build_member__partner_id
+msgid "Partner"
+msgstr "Contact"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_episode__poster
+msgid "Poster"
+msgstr "Affiche"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_vendre__price
+msgid "Price"
+msgstr "Prix"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build__price_label
+msgid "Price Label"
+msgstr "Prix affiché"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build__product_id
+msgid "Product"
+msgstr "Article"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_vendre__product_name
+msgid "Product Name"
+msgstr "Nom de l'article"
+
+#. module: besacraft_builds
+#: model:ir.model.fields.selection,name:besacraft_builds.selection__besacraft_build__state__publie
+msgid "Published"
+msgstr "Publié"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build_layer_line__qty
+msgid "Qty"
+msgstr "Quantité"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build__recipe_data
+msgid "Recipes"
+msgstr "Recettes"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,help:besacraft_builds.field_besacraft_build__recipe_data
+msgid "recipes.json as produced by buildplan: trees, raw_totals and items."
+msgstr "recipes.json tel que produit par buildplan : trees, raw_totals et items."
+
+#. module: besacraft_builds
+#: model:besacraft.serie,name:besacraft_builds.serie_survie
+msgid "Schematics / créatif"
+msgstr "Schematics / créatif"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build__seo_name
+msgid "Seo name"
+msgstr "Nom SEO"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build__is_seo_optimized
+msgid "SEO optimized"
+msgstr "Optimisé pour le référencement"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_episode__sequence
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_serie__sequence
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build_layer__sequence
+msgid "Sequence"
+msgstr "Séquence"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_episode__serie_id
+msgid "Serie"
+msgstr "Série"
+
+#. module: besacraft_builds
+#: model:ir.actions.act_window,name:besacraft_builds.action_serie
+#: model:ir.ui.menu,name:besacraft_builds.menu_serie
+msgid "Series"
+msgstr "Séries"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build__short_youtube_url
+msgid "Short on YouTube"
+msgstr "Short sur YouTube"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build__short_youtube_id
+msgid "Short Youtube"
+msgstr "Identifiant du short YouTube"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_serie__youtube_shorts_playlist
+msgid "Shorts Playlist"
+msgstr "Playlist des shorts"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,help:besacraft_builds.field_besacraft_serie__website_ids
+msgid "Sites whose catalogue lists this series. A site with no series has no catalogue at all: /builds and the tutorial pages answer 404 there."
+msgstr "Sites dont le catalogue affiche cette série. Un site sans aucune série n'a pas de catalogue du tout : /builds et les pages de tutoriel y répondent 404."
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build__size_x
+msgid "Size X"
+msgstr "Taille X"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build__size_y
+msgid "Size Y"
+msgstr "Taille Y"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build__size_z
+msgid "Size Z"
+msgstr "Taille Z"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build__source_url
+msgid "Source"
+msgstr "Source"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build__state
+msgid "State"
+msgstr "État"
+
+#. module: besacraft_builds
+#: model:besacraft.serie,name:besacraft_builds.serie_steampunk
+msgid "Steampunk"
+msgstr "Steampunk"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_serie__subtitle
+msgid "Subtitle"
+msgstr "Sous-titre"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_episode__summary
+msgid "Summary"
+msgstr "Résumé"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build__accroche
+msgid "Tagline"
+msgstr "Accroche"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,help:besacraft_builds.field_besacraft_serie__badge_ink
+msgid "Text colour over the badge."
+msgstr "Couleur du texte sur le badge."
+
+#. module: besacraft_builds
+#: model:ir.model.fields,help:besacraft_builds.field_besacraft_build__short_video
+msgid "The 9:16 video of the build, played on the build page."
+msgstr "La vidéo 9:16 du build, lue sur la page du build."
+
+#. module: besacraft_builds
+#: model:ir.model.fields,help:besacraft_builds.field_product_template__besacraft_build_id
+#: model:ir.model.fields,help:besacraft_builds.field_product_product__besacraft_build_id
+msgid "The build this product unlocks. Computed, so the link stays owned by the build side and a product never carries build data of its own."
+msgstr "Le build que cet article débloque. Calculé, pour que le lien reste porté par le build et qu'un article ne porte jamais de données de build en propre."
+
+#. module: besacraft_builds
+#: model:ir.model.fields,help:besacraft_builds.field_besacraft_build__box_image
+msgid "The build's box, rendered by buildplan. This is what the shop shows: a bare render looks like a screenshot, a box looks like something you buy."
+msgstr "La boîte du build, rendue par buildplan. C'est ce que montre la boutique : un rendu nu ressemble à une capture d'écran, une boîte ressemble à quelque chose qui s'achète."
+
+#. module: besacraft_builds
+#: model:ir.model.fields,help:besacraft_builds.field_besacraft_build__website_url
+#: model:ir.model.fields,help:besacraft_builds.field_besacraft_episode__website_url
+msgid "The full URL to access the document through the website."
+msgstr "L'URL complète pour accéder au document depuis le site web."
+
+#. module: besacraft_builds
+#: model:ir.model.fields,help:besacraft_builds.field_besacraft_build__product_id
+msgid "The product that grants access. Required when enroll is 'payment'."
+msgstr "L'article qui donne accès. Obligatoire quand l'accès est « payant »."
+
+#. module: besacraft_builds
+#: model:ir.model.fields,help:besacraft_builds.field_besacraft_build__youtube_url
+msgid "The series episode this build was built in."
+msgstr "L'épisode de la série dans lequel ce build a été construit."
+
+#. module: besacraft_builds
+#: model:ir.model.fields,help:besacraft_builds.field_product_template__is_besacraft_tutorial
+#: model:ir.model.fields,help:besacraft_builds.field_product_product__is_besacraft_tutorial
+msgid "This product grants access to a build tutorial."
+msgstr "Cet article donne accès au tutoriel d'un build."
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build_layer__title
+msgid "Title"
+msgstr "Titre"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build_layer__plan_image
+msgid "Top View"
+msgstr "Vue de dessus"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,help:besacraft_builds.field_besacraft_build__has_recipes
+msgid "True when recipes.json was generated; drives the recipe UI."
+msgstr "Vrai quand recipes.json a été généré ; commande l'affichage des recettes."
+
+#. module: besacraft_builds
+#: model:ir.model.fields,help:besacraft_builds.field_besacraft_build__code
+msgid "Tutorial number, zero-padded to three digits: 043 -> /t/43."
+msgstr "Numéro du tutoriel, complété à trois chiffres : 043 → /t/43."
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build__short_video
+msgid "Vertical Short"
+msgstr "Short vertical"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build__viewer_attachment_id
+msgid "Viewer Attachment"
+msgstr "Pièce jointe de la visionneuse"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build__layer_offset
+msgid "Viewer Offset"
+msgstr "Décalage de la visionneuse"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_episode__website_published
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build__website_published
+msgid "Visible on current website"
+msgstr "Visible sur le site web actuel"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_serie__visual_mode
+msgid "Visual Mode"
+msgstr "Mode visuel"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,help:besacraft_builds.field_besacraft_build_layer__note
+msgid "Warning shown next to the layer."
+msgstr "Avertissement affiché à côté de la couche."
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build__website_meta_description
+msgid "Website meta description"
+msgstr "Méta-description du site web"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build__website_meta_keywords
+msgid "Website meta keywords"
+msgstr "Mots-clés du site web"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build__website_meta_title
+msgid "Website meta title"
+msgstr "Méta-titre du site web"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build__website_meta_og_img
+msgid "Website opengraph image"
+msgstr "Image Open Graph"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build__website_url
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_episode__website_url
+msgid "Website URL"
+msgstr "URL du site web"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_serie__website_ids
+msgid "Websites"
+msgstr "Sites web"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,help:besacraft_builds.field_besacraft_build__short_youtube_url
+msgid "Where the vertical short was published. Any YouTube address form works; the id is read from it."
+msgstr "Là où le short vertical a été publié. Toutes les formes d'adresse YouTube fonctionnent ; l'identifiant en est extrait."
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_episode__youtube_url
+msgid "YouTube URL"
+msgstr "URL YouTube"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build__youtube_url
+msgid "Youtube Url"
+msgstr "URL YouTube"
