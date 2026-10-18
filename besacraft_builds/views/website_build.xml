@@ -121,6 +121,15 @@
                                 <t t-if="accessible">
                                     <span t-if="payant" class="bc-badge-achete">Acheté</span>
                                     <a t-attf-href="/t/#{int(build.code)}" class="bc-btn-achat">Ouvrir le tuto</a>
+                                    <form t-if="peut_rejoindre" method="post"
+                                          t-attf-action="/builds/#{int(build.code)}/rejoindre"
+                                          class="bc-rejoindre-form">
+                                        <input type="hidden" name="csrf_token"
+                                               t-att-value="request.csrf_token()"/>
+                                        <button type="submit" class="bc-btn-second">
+                                            Add to my books
+                                        </button>
+                                    </form>
                                 </t>
                                 <t t-else="">
                                     <t t-call="besacraft_builds.achat"/>

@@ -799,3 +799,8 @@ msgstr "URL YouTube"
 #: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build__youtube_url
 msgid "Youtube Url"
 msgstr "URL YouTube"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.build
+msgid "Add to my books"
+msgstr "Ajouter à mes livres"
