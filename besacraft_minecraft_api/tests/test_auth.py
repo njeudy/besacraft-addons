@@ -99,3 +99,48 @@ class TestAuth(common.HttpCase):
         self.assertFalse(Session._partenaire_du_jeton(session.token))
         self.assertFalse(Session._partenaire_du_jeton("nimportequoi"))
         self.assertFalse(Session._partenaire_du_jeton(""))
+
+    @patch(CHEMIN_SESSION)
+    def test_deux_partenaires_sur_le_meme_uuid_sont_refuses(self, faux_get):
+        """Refuse rather than guess: picking one would hand a session to a stranger.
+
+        La contrainte d'unicité rend l'état impossible ; elle est retirée le temps du
+        test, parce qu'une base où elle n'a pas pu s'installer existe bel et bien.
+        """
+        self.env.cr.execute("ALTER TABLE res_partner "
+                            "DROP CONSTRAINT IF EXISTS res_partner_minecraft_uuid_uniq")
+        self.env["res.partner"].create({
+            "name": "Sosie", "minecraft_uuid": "069a79f444e94726a5befca90e38aaf5"})
+        faux_get.return_value.status_code = 200
+        faux_get.return_value.content = b"{}"
+        faux_get.return_value.json.return_value = {
+            "id": "069a79f444e94726a5befca90e38aaf5"}
+        reponse = self._session("Zunk", self._defi()["server_id"])
+        self.assertEqual(reponse.status_code, 409)
+        self.assertEqual(reponse.json()["erreur"], "compte_ambigu")
+
+    def test_un_corps_qui_n_est_pas_du_json(self):
+        """Review Focus #1, autre route : jamais une trace Python sur une entrée ouverte."""
+        self.assertEqual(self.url_open(
+            "/mc/v1/session", headers=JSON, data="nope").status_code, 400)
+
+    def test_un_corps_json_qui_n_est_pas_un_objet(self):
+        self.assertEqual(self.url_open(
+            "/mc/v1/session", headers=JSON, data="[1,2]").status_code, 400)
+
+    def test_un_corps_blanc(self):
+        # `data=""` ferait basculer `url_open` en GET, donc 405 : un corps blanc dit la
+        # même chose côté serveur tout en restant un POST.
+        self.assertEqual(self.url_open(
+            "/mc/v1/session", headers=JSON, data=" ").status_code, 400)
+
+    @patch(CHEMIN_SESSION)
+    def test_l_uuid_certifie_sort_sous_la_forme_canonique(self, faux_get):
+        """Both sides must key on the same string, whatever shape they received."""
+        faux_get.return_value.status_code = 200
+        faux_get.return_value.content = b"{}"
+        faux_get.return_value.json.return_value = {
+            "id": "069A79F4-44E9-4726-A5BE-FCA90E38AAF5"}
+        self.assertEqual(
+            self.env["besacraft.mc.session"]._uuid_certifie("Zunk", "0" * 32),
+            "069a79f444e94726a5befca90e38aaf5")
