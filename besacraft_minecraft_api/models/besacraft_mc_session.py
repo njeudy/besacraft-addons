@@ -35,7 +35,8 @@ class BesacraftMcSession(models.Model):
             return False
         if reponse.status_code != 200 or not reponse.content:
             return False
-        return (reponse.json() or {}).get("id") or False
+        return self.env["res.partner"].normaliser_uuid_minecraft(
+            (reponse.json() or {}).get("id"))
 
     @api.model
     def _ouvrir(self, partner):
