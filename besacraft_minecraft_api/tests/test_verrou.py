@@ -158,3 +158,20 @@ class TestProgression(common.HttpCase):
             headers={"Authorization": "Bearer %s" % jeton,
                      "Content-Type": "application/json"})
         self.assertEqual(reponse.status_code, 403)
+
+    def test_une_lecture_perimee_ne_fait_pas_redescendre(self):
+        """Review Focus #5, la vraie course : deux requêtes qui écrivent en même temps.
+
+        The direct UPDATE stands for the neighbouring transaction that committed a
+        higher layer while this one still held the old value. The decision has to be
+        taken on the locked row, not on what the request read on the way in -- in
+        READ COMMITTED nothing else stops the slower writer from winning.
+        """
+        membre = self.build_a._action_add_members(self.partenaire)
+        self.assertEqual(membre.layer_reached, 0)
+        self.env.cr.execute(
+            "UPDATE besacraft_build_member SET layer_reached = 5 WHERE id = %s",
+            (membre.id,))
+        membre.marquer_couche_faite(4)
+        membre.invalidate_recordset()
+        self.assertEqual(membre.layer_reached, 5)
