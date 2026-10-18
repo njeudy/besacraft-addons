@@ -35,6 +35,11 @@ def reponse(donnees, code=200):
 
 def partenaire_ou_401():
     """The partner behind the Bearer token, or 401. Never falls back to a public user."""
+    # The ceiling comes before the refusal, not after it: four of the six routes are
+    # `auth="public"` and are rejected right here, and a refusal that costs nothing to
+    # repeat is a refusal that can be repeated forever. Behind a reverse proxy this
+    # key is only per-player if `proxy_mode = True` -- see the module's README.
+    limiter("ip:%s" % request.httprequest.remote_addr, APPELS_PAR_MINUTE, 60)
     entete = request.httprequest.headers.get("Authorization") or ""
     jeton = entete[7:] if entete.startswith("Bearer ") else ""
     partenaire = request.env["besacraft.mc.session"].sudo()._partenaire_du_jeton(jeton)
