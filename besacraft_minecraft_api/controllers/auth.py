@@ -3,7 +3,7 @@ import werkzeug
 from odoo import http
 from odoo.http import request
 
-from .base import reponse
+from .base import DEFIS_PAR_MINUTE, limiter, reponse
 
 OU_LIER = "https://nicolas.alusage.fr/my/account"
 
@@ -14,6 +14,7 @@ class BesacraftMcAuth(http.Controller):
     @http.route("/mc/v1/defi", type="http", auth="public", methods=["POST"],
                 csrf=False, save_session=False)
     def defi(self, **kw):
+        limiter("defi:%s" % request.httprequest.remote_addr, DEFIS_PAR_MINUTE, 60)
         defi = request.env["besacraft.mc.challenge"].sudo()._nouveau()
         return reponse({"server_id": defi.server_id})
 

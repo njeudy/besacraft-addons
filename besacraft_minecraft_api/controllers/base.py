@@ -1,8 +1,29 @@
 import json
+import time
+from collections import defaultdict, deque
 
 import werkzeug
 
 from odoo.http import request
+
+# Per-worker and in memory on purpose: this is a ceiling against a runaway client or a
+# clumsy script, not a defence against a distributed attack -- that belongs at the
+# reverse proxy. Keeping it here costs nothing and needs no shared store.
+_passages = defaultdict(deque)
+
+DEFIS_PAR_MINUTE = 20
+APPELS_PAR_MINUTE = 300
+
+
+def limiter(cle, maximum, fenetre):
+    """Raise 429 past `maximum` calls in the last `fenetre` seconds."""
+    maintenant = time.monotonic()
+    passages = _passages[cle]
+    while passages and maintenant - passages[0] > fenetre:
+        passages.popleft()
+    if len(passages) >= maximum:
+        raise werkzeug.exceptions.TooManyRequests()
+    passages.append(maintenant)
 
 
 def reponse(donnees, code=200):
@@ -19,4 +40,5 @@ def partenaire_ou_401():
     partenaire = request.env["besacraft.mc.session"].sudo()._partenaire_du_jeton(jeton)
     if not partenaire:
         raise werkzeug.exceptions.Unauthorized()
+    limiter("api:%s" % partenaire.id, APPELS_PAR_MINUTE, 60)
     return partenaire

@@ -5,6 +5,7 @@ from unittest.mock import patch
 import requests
 
 from odoo import fields
+from odoo.addons.besacraft_minecraft_api.controllers import base
 from odoo.tests import common, tagged
 
 CHEMIN_SESSION = ("odoo.addons.besacraft_minecraft_api.models"
@@ -16,6 +17,10 @@ JSON = {"Content-Type": "application/json"}
 class TestAuth(common.HttpCase):
     def setUp(self):
         super().setUp()
+        # Le plafond du défi compte par IP et vit en mémoire du worker : une autre classe
+        # de tests l'aurait rempli avant celle-ci.
+        base._passages.clear()
+        self.addCleanup(base._passages.clear)
         self.partenaire = self.env["res.partner"].create({
             "name": "Zunk", "minecraft_uuid": "069a79f444e94726a5befca90e38aaf5"})
 
