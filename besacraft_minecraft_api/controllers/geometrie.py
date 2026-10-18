@@ -42,3 +42,26 @@ class BesacraftMcGeometrie(BesacraftMcCatalogue):
                  for x, z, i in (brute.get("blocks") or [])
                  if i < len(palette) and not str(palette[i].get("id", "")).endswith(":air")]
         return reponse({"n": n, "y": brute.get("y", 0), "blocs": blocs})
+
+    @http.route("/mc/v1/build/<string:code>/couche/<int:n>/faite", type="http",
+                auth="public", methods=["POST"], csrf=False, save_session=False)
+    def faite(self, code, n, **kw):
+        """Record that a layer is laid. Never moves the progress backwards.
+
+        Two clients racing, or a player re-laying an old layer, must not reopen the
+        lock on what they already passed.
+        """
+        partenaire = partenaire_ou_401()
+        build, membre = self._membre_ou_403(partenaire, code)
+        if n < 1 or n > build.layer_count:
+            raise werkzeug.exceptions.NotFound()
+        if n > membre.layer_reached:
+            valeurs = {"layer_reached": n,
+                       "completion": int(round(100 * n / (build.layer_count or 1)))}
+            if n >= build.layer_count:
+                valeurs["member_status"] = "completed"
+            elif membre.member_status == "joined":
+                valeurs["member_status"] = "ongoing"
+            membre.write(valeurs)
+        return reponse({"layer_reached": membre.layer_reached,
+                        "completion": membre.completion})

@@ -89,3 +89,72 @@ class TestVerrou(common.HttpCase):
         reponse = self._couche(1)
         self.assertEqual(reponse.status_code, 409)
         self.assertEqual(reponse.json()["erreur"], "plan_absent")
+
+
+@tagged("post_install", "-at_install")
+class TestProgression(common.HttpCase):
+    """`/faite` : ce que le joueur a posé, et ce que le verrou lui ouvre ensuite."""
+
+    def setUp(self):
+        super().setUp()
+        self.partenaire = self.env["res.partner"].create({
+            "name": "Zunk", "minecraft_uuid": "069a79f444e94726a5befca90e38aaf5"})
+        self.entete_json = {
+            "Authorization": "Bearer %s" % self.env[
+                "besacraft.mc.session"]._ouvrir(self.partenaire).token,
+            "Content-Type": "application/json"}
+        self.build_a = self.env["besacraft.build"].import_build_json(
+            BUILD_JSON, None, "9721", self.env.ref("besacraft_builds.serie_survie"))
+
+    def _faite(self, n):
+        reponse = self.url_open("/mc/v1/build/%s/couche/%s/faite" % (self.build_a.code, n),
+                                data="{}", headers=self.entete_json)
+        self.env["besacraft.build.member"].invalidate_model()
+        return reponse
+
+    def test_faite_avance_la_progression(self):
+        membre = self.build_a._action_add_members(self.partenaire)
+        self.assertEqual(self._faite(1).status_code, 200)
+        self.assertEqual(membre.layer_reached, 1)
+        self.assertEqual(membre.member_status, "ongoing")
+
+    def test_faite_ne_fait_jamais_redescendre(self):
+        """Review Focus #5: two calls out of order must not lose progress."""
+        membre = self.build_a._action_add_members(self.partenaire)
+        membre.layer_reached = 5
+        self._faite(2)
+        self.assertEqual(membre.layer_reached, 5)
+
+    def test_faite_met_a_jour_le_pourcentage(self):
+        membre = self.build_a._action_add_members(self.partenaire)
+        self._faite(self.build_a.layer_count)
+        self.assertEqual(membre.completion, 100)
+        self.assertEqual(membre.member_status, "completed")
+
+    def test_faite_ouvre_la_couche_suivante(self):
+        """The lock and the progress are two sides of one state: prove they agree."""
+        self.build_a._action_add_members(self.partenaire)
+        self.assertEqual(self.url_open(
+            "/mc/v1/build/%s/couche/2" % self.build_a.code,
+            headers=self.entete_json).status_code, 403)
+        self._faite(1)
+        self.assertEqual(self.url_open(
+            "/mc/v1/build/%s/couche/2" % self.build_a.code,
+            headers=self.entete_json).status_code, 200)
+
+    def test_faite_hors_du_batiment(self):
+        """Review Focus #3 côté écriture : un n absurde ne crée pas une progression absurde."""
+        membre = self.build_a._action_add_members(self.partenaire)
+        for n in (0, 99):
+            self.assertEqual(self._faite(n).status_code, 404, n)
+        self.assertEqual(membre.layer_reached, 0)
+
+    def test_faite_sans_etre_membre(self):
+        autre = self.env["res.partner"].create({
+            "name": "Autre", "minecraft_uuid": "b" * 32})
+        jeton = self.env["besacraft.mc.session"]._ouvrir(autre).token
+        reponse = self.url_open(
+            "/mc/v1/build/%s/couche/1/faite" % self.build_a.code, data="{}",
+            headers={"Authorization": "Bearer %s" % jeton,
+                     "Content-Type": "application/json"})
+        self.assertEqual(reponse.status_code, 403)
