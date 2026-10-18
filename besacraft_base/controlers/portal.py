@@ -11,10 +11,12 @@ class CustomerPortal(CustomerPortal):
     def _get_optional_fields(self):
         """This method is there so that we can override the optional fields"""
         res = super(CustomerPortal, self)._get_optional_fields()
-        # Add minecraft fields
-        res.extend(
-            ["minecraft_login", "minecraft_uuid", "minecraft_skin", "minecraft_head"]
-        )
+        # Add minecraft fields. `minecraft_uuid` is deliberately absent: Odoo writes
+        # every key of this list found in the POST body, so leaving it here would let
+        # any customer claim another player's identity -- the `disabled` attribute on
+        # the input only binds the browser. The UUID is derived from the login by
+        # `set_minecraft_player_info`, never posted.
+        res.extend(["minecraft_login", "minecraft_skin", "minecraft_head"])
         return res
 
     @http.route(["/my/account"], type="http", auth="user", website=True)

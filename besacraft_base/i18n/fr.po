@@ -44,3 +44,8 @@ msgstr "Skin Minecraft"
 #: model:ir.model.fields,field_description:besacraft_base.field_res_users__minecraft_uuid
 msgid "Minecraft UUID"
 msgstr "UUID Minecraft"
+
+#. module: besacraft_base
+#: model:ir.model.constraint,message:besacraft_base.constraint_res_partner_minecraft_uuid_uniq
+msgid "This Minecraft account is already linked to another contact."
+msgstr "Ce compte Minecraft est déjà rattaché à un autre contact."
