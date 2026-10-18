@@ -1,3 +1,4 @@
+import base64
 import json
 
 from odoo.exceptions import ValidationError
@@ -73,6 +74,22 @@ class TestImport(TransactionCase):
         build.layer_ids[0].title = "Les murs"
         self._import()
         self.assertEqual(build.layer_ids[0].title, "Les murs")
+
+    def test_l_import_stocke_le_plan_complet(self):
+        """The full plan is kept as an attachment: the hologram field drops block types."""
+        build = self._import(BUILD_AVEC_BLOCS, plan=None)
+        self.assertTrue(build.build_json_attachment_id)
+        contenu = json.loads(base64.b64decode(build.build_json_attachment_id.datas))
+        self.assertEqual(contenu["size"], BUILD_AVEC_BLOCS["size"])
+        self.assertIn("palette", contenu)
+
+    def test_rejouer_l_import_ne_duplique_pas_la_piece_jointe(self):
+        """A second import refreshes the attachment instead of stacking a new one."""
+        build = self._import(BUILD_AVEC_BLOCS, plan=None)
+        premiere = build.build_json_attachment_id.id
+        self.assertTrue(premiere)
+        self._import(BUILD_AVEC_BLOCS, plan=None)
+        self.assertEqual(build.build_json_attachment_id.id, premiere)
 
 
 # Palette avec de l'air (index 0) et de cave_air, que seul « :air » exclut (index 3 reste posé) ; deux couches données dans le désordre, la plus basse

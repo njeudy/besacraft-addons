@@ -1,3 +1,4 @@
+import base64
 import json
 
 from odoo import api, models
@@ -59,6 +60,31 @@ class BesacraftBuildImport(models.Model):
         return json.dumps({"taille": build_json.get("size") or [0, 0, 0], "couches": plats},
                           separators=(",", ":"))
 
+
+    def stocker_le_plan(self, build_json):
+        """Keep build.json as an attachment, refreshing the one already there.
+
+        Public on purpose: the catch-up script calls it over JSON-RPC, and Odoo
+        refuses to dispatch any method whose name starts with an underscore.
+
+        Only `datas` is written on an existing attachment: sending `res_model` or
+        `res_id` again on an attached file makes Odoo recreate a documents.document
+        and break its uniqueness constraint -- and it only fails on the second run.
+        """
+        self.ensure_one()
+        contenu = base64.b64encode(
+            json.dumps(build_json, separators=(",", ":")).encode()).decode()
+        if self.build_json_attachment_id:
+            self.build_json_attachment_id.write({"datas": contenu})
+            return
+        self.build_json_attachment_id = self.env["ir.attachment"].create({
+            "name": "build-%s.json" % self.code,
+            "res_model": "besacraft.build",
+            "res_id": self.id,
+            "mimetype": "application/json",
+            "datas": contenu,
+        })
+
     @api.model
     def import_build_json(self, build_json, plan_json, code, serie):
         """Create or refresh a build from a decoded build.json. Returns the build.
@@ -101,6 +127,11 @@ class BesacraftBuildImport(models.Model):
         else:
             build = self.create(dict(valeurs, code=code, serie_id=serie.id,
                                      name=build_json.get("name") or code))
+
+        # The hologram field keeps positions without block types, because it is served
+        # publicly. The mod needs the types, so the whole plan is kept apart, as an
+        # attachment: a few hundred KB that no list view ever loads.
+        build.stocker_le_plan(build_json)
 
         items = build_json.get("items") or {}
         Layer = self.env["besacraft.build.layer"]
