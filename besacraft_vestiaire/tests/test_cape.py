@@ -64,8 +64,12 @@ class TestCape(TransactionCase):
         zoe._check_cape_possedee()  # no cape worn: nothing to refuse
         self.zoe.vestiaire_cape_id = self.cape
         zoe._check_cape_possedee()  # owned cape accepted without AccessError
+        # A portal user cannot write res.partner: force the unowned cape in SQL.
+        self.env.cr.execute("UPDATE res_partner SET vestiaire_cape_id = %s WHERE id = %s",
+                            (autre.id, self.zoe.id))
+        self.zoe.invalidate_recordset(["vestiaire_cape_id"])
         with self.assertRaises(ValidationError):
-            zoe.write({"vestiaire_cape_id": autre.id})
+            zoe._check_cape_possedee()
 
     def test_retirer_la_possession_retire_la_cape_portee(self):
         self.zoe._vestiaire_offrir_cape(self.cape)
