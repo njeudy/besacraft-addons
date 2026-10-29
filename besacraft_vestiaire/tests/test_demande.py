@@ -115,7 +115,8 @@ class TestPageDemande(common.HttpCase):
     def test_un_lien_perime_le_dit(self):
         page = self.url_open("/vestiaire/demande?code=perime000000")
         self.assertEqual(page.status_code, 200)
-        self.assertIn("expired", page.text)
+        # The site may be served in English or in French.
+        self.assertTrue("expired" in page.text or "expiré" in page.text)
 
     def test_un_lien_valide_montre_le_pseudo(self):
         code = self.env["besacraft.vestiaire.code"]._emettre(UUID, "zoejeudy")
