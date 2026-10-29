@@ -30,13 +30,22 @@ class BesacraftVestiaireSkin(models.Model):
         for skin in self:
             images.verifier_skin(images.decoder(skin.image))
 
+    @api.model
+    def _verifier_valeurs(self, vals):
+        # The attachment layer decodes the base64 before any constraint runs.
+        if vals.get("image"):
+            images.verifier_skin(images.decoder(vals["image"]))
+
     @api.model_create_multi
     def create(self, vals_list):
+        for vals in vals_list:
+            self._verifier_valeurs(vals)
         skins = super().create(vals_list)
         skins.filtered("actif")._garder_un_seul_actif()
         return skins
 
     def write(self, vals):
+        self._verifier_valeurs(vals)
         res = super().write(vals)
         if vals.get("actif") or "partner_id" in vals:
             self.filtered("actif")._garder_un_seul_actif()
