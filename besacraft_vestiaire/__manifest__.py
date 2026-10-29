@@ -14,9 +14,9 @@
         "data/mail_templates.xml",
         "views/vestiaire_demande_views.xml",
         "views/website_demande.xml",
-        "views/vestiaire_skin_views.xml",
         "views/vestiaire_cape_views.xml",
         "wizards/vestiaire_offrir_views.xml",
+        "views/vestiaire_skin_views.xml",
     ],
     "installable": True,
 }
