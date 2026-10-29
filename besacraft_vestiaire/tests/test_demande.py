@@ -125,7 +125,6 @@ class TestPageDemande(common.HttpCase):
     def test_un_envoi_invalide_ne_laisse_rien_en_base(self):
         import re
         code = self.env["besacraft.vestiaire.code"]._emettre(UUID, "zoejeudy")
-        self.env.cr.commit()
         page = self.url_open("/vestiaire/demande?code=%s" % code.code)
         csrf = re.search(r'name="csrf_token" value="([^"]+)"', page.text).group(1)
         rep = self.url_open("/vestiaire/demande", data={
