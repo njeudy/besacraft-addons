@@ -82,12 +82,11 @@ class TestCsl(common.HttpCase):
         self.assertEqual(self.url_open("/csl/Doublon.json").status_code, 200)
 
     def test_texture_partagee_prend_le_proprietaire_valide(self):
-        autre = self._compte("Autre", "44444444444444444444444444444444")
+        autre = self._compte("Autre", "44444444444444444444444444444444", actif=False)
         self.env["besacraft.vestiaire.skin"].create({
             "partner_id": autre.id, "image": base64.b64encode(png(64, 64)),
             "modele": "slim", "actif": True})
         self.assertEqual(self.skin.empreinte, autre.vestiaire_skin_ids.empreinte)
-        self.zoe.user_ids.active = False
         self.assertEqual(self.url_open("/csl/textures/%s" % self.skin.empreinte).status_code, 200)
 
     def test_texture_inactive_non_servie(self):
