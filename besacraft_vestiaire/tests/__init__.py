@@ -4,3 +4,4 @@ from . import test_demande
 from . import test_images
 from . import test_skin
 from . import test_mojang
+from . import test_cape
