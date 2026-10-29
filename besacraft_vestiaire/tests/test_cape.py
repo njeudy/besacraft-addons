@@ -64,10 +64,8 @@ class TestCape(TransactionCase):
         zoe._check_cape_possedee()  # no cape worn: nothing to refuse
         self.zoe.vestiaire_cape_id = self.cape
         zoe._check_cape_possedee()  # owned cape accepted without AccessError
-        self.zoe.vestiaire_cape_id = False
-        self.zoe.sudo().vestiaire_cape_id = autre
         with self.assertRaises(ValidationError):
-            zoe._check_cape_possedee()
+            zoe.write({"vestiaire_cape_id": autre.id})
 
     def test_retirer_la_possession_retire_la_cape_portee(self):
         self.zoe._vestiaire_offrir_cape(self.cape)
