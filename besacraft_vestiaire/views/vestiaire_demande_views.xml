@@ -38,6 +38,7 @@
                             <field name="moins_de_15"/>
                             <field name="email_parent" invisible="not moins_de_15"/>
                             <field name="partner_id"/>
+                            <field name="partner_cible_id" invisible="state != 'a_valider'"/>
                             <field name="message_refus" invisible="state == 'validee'"/>
                         </group>
                     </group>
