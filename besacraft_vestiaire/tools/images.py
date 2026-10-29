@@ -1,3 +1,5 @@
+import base64
+import binascii
 import hashlib
 import io
 
@@ -16,7 +18,7 @@ def _ouvrir(data):
     try:
         image = Image.open(io.BytesIO(data))
         image.verify()
-    except (UnidentifiedImageError, OSError, SyntaxError):
+    except (UnidentifiedImageError, Image.DecompressionBombError, OSError, SyntaxError):
         raise ValidationError(_("The file is not a valid image."))
     if image.format != "PNG":
         raise ValidationError(_("The image must be a PNG."))
@@ -32,6 +34,14 @@ def verifier_cape(data):
     largeur, hauteur = _ouvrir(data)
     if largeur % 64 or largeur != 2 * hauteur:
         raise ValidationError(_("A cape must be 64×32 pixels or a multiple of it."))
+
+
+def decoder(valeur):
+    """Decode a base64 payload, turning malformed input into a ValidationError."""
+    try:
+        return base64.b64decode(valeur, validate=True)
+    except (binascii.Error, ValueError, TypeError):
+        raise ValidationError(_("The file is not a valid image."))
 
 
 def empreinte(data):
