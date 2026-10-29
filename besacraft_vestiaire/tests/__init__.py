@@ -5,3 +5,4 @@ from . import test_images
 from . import test_skin
 from . import test_mojang
 from . import test_cape
+from . import test_csl
