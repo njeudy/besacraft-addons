@@ -50,3 +50,27 @@ class TestCape(TransactionCase):
         assistant.action_offrir()
         self.assertEqual(self.zoe._vestiaire_capes(), self.cape)
         self.assertEqual(autre._vestiaire_capes(), self.cape)
+
+    def test_porter_sans_droit_sur_les_possessions(self):
+        portail = self.env["res.users"].with_context(no_reset_password=True).create({
+            "name": "Portail Zoé", "login": "zoe_portail", "email": "zoe@example.com",
+            "partner_id": self.zoe.id,
+            "groups_id": [(6, 0, [self.env.ref("base.group_portal").id])]})
+        self.zoe._vestiaire_offrir_cape(self.cape)
+        autre = self.env["besacraft.vestiaire.cape"].create({
+            "name": "Autre", "image": base64.b64encode(png(64, 32))})
+        zoe = self.zoe.with_user(portail)
+        self.assertEqual(zoe._vestiaire_capes(), self.cape)
+        zoe._check_cape_possedee()  # no cape worn: nothing to refuse
+        self.zoe.vestiaire_cape_id = self.cape
+        zoe._check_cape_possedee()  # owned cape accepted without AccessError
+        self.zoe.vestiaire_cape_id = False
+        self.zoe.sudo().vestiaire_cape_id = autre
+        with self.assertRaises(ValidationError):
+            zoe._check_cape_possedee()
+
+    def test_retirer_la_possession_retire_la_cape_portee(self):
+        self.zoe._vestiaire_offrir_cape(self.cape)
+        self.zoe.vestiaire_cape_id = self.cape
+        self.zoe.vestiaire_possession_ids.unlink()
+        self.assertFalse(self.zoe.vestiaire_cape_id)
