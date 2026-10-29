@@ -54,6 +54,28 @@ class TestPortail(common.HttpCase):
         self.assertEqual(page.status_code, 200)
         self.assertFalse(self.zoe.vestiaire_skin_ids)
 
+    def test_l_erreur_d_image_est_en_francais(self):
+        self.env["res.lang"]._activate_lang("fr_FR")
+        self.user.lang = "fr_FR"
+        self.authenticate("zoe-portail", "zoe-portail-123")
+        page = self.url_open("/my/vestiaire/skin/ajouter",
+                             data={"name": "X", "csrf_token": self._csrf()},
+                             files={"image": ("x.png", b"pas une image", "image/png")})
+        self.assertIn("Le fichier n&#39;est pas une image valide.", page.text)
+
+    def test_un_champ_image_qui_n_est_pas_un_fichier(self):
+        self.authenticate("zoe-portail", "zoe-portail-123")
+        page = self.url_open("/my/vestiaire/skin/ajouter",
+                             data={"name": "X", "image": "texte", "csrf_token": self._csrf()})
+        self.assertEqual(page.status_code, 200)
+        self.assertFalse(self.zoe.vestiaire_skin_ids)
+
+    def test_une_cape_inconnue_ne_change_rien(self):
+        self.zoe.sudo().vestiaire_cape_id = self.cape
+        self.authenticate("zoe-portail", "zoe-portail-123")
+        self.url_open("/my/vestiaire/cape", data={"cape_id": "999999", "csrf_token": self._csrf()})
+        self.assertEqual(self.zoe.vestiaire_cape_id, self.cape)
+
     def test_le_deuxieme_skin_n_est_pas_actif(self):
         premier = self._skin("Premier", actif=True)
         self.authenticate("zoe-portail", "zoe-portail-123")
