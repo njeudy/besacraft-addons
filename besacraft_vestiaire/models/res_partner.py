@@ -26,7 +26,8 @@ class ResPartner(models.Model):
 
     def _vestiaire_capes(self):
         self.ensure_one()
-        return self.vestiaire_possession_ids.cape_id
+        # Ownership is admin-only data; the wear check must work for the player too.
+        return self.sudo().vestiaire_possession_ids.cape_id
 
     def _vestiaire_offrir_cape(self, cape):
         for partner in self:

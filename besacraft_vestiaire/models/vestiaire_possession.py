@@ -13,3 +13,10 @@ class BesacraftVestiairePossession(models.Model):
 
     _sql_constraints = [("unique_cape", "unique(partner_id, cape_id)",
                          "A player owns a cape only once.")]
+
+    def unlink(self):
+        for possession in self:
+            partner = possession.partner_id.sudo()
+            if partner.vestiaire_cape_id == possession.cape_id:
+                partner.vestiaire_cape_id = False
+        return super().unlink()
