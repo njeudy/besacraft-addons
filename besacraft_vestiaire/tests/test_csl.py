@@ -92,3 +92,25 @@ class TestCsl(common.HttpCase):
     def test_texture_inactive_non_servie(self):
         self.skin.actif = False
         self.assertEqual(self.url_open("/csl/textures/%s" % self.skin.empreinte).status_code, 404)
+
+    def test_octet_nul_en_404(self):
+        self.assertEqual(self.url_open("/csl/%00.json").status_code, 404)
+        self.assertEqual(self.url_open("/csl/Zoe-Jeudy.json").status_code, 404)
+
+    def test_le_404_ne_journalise_pas_d_avertissement(self):
+        with self.assertNoLogs("odoo.http", level="WARNING"):
+            self.assertEqual(self.url_open("/csl/Personne.json").status_code, 404)
+            self.assertEqual(self.url_open("/csl/textures/%s" % ("0" * 64)).status_code, 404)
+
+    def test_cape_non_publiee_ni_dans_le_profil_ni_en_texture(self):
+        self.cape.publiee = False
+        profil = self.url_open("/csl/ZoeJeudy.json").json()
+        self.assertNotIn("cape", profil)
+        self.assertNotIn("elytra", profil)
+        self.assertEqual(profil["skins"], {"slim": self.skin.empreinte})
+        for empreinte in (self.cape.empreinte, self.cape.empreinte_elytre):
+            self.assertEqual(self.url_open("/csl/textures/%s" % empreinte).status_code, 404)
+
+    def test_nosniff_sur_les_textures(self):
+        r = self.url_open("/csl/textures/%s" % self.skin.empreinte)
+        self.assertEqual(r.headers["X-Content-Type-Options"], "nosniff")

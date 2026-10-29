@@ -132,3 +132,30 @@ class TestPortail(common.HttpCase):
         self.assertIn("/my/vestiaire", self.url_open("/my").text)
         self.zoe.minecraft_uuid = False
         self.assertNotIn("/my/vestiaire", self.url_open("/my").text)
+
+    def test_le_modele_du_skin_est_traduit(self):
+        self.env["res.lang"]._activate_lang("fr_FR")
+        self.user.lang = "fr_FR"
+        self._skin("Mon skin")
+        self.authenticate("zoe-portail", "zoe-portail-123")
+        page = self.url_open("/my/vestiaire").text
+        self.assertIn(">Classique<", page)
+        self.assertNotIn(">Classic<", page)
+
+    def test_nosniff_sur_l_apercu(self):
+        skin = self._skin("Rose")
+        self.authenticate("zoe-portail", "zoe-portail-123")
+        r = self.url_open("/my/vestiaire/skin/%s/apercu" % skin.id)
+        self.assertEqual(r.status_code, 200)
+        self.assertEqual(r.headers["X-Content-Type-Options"], "nosniff")
+
+    def test_apercu_d_un_skin_etranger_en_404_sans_avertissement(self):
+        self.authenticate("zoe-portail", "zoe-portail-123")
+        with self.assertNoLogs("odoo.http", level="WARNING"):
+            r = self.url_open("/my/vestiaire/skin/%s/apercu" % self.skin_autre.id)
+        self.assertEqual(r.status_code, 404)
+
+    def test_le_groupe_createur_n_eleve_pas_un_portail_en_interne(self):
+        self.env.ref("besacraft_vestiaire.group_vestiaire_createur").users = [(4, self.user.id)]
+        self.assertTrue(self.user.share)
+        self.assertFalse(self.user.has_group("base.group_user"))

@@ -109,6 +109,27 @@ class TestDemande(TransactionCase):
         self.assertEqual(demande.prenom, "Zoé")
         self.assertEqual(demande.email, "zoe@example.org")
 
+    def _site_besacraft(self):
+        return self.env["website"].create(
+            {"name": "Besacraft", "domain": "https://www.besacraft.fr"})
+
+    def test_valider_rattache_le_contact_au_site_besacraft(self):
+        site = self._site_besacraft()
+        demande = self.Demande._soumettre(self.code.code, self.valeurs)
+        demande.action_valider()
+        self.assertEqual(demande.partner_id.website_id, site)
+
+    def test_valider_rattache_un_contact_trouve_sans_site(self):
+        site = self._site_besacraft()
+        zoe = self.env["res.partner"].create({"name": "Zoé J", "email": "zoe@example.org"})
+        self.Demande._soumettre(self.code.code, self.valeurs).action_valider()
+        self.assertEqual(zoe.website_id, site)
+
+    def test_l_url_du_code_vient_du_site_besacraft(self):
+        self._site_besacraft()
+        self.assertEqual(self.env["besacraft.vestiaire.code"]._url("abc"),
+                         "https://www.besacraft.fr/vestiaire/demande?code=abc")
+
 
 @tagged("post_install", "-at_install")
 class TestPageDemande(common.HttpCase):
@@ -134,3 +155,8 @@ class TestPageDemande(common.HttpCase):
         self.assertEqual(rep.status_code, 200)
         self.env.cr.execute("SELECT count(*) FROM besacraft_vestiaire_demande WHERE uuid = %s", [UUID])
         self.assertEqual(self.env.cr.fetchone()[0], 0)
+
+    def test_un_code_avec_un_octet_nul_n_est_pas_une_erreur_serveur(self):
+        page = self.url_open("/vestiaire/demande?code=%00")
+        self.assertEqual(page.status_code, 200)
+        self.assertTrue("expired" in page.text or "expiré" in page.text)
