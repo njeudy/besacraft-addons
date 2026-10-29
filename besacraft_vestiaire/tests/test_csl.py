@@ -28,7 +28,7 @@ class TestCsl(common.HttpCase):
         partner = self.env["res.partner"].create({
             "name": login, "minecraft_login": login, "minecraft_uuid": uuid})
         user = self.env["res.users"].create({
-            "name": login, "login": "%s-csl" % login, "partner_id": partner.id,
+            "name": login, "login": "%s-%s-csl" % (login, uuid[:4]), "partner_id": partner.id,
             "groups_id": [(6, 0, [self.env.ref("base.group_portal").id])]})
         user.active = actif
         return partner
