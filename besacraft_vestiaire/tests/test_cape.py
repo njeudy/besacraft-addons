@@ -67,7 +67,7 @@ class TestCape(TransactionCase):
         # A portal user cannot write res.partner: force the unowned cape in SQL.
         self.env.cr.execute("UPDATE res_partner SET vestiaire_cape_id = %s WHERE id = %s",
                             (autre.id, self.zoe.id))
-        self.zoe.invalidate_recordset(["vestiaire_cape_id"])
+        self.env.invalidate_all()
         with self.assertRaises(ValidationError):
             zoe._check_cape_possedee()
 
