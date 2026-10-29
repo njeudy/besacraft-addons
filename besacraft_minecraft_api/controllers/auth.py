@@ -47,8 +47,16 @@ class BesacraftMcAuth(http.Controller):
         if not partenaire:
             # Known player, unknown customer: say where to link the account rather than
             # refusing flatly -- this is the most common first contact.
-            return reponse({"erreur": "compte_non_lie", "ou": OU_LIER}, code=404)
+            return reponse(self._reponse_compte_non_lie(uuid, pseudo), code=404)
+        self._apres_certification(partenaire, pseudo)
         session = Session._ouvrir(partenaire)
         return reponse({"token": session.token,
                         "expire_le": session.expire_le.isoformat(),
                         "nom": partenaire.name})
+
+    def _reponse_compte_non_lie(self, uuid, pseudo):
+        """Body of the 404 sent to a certified player without a contact. Overridable."""
+        return {"erreur": "compte_non_lie", "ou": OU_LIER}
+
+    def _apres_certification(self, partenaire, pseudo):
+        """Called once Mojang vouched for this player and their contact is known. Overridable."""
