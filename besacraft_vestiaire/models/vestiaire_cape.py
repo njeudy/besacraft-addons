@@ -16,12 +16,11 @@ class BesacraftVestiaireCape(models.Model):
                                    store=True, index=True)
     publiee = fields.Boolean(string="Published", default=True)
 
-    @staticmethod
-    def _empreinte_ou_faux(valeur):
+    def _empreinte_ou_faux(self, valeur):
         if not valeur:
             return False
         try:
-            return images.empreinte(images.decoder(valeur))
+            return images.empreinte(images.decoder(self.env, valeur))
         except ValidationError:
             return False  # reported by the _check_images constraint
 
@@ -36,14 +35,14 @@ class BesacraftVestiaireCape(models.Model):
         for cape in self:
             for valeur in (cape.image, cape.image_elytre):
                 if valeur:
-                    images.verifier_cape(images.decoder(valeur))
+                    images.verifier_cape(self.env, images.decoder(self.env, valeur))
 
     @api.model
     def _verifier_valeurs(self, vals):
         # The attachment layer decodes the base64 before any constraint runs.
         for champ in ("image", "image_elytre"):
             if vals.get(champ):
-                images.verifier_cape(images.decoder(vals[champ]))
+                images.verifier_cape(self.env, images.decoder(self.env, vals[champ]))
 
     @api.model_create_multi
     def create(self, vals_list):

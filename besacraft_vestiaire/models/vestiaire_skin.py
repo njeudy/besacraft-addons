@@ -21,20 +21,20 @@ class BesacraftVestiaireSkin(models.Model):
     def _compute_empreinte(self):
         for skin in self:
             try:
-                skin.empreinte = images.empreinte(images.decoder(skin.image)) if skin.image else False
+                skin.empreinte = images.empreinte(images.decoder(self.env, skin.image)) if skin.image else False
             except ValidationError:
                 skin.empreinte = False  # reported by the _check_image constraint
 
     @api.constrains("image")
     def _check_image(self):
         for skin in self:
-            images.verifier_skin(images.decoder(skin.image))
+            images.verifier_skin(self.env, images.decoder(self.env, skin.image))
 
     @api.model
     def _verifier_valeurs(self, vals):
         # The attachment layer decodes the base64 before any constraint runs.
         if vals.get("image"):
-            images.verifier_skin(images.decoder(vals["image"]))
+            images.verifier_skin(self.env, images.decoder(self.env, vals["image"]))
 
     @api.model_create_multi
     def create(self, vals_list):

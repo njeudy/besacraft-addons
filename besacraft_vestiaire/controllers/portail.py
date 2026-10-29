@@ -35,7 +35,7 @@ class VestiairePortail(CustomerPortal):
                 methods=["POST"])
     def ajouter_skin(self, image=None, name=None, modele="classic", **kw):
         partner = self._vestiaire_partner()
-        if not partner or not image:
+        if not partner or not hasattr(image, "read"):
             return request.redirect("/my/vestiaire")
         try:
             with request.env.cr.savepoint():
@@ -86,8 +86,10 @@ class VestiairePortail(CustomerPortal):
         partner = self._vestiaire_partner()
         if partner:
             sudo = partner.sudo()
-            cape = request.env["besacraft.vestiaire.cape"].sudo().browse(
-                int(cape_id) if (cape_id or "").isdigit() else 0).exists()
-            if not cape or cape in sudo._vestiaire_capes():
-                sudo.vestiaire_cape_id = cape
+            if not cape_id:
+                sudo.vestiaire_cape_id = False
+            elif cape_id.isdigit():
+                cape = request.env["besacraft.vestiaire.cape"].sudo().browse(int(cape_id)).exists()
+                if cape and cape in sudo._vestiaire_capes():
+                    sudo.vestiaire_cape_id = cape
         return request.redirect("/my/vestiaire")

@@ -6,7 +6,7 @@ from PIL import Image
 
 from odoo.addons.besacraft_vestiaire.tools import images
 from odoo.exceptions import ValidationError
-from odoo.tests import BaseCase
+from odoo.tests import TransactionCase
 
 
 def png(largeur, hauteur):
@@ -15,34 +15,34 @@ def png(largeur, hauteur):
     return tampon.getvalue()
 
 
-class TestImages(BaseCase):
+class TestImages(TransactionCase):
     def test_skins_acceptes(self):
-        images.verifier_skin(png(64, 64))
-        images.verifier_skin(png(64, 32))
+        images.verifier_skin(self.env, png(64, 64))
+        images.verifier_skin(self.env, png(64, 32))
 
     def test_skin_mal_dimensionne(self):
         with self.assertRaises(ValidationError):
-            images.verifier_skin(png(128, 128))
+            images.verifier_skin(self.env, png(128, 128))
 
     def test_pas_un_png(self):
         with self.assertRaises(ValidationError):
-            images.verifier_skin(b"GIF89a pas un png")
+            images.verifier_skin(self.env, b"GIF89a pas un png")
         tampon = io.BytesIO()
         Image.new("RGB", (64, 64)).save(tampon, format="JPEG")
         with self.assertRaises(ValidationError):
-            images.verifier_skin(tampon.getvalue())
+            images.verifier_skin(self.env, tampon.getvalue())
 
     def test_trop_lourd(self):
         with self.assertRaises(ValidationError):
-            images.verifier_skin(png(64, 64) + b"\0" * (1024 * 1024))
+            images.verifier_skin(self.env, png(64, 64) + b"\0" * (1024 * 1024))
 
     def test_capes(self):
-        images.verifier_cape(png(64, 32))
-        images.verifier_cape(png(128, 64))
+        images.verifier_cape(self.env, png(64, 32))
+        images.verifier_cape(self.env, png(128, 64))
         with self.assertRaises(ValidationError):
-            images.verifier_cape(png(64, 64))
+            images.verifier_cape(self.env, png(64, 64))
         with self.assertRaises(ValidationError):
-            images.verifier_cape(png(96, 48))
+            images.verifier_cape(self.env, png(96, 48))
 
     def test_empreinte_stable(self):
         self.assertEqual(images.empreinte(b"abc"), images.empreinte(b"abc"))
@@ -56,4 +56,4 @@ class TestImages(BaseCase):
                 + chunk(b"IHDR", struct.pack(">IIBBBBB", 100000, 100000, 8, 6, 0, 0, 0))
                 + chunk(b"IEND", b""))
         with self.assertRaises(ValidationError):
-            images.verifier_skin(data)
+            images.verifier_skin(self.env, data)
