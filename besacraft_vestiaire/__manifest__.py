@@ -11,6 +11,9 @@
         "security/groups.xml",
         "security/ir.model.access.csv",
         "data/ir_cron.xml",
+        "data/mail_templates.xml",
+        "views/vestiaire_demande_views.xml",
+        "views/website_demande.xml",
     ],
     "installable": True,
 }

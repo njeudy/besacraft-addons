@@ -1,8 +1,10 @@
-from odoo import api, models
+from odoo import api, fields, models
 
 
 class ResPartner(models.Model):
     _inherit = "res.partner"
+
+    vestiaire_parent_email = fields.Char(string="Parent email")
 
     def _vestiaire_valide(self):
         """A wardrobe account is a contact with a Minecraft UUID and an active user."""

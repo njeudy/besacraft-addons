@@ -1,0 +1,74 @@
+<odoo>
+    <record id="vestiaire_demande_view_list" model="ir.ui.view">
+        <field name="name">besacraft.vestiaire.demande.list</field>
+        <field name="model">besacraft.vestiaire.demande</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="pseudo"/>
+                <field name="prenom"/>
+                <field name="email"/>
+                <field name="moins_de_15"/>
+                <field name="state" widget="badge"/>
+                <field name="create_date"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="vestiaire_demande_view_form" model="ir.ui.view">
+        <field name="name">besacraft.vestiaire.demande.form</field>
+        <field name="model">besacraft.vestiaire.demande</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_valider" type="object" string="Validate"
+                            class="btn-primary" invisible="state != 'a_valider'"/>
+                    <button name="action_refuser" type="object" string="Refuse"
+                            invisible="state != 'a_valider'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="a_valider,validee"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="pseudo"/>
+                            <field name="uuid"/>
+                            <field name="prenom"/>
+                            <field name="email"/>
+                        </group>
+                        <group>
+                            <field name="moins_de_15"/>
+                            <field name="email_parent" invisible="not moins_de_15"/>
+                            <field name="partner_id"/>
+                            <field name="message_refus" invisible="state == 'validee'"/>
+                        </group>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="vestiaire_demande_action" model="ir.actions.act_window">
+        <field name="name">Account requests</field>
+        <field name="res_model">besacraft.vestiaire.demande</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'search_default_a_valider': 1}</field>
+    </record>
+
+    <record id="vestiaire_demande_view_search" model="ir.ui.view">
+        <field name="name">besacraft.vestiaire.demande.search</field>
+        <field name="model">besacraft.vestiaire.demande</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="pseudo"/>
+                <field name="email"/>
+                <filter name="a_valider" string="To validate" domain="[('state', '=', 'a_valider')]"/>
+            </search>
+        </field>
+    </record>
+
+    <menuitem id="menu_vestiaire_root" name="Wardrobe"
+              groups="besacraft_vestiaire.group_vestiaire_admin" sequence="60"/>
+    <menuitem id="menu_vestiaire_demandes" name="Account requests"
+              parent="menu_vestiaire_root" action="vestiaire_demande_action"
+              groups="besacraft_vestiaire.group_vestiaire_admin" sequence="10"/>
+</odoo>
