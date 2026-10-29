@@ -1,0 +1,10 @@
+<odoo>
+    <record id="cron_purger_codes" model="ir.cron">
+        <field name="name">Wardrobe: purge expired request codes</field>
+        <field name="model_id" ref="model_besacraft_vestiaire_code"/>
+        <field name="state">code</field>
+        <field name="code">model._purger()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+    </record>
+</odoo>

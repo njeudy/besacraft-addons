@@ -10,6 +10,7 @@
     "data": [
         "security/groups.xml",
         "security/ir.model.access.csv",
+        "data/ir_cron.xml",
     ],
     "installable": True,
 }
