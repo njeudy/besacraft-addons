@@ -13,9 +13,12 @@ class VestiaireCsl(http.Controller):
     """The CustomSkinAPI format read by CustomSkinLoader: profile, then textures by hash."""
 
     def _joueur(self, pseudo):
-        partner = request.env["res.partner"].sudo().search(
-            [("minecraft_login", "=ilike", pseudo)], limit=1)
-        return partner if partner and partner._vestiaire_valide() else None
+        # Escape the SQL wildcards: the pseudo is matched whole, case-insensitively.
+        motif = re.sub(r"([\\%_])", r"\\\1", pseudo)
+        candidats = request.env["res.partner"].sudo().search(
+            [("minecraft_login", "=ilike", motif)])
+        # minecraft_login is not unique: the first valid account wins.
+        return next((p for p in candidats if p._vestiaire_valide()), None)
 
     @http.route("/csl/<string:pseudo>.json", type="http", auth="public",
                 methods=["GET"], csrf=False, save_session=False)
@@ -33,7 +36,8 @@ class VestiaireCsl(http.Controller):
             if cape.empreinte_elytre:
                 corps["elytra"] = cape.empreinte_elytre
         return request.make_response(json.dumps(corps),
-                                     headers=[("Content-Type", "application/json")])
+                                     headers=[("Content-Type", "application/json"),
+                                              ("Cache-Control", "no-cache")])
 
     @http.route("/csl/textures/<string:empreinte>", type="http", auth="public",
                 methods=["GET"], csrf=False, save_session=False)
@@ -41,9 +45,10 @@ class VestiaireCsl(http.Controller):
         if not HASH.match(empreinte):
             return request.not_found()
         env = request.env
-        skin = env["besacraft.vestiaire.skin"].sudo().search(
-            [("empreinte", "=", empreinte)], limit=1)
-        if skin and skin.partner_id._vestiaire_valide():
+        skins = env["besacraft.vestiaire.skin"].sudo().search(
+            [("empreinte", "=", empreinte), ("actif", "=", True)])
+        skin = next((s for s in skins if s.partner_id._vestiaire_valide()), None)
+        if skin:
             return self._png(skin.image)
         portee = env["res.partner"].sudo().search(
             ["|", ("vestiaire_cape_id.empreinte", "=", empreinte),
