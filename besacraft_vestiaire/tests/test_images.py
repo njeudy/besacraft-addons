@@ -1,4 +1,6 @@
 import io
+import struct
+import zlib
 
 from PIL import Image
 
@@ -45,3 +47,13 @@ class TestImages(BaseCase):
     def test_empreinte_stable(self):
         self.assertEqual(images.empreinte(b"abc"), images.empreinte(b"abc"))
         self.assertRegex(images.empreinte(b"abc"), r"^[0-9a-f]{64}$")
+
+    def test_bombe_de_decompression(self):
+        def chunk(kind, body):
+            return (struct.pack(">I", len(body)) + kind + body
+                    + struct.pack(">I", zlib.crc32(kind + body)))
+        data = (b"\x89PNG\r\n\x1a\n"
+                + chunk(b"IHDR", struct.pack(">IIBBBBB", 100000, 100000, 8, 6, 0, 0, 0))
+                + chunk(b"IEND", b""))
+        with self.assertRaises(ValidationError):
+            images.verifier_skin(data)

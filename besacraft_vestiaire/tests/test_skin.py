@@ -30,3 +30,32 @@ class TestSkin(TransactionCase):
     def test_image_refusee(self):
         with self.assertRaises(ValidationError):
             self._skin(image=base64.b64encode(png(10, 10)))
+
+    def test_lot_de_creation_un_seul_actif(self):
+        autre = self.env["res.partner"].create({"name": "Léo"})
+        valeurs = [{"partner_id": p.id, "name": n, "actif": True,
+                    "image": base64.b64encode(png(64, 64))}
+                   for p, n in ((self.zoe, "a"), (self.zoe, "b"), (autre, "c"), (autre, "d"))]
+        skins = self.Skin.create(valeurs)
+        self.assertEqual(skins.mapped("actif"), [False, True, False, True])
+        self.assertEqual(self.zoe._vestiaire_skin_actif(), skins[1])
+        self.assertEqual(autre._vestiaire_skin_actif(), skins[3])
+
+    def test_ecriture_multiple_un_seul_actif(self):
+        premier, second = self._skin(), self._skin()
+        (premier | second).write({"actif": True})
+        self.assertEqual(len(self.zoe.vestiaire_skin_ids.filtered("actif")), 1)
+
+    def test_changement_de_contact_garde_un_actif(self):
+        leo = self.env["res.partner"].create({"name": "Léo"})
+        actif_leo = self.Skin.create({"partner_id": leo.id, "name": "x", "actif": True,
+                                      "image": base64.b64encode(png(64, 64))})
+        mien = self._skin(actif=True)
+        mien.partner_id = leo
+        self.assertEqual(len(leo.vestiaire_skin_ids.filtered("actif")), 1)
+        self.assertTrue(mien.actif)
+        self.assertFalse(actif_leo.actif)
+
+    def test_base64_invalide(self):
+        with self.assertRaises(ValidationError):
+            self._skin(image="!!!notbase64")
