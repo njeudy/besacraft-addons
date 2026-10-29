@@ -17,6 +17,7 @@
         "views/vestiaire_cape_views.xml",
         "wizards/vestiaire_offrir_views.xml",
         "views/vestiaire_skin_views.xml",
+        "views/portal_vestiaire.xml",
     ],
     "installable": True,
 }

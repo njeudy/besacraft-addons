@@ -1,0 +1,87 @@
+<odoo>
+    <template id="portal_my_home_vestiaire" name="Wardrobe entry" inherit_id="portal.portal_my_home">
+        <xpath expr="//div[@id='portal_common_category']" position="inside">
+            <t t-if="request.env.user.partner_id._vestiaire_valide()" t-call="portal.portal_docs_entry">
+                <t t-set="title">Wardrobe</t>
+                <t t-set="text">Your skins and capes</t>
+                <t t-set="url" t-value="'/my/vestiaire'"/>
+                <t t-set="config_card" t-value="True"/>
+            </t>
+        </xpath>
+    </template>
+
+    <template id="portal_vestiaire" name="Wardrobe">
+        <t t-call="portal.portal_layout">
+            <t t-set="additional_title">Wardrobe</t>
+            <div class="o_portal_wrap">
+                <h1 class="h3 mb-3">Wardrobe</h1>
+                <div t-if="erreur" class="alert alert-danger" t-out="erreur"/>
+
+                <h2 class="h5">Skins</h2>
+                <p t-if="not skins" class="text-muted">You have no skin yet.</p>
+                <div class="row g-3 mb-4">
+                    <div t-foreach="skins" t-as="skin" class="col-6 col-md-3">
+                        <div t-attf-class="card h-100 #{'border-primary' if skin.actif else ''}">
+                            <img t-attf-src="/my/vestiaire/skin/#{skin.id}/apercu" class="card-img-top"
+                                 alt="" style="image-rendering: pixelated;"/>
+                            <div class="card-body">
+                                <div class="fw-bold" t-out="skin.name"/>
+                                <div class="text-muted small" t-out="dict(skin._fields['modele'].selection)[skin.modele]"/>
+                                <span t-if="skin.actif" class="badge text-bg-primary">In use</span>
+                            </div>
+                            <div class="card-footer d-flex gap-2">
+                                <form t-if="not skin.actif" t-attf-action="/my/vestiaire/skin/#{skin.id}/activer" method="post">
+                                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                    <button type="submit" class="btn btn-sm btn-primary">Use</button>
+                                </form>
+                                <form t-attf-action="/my/vestiaire/skin/#{skin.id}/supprimer" method="post">
+                                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <form action="/my/vestiaire/skin/ajouter" method="post" enctype="multipart/form-data" class="mb-5">
+                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                    <h3 class="h6">Add a skin</h3>
+                    <div class="row g-2 align-items-end">
+                        <div class="col-md-3">
+                            <label for="vp_name" class="form-label">Name</label>
+                            <input id="vp_name" type="text" name="name" class="form-control"/>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="vp_modele" class="form-label">Model</label>
+                            <select id="vp_modele" name="modele" class="form-select">
+                                <option value="classic">Classic</option>
+                                <option value="slim">Slim</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="vp_image" class="form-label">PNG file</label>
+                            <input id="vp_image" type="file" name="image" accept="image/png" class="form-control" required="required"/>
+                        </div>
+                        <div class="col-md-2">
+                            <button type="submit" class="btn btn-primary w-100">Upload</button>
+                        </div>
+                    </div>
+                </form>
+
+                <h2 class="h5">Capes</h2>
+                <p t-if="not capes" class="text-muted">You do not own any cape yet.</p>
+                <form t-else="" action="/my/vestiaire/cape" method="post">
+                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                    <div class="d-flex flex-wrap gap-2">
+                        <button type="submit" name="cape_id" value=""
+                                t-attf-class="btn #{'btn-primary' if not cape_portee else 'btn-outline-secondary'}">No cape</button>
+                        <button t-foreach="capes" t-as="cape" type="submit" name="cape_id" t-att-value="cape.id"
+                                t-attf-class="btn #{'btn-primary' if cape == cape_portee else 'btn-outline-secondary'}">
+                            Wear <t t-out="cape.name"/>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </t>
+    </template>
+</odoo>
