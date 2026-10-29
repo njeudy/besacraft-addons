@@ -1,7 +1,7 @@
 import base64
 import logging
 
-from odoo import api, fields, models
+from odoo import _, api, fields, models
 from odoo.exceptions import ValidationError
 
 from ..tools import mojang
@@ -14,6 +14,25 @@ class ResPartner(models.Model):
 
     vestiaire_parent_email = fields.Char(string="Parent email")
     vestiaire_skin_ids = fields.One2many("besacraft.vestiaire.skin", "partner_id", string="Skins")
+    vestiaire_possession_ids = fields.One2many("besacraft.vestiaire.possession", "partner_id",
+                                               string="Owned items")
+    vestiaire_cape_id = fields.Many2one("besacraft.vestiaire.cape", string="Worn cape")
+
+    @api.constrains("vestiaire_cape_id")
+    def _check_cape_possedee(self):
+        for partner in self:
+            if partner.vestiaire_cape_id and partner.vestiaire_cape_id not in partner._vestiaire_capes():
+                raise ValidationError(_("You can only wear a cape you own."))
+
+    def _vestiaire_capes(self):
+        self.ensure_one()
+        return self.vestiaire_possession_ids.cape_id
+
+    def _vestiaire_offrir_cape(self, cape):
+        for partner in self:
+            if cape not in partner._vestiaire_capes():
+                self.env["besacraft.vestiaire.possession"].create(
+                    {"partner_id": partner.id, "cape_id": cape.id, "origine": "offert"})
 
     def _vestiaire_valide(self):
         """A wardrobe account is a contact with a Minecraft UUID and an active user."""

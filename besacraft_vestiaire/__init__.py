@@ -1,1 +1,1 @@
-from . import controllers, models, tools
+from . import controllers, models, tools, wizards

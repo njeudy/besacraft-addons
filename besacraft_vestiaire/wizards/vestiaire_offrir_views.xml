@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="vestiaire_offrir_view_form" model="ir.ui.view">
+        <field name="name">besacraft.vestiaire.offrir.form</field>
+        <field name="model">besacraft.vestiaire.offrir</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="partner_ids" widget="many2many_tags"/>
+                    <field name="cape_id"/>
+                </group>
+                <footer>
+                    <button name="action_offrir" type="object" string="Give" class="btn-primary"/>
+                    <button string="Cancel" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="vestiaire_offrir_action" model="ir.actions.act_window">
+        <field name="name">Give a cape</field>
+        <field name="res_model">besacraft.vestiaire.offrir</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="binding_model_id" ref="base.model_res_partner"/>
+        <field name="binding_view_types">list,form</field>
+        <field name="groups_id" eval="[(4, ref('besacraft_vestiaire.group_vestiaire_admin'))]"/>
+    </record>
+</odoo>

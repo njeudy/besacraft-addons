@@ -18,6 +18,18 @@
                             <field name="actif"/>
                         </list>
                     </field>
+                    <button name="%(besacraft_vestiaire.vestiaire_offrir_action)d" type="action"
+                            string="Give a cape"/>
+                    <group>
+                        <field name="vestiaire_cape_id"/>
+                    </group>
+                    <field name="vestiaire_possession_ids" context="{'default_partner_id': id}">
+                        <list editable="bottom">
+                            <field name="cape_id"/>
+                            <field name="origine"/>
+                            <field name="date"/>
+                        </list>
+                    </field>
                 </page>
             </xpath>
         </field>

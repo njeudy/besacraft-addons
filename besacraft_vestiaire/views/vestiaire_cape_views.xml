@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="vestiaire_cape_view_list" model="ir.ui.view">
+        <field name="name">besacraft.vestiaire.cape.list</field>
+        <field name="model">besacraft.vestiaire.cape</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="image" widget="image" options="{'size': [96, 48]}"/>
+                <field name="name"/>
+                <field name="publiee"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="vestiaire_cape_view_form" model="ir.ui.view">
+        <field name="name">besacraft.vestiaire.cape.form</field>
+        <field name="model">besacraft.vestiaire.cape</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="publiee"/>
+                        <field name="image" widget="image" options="{'size': [256, 128]}"/>
+                        <field name="image_elytre" widget="image" options="{'size': [256, 128]}"/>
+                        <field name="empreinte" readonly="1"/>
+                        <field name="empreinte_elytre" readonly="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="vestiaire_cape_action" model="ir.actions.act_window">
+        <field name="name">Capes</field>
+        <field name="res_model">besacraft.vestiaire.cape</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_vestiaire_capes" name="Capes"
+              parent="menu_vestiaire_root" action="vestiaire_cape_action"
+              groups="besacraft_vestiaire.group_vestiaire_admin" sequence="30"/>
+</odoo>
