@@ -8,6 +8,8 @@
             <xpath expr="//notebook" position="inside">
                 <page name="vestiaire" string="Wardrobe"
                       groups="besacraft_vestiaire.group_vestiaire_admin">
+                    <button name="action_vestiaire_importer_skin_mojang" type="object"
+                            string="Import Mojang skin"/>
                     <field name="vestiaire_skin_ids" context="{'default_partner_id': id}">
                         <list editable="bottom">
                             <field name="image" widget="image" options="{'size': [48, 48]}"/>

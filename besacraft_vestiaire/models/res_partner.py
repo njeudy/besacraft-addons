@@ -1,4 +1,12 @@
+import base64
+import logging
+
 from odoo import api, fields, models
+from odoo.exceptions import ValidationError
+
+from ..tools import mojang
+
+_logger = logging.getLogger(__name__)
 
 
 class ResPartner(models.Model):
@@ -22,3 +30,31 @@ class ResPartner(models.Model):
     def _vestiaire_skin_actif(self):
         self.ensure_one()
         return self.vestiaire_skin_ids.filtered("actif")[:1]
+
+    def _vestiaire_importer_skin_mojang(self):
+        """Seed a first skin from Mojang for valid accounts that have none. Re-runnable."""
+        crees = 0
+        for partner in self.filtered(lambda p: p._vestiaire_valide() and not p.vestiaire_skin_ids):
+            texture = mojang.texture_skin(partner.minecraft_uuid)
+            if not texture:
+                continue
+            data, modele = texture
+            try:
+                with self.env.cr.savepoint():
+                    self.env["besacraft.vestiaire.skin"].create({
+                        "partner_id": partner.id, "name": "Mojang",
+                        "image": base64.b64encode(data), "modele": modele, "actif": True})
+            except ValidationError as erreur:
+                _logger.warning("Mojang skin of %s refused: %s", partner.minecraft_login, erreur)
+                continue
+            crees += 1
+        return crees
+
+    def action_vestiaire_importer_skin_mojang(self):
+        self._vestiaire_importer_skin_mojang()
+        return True
+
+    @api.model
+    def _vestiaire_cron_importer_skins(self):
+        self.search([("minecraft_uuid", "!=", False), ("user_ids", "!=", False),
+                     ("vestiaire_skin_ids", "=", False)])._vestiaire_importer_skin_mojang()
