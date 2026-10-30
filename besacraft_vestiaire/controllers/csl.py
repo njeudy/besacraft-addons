@@ -5,6 +5,7 @@ import re
 from odoo import http
 from odoo.http import request
 
+PSEUDO = re.compile(r"^[A-Za-z0-9_]{1,16}$")
 HASH = re.compile(r"^[0-9a-f]{64}$")
 CACHE = [("Cache-Control", "public, max-age=31536000, immutable")]
 
@@ -23,15 +24,15 @@ class VestiaireCsl(http.Controller):
     @http.route("/csl/<string:pseudo>.json", type="http", auth="public",
                 methods=["GET"], csrf=False, save_session=False)
     def profil(self, pseudo, **kw):
-        partner = self._joueur(pseudo)
+        partner = self._joueur(pseudo) if PSEUDO.match(pseudo) else None
         if not partner:
-            return request.not_found()
+            raise request.not_found()
         corps = {"username": partner.minecraft_login}
         skin = partner._vestiaire_skin_actif()
         if skin:
             corps["skins"] = {"slim" if skin.modele == "slim" else "default": skin.empreinte}
         cape = partner.vestiaire_cape_id
-        if cape:
+        if cape.publiee:
             corps["cape"] = cape.empreinte
             if cape.empreinte_elytre:
                 corps["elytra"] = cape.empreinte_elytre
@@ -43,7 +44,7 @@ class VestiaireCsl(http.Controller):
                 methods=["GET"], csrf=False, save_session=False)
     def texture(self, empreinte, **kw):
         if not HASH.match(empreinte):
-            return request.not_found()
+            raise request.not_found()
         env = request.env
         skins = env["besacraft.vestiaire.skin"].sudo().search(
             [("empreinte", "=", empreinte), ("actif", "=", True)])
@@ -53,12 +54,14 @@ class VestiaireCsl(http.Controller):
         portee = env["res.partner"].sudo().search(
             ["|", ("vestiaire_cape_id.empreinte", "=", empreinte),
              ("vestiaire_cape_id.empreinte_elytre", "=", empreinte)])
-        porteur = portee.filtered(lambda p: p._vestiaire_valide())[:1]
+        porteur = portee.filtered(
+            lambda p: p._vestiaire_valide() and p.vestiaire_cape_id.publiee)[:1]
         if not porteur:
-            return request.not_found()
+            raise request.not_found()
         cape = porteur.vestiaire_cape_id
         return self._png(cape.image if cape.empreinte == empreinte else cape.image_elytre)
 
     def _png(self, image):
         return request.make_response(base64.b64decode(image),
-                                     headers=[("Content-Type", "image/png")] + CACHE)
+                                     headers=[("Content-Type", "image/png"),
+                                              ("X-Content-Type-Options", "nosniff")] + CACHE)

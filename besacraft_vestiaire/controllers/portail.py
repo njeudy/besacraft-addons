@@ -60,9 +60,10 @@ class VestiairePortail(CustomerPortal):
         # previews them here.
         skin = self._mon_skin(skin_id)
         if not skin:
-            return request.not_found()
+            raise request.not_found()
         return request.make_response(base64.b64decode(skin.image),
                                      headers=[("Content-Type", "image/png"),
+                                              ("X-Content-Type-Options", "nosniff"),
                                               ("Cache-Control", "private, max-age=3600")])
 
     @http.route("/my/vestiaire/skin/<int:skin_id>/activer", type="http", auth="user",

@@ -86,8 +86,12 @@ class BesacraftVestiaireDemande(models.Model):
                     "Contact %(name)s (id %(id)s) is an internal user. "
                     "Fix the contact or refuse the request.",
                     name=partner.display_name, id=partner.id))
+            site = self.env["besacraft.vestiaire.code"]._site_besacraft()
             if not partner:
                 partner = Partner.create({"name": demande.prenom, "email": demande.email})
+            if site and not partner.website_id:
+                # The portal invitation links to the contact's website domain.
+                partner.website_id = site
             partner.write({"minecraft_uuid": demande.uuid, "minecraft_login": demande.pseudo,
                            "email": partner.email or demande.email,
                            "vestiaire_parent_email": demande.email_parent or False})

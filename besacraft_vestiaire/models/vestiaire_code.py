@@ -1,3 +1,4 @@
+import re
 import secrets
 import string
 from datetime import timedelta
@@ -5,6 +6,8 @@ from datetime import timedelta
 from odoo import api, fields, models
 
 ALPHABET = string.ascii_letters + string.digits
+LONGUEUR = 12
+FORMAT = re.compile(r"^[A-Za-z0-9]{%d}$" % LONGUEUR)
 DUREE_HEURES = 24
 
 
@@ -22,7 +25,7 @@ class BesacraftVestiaireCode(models.Model):
     @api.model
     def _emettre(self, uuid, pseudo):
         return self.create({
-            "code": "".join(secrets.choice(ALPHABET) for _ in range(12)),
+            "code": "".join(secrets.choice(ALPHABET) for _ in range(LONGUEUR)),
             "uuid": self.env["res.partner"].normaliser_uuid_minecraft(uuid),
             "pseudo": pseudo,
             "expire_le": fields.Datetime.now() + timedelta(hours=DUREE_HEURES),
@@ -30,14 +33,18 @@ class BesacraftVestiaireCode(models.Model):
 
     @api.model
     def _trouver(self, code):
-        if not code:
+        if not code or not FORMAT.match(code):
             return self.browse()
         return self.search([("code", "=", code),
                             ("expire_le", ">", fields.Datetime.now())], limit=1)
 
     @api.model
+    def _site_besacraft(self):
+        return self.env["website"].sudo().search([("domain", "ilike", "besacraft.fr")], limit=1)
+
+    @api.model
     def _url(self, code):
-        site = self.env["website"].sudo().search([("domain", "ilike", "besacraft.fr")], limit=1)
+        site = self._site_besacraft()
         racine = (site.domain or self.env["ir.config_parameter"].sudo()
                   .get_param("web.base.url")).rstrip("/")
         return "%s/vestiaire/demande?code=%s" % (racine, code)
