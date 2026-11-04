@@ -16,6 +16,17 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #. module: besacraft_vestiaire
+#. odoo-python
+#: code:addons/besacraft_vestiaire/models/res_partner.py:0
+msgid "%(points)s wardrobe points: %(libelle)s"
+msgstr "%(points)s points du Vestiaire : %(libelle)s"
+
+#. module: besacraft_vestiaire
+#: model:ir.model.fields,help:besacraft_vestiaire.field_besacraft_vestiaire_cosmetique__prix
+msgid "0 means the item is not sold."
+msgstr "0 : l'objet n'est pas en vente."
+
+#. module: besacraft_vestiaire
 #: model:mail.template,body_html:besacraft_vestiaire.mail_demande_refusee
 msgid ""
 "<p>Hello <t t-out=\"object.prenom\"/>,</p>\n"
@@ -57,10 +68,20 @@ msgstr ""
 "                            </select>"
 
 #. module: besacraft_vestiaire
+#: model:ir.model.fields.selection,name:besacraft_vestiaire.selection__besacraft_vestiaire_offrir__quoi__cape
+msgid "A cape"
+msgstr "Une cape"
+
+#. module: besacraft_vestiaire
 #. odoo-python
 #: code:addons/besacraft_vestiaire/tools/images.py:0
 msgid "A cape must be 64×32 pixels or a multiple of it."
 msgstr "Une cape doit faire 64×32 pixels ou un multiple de cette taille."
+
+#. module: besacraft_vestiaire
+#: model:ir.model.fields.selection,name:besacraft_vestiaire.selection__besacraft_vestiaire_offrir__quoi__cosmetique
+msgid "A cosmetic or an emote"
+msgstr "Un cosmétique ou une émote"
 
 #. module: besacraft_vestiaire
 #. odoo-python
@@ -74,10 +95,42 @@ msgid "A player owns a cape only once."
 msgstr "Un joueur ne possède une cape qu'une seule fois."
 
 #. module: besacraft_vestiaire
+#: model:ir.model.constraint,message:besacraft_vestiaire.constraint_besacraft_vestiaire_possession_unique_cosmetique
+msgid "A player owns a cosmetic only once."
+msgstr "Un joueur ne possède un cosmétique qu'une fois."
+
+#. module: besacraft_vestiaire
+#. odoo-python
+#: code:addons/besacraft_vestiaire/models/vestiaire_mouvement.py:0
+msgid "A points movement cannot be changed: add a correction instead."
+msgstr "Un mouvement de points ne se modifie pas : ajoutez une correction."
+
+#. module: besacraft_vestiaire
+#. odoo-python
+#: code:addons/besacraft_vestiaire/models/vestiaire_mouvement.py:0
+msgid "A points movement cannot be deleted: add a correction instead."
+msgstr "Un mouvement de points ne se supprime pas : ajoutez une correction."
+
+#. module: besacraft_vestiaire
+#: model:ir.model.constraint,message:besacraft_vestiaire.constraint_besacraft_vestiaire_cosmetique_prix_positif
+msgid "A price cannot be negative."
+msgstr "Un prix ne peut pas être négatif."
+
+#. module: besacraft_vestiaire
+#: model:ir.model.constraint,message:besacraft_vestiaire.constraint_besacraft_vestiaire_bareme_points_positifs
+msgid "A reward must be worth some points."
+msgstr "Une récompense doit valoir des points."
+
+#. module: besacraft_vestiaire
 #. odoo-python
 #: code:addons/besacraft_vestiaire/tools/images.py:0
 msgid "A skin must be 64×64 or 64×32 pixels."
 msgstr "Un skin doit faire 64×64 ou 64×32 pixels."
+
+#. module: besacraft_vestiaire
+#: model:ir.model.constraint,message:besacraft_vestiaire.constraint_besacraft_vestiaire_case_unique_case
+msgid "A wheel slot holds one emote."
+msgstr "Une case de la roue contient une émote."
 
 #. module: besacraft_vestiaire
 #: model:ir.actions.act_window,name:besacraft_vestiaire.vestiaire_demande_action
@@ -91,6 +144,7 @@ msgid "Action Needed"
 msgstr "Action requise"
 
 #. module: besacraft_vestiaire
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_cle_serveur__active
 #: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_skin__actif
 msgid "Active"
 msgstr "Actif"
@@ -126,9 +180,35 @@ msgid "Administrator"
 msgstr "Administrateur"
 
 #. module: besacraft_vestiaire
+#: model:ir.model.constraint,message:besacraft_vestiaire.constraint_besacraft_vestiaire_possession_un_objet
+msgid "An ownership is either a cape or a cosmetic."
+msgstr "Une possession est soit une cape, soit un cosmétique."
+
+#. module: besacraft_vestiaire
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_mouvement__annonce
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_possession__annonce
+msgid "Announced in game"
+msgstr "Annoncé en jeu"
+
+#. module: besacraft_vestiaire
 #: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_demande__message_attachment_count
 msgid "Attachment Count"
 msgstr "Nombre de pièces jointes"
+
+#. module: besacraft_vestiaire
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_mouvement__user_id
+msgid "Author"
+msgstr "Auteur"
+
+#. module: besacraft_vestiaire
+#: model_terms:ir.ui.view,arch_db:besacraft_vestiaire.res_partner_view_form_vestiaire
+msgid "Balance"
+msgstr "Solde"
+
+#. module: besacraft_vestiaire
+#: model_terms:ir.ui.view,arch_db:besacraft_vestiaire.portal_vestiaire
+msgid "Balance:"
+msgstr "Solde :"
 
 #. module: besacraft_vestiaire
 #: model:ir.module.category,name:besacraft_vestiaire.module_category_vestiaire
@@ -144,6 +224,17 @@ msgstr "Besacraft : un compte pour {{ object.prenom }}"
 #: model:mail.template,subject:besacraft_vestiaire.mail_demande_refusee
 msgid "Besacraft: your account request"
 msgstr "Besacraft : votre demande de compte"
+
+#. module: besacraft_vestiaire
+#. odoo-python
+#: code:addons/besacraft_vestiaire/models/res_partner.py:0
+msgid "Bought %(nom)s for %(prix)s points in the wardrobe."
+msgstr "A acheté %(nom)s pour %(prix)s points dans le Vestiaire."
+
+#. module: besacraft_vestiaire
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_mouvement__cosmetique_id
+msgid "Bought item"
+msgstr "Objet acheté"
 
 #. module: besacraft_vestiaire
 #: model_terms:ir.ui.view,arch_db:besacraft_vestiaire.vestiaire_offrir_view_form
@@ -164,12 +255,32 @@ msgid "Capes"
 msgstr "Capes"
 
 #. module: besacraft_vestiaire
+#: model:ir.model.fields.selection,name:besacraft_vestiaire.selection__besacraft_vestiaire_bareme__motif__defi
+#: model:ir.model.fields.selection,name:besacraft_vestiaire.selection__besacraft_vestiaire_mouvement__motif__defi
+msgid "Challenge"
+msgstr "Défi"
+
+#. module: besacraft_vestiaire
+#. odoo-python
+#: code:addons/besacraft_vestiaire/wizards/vestiaire_offrir.py:0
+msgid "Choose a cape."
+msgstr "Choisissez une cape."
+
+#. module: besacraft_vestiaire
+#. odoo-python
+#: code:addons/besacraft_vestiaire/wizards/vestiaire_offrir.py:0
+msgid "Choose a cosmetic or an emote."
+msgstr "Choisissez un cosmétique ou une émote."
+
+#. module: besacraft_vestiaire
 #: model:ir.model.fields.selection,name:besacraft_vestiaire.selection__besacraft_vestiaire_skin__modele__classic
 msgid "Classic"
 msgstr "Classique"
 
 #. module: besacraft_vestiaire
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_bareme__code
 #: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_code__code
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_cosmetique__code
 msgid "Code"
 msgstr "Code"
 
@@ -184,7 +295,9 @@ msgstr "Contact"
 msgid ""
 "Contact %(name)s (id %(id)s) already has another Minecraft UUID. Fix the "
 "contact or refuse the request."
-msgstr "Le contact %(name)s (id %(id)s) a déjà un autre UUID Minecraft. Corrige le contact ou refuse la demande."
+msgstr ""
+"Le contact %(name)s (id %(id)s) a déjà un autre UUID Minecraft. Corrige le "
+"contact ou refuse la demande."
 
 #. module: besacraft_vestiaire
 #. odoo-python
@@ -192,7 +305,9 @@ msgstr "Le contact %(name)s (id %(id)s) a déjà un autre UUID Minecraft. Corrig
 msgid ""
 "Contact %(name)s (id %(id)s) is an internal user. Fix the contact or refuse "
 "the request."
-msgstr "Le contact %(name)s (id %(id)s) est un utilisateur interne. Corrige le contact ou refuse la demande."
+msgstr ""
+"Le contact %(name)s (id %(id)s) est un utilisateur interne. Corrige le "
+"contact ou refuse la demande."
 
 #. module: besacraft_vestiaire
 #: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_demande__partner_cible_id
@@ -200,9 +315,48 @@ msgid "Contact to link"
 msgstr "Contact à lier"
 
 #. module: besacraft_vestiaire
+#. odoo-python
+#: code:addons/besacraft_vestiaire/models/vestiaire_cle_serveur.py:0
+msgid "Copy it now, it will not be shown again: %s"
+msgstr "Copiez-la maintenant, elle ne sera plus affichée : %s"
+
+#. module: besacraft_vestiaire
+#: model:ir.model.fields.selection,name:besacraft_vestiaire.selection__besacraft_vestiaire_mouvement__motif__correction
+msgid "Correction"
+msgstr "Correction"
+
+#. module: besacraft_vestiaire
+#: model:ir.model.fields.selection,name:besacraft_vestiaire.selection__besacraft_vestiaire_cosmetique__genre__cosmetique
+msgid "Cosmetic"
+msgstr "Cosmétique"
+
+#. module: besacraft_vestiaire
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_offrir__cosmetique_id
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_possession__cosmetique_id
+msgid "Cosmetic or emote"
+msgstr "Cosmétique ou émote"
+
+#. module: besacraft_vestiaire
+#: model_terms:ir.ui.view,arch_db:besacraft_vestiaire.vestiaire_cosmetique_view_search
+msgid "Cosmetics"
+msgstr "Cosmétiques"
+
+#. module: besacraft_vestiaire
+#: model:ir.actions.act_window,name:besacraft_vestiaire.vestiaire_cosmetique_action
+#: model:ir.ui.menu,name:besacraft_vestiaire.menu_vestiaire_cosmetiques
+#: model_terms:ir.ui.view,arch_db:besacraft_vestiaire.portal_vestiaire
+msgid "Cosmetics and emotes"
+msgstr "Cosmétiques et émotes"
+
+#. module: besacraft_vestiaire
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_bareme__create_uid
 #: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_cape__create_uid
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_case__create_uid
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_cle_serveur__create_uid
 #: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_code__create_uid
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_cosmetique__create_uid
 #: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_demande__create_uid
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_mouvement__create_uid
 #: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_offrir__create_uid
 #: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_possession__create_uid
 #: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_skin__create_uid
@@ -210,9 +364,14 @@ msgid "Created by"
 msgstr "Créé par"
 
 #. module: besacraft_vestiaire
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_bareme__create_date
 #: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_cape__create_date
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_case__create_date
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_cle_serveur__create_date
 #: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_code__create_date
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_cosmetique__create_date
 #: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_demande__create_date
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_mouvement__create_date
 #: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_offrir__create_date
 #: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_possession__create_date
 #: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_skin__create_date
@@ -220,12 +379,15 @@ msgid "Created on"
 msgstr "Créé le"
 
 #. module: besacraft_vestiaire
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_cosmetique__createur_id
 #: model:res.groups,name:besacraft_vestiaire.group_vestiaire_createur
 msgid "Creator"
 msgstr "Créateur"
 
 #. module: besacraft_vestiaire
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_mouvement__date
 #: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_possession__date
+#: model_terms:ir.ui.view,arch_db:besacraft_vestiaire.portal_vestiaire
 msgid "Date"
 msgstr "Date"
 
@@ -235,9 +397,14 @@ msgid "Delete"
 msgstr "Supprimer"
 
 #. module: besacraft_vestiaire
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_bareme__display_name
 #: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_cape__display_name
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_case__display_name
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_cle_serveur__display_name
 #: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_code__display_name
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_cosmetique__display_name
 #: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_demande__display_name
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_mouvement__display_name
 #: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_offrir__display_name
 #: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_possession__display_name
 #: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_skin__display_name
@@ -259,6 +426,33 @@ msgstr "Image de l'élytre"
 #: model_terms:ir.ui.view,arch_db:besacraft_vestiaire.page_demande
 msgid "Email"
 msgstr "E-mail"
+
+#. module: besacraft_vestiaire
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_case__emote_id
+#: model:ir.model.fields.selection,name:besacraft_vestiaire.selection__besacraft_vestiaire_cosmetique__genre__emote
+msgid "Emote"
+msgstr "Émote"
+
+#. module: besacraft_vestiaire
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_res_partner__vestiaire_case_ids
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_res_users__vestiaire_case_ids
+msgid "Emote wheel"
+msgstr "Roue d'émotes"
+
+#. module: besacraft_vestiaire
+#: model:ir.model,name:besacraft_vestiaire.model_besacraft_vestiaire_case
+msgid "Emote wheel slot"
+msgstr "Case de la roue d'émotes"
+
+#. module: besacraft_vestiaire
+#: model_terms:ir.ui.view,arch_db:besacraft_vestiaire.vestiaire_cosmetique_view_search
+msgid "Emotes"
+msgstr "Émotes"
+
+#. module: besacraft_vestiaire
+#: model:ir.model.fields,help:besacraft_vestiaire.field_besacraft_vestiaire_cosmetique__de_base
+msgid "Every valid account owns it without a purchase."
+msgstr "Tout compte validé le possède sans l'acheter."
 
 #. module: besacraft_vestiaire
 #: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_code__expire_le
@@ -293,21 +487,42 @@ msgid "Font awesome icon e.g. fa-tasks"
 msgstr "Icône Font Awesome, p. ex. fa-tasks"
 
 #. module: besacraft_vestiaire
+#: model_terms:ir.ui.view,arch_db:besacraft_vestiaire.vestiaire_cosmetique_view_search
+msgid "For sale"
+msgstr "En vente"
+
+#. module: besacraft_vestiaire
+#. odoo-python
+#: code:addons/besacraft_vestiaire/wizards/vestiaire_offrir.py:0
+#: model:ir.model.fields.selection,name:besacraft_vestiaire.selection__besacraft_vestiaire_mouvement__motif__cadeau
 #: model:ir.model.fields.selection,name:besacraft_vestiaire.selection__besacraft_vestiaire_possession__origine__offert
 msgid "Gift"
 msgstr "Cadeau"
 
 #. module: besacraft_vestiaire
+#: model:ir.actions.act_window,name:besacraft_vestiaire.vestiaire_offrir_action
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_offrir__quoi
+#: model_terms:ir.ui.view,arch_db:besacraft_vestiaire.res_partner_view_form_vestiaire
 #: model_terms:ir.ui.view,arch_db:besacraft_vestiaire.vestiaire_offrir_view_form
 msgid "Give"
-msgstr "Offrir"
+msgstr "Offrir une cape"
 
 #. module: besacraft_vestiaire
-#: model:ir.actions.act_window,name:besacraft_vestiaire.vestiaire_offrir_action
+#. odoo-python
+#: code:addons/besacraft_vestiaire/wizards/vestiaire_offrir.py:0
+msgid "Give a positive number of points."
+msgstr "Indiquez un nombre de points positif."
+
+#. module: besacraft_vestiaire
 #: model:ir.model,name:besacraft_vestiaire.model_besacraft_vestiaire_offrir
-#: model_terms:ir.ui.view,arch_db:besacraft_vestiaire.res_partner_view_form_vestiaire
-msgid "Give a cape"
+msgid "Give a wardrobe item or points"
 msgstr "Offrir une cape"
+
+#. module: besacraft_vestiaire
+#: model_terms:ir.ui.view,arch_db:besacraft_vestiaire.vestiaire_cosmetique_view_search
+#: model_terms:ir.ui.view,arch_db:besacraft_vestiaire.vestiaire_mouvement_view_search
+msgid "Group By"
+msgstr "Regrouper par"
 
 #. module: besacraft_vestiaire
 #: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_demande__has_message
@@ -326,9 +541,14 @@ msgid "I am under 15"
 msgstr "J'ai moins de 15 ans"
 
 #. module: besacraft_vestiaire
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_bareme__id
 #: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_cape__id
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_case__id
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_cle_serveur__id
 #: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_code__id
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_cosmetique__id
 #: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_demande__id
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_mouvement__id
 #: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_offrir__id
 #: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_possession__id
 #: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_skin__id
@@ -344,6 +564,11 @@ msgstr "Icône"
 #: model:ir.model.fields,help:besacraft_vestiaire.field_besacraft_vestiaire_demande__activity_exception_icon
 msgid "Icon to indicate an exception activity."
 msgstr "Icône indiquant une activité d'exception."
+
+#. module: besacraft_vestiaire
+#: model:ir.model.fields,help:besacraft_vestiaire.field_besacraft_vestiaire_cosmetique__code
+msgid "Identifier of the item in the mod's catalogue.json."
+msgstr "Identifiant de l'objet dans le catalogue.json du mod."
 
 #. module: besacraft_vestiaire
 #: model:ir.model.fields,help:besacraft_vestiaire.field_besacraft_vestiaire_demande__message_needaction
@@ -373,14 +598,41 @@ msgid "In use"
 msgstr "Utilisé"
 
 #. module: besacraft_vestiaire
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_case__index
+msgid "Index"
+msgstr "Case"
+
+#. module: besacraft_vestiaire
 #: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_demande__message_is_follower
 msgid "Is Follower"
 msgstr "Est abonné"
 
 #. module: besacraft_vestiaire
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_cle_serveur__cle_hash
+msgid "Key hash"
+msgstr "Empreinte de la clé"
+
+#. module: besacraft_vestiaire
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_cosmetique__genre
+#: model_terms:ir.ui.view,arch_db:besacraft_vestiaire.vestiaire_cosmetique_view_search
+msgid "Kind"
+msgstr "Genre"
+
+#. module: besacraft_vestiaire
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_bareme__name
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_mouvement__libelle
+msgid "Label"
+msgstr "Libellé"
+
+#. module: besacraft_vestiaire
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_bareme__write_uid
 #: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_cape__write_uid
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_case__write_uid
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_cle_serveur__write_uid
 #: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_code__write_uid
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_cosmetique__write_uid
 #: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_demande__write_uid
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_mouvement__write_uid
 #: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_offrir__write_uid
 #: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_possession__write_uid
 #: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_skin__write_uid
@@ -388,9 +640,14 @@ msgid "Last Updated by"
 msgstr "Dernière modification par"
 
 #. module: besacraft_vestiaire
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_bareme__write_date
 #: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_cape__write_date
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_case__write_date
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_cle_serveur__write_date
 #: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_code__write_date
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_cosmetique__write_date
 #: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_demande__write_date
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_mouvement__write_date
 #: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_offrir__write_date
 #: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_possession__write_date
 #: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_skin__write_date
@@ -398,14 +655,47 @@ msgid "Last Updated on"
 msgstr "Dernière modification le"
 
 #. module: besacraft_vestiaire
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_cle_serveur__derniere_utilisation
+msgid "Last used"
+msgstr "Dernière utilisation"
+
+#. module: besacraft_vestiaire
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_cosmetique__licence
+msgid "License"
+msgstr "Licence"
+
+#. module: besacraft_vestiaire
 #: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_demande__message_has_error
 msgid "Message Delivery error"
 msgstr "Erreur d'envoi du message"
 
 #. module: besacraft_vestiaire
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_offrir__libelle
+msgid "Message to the player"
+msgstr "Message au joueur"
+
+#. module: besacraft_vestiaire
 #: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_demande__message_ids
 msgid "Messages"
 msgstr "Messages"
+
+#. module: besacraft_vestiaire
+#: model:ir.model.fields.selection,name:besacraft_vestiaire.selection__besacraft_vestiaire_bareme__motif__mission
+#: model:ir.model.fields.selection,name:besacraft_vestiaire.selection__besacraft_vestiaire_mouvement__motif__mission
+msgid "Mission"
+msgstr "Mission"
+
+#. module: besacraft_vestiaire
+#: model:ir.model.fields,help:besacraft_vestiaire.field_besacraft_vestiaire_bareme__code
+msgid "Mission or challenge code. Empty: default for the reason."
+msgstr "Code de la mission ou du défi. Vide : valeur par défaut du motif."
+
+#. module: besacraft_vestiaire
+#: model:ir.model.fields,help:besacraft_vestiaire.field_besacraft_vestiaire_mouvement__reference
+msgid ""
+"Mission, episode, build or order this movement comes from. A player gets a "
+"given reason and reference only once."
+msgstr "Mission, épisode, construction ou commande d'où vient ce mouvement. Un joueur ne reçoit qu'une fois un même motif et une même référence."
 
 #. module: besacraft_vestiaire
 #: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_skin__modele
@@ -420,10 +710,23 @@ msgstr "Échéance de mon activité"
 
 #. module: besacraft_vestiaire
 #: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_cape__name
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_cle_serveur__name
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_cosmetique__name
 #: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_skin__name
 #: model_terms:ir.ui.view,arch_db:besacraft_vestiaire.portal_vestiaire
 msgid "Name"
 msgstr "Nom"
+
+#. module: besacraft_vestiaire
+#: model_terms:ir.ui.view,arch_db:besacraft_vestiaire.vestiaire_cle_serveur_view_list
+msgid "New key"
+msgstr "Nouvelle clé"
+
+#. module: besacraft_vestiaire
+#. odoo-python
+#: code:addons/besacraft_vestiaire/models/vestiaire_cle_serveur.py:0
+msgid "New key for %s"
+msgstr "Nouvelle clé pour %s"
 
 #. module: besacraft_vestiaire
 #: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_demande__activity_date_deadline
@@ -471,6 +774,18 @@ msgid "Origin"
 msgstr "Origine"
 
 #. module: besacraft_vestiaire
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_res_partner__vestiaire_tenue_ids
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_res_users__vestiaire_tenue_ids
+msgid "Outfit"
+msgstr "Tenue"
+
+#. module: besacraft_vestiaire
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_cosmetique__de_base
+#: model_terms:ir.ui.view,arch_db:besacraft_vestiaire.vestiaire_cosmetique_view_search
+msgid "Owned by everyone"
+msgstr "Possédé par tous"
+
+#. module: besacraft_vestiaire
 #: model:ir.model.fields,field_description:besacraft_vestiaire.field_res_partner__vestiaire_possession_ids
 #: model:ir.model.fields,field_description:besacraft_vestiaire.field_res_users__vestiaire_possession_ids
 msgid "Owned items"
@@ -490,6 +805,7 @@ msgid "Parent email"
 msgstr "E-mail du parent"
 
 #. module: besacraft_vestiaire
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_case__partner_id
 #: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_demande__partner_id
 #: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_possession__partner_id
 #: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_skin__partner_id
@@ -497,9 +813,45 @@ msgid "Partner"
 msgstr "Partenaire"
 
 #. module: besacraft_vestiaire
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_mouvement__partner_id
+#: model_terms:ir.ui.view,arch_db:besacraft_vestiaire.vestiaire_mouvement_view_search
+msgid "Player"
+msgstr "Joueur"
+
+#. module: besacraft_vestiaire
 #: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_offrir__partner_ids
 msgid "Players"
 msgstr "Joueurs"
+
+#. module: besacraft_vestiaire
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_bareme__points
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_mouvement__points
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_offrir__points
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_res_partner__vestiaire_points
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_res_users__vestiaire_points
+#: model:ir.model.fields.selection,name:besacraft_vestiaire.selection__besacraft_vestiaire_offrir__quoi__points
+#: model_terms:ir.ui.view,arch_db:besacraft_vestiaire.portal_vestiaire
+msgid "Points"
+msgstr "Points"
+
+#. module: besacraft_vestiaire
+#: model:ir.actions.act_window,name:besacraft_vestiaire.vestiaire_mouvement_action
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_res_partner__vestiaire_mouvement_ids
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_res_users__vestiaire_mouvement_ids
+#: model:ir.ui.menu,name:besacraft_vestiaire.menu_vestiaire_mouvements
+msgid "Points movements"
+msgstr "Mouvements de points"
+
+#. module: besacraft_vestiaire
+#: model:ir.actions.act_window,name:besacraft_vestiaire.vestiaire_bareme_action
+#: model:ir.ui.menu,name:besacraft_vestiaire.menu_vestiaire_bareme
+msgid "Points scale"
+msgstr "Barème des points"
+
+#. module: besacraft_vestiaire
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_cosmetique__prix
+msgid "Price (points)"
+msgstr "Prix (points)"
 
 #. module: besacraft_vestiaire
 #: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_code__pseudo
@@ -509,13 +861,38 @@ msgstr "Pseudo"
 
 #. module: besacraft_vestiaire
 #: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_cape__publiee
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_cosmetique__publie
 msgid "Published"
 msgstr "Publiée"
+
+#. module: besacraft_vestiaire
+#: model:ir.model.fields.selection,name:besacraft_vestiaire.selection__besacraft_vestiaire_bareme__motif__construction
+#: model:ir.model.fields.selection,name:besacraft_vestiaire.selection__besacraft_vestiaire_mouvement__motif__construction
+msgid "Published build"
+msgstr "Construction publiée"
+
+#. module: besacraft_vestiaire
+#: model:ir.model.fields.selection,name:besacraft_vestiaire.selection__besacraft_vestiaire_mouvement__motif__achat
+#: model:ir.model.fields.selection,name:besacraft_vestiaire.selection__besacraft_vestiaire_possession__origine__achat
+msgid "Purchase"
+msgstr "Achat"
 
 #. module: besacraft_vestiaire
 #: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_demande__rating_ids
 msgid "Ratings"
 msgstr "Évaluations"
+
+#. module: besacraft_vestiaire
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_bareme__motif
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_mouvement__motif
+#: model_terms:ir.ui.view,arch_db:besacraft_vestiaire.vestiaire_mouvement_view_search
+msgid "Reason"
+msgstr "Motif"
+
+#. module: besacraft_vestiaire
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_mouvement__reference
+msgid "Reference"
+msgstr "Référence"
 
 #. module: besacraft_vestiaire
 #: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_demande__message_refus
@@ -543,6 +920,11 @@ msgid "Responsible User"
 msgstr "Utilisateur responsable"
 
 #. module: besacraft_vestiaire
+#: model:ir.model.fields.selection,name:besacraft_vestiaire.selection__besacraft_vestiaire_possession__origine__gagne
+msgid "Reward"
+msgstr "Récompense"
+
+#. module: besacraft_vestiaire
 #: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_demande__message_has_sms_error
 msgid "SMS Delivery error"
 msgstr "Erreur d'envoi du SMS"
@@ -551,6 +933,27 @@ msgstr "Erreur d'envoi du SMS"
 #: model_terms:ir.ui.view,arch_db:besacraft_vestiaire.page_demande
 msgid "Send my request"
 msgstr "Envoyer ma demande"
+
+#. module: besacraft_vestiaire
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_cosmetique__sequence
+msgid "Sequence"
+msgstr "Séquence"
+
+#. module: besacraft_vestiaire
+#: model:ir.actions.act_window,name:besacraft_vestiaire.vestiaire_cle_serveur_action
+#: model:ir.ui.menu,name:besacraft_vestiaire.menu_vestiaire_cles
+msgid "Server keys"
+msgstr "Clés de serveur"
+
+#. module: besacraft_vestiaire
+#: model:ir.model.fields.selection,name:besacraft_vestiaire.selection__besacraft_vestiaire_mouvement__motif__boutique
+msgid "Shop"
+msgstr "Boutique"
+
+#. module: besacraft_vestiaire
+#: model:ir.model.fields,help:besacraft_vestiaire.field_besacraft_vestiaire_offrir__libelle
+msgid "Shown in game, e.g. 'Well done for the Battant bridge!'"
+msgstr "Affiché en jeu, par ex. « Bravo pour le pont de Battant ! »"
 
 #. module: besacraft_vestiaire
 #: model:ir.model.fields,field_description:besacraft_vestiaire.field_res_partner__vestiaire_skin_ids
@@ -563,6 +966,21 @@ msgstr "Skins"
 #: model:ir.model.fields.selection,name:besacraft_vestiaire.selection__besacraft_vestiaire_skin__modele__slim
 msgid "Slim"
 msgstr "Fin"
+
+#. module: besacraft_vestiaire
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_cosmetique__emplacement
+msgid "Slot"
+msgstr "Emplacement"
+
+#. module: besacraft_vestiaire
+#: model:ir.model.fields,help:besacraft_vestiaire.field_besacraft_vestiaire_cosmetique__emplacement
+msgid "Slot of a cosmetic in the mod (chapeau, tete, ailes...)."
+msgstr "Emplacement du cosmétique dans le mod (chapeau, tete, ailes…)."
+
+#. module: besacraft_vestiaire
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_cosmetique__source
+msgid "Source"
+msgstr "Source"
 
 #. module: besacraft_vestiaire
 #: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_demande__state
@@ -588,9 +1006,16 @@ msgid "Thanks! Nicolas will look at your request."
 msgstr "Merci ! Nicolas va regarder ta demande."
 
 #. module: besacraft_vestiaire
+#: model:ir.model.constraint,message:besacraft_vestiaire.constraint_besacraft_vestiaire_cosmetique_unique_code
+msgid "The code of a wardrobe item must be unique."
+msgstr "Le code d'un objet du Vestiaire doit être unique."
+
+#. module: besacraft_vestiaire
 #: model:ir.model.fields,help:besacraft_vestiaire.field_besacraft_vestiaire_demande__partner_cible_id
 msgid "The contact validation would use. Empty: a new contact is created."
-msgstr "Le contact que la validation utiliserait. Vide : un nouveau contact est créé."
+msgstr ""
+"Le contact que la validation utiliserait. Vide : un nouveau contact est "
+"créé."
 
 #. module: besacraft_vestiaire
 #. odoo-python
@@ -611,6 +1036,16 @@ msgid "The image must be a PNG."
 msgstr "L'image doit être un PNG."
 
 #. module: besacraft_vestiaire
+#: model_terms:ir.ui.view,arch_db:besacraft_vestiaire.vestiaire_cle_serveur_view_list
+msgid "The previous key of this server will stop working."
+msgstr "L'ancienne clé de ce serveur cessera de fonctionner."
+
+#. module: besacraft_vestiaire
+#: model:ir.model.constraint,message:besacraft_vestiaire.constraint_besacraft_vestiaire_case_index_borne
+msgid "The wheel has eight slots."
+msgstr "La roue a huit cases."
+
+#. module: besacraft_vestiaire
 #. odoo-python
 #: code:addons/besacraft_vestiaire/models/vestiaire_demande.py:0
 msgid "This link has expired."
@@ -621,13 +1056,35 @@ msgstr "Ce lien a expiré."
 msgid ""
 "This link has expired. Join the game again and type /vestiaire to get a new "
 "one."
-msgstr "Ce lien a expiré. Reconnecte-toi au jeu et tape /vestiaire pour en obtenir un nouveau."
+msgstr ""
+"Ce lien a expiré. Reconnecte-toi au jeu et tape /vestiaire pour en obtenir "
+"un nouveau."
+
+#. module: besacraft_vestiaire
+#: model:ir.model.constraint,message:besacraft_vestiaire.constraint_besacraft_vestiaire_mouvement_unique_reference
+msgid "This player already received points for this reason and reference."
+msgstr "Ce joueur a déjà reçu des points pour ce motif et cette référence."
+
+#. module: besacraft_vestiaire
+#: model:ir.model.constraint,message:besacraft_vestiaire.constraint_besacraft_vestiaire_bareme_unique_motif_code
+msgid "This reason and code already have points."
+msgstr "Ce motif et ce code ont déjà des points."
+
+#. module: besacraft_vestiaire
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_cosmetique__vignette
+msgid "Thumbnail"
+msgstr "Vignette"
 
 #. module: besacraft_vestiaire
 #: model:ir.model.fields.selection,name:besacraft_vestiaire.selection__besacraft_vestiaire_demande__state__a_valider
 #: model_terms:ir.ui.view,arch_db:besacraft_vestiaire.vestiaire_demande_view_search
 msgid "To validate"
 msgstr "À valider"
+
+#. module: besacraft_vestiaire
+#: model_terms:ir.ui.view,arch_db:besacraft_vestiaire.vestiaire_mouvement_view_list
+msgid "Total"
+msgstr "Total"
 
 #. module: besacraft_vestiaire
 #: model:ir.model.fields,help:besacraft_vestiaire.field_besacraft_vestiaire_demande__activity_exception_decoration
@@ -695,9 +1152,29 @@ msgid "Wardrobe cape"
 msgstr "Cape du Vestiaire"
 
 #. module: besacraft_vestiaire
+#: model:ir.model,name:besacraft_vestiaire.model_besacraft_vestiaire_cosmetique
+msgid "Wardrobe cosmetic or emote"
+msgstr "Cosmétique ou émote du Vestiaire"
+
+#. module: besacraft_vestiaire
 #: model:ir.model,name:besacraft_vestiaire.model_besacraft_vestiaire_possession
 msgid "Wardrobe ownership"
 msgstr "Possession du Vestiaire"
+
+#. module: besacraft_vestiaire
+#: model:ir.model,name:besacraft_vestiaire.model_besacraft_vestiaire_mouvement
+msgid "Wardrobe points movement"
+msgstr "Mouvement de points du Vestiaire"
+
+#. module: besacraft_vestiaire
+#: model:ir.model,name:besacraft_vestiaire.model_besacraft_vestiaire_bareme
+msgid "Wardrobe points scale"
+msgstr "Barème des points du Vestiaire"
+
+#. module: besacraft_vestiaire
+#: model:ir.model,name:besacraft_vestiaire.model_besacraft_vestiaire_cle_serveur
+msgid "Wardrobe server key"
+msgstr "Clé de serveur du Vestiaire"
 
 #. module: besacraft_vestiaire
 #: model:ir.model,name:besacraft_vestiaire.model_besacraft_vestiaire_skin
@@ -740,6 +1217,11 @@ msgid "Website communication history"
 msgstr "Historique des communications du site web"
 
 #. module: besacraft_vestiaire
+#: model_terms:ir.ui.view,arch_db:besacraft_vestiaire.portal_vestiaire
+msgid "What"
+msgstr "Quoi"
+
+#. module: besacraft_vestiaire
 #: model:ir.model.fields,field_description:besacraft_vestiaire.field_res_partner__vestiaire_cape_id
 #: model:ir.model.fields,field_description:besacraft_vestiaire.field_res_users__vestiaire_cape_id
 msgid "Worn cape"
@@ -758,6 +1240,11 @@ msgstr "Tu ne possèdes encore aucune cape."
 
 #. module: besacraft_vestiaire
 #: model_terms:ir.ui.view,arch_db:besacraft_vestiaire.portal_vestiaire
+msgid "You do not own any cosmetic yet."
+msgstr "Tu n'as encore aucun cosmétique."
+
+#. module: besacraft_vestiaire
+#: model_terms:ir.ui.view,arch_db:besacraft_vestiaire.portal_vestiaire
 msgid "You have no skin yet."
 msgstr "Tu n'as encore aucun skin."
 
@@ -765,3 +1252,10 @@ msgstr "Tu n'as encore aucun skin."
 #: model_terms:ir.ui.view,arch_db:besacraft_vestiaire.portal_my_home_vestiaire
 msgid "Your skins and capes"
 msgstr "Tes skins et tes capes"
+
+#. module: besacraft_vestiaire
+#: model_terms:ir.ui.view,arch_db:besacraft_vestiaire.portal_vestiaire
+msgid ""
+"points. You earn them by playing, and spend them in the in-game wardrobe "
+"(key V)."
+msgstr "points. Tu les gagnes en jouant et tu les dépenses dans le Vestiaire du jeu (touche V)."
