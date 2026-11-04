@@ -1,5 +1,4 @@
-from odoo import _, api, fields, models
-from odoo.exceptions import ValidationError
+from odoo import fields, models
 
 
 class BesacraftVestiairePossession(models.Model):
@@ -19,13 +18,9 @@ class BesacraftVestiairePossession(models.Model):
         ("unique_cape", "unique(partner_id, cape_id)", "A player owns a cape only once."),
         ("unique_cosmetique", "unique(partner_id, cosmetique_id)",
          "A player owns a cosmetic only once."),
+        ("un_objet", "check((cape_id IS NULL) <> (cosmetique_id IS NULL))",
+         "An ownership is either a cape or a cosmetic."),
     ]
-
-    @api.constrains("cape_id", "cosmetique_id")
-    def _check_un_objet(self):
-        for possession in self:
-            if bool(possession.cape_id) == bool(possession.cosmetique_id):
-                raise ValidationError(_("An ownership is either a cape or a cosmetic."))
 
     def unlink(self):
         for possession in self:

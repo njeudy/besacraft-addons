@@ -1,4 +1,6 @@
-from odoo.exceptions import UserError, ValidationError
+from psycopg2 import IntegrityError
+
+from odoo.exceptions import UserError
 from odoo.tests import common, tagged
 from odoo.tools import mute_logger
 
@@ -132,9 +134,10 @@ class TestPoints(PointsCommon):
 
     @mute_logger("odoo.sql_db")
     def test_possession_cape_ou_cosmetique(self):
-        with self.assertRaises(ValidationError):
+        with self.assertRaises(IntegrityError):
             self.env["besacraft.vestiaire.possession"].create(
                 {"partner_id": self.zoe.id, "origine": "offert"})
+            self.env.flush_all()
 
     def test_nouvelles_annoncees_une_fois(self):
         self.zoe._vestiaire_crediter(50, "cadeau", "Bravo pour le pont")
