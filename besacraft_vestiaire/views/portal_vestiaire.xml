@@ -81,6 +81,27 @@
                         </button>
                     </div>
                 </form>
+
+                <h2 class="h5 mt-4">Points</h2>
+                <p>Balance: <strong t-out="points"/> points. You earn them by playing, and spend them in the in-game wardrobe (key V).</p>
+                <table t-if="mouvements" class="table table-sm o_vestiaire_mouvements">
+                    <thead><tr><th>Date</th><th>What</th><th class="text-end">Points</th></tr></thead>
+                    <tbody>
+                        <tr t-foreach="mouvements" t-as="mouvement">
+                            <td t-out="mouvement.date" t-options="{'widget': 'date'}"/>
+                            <td t-out="mouvement.libelle or mouvement.motif"/>
+                            <td class="text-end" t-out="mouvement.points"/>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h2 class="h5 mt-4">Cosmetics and emotes</h2>
+                <p t-if="not possede" class="text-muted">You do not own any cosmetic yet.</p>
+                <ul t-else="" class="list-inline o_vestiaire_possede">
+                    <li t-foreach="possede" t-as="objet" class="list-inline-item badge text-bg-light">
+                        <t t-out="objet.name"/>
+                    </li>
+                </ul>
             </div>
         </t>
     </template>

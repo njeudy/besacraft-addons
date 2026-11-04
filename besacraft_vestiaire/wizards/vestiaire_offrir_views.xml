@@ -7,7 +7,12 @@
             <form>
                 <group>
                     <field name="partner_ids" widget="many2many_tags"/>
-                    <field name="cape_id"/>
+                    <field name="quoi" widget="radio"/>
+                    <field name="cape_id" invisible="quoi != 'cape'" required="quoi == 'cape'"/>
+                    <field name="cosmetique_id" invisible="quoi != 'cosmetique'"
+                           required="quoi == 'cosmetique'"/>
+                    <field name="points" invisible="quoi != 'points'"/>
+                    <field name="libelle" invisible="quoi != 'points'"/>
                 </group>
                 <footer>
                     <button name="action_offrir" type="object" string="Give" class="btn-primary"/>
@@ -18,7 +23,7 @@
     </record>
 
     <record id="vestiaire_offrir_action" model="ir.actions.act_window">
-        <field name="name">Give a cape</field>
+        <field name="name">Give</field>
         <field name="res_model">besacraft.vestiaire.offrir</field>
         <field name="view_mode">form</field>
         <field name="target">new</field>

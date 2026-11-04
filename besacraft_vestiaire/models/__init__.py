@@ -3,4 +3,9 @@ from . import vestiaire_code
 from . import vestiaire_demande
 from . import vestiaire_skin
 from . import vestiaire_cape
+from . import vestiaire_cosmetique
 from . import vestiaire_possession
+from . import vestiaire_mouvement
+from . import vestiaire_bareme
+from . import vestiaire_case
+from . import vestiaire_cle_serveur

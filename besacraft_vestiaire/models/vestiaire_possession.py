@@ -1,4 +1,5 @@
-from odoo import fields, models
+from odoo import _, api, fields, models
+from odoo.exceptions import ValidationError
 
 
 class BesacraftVestiairePossession(models.Model):
@@ -6,17 +7,32 @@ class BesacraftVestiairePossession(models.Model):
     _description = "Wardrobe ownership"
 
     partner_id = fields.Many2one("res.partner", required=True, ondelete="cascade", index=True)
-    cape_id = fields.Many2one("besacraft.vestiaire.cape", required=True, ondelete="cascade")
-    origine = fields.Selection([("offert", "Gift")], string="Origin",
-                               required=True, default="offert")
+    cape_id = fields.Many2one("besacraft.vestiaire.cape", ondelete="cascade")
+    cosmetique_id = fields.Many2one("besacraft.vestiaire.cosmetique", string="Cosmetic or emote",
+                                    ondelete="cascade")
+    origine = fields.Selection([("offert", "Gift"), ("achat", "Purchase"), ("gagne", "Reward")],
+                               string="Origin", required=True, default="offert")
     date = fields.Datetime(default=fields.Datetime.now, required=True)
+    annonce = fields.Boolean(string="Announced in game")
 
-    _sql_constraints = [("unique_cape", "unique(partner_id, cape_id)",
-                         "A player owns a cape only once.")]
+    _sql_constraints = [
+        ("unique_cape", "unique(partner_id, cape_id)", "A player owns a cape only once."),
+        ("unique_cosmetique", "unique(partner_id, cosmetique_id)",
+         "A player owns a cosmetic only once."),
+    ]
+
+    @api.constrains("cape_id", "cosmetique_id")
+    def _check_un_objet(self):
+        for possession in self:
+            if bool(possession.cape_id) == bool(possession.cosmetique_id):
+                raise ValidationError(_("An ownership is either a cape or a cosmetic."))
 
     def unlink(self):
         for possession in self:
             partner = possession.partner_id.sudo()
-            if partner.vestiaire_cape_id == possession.cape_id:
+            if possession.cape_id and partner.vestiaire_cape_id == possession.cape_id:
                 partner.vestiaire_cape_id = False
-        return super().unlink()
+        partners = self.partner_id.sudo()
+        resultat = super().unlink()
+        partners._vestiaire_ranger()
+        return resultat

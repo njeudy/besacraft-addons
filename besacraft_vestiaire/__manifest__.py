@@ -1,11 +1,11 @@
 {
     "name": "Besacraft — Wardrobe",
-    "version": "18.0.1.0.0",
+    "version": "18.0.1.1.0",
     "license": "LGPL-3",
     "author": "Nicolas JEUDY",
     "website": "https://besacraft.fr",
     "category": "Besacraft",
-    "summary": "Account requests, skins and capes for the Besacraft players",
+    "summary": "Account requests, skins, capes, cosmetics, emotes and points for the Besacraft players",
     "depends": ["besacraft_minecraft_api", "besacraft_base", "portal", "website", "mail"],
     "data": [
         "security/groups.xml",
@@ -15,6 +15,8 @@
         "views/vestiaire_demande_views.xml",
         "views/website_demande.xml",
         "views/vestiaire_cape_views.xml",
+        "views/vestiaire_points_views.xml",
+        "data/vestiaire_catalogue_v50.xml",
         "wizards/vestiaire_offrir_views.xml",
         "views/vestiaire_skin_views.xml",
         "views/portal_vestiaire.xml",

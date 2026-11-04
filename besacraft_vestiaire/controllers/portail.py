@@ -25,6 +25,8 @@ class VestiairePortail(CustomerPortal):
         return request.render("besacraft_vestiaire.portal_vestiaire", {
             "partner": partner, "skins": sudo.vestiaire_skin_ids,
             "capes": sudo._vestiaire_capes(), "cape_portee": sudo.vestiaire_cape_id,
+            "possede": sudo._vestiaire_possede(), "points": sudo.vestiaire_points,
+            "mouvements": sudo.vestiaire_mouvement_ids[:50],
             "erreur": erreur, "page_name": "vestiaire"})
 
     @http.route("/my/vestiaire", type="http", auth="user", website=True)

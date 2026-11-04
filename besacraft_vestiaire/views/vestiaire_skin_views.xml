@@ -19,15 +19,35 @@
                         </list>
                     </field>
                     <button name="%(besacraft_vestiaire.vestiaire_offrir_action)d" type="action"
-                            string="Give a cape"/>
+                            string="Give"/>
                     <group>
                         <field name="vestiaire_cape_id"/>
                     </group>
                     <field name="vestiaire_possession_ids" context="{'default_partner_id': id}">
                         <list editable="bottom">
                             <field name="cape_id"/>
+                            <field name="cosmetique_id"/>
                             <field name="origine"/>
                             <field name="date"/>
+                        </list>
+                    </field>
+                    <group>
+                        <field name="vestiaire_points"/>
+                        <field name="vestiaire_tenue_ids" widget="many2many_tags"/>
+                    </group>
+                    <field name="vestiaire_case_ids" context="{'default_partner_id': id}">
+                        <list editable="bottom">
+                            <field name="index"/>
+                            <field name="emote_id"/>
+                        </list>
+                    </field>
+                    <field name="vestiaire_mouvement_ids" readonly="1">
+                        <list>
+                            <field name="date"/>
+                            <field name="motif"/>
+                            <field name="libelle"/>
+                            <field name="reference"/>
+                            <field name="points" sum="Balance"/>
                         </list>
                     </field>
                 </page>
