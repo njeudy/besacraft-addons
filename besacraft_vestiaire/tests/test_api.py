@@ -32,4 +32,7 @@ class TestApi(common.HttpCase):
             "groups_id": [(6, 0, [self.env.ref("base.group_portal").id])]})
         r = self._moi(self.jeton)
         self.assertEqual(r.status_code, 200)
-        self.assertEqual(r.json(), {"pseudo": "zoejeudy", "skin": None, "cape": None})
+        corps = r.json()
+        self.assertEqual({k: corps[k] for k in ("pseudo", "skin", "cape", "points", "tenue")},
+                         {"pseudo": "zoejeudy", "skin": None, "cape": None, "points": 0,
+                          "tenue": []})
