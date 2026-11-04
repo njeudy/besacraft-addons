@@ -3,6 +3,8 @@ import re
 from odoo import api, fields, models
 from odoo.exceptions import ValidationError
 
+from .youtube import youtube_id
+
 CODE_RE = re.compile(r"^\d+$")
 
 
@@ -37,7 +39,19 @@ class BesacraftBuild(models.Model):
                        help="Editorial title, accented. Not the schematic's technical name.")
     code = fields.Char(required=True, index=True, copy=False,
                        help="Tutorial number, zero-padded to three digits: 043 -> /t/43.")
-    serie_id = fields.Many2one("besacraft.serie", required=True, ondelete="restrict")
+    # La série PRINCIPALE : celle dont le build porte la pastille et la couleur, et dont
+    # le mode visuel habille sa page. Un build appartient toujours à une série -- c'est sa
+    # maison -- mais il peut se montrer dans d'autres.
+    serie_id = fields.Many2one("besacraft.serie", "Main Series",
+                               required=True, ondelete="restrict")
+    # Les séries SUPPLÉMENTAIRES. Une ferme Create est un bâtiment de la survie et une
+    # machine du steampunk : la ranger dans une seule obligeait à choisir, et le lecteur
+    # qui parcourt l'autre série ne la trouvait pas. Les sites suivent : un build se montre
+    # partout où l'une de ses séries est publiée.
+    serie_ids = fields.Many2many(
+        "besacraft.serie", "besacraft_build_serie_extra_rel", "build_id", "serie_id",
+        string="Also In", domain="[('id', '!=', serie_id)]",
+        help="Further series whose catalogue lists this build, besides its main one.")
     accroche = fields.Text("Tagline", translate=True)
     level = fields.Selection(
         [("debutant", "Beginner"), ("confirme", "Confident"), ("forgeron", "Blacksmith")],
@@ -63,10 +77,17 @@ class BesacraftBuild(models.Model):
         "Box",
         help="The build's box, rendered by buildplan. This is what the shop shows: a "
              "bare render looks like a screenshot, a box looks like something you buy.")
-    youtube_url = fields.Char()
+    youtube_url = fields.Char(help="The series episode this build was built in.")
     short_video = fields.Binary(
         "Vertical Short", attachment=True,
         help="The 9:16 video of the build, played on the build page.")
+    # Le short reste servi depuis Odoo : la page d'un tuto payant n'emprunte pas son
+    # lecteur à YouTube, qui demanderait des cookies tiers et proposerait la concurrence
+    # à la fin. L'adresse YouTube n'est là que pour renvoyer vers la publication.
+    short_youtube_url = fields.Char(
+        "Short on YouTube", help="Where the vertical short was published. Any YouTube "
+                                 "address form works; the id is read from it.")
+    short_youtube_id = fields.Char(compute="_compute_short_youtube_id")
     # Les positions de tous les blocs, couche par couche, pour l'hologramme du site. Jamais
     # lu avec la fiche : `prefetch=False` garde ce texte (plusieurs centaines de Ko sur un
     # gros build) hors des chargements de listes.
@@ -288,6 +309,11 @@ Jouable en survie — aucun bloc inaccessible, aucune commande, aucun mod obliga
             montant = montant.replace(",", "\u202f").replace(".", ",")
             build.price_label = "%s\u00a0%s" % (montant, symbole)
 
+    @api.depends("short_youtube_url")
+    def _compute_short_youtube_id(self):
+        for build in self:
+            build.short_youtube_id = youtube_id(build.short_youtube_url)
+
     def is_accessible_by(self, partner):
         """True when this partner may see the viewer and the notice."""
         self.ensure_one()
@@ -305,14 +331,33 @@ Jouable en survie — aucun bloc inaccessible, aucune commande, aucun mod obliga
             build.website_url = "/t/%d" % int(build.code) if build.code else ""
 
     @api.model
+    def series(self):
+        """Every series this build belongs to, its main one first.
+
+        Read through this rather than `serie_id` wherever the question is "does this build
+        belong to that series": a build shown in several series answers yes to each.
+        """
+        return self.serie_id | self.serie_ids
+
+    @api.model
+    def _domaine_series(self, series):
+        """Builds filed under any of `series`, as a main series or as an extra one.
+
+        Takes a recordset rather than one series: a build's neighbours are the ones sharing
+        ANY of its series, and a farm filed in both survival and steampunk has neighbours
+        on both shelves.
+        """
+        return ["|", ("serie_id", "in", series.ids), ("serie_ids", "in", series.ids)]
+
     def _domaine_site(self, website):
-        """The builds a site shows: those whose series it publishes."""
-        return [("serie_id.website_ids", "in", website.id)]
+        """The builds a site shows: those one of whose series it publishes."""
+        return ["|", ("serie_id.website_ids", "in", website.id),
+                ("serie_ids.website_ids", "in", website.id)]
 
     def is_shown_on(self, website):
-        """True when this build's series is published on that site."""
+        """True when one of this build's series is published on that site."""
         self.ensure_one()
-        return website in self.serie_id.website_ids
+        return bool(website & self.series().website_ids)
 
     def _search_get_detail(self, website, order, options):
         """What the site's search box knows about a tutorial.

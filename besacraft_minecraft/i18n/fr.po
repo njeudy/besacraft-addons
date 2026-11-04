@@ -1,0 +1,67 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* besacraft_minecraft
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 18.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-16 16:45+0000\n"
+"PO-Revision-Date: 2026-10-16 16:45+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+
+#. module: besacraft_minecraft
+#: model:ir.model.fields,field_description:besacraft_minecraft.field_besacraft_item__active
+msgid "Active"
+msgstr "Actif"
+
+#. module: besacraft_minecraft
+#: model:ir.ui.menu,name:besacraft_minecraft.besacraft_menu_items
+msgid "Blocs"
+msgstr "Blocs"
+
+#. module: besacraft_minecraft
+#: model:ir.actions.act_window,name:besacraft_minecraft.besacraft_item_action
+msgid "Blocs Minecraft"
+msgstr "Blocs Minecraft"
+
+#. module: besacraft_minecraft
+#: model:ir.model.fields,field_description:besacraft_minecraft.field_besacraft_product_line__create_uid
+#: model:ir.model.fields,field_description:besacraft_minecraft.field_besacraft_item__create_uid
+msgid "Created by"
+msgstr "Créé par"
+
+#. module: besacraft_minecraft
+#: model:ir.model.fields,field_description:besacraft_minecraft.field_besacraft_product_line__create_date
+#: model:ir.model.fields,field_description:besacraft_minecraft.field_besacraft_item__create_date
+msgid "Created on"
+msgstr "Créé le"
+
+#. module: besacraft_minecraft
+#: model:ir.model.fields,field_description:besacraft_minecraft.field_besacraft_product_line__display_name
+#: model:ir.model.fields,field_description:besacraft_minecraft.field_besacraft_item__display_name
+msgid "Display Name"
+msgstr "Nom affiché"
+
+#. module: besacraft_minecraft
+#: model:ir.model.fields,field_description:besacraft_minecraft.field_besacraft_product_line__write_uid
+#: model:ir.model.fields,field_description:besacraft_minecraft.field_besacraft_item__write_uid
+msgid "Last Updated by"
+msgstr "Dernière modification par"
+
+#. module: besacraft_minecraft
+#: model:ir.model.fields,field_description:besacraft_minecraft.field_besacraft_item__write_date
+#: model:ir.model.fields,field_description:besacraft_minecraft.field_besacraft_product_line__write_date
+msgid "Last Updated on"
+msgstr "Dernière modification le"
+
+#. module: besacraft_minecraft
+#: model:ir.model.fields,field_description:besacraft_minecraft.field_besacraft_product_line__sequence
+msgid "Sequence"
+msgstr "Séquence"

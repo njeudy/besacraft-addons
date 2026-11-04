@@ -1,0 +1,10 @@
+<odoo>
+    <!-- La racine vit ICI, dans la dépendance commune, et nulle part ailleurs.
+         `besacraft_builds` et `besacraft_minecraft` en déclaraient chacun une, du même
+         nom : installés ensemble, ils donnaient deux entrées « Besacraft » dans le
+         sélecteur d'applications, dont une sans action — elle avait l'air cassée.
+         Les deux modules dépendent de celui-ci : c'est le seul endroit où la racine
+         ne peut pas être déclarée deux fois. -->
+    <menuitem id="menu_root" name="Besacraft" sequence="90"
+              web_icon="besacraft_base,static/description/icon.png"/>
+</odoo>

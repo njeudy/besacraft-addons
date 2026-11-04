@@ -2,7 +2,7 @@
 /**
  * Catalogue : filtres, tri et recherche.
  *
- * Tout se fait sur les cartes déjà présentes dans la page (data-serie, data-acces,
+ * Tout se fait sur les cartes déjà présentes dans la page (data-series, data-acces,
  * data-blocs, data-couches, data-code, data-nom) : le catalogue tient en quelques dizaines
  * de cartes, et un aller-retour serveur par clic serait plus lent que de les masquer.
  * Sans JavaScript la page reste complète, simplement non filtrée.
@@ -65,7 +65,9 @@ publicWidget.registry.BesacraftCatalogue = publicWidget.Widget.extend({
         let visibles = 0;
         for (const c of this.cases) {
             const d = c.firstElementChild.dataset;
-            const ok = (serie === "tout" || d.serie === serie)
+            // Un build peut tenir dans plusieurs séries : la carte les liste toutes,
+            // et le filtre retient celles où la série demandée figure.
+            const ok = (serie === "tout" || (d.series || "").split(" ").includes(serie))
                 && (acces === "tout" || d.acces === acces)
                 && (!terme || (d.nom || "").includes(terme) || d.code.includes(terme));
             c.hidden = !ok;

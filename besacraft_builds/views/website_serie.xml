@@ -138,7 +138,7 @@
                                     <ul>
                                         <li t-foreach="vus[episode.id]" t-as="vu">
                                             <a t-attf-href="/builds/#{int(vu.code)}" class="bc-mini-carte bc-lueur">
-                                                <img t-attf-src="/web/image/besacraft.build/#{vu.id}/#{vu.id in avec_boite and 'box_image' or 'overview_image'}"
+                                                <img t-attf-src="/web/image/besacraft.build/#{vu.id}/#{vu.id in avec_boite and 'box_image' or 'overview_image'}/192x192"
                                                      alt="" width="96" height="96" loading="lazy"/>
                                                 <span><b>N°<t t-out="vu.code"/></b> <t t-out="vu.name"/></span>
                                             </a>

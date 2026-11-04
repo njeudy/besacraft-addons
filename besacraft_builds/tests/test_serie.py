@@ -16,6 +16,18 @@ class TestSerie(TransactionCase):
         self.assertEqual(serie.visual_mode, "notice")
 
     def test_zunk_garde_son_code(self):
-        """Renommée, pas recodée : les étiquettes `serie:hardcore` des tâches tiennent."""
+        """Renamed, not recoded: the `serie:hardcore` tags on the tasks still match."""
         serie = self.env.ref("besacraft_builds.serie_hardcore")
         self.assertEqual((serie.name, serie.code), ("Les aventures de Zunk", "hardcore"))
+
+    def test_le_badge_steampunk_est_en_cuivre(self):
+        """The copper block's own tone. It shipped as a charter bronze first, which said
+        nothing about what the series builds."""
+        serie = self.env.ref("besacraft_builds.serie_steampunk")
+        self.assertEqual(serie.color, "#C06C50")
+
+    def test_deux_series_ne_partagent_pas_leur_badge(self):
+        """A badge names its series at a glance; two series in one colour cannot. Steampunk
+        and Zunk are the close pair -- copper against red -- so this is where it would go."""
+        couleurs = self.env["besacraft.serie"].search([]).mapped("color")
+        self.assertEqual(len(set(couleurs)), len(couleurs), couleurs)

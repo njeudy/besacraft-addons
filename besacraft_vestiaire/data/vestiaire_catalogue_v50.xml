@@ -1,0 +1,414 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <!-- Everything the v50 pack shipped stays owned by everyone. -->
+    <record id="cosmetique_chapeau_sorcier" model="besacraft.vestiaire.cosmetique">
+        <field name="code">chapeau_sorcier</field>
+        <field name="name">Chapeau de sorcier</field>
+        <field name="genre">cosmetique</field>
+        <field name="emplacement">chapeau</field>
+        <field name="sequence">10</field>
+        <field name="de_base" eval="True"/>
+    </record>
+    <record id="cosmetique_chat_tete" model="besacraft.vestiaire.cosmetique">
+        <field name="code">chat_tete</field>
+        <field name="name">Chat perché</field>
+        <field name="genre">cosmetique</field>
+        <field name="emplacement">familier_tete</field>
+        <field name="sequence">20</field>
+        <field name="de_base" eval="True"/>
+    </record>
+    <record id="cosmetique_ailes_dragon" model="besacraft.vestiaire.cosmetique">
+        <field name="code">ailes_dragon</field>
+        <field name="name">Ailes de dragon</field>
+        <field name="genre">cosmetique</field>
+        <field name="emplacement">ailes</field>
+        <field name="sequence">30</field>
+        <field name="de_base" eval="True"/>
+    </record>
+    <record id="cosmetique_cape_test" model="besacraft.vestiaire.cosmetique">
+        <field name="code">cape_test</field>
+        <field name="name">Cape de Besacraft</field>
+        <field name="genre">cosmetique</field>
+        <field name="emplacement">cape</field>
+        <field name="sequence">40</field>
+        <field name="de_base" eval="True"/>
+    </record>
+    <record id="cosmetique_queue_renard" model="besacraft.vestiaire.cosmetique">
+        <field name="code">queue_renard</field>
+        <field name="name">Queue de renard</field>
+        <field name="genre">cosmetique</field>
+        <field name="emplacement">queue</field>
+        <field name="sequence">50</field>
+        <field name="de_base" eval="True"/>
+    </record>
+    <record id="cosmetique_bottes_test" model="besacraft.vestiaire.cosmetique">
+        <field name="code">bottes_test</field>
+        <field name="name">Bottes fourrées</field>
+        <field name="genre">cosmetique</field>
+        <field name="emplacement">chaussures</field>
+        <field name="sequence">60</field>
+        <field name="de_base" eval="True"/>
+    </record>
+    <record id="cosmetique_poings_flamme" model="besacraft.vestiaire.cosmetique">
+        <field name="code">poings_flamme</field>
+        <field name="name">Poings enflammés</field>
+        <field name="genre">cosmetique</field>
+        <field name="emplacement">bras</field>
+        <field name="sequence">70</field>
+        <field name="de_base" eval="True"/>
+    </record>
+    <record id="cosmetique_familier_epaule" model="besacraft.vestiaire.cosmetique">
+        <field name="code">familier_epaule</field>
+        <field name="name">Chouette d'épaule</field>
+        <field name="genre">cosmetique</field>
+        <field name="emplacement">familier_epaule</field>
+        <field name="sequence">80</field>
+        <field name="de_base" eval="True"/>
+    </record>
+    <record id="cosmetique_tete_dragon" model="besacraft.vestiaire.cosmetique">
+        <field name="code">tete_dragon</field>
+        <field name="name">Tête de dragon</field>
+        <field name="genre">cosmetique</field>
+        <field name="emplacement">tete</field>
+        <field name="sequence">90</field>
+        <field name="de_base" eval="True"/>
+    </record>
+    <record id="cosmetique_aura_braises" model="besacraft.vestiaire.cosmetique">
+        <field name="code">aura_braises</field>
+        <field name="name">Aura de braises</field>
+        <field name="genre">cosmetique</field>
+        <field name="emplacement">effet</field>
+        <field name="sequence">100</field>
+        <field name="de_base" eval="True"/>
+    </record>
+    <record id="cosmetique_traine_etoiles" model="besacraft.vestiaire.cosmetique">
+        <field name="code">traine_etoiles</field>
+        <field name="name">Traînée d'étoiles</field>
+        <field name="genre">cosmetique</field>
+        <field name="emplacement">effet</field>
+        <field name="sequence">110</field>
+        <field name="de_base" eval="True"/>
+    </record>
+    <record id="emote_bow1" model="besacraft.vestiaire.cosmetique">
+        <field name="code">bow1</field>
+        <field name="name">Révérence</field>
+        <field name="genre">emote</field>
+        <field name="sequence">10</field>
+        <field name="de_base" eval="True"/>
+    </record>
+    <record id="emote_floss" model="besacraft.vestiaire.cosmetique">
+        <field name="code">floss</field>
+        <field name="name">Floss</field>
+        <field name="genre">emote</field>
+        <field name="sequence">20</field>
+        <field name="de_base" eval="True"/>
+    </record>
+    <record id="emote_heart" model="besacraft.vestiaire.cosmetique">
+        <field name="code">heart</field>
+        <field name="name">Cœur</field>
+        <field name="genre">emote</field>
+        <field name="sequence">30</field>
+        <field name="de_base" eval="True"/>
+    </record>
+    <record id="emote_sit" model="besacraft.vestiaire.cosmetique">
+        <field name="code">sit</field>
+        <field name="name">S'asseoir</field>
+        <field name="genre">emote</field>
+        <field name="sequence">40</field>
+        <field name="de_base" eval="True"/>
+    </record>
+    <record id="emote_bow2" model="besacraft.vestiaire.cosmetique">
+        <field name="code">bow2</field>
+        <field name="name">Salut respectueux</field>
+        <field name="genre">emote</field>
+        <field name="sequence">50</field>
+        <field name="de_base" eval="True"/>
+    </record>
+    <record id="emote_hommage" model="besacraft.vestiaire.cosmetique">
+        <field name="code">hommage</field>
+        <field name="name">Rendre hommage</field>
+        <field name="genre">emote</field>
+        <field name="sequence">60</field>
+        <field name="de_base" eval="True"/>
+    </record>
+    <record id="emote_inspecter" model="besacraft.vestiaire.cosmetique">
+        <field name="code">inspecter</field>
+        <field name="name">Inspecter</field>
+        <field name="genre">emote</field>
+        <field name="sequence">70</field>
+        <field name="de_base" eval="True"/>
+    </record>
+    <record id="emote_feu_de_camp" model="besacraft.vestiaire.cosmetique">
+        <field name="code">feu_de_camp</field>
+        <field name="name">Au coin du feu</field>
+        <field name="genre">emote</field>
+        <field name="sequence">80</field>
+        <field name="de_base" eval="True"/>
+    </record>
+    <record id="emote_assis_cool" model="besacraft.vestiaire.cosmetique">
+        <field name="code">assis_cool</field>
+        <field name="name">Assis, tranquille</field>
+        <field name="genre">emote</field>
+        <field name="sequence">90</field>
+        <field name="de_base" eval="True"/>
+    </record>
+    <record id="emote_signe_croix" model="besacraft.vestiaire.cosmetique">
+        <field name="code">signe_croix</field>
+        <field name="name">Signe de croix</field>
+        <field name="genre">emote</field>
+        <field name="sequence">100</field>
+        <field name="de_base" eval="True"/>
+    </record>
+    <record id="emote_dab" model="besacraft.vestiaire.cosmetique">
+        <field name="code">dab</field>
+        <field name="name">Dab</field>
+        <field name="genre">emote</field>
+        <field name="sequence">110</field>
+        <field name="de_base" eval="True"/>
+    </record>
+    <record id="emote_grace" model="besacraft.vestiaire.cosmetique">
+        <field name="code">grace</field>
+        <field name="name">Grâce</field>
+        <field name="genre">emote</field>
+        <field name="sequence">120</field>
+        <field name="de_base" eval="True"/>
+    </record>
+    <record id="emote_jongle_tete" model="besacraft.vestiaire.cosmetique">
+        <field name="code">jongle_tete</field>
+        <field name="name">Jongler avec sa tête</field>
+        <field name="genre">emote</field>
+        <field name="sequence">130</field>
+        <field name="de_base" eval="True"/>
+    </record>
+    <record id="emote_lancer_tete" model="besacraft.vestiaire.cosmetique">
+        <field name="code">lancer_tete</field>
+        <field name="name">Lancer sa tête</field>
+        <field name="genre">emote</field>
+        <field name="sequence">140</field>
+        <field name="de_base" eval="True"/>
+    </record>
+    <record id="emote_coeur_mains" model="besacraft.vestiaire.cosmetique">
+        <field name="code">coeur_mains</field>
+        <field name="name">Cœur avec les mains</field>
+        <field name="genre">emote</field>
+        <field name="sequence">150</field>
+        <field name="de_base" eval="True"/>
+    </record>
+    <record id="emote_calin" model="besacraft.vestiaire.cosmetique">
+        <field name="code">calin</field>
+        <field name="name">Câlin</field>
+        <field name="genre">emote</field>
+        <field name="sequence">160</field>
+        <field name="de_base" eval="True"/>
+    </record>
+    <record id="emote_mal_de_dos" model="besacraft.vestiaire.cosmetique">
+        <field name="code">mal_de_dos</field>
+        <field name="name">Mal de dos</field>
+        <field name="genre">emote</field>
+        <field name="sequence">170</field>
+        <field name="de_base" eval="True"/>
+    </record>
+    <record id="emote_en_morceaux" model="besacraft.vestiaire.cosmetique">
+        <field name="code">en_morceaux</field>
+        <field name="name">En morceaux</field>
+        <field name="genre">emote</field>
+        <field name="sequence">180</field>
+        <field name="de_base" eval="True"/>
+    </record>
+    <record id="emote_regarder_objet" model="besacraft.vestiaire.cosmetique">
+        <field name="code">regarder_objet</field>
+        <field name="name">Regarder l'objet</field>
+        <field name="genre">emote</field>
+        <field name="sequence">190</field>
+        <field name="de_base" eval="True"/>
+    </record>
+    <record id="emote_saut" model="besacraft.vestiaire.cosmetique">
+        <field name="code">saut</field>
+        <field name="name">Saut</field>
+        <field name="genre">emote</field>
+        <field name="sequence">200</field>
+        <field name="de_base" eval="True"/>
+    </record>
+    <record id="emote_jumping_jacks" model="besacraft.vestiaire.cosmetique">
+        <field name="code">jumping_jacks</field>
+        <field name="name">Jumping jacks</field>
+        <field name="genre">emote</field>
+        <field name="sequence">210</field>
+        <field name="de_base" eval="True"/>
+    </record>
+    <record id="emote_allonge" model="besacraft.vestiaire.cosmetique">
+        <field name="code">allonge</field>
+        <field name="name">S'allonger</field>
+        <field name="genre">emote</field>
+        <field name="sequence">220</field>
+        <field name="de_base" eval="True"/>
+    </record>
+    <record id="emote_adosse" model="besacraft.vestiaire.cosmetique">
+        <field name="code">adosse</field>
+        <field name="name">S'adosser</field>
+        <field name="genre">emote</field>
+        <field name="sequence">230</field>
+        <field name="de_base" eval="True"/>
+    </record>
+    <record id="emote_sur_le_dos" model="besacraft.vestiaire.cosmetique">
+        <field name="code">sur_le_dos</field>
+        <field name="name">Sur le dos</field>
+        <field name="genre">emote</field>
+        <field name="sequence">240</field>
+        <field name="de_base" eval="True"/>
+    </record>
+    <record id="emote_regarder_autour" model="besacraft.vestiaire.cosmetique">
+        <field name="code">regarder_autour</field>
+        <field name="name">Regarder autour</field>
+        <field name="genre">emote</field>
+        <field name="sequence">250</field>
+        <field name="de_base" eval="True"/>
+    </record>
+    <record id="emote_gestes" model="besacraft.vestiaire.cosmetique">
+        <field name="code">gestes</field>
+        <field name="name">Gesticuler</field>
+        <field name="genre">emote</field>
+        <field name="sequence">260</field>
+        <field name="de_base" eval="True"/>
+    </record>
+    <record id="emote_meditation" model="besacraft.vestiaire.cosmetique">
+        <field name="code">meditation</field>
+        <field name="name">Méditation</field>
+        <field name="genre">emote</field>
+        <field name="sequence">270</field>
+        <field name="de_base" eval="True"/>
+    </record>
+    <record id="emote_coucou" model="besacraft.vestiaire.cosmetique">
+        <field name="code">coucou</field>
+        <field name="name">Coucou</field>
+        <field name="genre">emote</field>
+        <field name="sequence">280</field>
+        <field name="de_base" eval="True"/>
+    </record>
+    <record id="emote_course_ninja" model="besacraft.vestiaire.cosmetique">
+        <field name="code">course_ninja</field>
+        <field name="name">Course ninja</field>
+        <field name="genre">emote</field>
+        <field name="sequence">290</field>
+        <field name="de_base" eval="True"/>
+    </record>
+    <record id="emote_timide" model="besacraft.vestiaire.cosmetique">
+        <field name="code">timide</field>
+        <field name="name">Timide</field>
+        <field name="genre">emote</field>
+        <field name="sequence">300</field>
+        <field name="de_base" eval="True"/>
+    </record>
+    <record id="emote_pingouin" model="besacraft.vestiaire.cosmetique">
+        <field name="code">pingouin</field>
+        <field name="name">Pingouin</field>
+        <field name="genre">emote</field>
+        <field name="sequence">310</field>
+        <field name="de_base" eval="True"/>
+    </record>
+    <record id="emote_selfie" model="besacraft.vestiaire.cosmetique">
+        <field name="code">selfie</field>
+        <field name="name">Selfie</field>
+        <field name="genre">emote</field>
+        <field name="sequence">320</field>
+        <field name="de_base" eval="True"/>
+    </record>
+    <record id="emote_non_de_la_tete" model="besacraft.vestiaire.cosmetique">
+        <field name="code">non_de_la_tete</field>
+        <field name="name">Non de la tête</field>
+        <field name="genre">emote</field>
+        <field name="sequence">330</field>
+        <field name="de_base" eval="True"/>
+    </record>
+    <record id="emote_tpose" model="besacraft.vestiaire.cosmetique">
+        <field name="code">tpose</field>
+        <field name="name">T-pose</field>
+        <field name="genre">emote</field>
+        <field name="sequence">340</field>
+        <field name="de_base" eval="True"/>
+    </record>
+    <record id="emote_salut_dragon" model="besacraft.vestiaire.cosmetique">
+        <field name="code">salut_dragon</field>
+        <field name="name">Salut du dragon</field>
+        <field name="genre">emote</field>
+        <field name="sequence">350</field>
+        <field name="de_base" eval="True"/>
+    </record>
+    <record id="emote_guitare" model="besacraft.vestiaire.cosmetique">
+        <field name="code">guitare</field>
+        <field name="name">Guitare électrique</field>
+        <field name="genre">emote</field>
+        <field name="sequence">360</field>
+        <field name="de_base" eval="True"/>
+    </record>
+    <record id="emote_coup_de_pioche" model="besacraft.vestiaire.cosmetique">
+        <field name="code">coup_de_pioche</field>
+        <field name="name">Coup de pioche</field>
+        <field name="genre">emote</field>
+        <field name="sequence">370</field>
+        <field name="de_base" eval="True"/>
+    </record>
+    <record id="emote_salut_chevalier" model="besacraft.vestiaire.cosmetique">
+        <field name="code">salut_chevalier</field>
+        <field name="name">Salut du chevalier</field>
+        <field name="genre">emote</field>
+        <field name="sequence">380</field>
+        <field name="de_base" eval="True"/>
+    </record>
+    <record id="emote_serment" model="besacraft.vestiaire.cosmetique">
+        <field name="code">serment</field>
+        <field name="name">Serment du chevalier</field>
+        <field name="genre">emote</field>
+        <field name="sequence">390</field>
+        <field name="de_base" eval="True"/>
+    </record>
+    <record id="emote_adoubement" model="besacraft.vestiaire.cosmetique">
+        <field name="code">adoubement</field>
+        <field name="name">Adoubement</field>
+        <field name="genre">emote</field>
+        <field name="sequence">400</field>
+        <field name="de_base" eval="True"/>
+    </record>
+    <record id="emote_danse_comtoise" model="besacraft.vestiaire.cosmetique">
+        <field name="code">danse_comtoise</field>
+        <field name="name">Danse comtoise</field>
+        <field name="genre">emote</field>
+        <field name="sequence">410</field>
+        <field name="de_base" eval="True"/>
+    </record>
+    <record id="emote_comte" model="besacraft.vestiaire.cosmetique">
+        <field name="code">comte</field>
+        <field name="name">Comté !</field>
+        <field name="genre">emote</field>
+        <field name="sequence">420</field>
+        <field name="de_base" eval="True"/>
+    </record>
+    <record id="emote_envol_dragon" model="besacraft.vestiaire.cosmetique">
+        <field name="code">envol_dragon</field>
+        <field name="name">Envol du dragon</field>
+        <field name="genre">emote</field>
+        <field name="sequence">430</field>
+        <field name="de_base" eval="True"/>
+    </record>
+    <record id="emote_pause_batisseur" model="besacraft.vestiaire.cosmetique">
+        <field name="code">pause_batisseur</field>
+        <field name="name">Pause du bâtisseur</field>
+        <field name="genre">emote</field>
+        <field name="sequence">440</field>
+        <field name="de_base" eval="True"/>
+    </record>
+    <record id="emote_horloge_comtoise" model="besacraft.vestiaire.cosmetique">
+        <field name="code">horloge_comtoise</field>
+        <field name="name">Horloge comtoise</field>
+        <field name="genre">emote</field>
+        <field name="sequence">450</field>
+        <field name="de_base" eval="True"/>
+    </record>
+    <record id="emote_fanfare" model="besacraft.vestiaire.cosmetique">
+        <field name="code">fanfare</field>
+        <field name="name">Trompette de fanfare</field>
+        <field name="genre">emote</field>
+        <field name="sequence">460</field>
+        <field name="de_base" eval="True"/>
+    </record>
+</odoo>

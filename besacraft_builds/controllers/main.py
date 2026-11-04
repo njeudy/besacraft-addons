@@ -2,6 +2,8 @@ import base64
 import json
 import random
 
+import werkzeug
+
 from odoo import http
 from odoo.http import request
 
@@ -114,7 +116,7 @@ class BesacraftBuilds(http.Controller):
         series = request.website._besacraft_series()
         # Le compteur de chaque filtre se lit sur la totalité, pas sur la sélection
         # courante : un filtre qui afficherait « 0 » une fois cliqué serait absurde.
-        par_serie = {s.id: len(builds.filtered(lambda b, s=s: b.serie_id == s)) for s in series}
+        par_serie = {s.id: len(builds.filtered(lambda b, s=s: s in b.series())) for s in series}
         valeurs = {
             "builds": builds, "series": series,
             "serie_active": serie if serie in series.mapped("code") else None,
@@ -148,15 +150,23 @@ class BesacraftBuilds(http.Controller):
                 if couche not in vus:
                     vus.append(couche)
                     apercu.append(self._couche_apercu(couche, role))
-        voisins = request.env["besacraft.build"].sudo().search(
-            [("serie_id", "=", build.serie_id.id), ("id", "!=", build.id)]
-            + self._domaine_builds())
+        # Le OR des séries vient en tête : un domaine Odoo ANDe implicitement les
+        # expressions qui suivent, donc l'ordre inverse ferait porter le OR sur le reste.
+        voisins = build.sudo().search(
+            build._domaine_series(build.series())
+            + [("id", "!=", build.id)] + self._domaine_builds())
         voisins = sorted(voisins, key=lambda b: abs(int(b.code) - int(build.code)))[:4]
         voisins = request.env["besacraft.build"].sudo().browse(
             [b.id for b in sorted(voisins, key=lambda b: b.code)])
         valeurs = {
             "build": build, "main_object": build,
             "accessible": build.is_accessible_by(partner),
+            # Un build gratuit est lisible par tout le monde, mais il n'entre dans les
+            # livres du mod que si son lecteur l'y met : d'où un bouton qui ne regarde
+            # pas l'accès mais l'adhésion.
+            "peut_rejoindre": (build.enroll == "public"
+                               and not request.env.user._is_public()
+                               and partner not in build.partner_ids),
             "apercu": apercu, "voisins": voisins,
             "a_un_court": build.id in self._avec_piece(build, "short_video"),
             "barre_active": "catalogue",
@@ -164,6 +174,24 @@ class BesacraftBuilds(http.Controller):
         }
         valeurs.update(self._contexte_cartes(build | voisins))
         return request.render("besacraft_builds.build", valeurs)
+
+    @http.route("/builds/<int:code>/rejoindre", type="http", auth="user",
+                methods=["POST"], website=True, sitemap=False)
+    def rejoindre(self, code, **kw):
+        """Add a free build to the visitor's own books.
+
+        Paying builds are refused here on purpose: access to those is granted by the
+        confirmed sale order, and a route that could hand them out would be a hole.
+        """
+        if self._garde_site():
+            return request.not_found()
+        build = self._build(code)
+        if not build:
+            return request.not_found()
+        if build.enroll != "public":
+            raise werkzeug.exceptions.Forbidden()
+        build.sudo()._action_add_members(request.env.user.partner_id)
+        return request.redirect("/builds/%d" % code)
 
     @http.route("/builds/<int:code>/court", type="http", auth="public", website=True,
                 sitemap=False)
@@ -233,7 +261,7 @@ class BesacraftBuilds(http.Controller):
         if not serie:
             return request.not_found()
         Build = request.env["besacraft.build"].sudo()
-        domaine = self._domaine_builds() + [("serie_id", "=", serie.id)]
+        domaine = self._domaine_builds() + Build._domaine_series(serie)
         builds = Build.search(domaine, limit=8)
         episodes = request.env["besacraft.episode"].sudo().search(
             self._filtre_publie() + [("serie_id", "=", serie.id)])

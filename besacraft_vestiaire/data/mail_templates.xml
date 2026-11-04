@@ -1,0 +1,25 @@
+<odoo>
+    <record id="mail_parent_info" model="mail.template">
+        <field name="name">Wardrobe: parent information</field>
+        <field name="model_id" ref="model_besacraft_vestiaire_demande"/>
+        <field name="email_to">{{ object.email_parent }}</field>
+        <field name="subject">Besacraft: an account for {{ object.prenom }}</field>
+        <field name="body_html" type="html">
+            <p>Hello,</p>
+            <p><t t-out="object.prenom"/> (Minecraft: <t t-out="object.pseudo"/>) now has a
+               Besacraft account. An invitation was sent to <t t-out="object.email"/>.</p>
+            <p>Reply to this email if you did not expect it.</p>
+        </field>
+    </record>
+    <record id="mail_demande_refusee" model="mail.template">
+        <field name="name">Wardrobe: request refused</field>
+        <field name="model_id" ref="model_besacraft_vestiaire_demande"/>
+        <field name="email_to">{{ object.email }}</field>
+        <field name="subject">Besacraft: your account request</field>
+        <field name="body_html" type="html">
+            <p>Hello <t t-out="object.prenom"/>,</p>
+            <p>Your Besacraft account request was not accepted.</p>
+            <p t-if="object.message_refus"><t t-out="object.message_refus"/></p>
+        </field>
+    </record>
+</odoo>

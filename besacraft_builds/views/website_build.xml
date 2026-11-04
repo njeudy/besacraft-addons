@@ -45,7 +45,7 @@
                         <h2 class="bc-h2">La boîte</h2>
                         <div class="bc-boite-grille">
                             <figure class="bc-boite-objet bc-lueur">
-                                <img t-attf-src="/web/image/besacraft.build/#{build.id}/#{build.id in avec_boite and 'box_image' or 'overview_image'}"
+                                <img t-attf-src="/web/image/besacraft.build/#{build.id}/#{build.id in avec_boite and 'box_image' or 'overview_image'}/1024x1024"
                                      t-att-alt="'Boîte du build N°%s, %s' % (build.code, build.name)"
                                      width="700" height="700" loading="lazy"/>
                                 <figcaption>Boîte N°<t t-out="build.code"/></figcaption>
@@ -63,21 +63,24 @@
                     </section>
 
                     <section t-if="a_un_court" class="bc-sec bc-court-sec">
-                        <h2 class="bc-h2">Le court</h2>
+                        <h2 class="bc-h2">Le short</h2>
                         <div class="bc-court-grille">
                             <figure class="bc-court">
                                 <div class="bc-court-cadre">
                                     <video controls="controls" preload="metadata" playsinline="playsinline"
-                                           t-attf-poster="/web/image/besacraft.build/#{build.id}/overview_image"
-                                           t-att-aria-label="'Court vertical du build N°%s, %s' % (build.code, build.name)">
+                                           t-attf-poster="/web/image/besacraft.build/#{build.id}/overview_image/1024x1024"
+                                           t-att-aria-label="'Short vertical du build N°%s, %s' % (build.code, build.name)">
                                         <source t-attf-src="/builds/#{int(build.code)}/court" type="video/mp4"/>
                                     </video>
                                 </div>
-                                <figcaption>Court N°<t t-out="build.code"/></figcaption>
+                                <figcaption>Short N°<t t-out="build.code"/></figcaption>
                             </figure>
                             <div class="bc-court-info">
                                 <p class="bc-chapo">Le bâtiment se pose couche par couche, avec la liste
                                     des blocs à l'écran. La notice complète est dans le tuto.</p>
+                                <a t-if="build.short_youtube_id"
+                                   t-attf-href="https://www.youtube.com/shorts/#{build.short_youtube_id}"
+                                   target="_blank" rel="noopener" class="bc-btn-second">Voir le short sur YouTube</a>
                                 <a t-if="build.youtube_url" t-att-href="build.youtube_url" target="_blank"
                                    rel="noopener" class="bc-btn-second">Voir l'épisode sur YouTube</a>
                             </div>
@@ -90,9 +93,9 @@
                             <ol class="bc-contenu">
                                 <li><b>La vue 3D</b> du build, à tourner et à parcourir couche par couche.</li>
                                 <li><b>La liste des blocs</b> de chaque couche, cochable pendant que tu poses.</li>
-                                <li><b>La notice complète</b>, de la fondation au faîtage.</li>
+                                <li><b>La notice complète</b> de la fondation au faîtage.</li>
                                 <li><b>Les recettes de fabrication</b> et les matières premières à réunir.</li>
-                                <li><b>La vidéo courte</b> de la construction, du premier bloc à la vue finale.</li>
+                                <li><b>Le short</b> de la construction, du premier bloc à la vue finale.</li>
                             </ol>
                             <div class="bc-regle">
                                 <p>Pas de schematic : on construit soi-même, c'est le principe.</p>
@@ -118,6 +121,15 @@
                                 <t t-if="accessible">
                                     <span t-if="payant" class="bc-badge-achete">Acheté</span>
                                     <a t-attf-href="/t/#{int(build.code)}" class="bc-btn-achat">Ouvrir le tuto</a>
+                                    <form t-if="peut_rejoindre" method="post"
+                                          t-attf-action="/builds/#{int(build.code)}/rejoindre"
+                                          class="bc-rejoindre-form">
+                                        <input type="hidden" name="csrf_token"
+                                               t-att-value="request.csrf_token()"/>
+                                        <button type="submit" class="bc-btn-second">
+                                            Add to my books
+                                        </button>
+                                    </form>
                                 </t>
                                 <t t-else="">
                                     <t t-call="besacraft_builds.achat"/>

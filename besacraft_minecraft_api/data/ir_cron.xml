@@ -1,0 +1,11 @@
+<odoo>
+    <record id="cron_purge_sessions" model="ir.cron">
+        <field name="name">Besacraft: purge expired Minecraft challenges and sessions</field>
+        <field name="model_id" ref="model_besacraft_mc_session"/>
+        <field name="state">code</field>
+        <field name="code">model._purger()
+model.env["besacraft.mc.challenge"]._purger()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+    </record>
+</odoo>

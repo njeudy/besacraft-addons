@@ -15,9 +15,9 @@
                          dans la page tant que l'acces n'est pas accorde. -->
                     <div class="bc-paywall">
                         <div class="bc-paywall-fond"
-                             t-attf-style="background-image:url('/web/image/besacraft.build/#{build.id}/overview_image')"/>
+                             t-attf-style="background-image:url('/web/image/besacraft.build/#{build.id}/overview_image/1024x1024')"/>
                         <div class="bc-paywall-boite">
-                            <img t-attf-src="/web/image/besacraft.build/#{build.id}/overview_image"
+                            <img t-attf-src="/web/image/besacraft.build/#{build.id}/overview_image/1024x1024"
                                  t-att-alt="build.name" class="bc-paywall-img"/>
                             <span class="bc-paywall-serie">
                                 <t t-esc="build.serie_id.name"/> · Tuto n°<t t-esc="build.code"/>

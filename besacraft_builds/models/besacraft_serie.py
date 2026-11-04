@@ -30,6 +30,19 @@ class BesacraftSerie(models.Model):
         help="Sites whose catalogue lists this series. A site with no series has no "
              "catalogue at all: /builds and the tutorial pages answer 404 there.")
 
+    # Le nom de la playlist, pas son identifiant : Odoo Social choisit une playlist par
+    # son nom, et le module ne dépend pas de `social_youtube_playlist` pour autant -- il
+    # s'installe sur une base sans Social. Deux playlists séparées parce qu'un short et un
+    # épisode ne font pas le même travail : l'un va chercher des spectateurs, l'autre les
+    # garde, et une lecture enchaînée qui alterne les deux ne tient pas.
+    youtube_playlist = fields.Char(
+        "Episode Playlist",
+        help="Name of the YouTube playlist the series episodes go to.")
+    youtube_shorts_playlist = fields.Char(
+        "Shorts Playlist",
+        help="Name of the YouTube playlist the build shorts go to. Several series may "
+             "share one until a series has enough shorts of its own.")
+
     subtitle = fields.Char(translate=True, help="One line under the series name.")
     # Éditable sur le site (t-field) : la page de série est un texte qu'on retouche en ligne,
     # pas un gabarit à redéployer.

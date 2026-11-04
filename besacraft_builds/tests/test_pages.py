@@ -158,7 +158,7 @@ class TestPages(HttpCase):
 
     def test_le_catalogue_porte_les_donnees_des_filtres(self):
         page = self.url_open("/builds").text
-        for attribut in ('data-serie="schematics"', 'data-acces="payant"',
+        for attribut in ('data-series="schematics"', 'data-acces="payant"',
                          'data-acces="gratuit"', 'data-blocs="120"', 'data-couches="2"'):
             self.assertIn(attribut, page)
         self.assertIn("Tuto payant", page)

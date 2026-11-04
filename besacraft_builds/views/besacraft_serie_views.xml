@@ -41,6 +41,12 @@
                                    options="{'no_create': True}"/>
                         </group>
                     </group>
+                    <group string="YouTube">
+                        <field name="youtube_playlist"
+                               placeholder="Les aventures de Zunk"/>
+                        <field name="youtube_shorts_playlist"
+                               placeholder="🧱 Minecraft — Un build en 60 secondes"/>
+                    </group>
                     <notebook>
                         <page string="Description" name="description">
                             <field name="description"/>
