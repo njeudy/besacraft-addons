@@ -199,6 +199,36 @@ class TestPages(HttpCase):
         self.assertIsNone(donnees["build"])
         self.assertEqual(donnees["stats"], {"builds": 0, "blocs": 0, "series": 0})
 
+    def test_holo_dans_une_serie_ne_tire_que_dans_cette_serie(self):
+        autre = self.env.ref("besacraft_builds.serie_hardcore")
+        autre.website_ids = [(4, self.site.id)]
+        voisin = self.env["besacraft.build"].create({
+            "name": "Voisin holo", "code": "9924", "enroll": "public", "is_published": True,
+            "serie_id": autre.id,
+            "holo_data": json.dumps({"taille": [1, 1, 1], "couches": [[0, 0]]})})
+        for _ in range(8):
+            donnees = self.url_open("/besacraft/holo?serie=%s" % autre.code).json()
+            self.assertTrue(donnees["build"])
+            tire = self.env["besacraft.build"].search(
+                [("code", "=", donnees["build"]["code"])])
+            self.assertIn(autre, tire.series())
+        self.assertEqual(self.url_open(
+            "/besacraft/holo?serie=%s&code=9924" % autre.code).json()["build"]["code"], "9924")
+        self.assertIsNone(self.url_open(
+            "/besacraft/holo?serie=%s&code=9922" % autre.code).json()["build"],
+            "le build d'une autre série ne sort pas")
+        self.assertTrue(voisin)
+
+    def test_holo_d_une_serie_hors_du_site_ne_donne_rien(self):
+        autre = self.env.ref("besacraft_builds.serie_hardcore")
+        autre.website_ids = [(3, self.site.id)]
+        self.env["besacraft.build"].create({
+            "name": "Hors site holo", "code": "9925", "enroll": "public", "is_published": True,
+            "serie_id": autre.id,
+            "holo_data": json.dumps({"taille": [1, 1, 1], "couches": [[0, 0]]})})
+        for url in ("/besacraft/holo?serie=%s" % autre.code, "/besacraft/holo?serie=inconnue"):
+            self.assertIsNone(self.url_open(url).json()["build"], url)
+
     def test_holo_tire_parmi_les_builds_qui_ont_des_positions(self):
         # Le payant n'a pas de holo_data : seul le gratuit peut sortir (parmi ceux du test).
         for _ in range(5):

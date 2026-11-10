@@ -108,6 +108,30 @@ class BesacraftBuilds(http.Controller):
         return {"sequence": couche.sequence, "block_count": couche.block_count, "role": role,
                 "types": len(couche.line_ids), "lines": couche.line_ids[:8]}
 
+    def _tirer_holo(self, serie=None, code=None):
+        """One build to draw as a hologram, drawn at random among those the site shows.
+
+        `serie` narrows the draw to one series, and only a series of this site counts: a
+        series published elsewhere yields nothing rather than leaking its builds. `code`
+        picks one build. Only builds that carry positions can be drawn.
+        """
+        Build = request.env["besacraft.build"].sudo()
+        domaine = self._domaine_builds() + [("holo_data", "!=", False)]
+        if serie:
+            series = self._site()._besacraft_series().filtered(lambda s: s.code == serie)
+            if not series:
+                return Build
+            domaine = domaine + Build._domaine_series(series)
+        if code and str(code).isdigit():
+            domaine.append(("code", "=", self._code(int(code))))
+        ids = Build.search(domaine).ids
+        return Build.browse(random.choice(ids)) if ids else Build
+
+    def _couche_apercu(self, couche, role):
+        """One layer as the build page previews it: number, count, a few real blocks."""
+        return {"sequence": couche.sequence, "block_count": couche.block_count, "role": role,
+                "types": len(couche.line_ids), "lines": couche.line_ids[:8]}
+
     @http.route("/builds", type="http", auth="public", website=True,
                 sitemap=_site_besacraft)
     def catalogue(self, serie=None, **kw):
@@ -352,27 +376,24 @@ class BesacraftBuilds(http.Controller):
 
     @http.route("/besacraft/holo", type="http", auth="public", methods=["GET"],
                 website=True, sitemap=False)
-    def holo(self, code=None, **kw):
+    def holo(self, code=None, serie=None, **kw):
         """One build to draw as a hologram, and the site's figures.
 
-        No 404 guard: the theme calls this from pages of any site, and a site with no series
-        simply gets `build: null`. A fresh draw per load, hence no cache.
+        `serie` restricts the draw to one series of this site; a series the site does not
+        publish yields `build: null`. No 404 guard: the theme calls this from pages of any
+        site, and a site with no series simply gets `build: null`. A fresh draw per load,
+        hence no cache.
         """
         Build = request.env["besacraft.build"].sudo()
-        site = self._site()
-        series = site._besacraft_series()
-        publies = (self._filtre_publie() + Build._domaine_site(site)) if series else None
+        series = self._site()._besacraft_series()
         resultat = {"build": None, "stats": {"builds": 0, "blocs": 0, "series": len(series)}}
         if series:
+            publies = self._domaine_builds()
             resultat["stats"]["builds"] = Build.search_count(publies)
             resultat["stats"]["blocs"] = sum(
                 Build.search(publies).mapped("block_count"))
-            domaine = publies + [("holo_data", "!=", False)]
-            if code and str(code).isdigit():
-                domaine.append(("code", "=", self._code(int(code))))
-            ids = Build.search(domaine).ids
-            if ids:
-                build = Build.browse(random.choice(ids))
+            build = self._tirer_holo(serie=serie, code=code)
+            if build:
                 donnees = json.loads(build.holo_data)
                 resultat["build"] = {
                     "code": build.code, "nom": build.name,
