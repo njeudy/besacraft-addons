@@ -160,7 +160,7 @@ class TestRecettesPage(HttpCase):
 
     def test_la_page_montre_les_recettes(self):
         self.build.has_recipes = True
-        page = self.url_open("/t/9912").text
+        page = self.url_open("/builds/9912/guide").text
         self.assertIn("Recettes de la couche", page)
         self.assertIn("Table de craft", page)
         self.assertIn("donne 4", page)
@@ -171,6 +171,6 @@ class TestRecettesPage(HttpCase):
 
     def test_sans_drapeau_la_page_ne_montre_pas_de_recettes(self):
         """has_recipes is what the import sets once recipes.json exists: it decides."""
-        page = self.url_open("/t/9912").text
+        page = self.url_open("/builds/9912/guide").text
         self.assertNotIn("Recettes de la couche", page)
         self.assertNotIn("Matières premières pour tout le build", page)

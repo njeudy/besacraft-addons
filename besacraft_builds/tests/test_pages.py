@@ -114,7 +114,7 @@ class TestPages(HttpCase):
             self.env["besacraft.build.layer.line"].create({
                 "layer_id": couche.id, "item_key": "minecraft:p%d" % sequence,
                 "name_fr": nom, "qty": 5})
-        page = self.url_open("/t/9921").text
+        page = self.url_open("/builds/9921/guide").text
         self.assertIn("Planches un", page)
         self.assertNotIn("Planches deux", page)
         self.assertIn("/shop/cart/update", page)

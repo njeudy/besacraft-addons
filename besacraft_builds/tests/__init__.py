@@ -14,3 +14,4 @@ from . import test_multi_series
 from . import test_youtube
 from . import test_plan_prive
 from . import test_v2
+from . import test_fiche
