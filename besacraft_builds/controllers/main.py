@@ -6,6 +6,7 @@ import werkzeug
 
 from odoo import http
 from odoo.http import request
+from odoo.tools import is_html_empty
 
 
 def _site_besacraft(env, rule=None, qs=None):
@@ -296,7 +297,8 @@ class BesacraftBuilds(http.Controller):
         if build.enroll != "public":
             raise werkzeug.exceptions.Forbidden()
         build.sudo()._action_add_members(request.env.user.partner_id)
-        return request.redirect("/builds/%d" % code)
+        # Back where the button was: the product sheet, or the build page.
+        return request.redirect(("/t/%d" if kw.get("retour") == "fiche" else "/builds/%d") % code)
 
     @http.route("/builds/<int:code>/court", type="http", auth="public", website=True,
                 sitemap=False)
@@ -313,7 +315,106 @@ class BesacraftBuilds(http.Controller):
     @http.route("/t/<int:code>", type="http", auth="public", website=True,
                 sitemap=_site_besacraft)
     def tuto(self, code, **kw):
-        """A build's tutorial sheet. The URL carries the number without padding zeros."""
+        """A build's product sheet. The URL carries the number without padding zeros.
+
+        The gallery (box, 3D showcase, box face), the buying column, the episodes the build
+        shows up in, its story with the vertical short and the chapters, the showcase, the
+        technical sheet. Only the episodes of a series this site publishes are listed.
+        """
+        if self._garde_site():
+            return request.not_found()
+        build = self._build(code)
+        if not build:
+            return request.not_found()
+        partner = request.env.user.partner_id
+        series_site = self._site()._besacraft_series()
+        episodes = request.env["besacraft.episode"].sudo().search(
+            self._filtre_publie() + [("build_ids", "in", build.ids),
+                                     ("serie_id", "in", series_site.ids)],
+            order="number, date, id")
+        pieces = {champ: build.id in self._avec_piece(build, champ) for champ in (
+            "box_image", "box_face_image", "cutout_image", "overview_image", "short_video")}
+        payant = build.enroll == "payment" and bool(build.product_id)
+        accessible = build.is_accessible_by(partner)
+        chapitres = build.chapter_ids
+        valeurs = {
+            "build": build, "main_object": build,
+            "serie": build.serie_id, "series_build": build.series() & series_site,
+            "pieces": pieces, "vues": self._vues_fiche(build, pieces),
+            "a_vitrine": bool(build.vitrine_glb_attachment_id),
+            "payant": payant, "accessible": accessible,
+            "acquis": set(build.ids) if payant and accessible else set(),
+            "produit": build.sudo().product_id,
+            "peut_rejoindre": (build.enroll == "public"
+                               and not request.env.user._is_public()
+                               and partner not in build.partner_ids),
+            "chapitres": chapitres,
+            "offerts": [i + 1 for i, c in enumerate(chapitres) if c.free],
+            "episodes": episodes,
+            "avec_poster": self._avec_piece(episodes, "poster"),
+            "liens_episodes": {e.id: e._lien_au_moment(build) for e in episodes},
+            "moments": {m.episode_id.id: m.timecode
+                        for m in episodes.appearance_ids.filtered(
+                            lambda m: m.build_id == build and m.seconds)},
+            "barre_active": "shop" if payant else "collections",
+            "a_description": not is_html_empty(build.description),
+            "editeur": request.env.user.has_group("website.group_website_designer"),
+            "niveau": dict(build._fields["level"]._description_selection(
+                request.env)).get(build.level),
+        }
+        return request.render("besacraft_builds.fiche", valeurs)
+
+    @staticmethod
+    def _vues_fiche(build, pieces):
+        """The gallery's views, in order: the box, the 3D showcase, the box face.
+
+        Without a box, the build's overview stands first. The showcase needs its glb, and
+        shows the cutout (or the overview) until it is asked for.
+        """
+        url = "/web/image/besacraft.build/%d/%%s/1400x1400" % build.id
+        vues = []
+        if pieces["box_image"]:
+            vues.append({"cle": "boite", "image": url % "box_image"})
+        elif pieces["overview_image"]:
+            vues.append({"cle": "vue", "image": url % "overview_image"})
+        if build.vitrine_glb_attachment_id:
+            affiche = next((c for c in ("cutout_image", "overview_image", "box_image")
+                            if pieces[c]), None)
+            vues.append({"cle": "3d", "image": affiche and url % affiche})
+        if pieces["box_face_image"]:
+            vues.append({"cle": "face", "image": url % "box_face_image"})
+        return vues
+
+    @http.route("/builds/<int:code>/vitrine", type="http", auth="public", website=True,
+                sitemap=False)
+    def vitrine_page(self, code, **kw):
+        """The 3D showcase on its own, framed by the product sheet (and openable full page).
+
+        A page without the site's layout: it is an iframe's content, and the website's
+        header, bundle and editor have nothing to do in there. Same guards as the glb.
+        """
+        if self._garde_site():
+            return request.not_found()
+        build = self._build(code)
+        if not build or not build.vitrine_glb_attachment_id:
+            return request.not_found()
+        serie = build.serie_id.sudo()
+        return request.render("besacraft_builds.vitrine_page", {
+            "build": build, "serie": serie,
+            "seul": kw.get("seul") == "1",
+            "logo": serie.id in self._avec_piece(serie, "logo") and serie.id,
+            "niveau": dict(build._fields["level"]._description_selection(
+                request.env)).get(build.level),
+        })
+
+    @http.route("/builds/<int:code>/guide", type="http", auth="public", website=True,
+                sitemap=False)
+    def guide(self, code, **kw):
+        """The layer-by-layer notice, which /t/<n> held until it became the product sheet.
+
+        Kept as it was, at an address of its own, until the full-screen build screen of
+        /builds/<n> takes it over: the sheet must not leave the notice unreachable meanwhile.
+        """
         if self._garde_site():
             return request.not_found()
         build = self._build(code)
