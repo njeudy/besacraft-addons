@@ -196,6 +196,7 @@
         figcaption { display: flex; flex-direction: column; gap: 8px; padding-bottom: 6px; }
         b { font: 500 13px/1.3 var(--f-mono); color: var(--c-etat); }
         span { font-size: 14px; color: var(--c-gris); max-width: 28ch; }
+        .ac-lien { align-self: flex-start; font-size: 13px; }
     }
 
     // --- 04 · The showcase --------------------------------------------------------------------

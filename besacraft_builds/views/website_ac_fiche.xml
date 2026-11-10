@@ -173,6 +173,9 @@
                             <figcaption>
                                 <b>▶ <t t-out="build.name"/> in one minute</b>
                                 <span>The <t t-out="build.layer_count"/> layers go down one after the other, as in the guide.</span>
+                                <a t-if="build.short_youtube_id" class="ac-lien"
+                                   t-attf-href="https://www.youtube.com/shorts/#{build.short_youtube_id}"
+                                   target="_blank" rel="noopener">Watch the short on YouTube</a>
                             </figcaption>
                         </figure>
                     </div>
