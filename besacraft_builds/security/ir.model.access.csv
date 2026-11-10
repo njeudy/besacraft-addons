@@ -28,3 +28,8 @@ access_besacraft_build_chapter_user,besacraft.build.chapter.user,model_besacraft
 access_besacraft_build_chapter_manager,besacraft.build.chapter.manager,model_besacraft_build_chapter,base.group_system,1,1,1,1
 access_besacraft_build_chapter_public,besacraft.build.chapter.public,model_besacraft_build_chapter,base.group_public,1,0,0,0
 access_besacraft_build_chapter_portal,besacraft.build.chapter.portal,model_besacraft_build_chapter,base.group_portal,1,0,0,0
+access_besacraft_episode_appearance_user,besacraft.episode.appearance.user,model_besacraft_episode_appearance,base.group_user,1,0,0,0
+access_besacraft_episode_appearance_manager,besacraft.episode.appearance.manager,model_besacraft_episode_appearance,base.group_system,1,1,1,1
+access_besacraft_episode_appearance_designer,besacraft.episode.appearance.designer,model_besacraft_episode_appearance,website.group_website_designer,1,1,1,1
+access_besacraft_episode_appearance_public,besacraft.episode.appearance.public,model_besacraft_episode_appearance,base.group_public,1,0,0,0
+access_besacraft_episode_appearance_portal,besacraft.episode.appearance.portal,model_besacraft_episode_appearance,base.group_portal,1,0,0,0

@@ -72,6 +72,9 @@
                                 </form>
                             </field>
                         </page>
+                        <page string="Description" name="description">
+                            <field name="description" placeholder="The build told on its product sheet"/>
+                        </page>
                         <page string="Chapters" name="chapters">
                             <field name="chapter_ids">
                                 <list editable="bottom">

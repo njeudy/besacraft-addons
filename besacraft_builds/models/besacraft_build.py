@@ -53,6 +53,11 @@ class BesacraftBuild(models.Model):
         string="Also In", domain="[('id', '!=', serie_id)]",
         help="Further series whose catalogue lists this build, besides its main one.")
     accroche = fields.Text("Tagline", translate=True)
+    # Le récit du build sur sa fiche produit, édité en place depuis le site (t-field) :
+    # c'est du texte d'auteur, qui n'a rien à faire dans un gabarit.
+    description = fields.Html(
+        translate=True, sanitize_attributes=False,
+        help="The build told on its product sheet. Edited on the website.")
     level = fields.Selection(
         [("debutant", "Beginner"), ("confirme", "Confident"), ("forgeron", "Blacksmith")],
         default="debutant", required=True,
