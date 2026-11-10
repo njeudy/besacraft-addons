@@ -101,12 +101,19 @@ class BesacraftBuilds(http.Controller):
         return {
             "acquis": set(membres.build_id.ids),
             "avec_boite": self._avec_piece(builds, "box_image"),
+            "avec_vue": self._avec_piece(builds, "overview_image"),
         }
 
-    def _couche_apercu(self, couche, role):
-        """One layer as the build page previews it: number, count, a few real blocks."""
-        return {"sequence": couche.sequence, "block_count": couche.block_count, "role": role,
-                "types": len(couche.line_ids), "lines": couche.line_ids[:8]}
+    def _comptes(self, builds, series):
+        """The figures the v2 pages quote: how many builds, per series, free and paid."""
+        return {
+            "total": len(builds),
+            "par_serie": {s.id: len(builds.filtered(lambda b, s=s: s in b.series()))
+                          for s in series},
+            "n_gratuits": len(builds.filtered(lambda b: b.enroll == "public")),
+            "n_payants": len(builds.filtered(lambda b: b.enroll == "payment")),
+            "n_blocs": sum(builds.mapped("block_count")),
+        }
 
     def _tirer_holo(self, serie=None, code=None):
         """One build to draw as a hologram, drawn at random among those the site shows.
@@ -135,26 +142,45 @@ class BesacraftBuilds(http.Controller):
     @http.route("/builds", type="http", auth="public", website=True,
                 sitemap=_site_besacraft)
     def catalogue(self, serie=None, **kw):
-        """The catalogue: every build of the site on one shelf, filtered in the browser."""
+        """The builds home: a hologram, how it works, the latest builds, the series."""
         if self._garde_site():
             return request.not_found()
+        site = self._site()
+        series = site._besacraft_series()
+        if serie in series.mapped("code"):
+            # The shelf moved to /builds/collections; old links keep their filter.
+            return request.redirect("/builds/collections?serie=%s" % serie)
         Build = request.env["besacraft.build"].sudo()
-        publies = self._domaine_builds()
-        builds = Build.search(publies)
-        series = request.website._besacraft_series()
-        # Le compteur de chaque filtre se lit sur la totalité, pas sur la sélection
-        # courante : un filtre qui afficherait « 0 » une fois cliqué serait absurde.
-        par_serie = {s.id: len(builds.filtered(lambda b, s=s: s in b.series())) for s in series}
+        builds = Build.search(self._domaine_builds())
+        derniers = Build.search(self._domaine_builds(), order="code desc", limit=5)
+        holo = self._tirer_holo()
         valeurs = {
-            "builds": builds, "series": series,
-            "serie_active": serie if serie in series.mapped("code") else None,
-            "total": len(builds), "par_serie": par_serie,
-            "n_gratuits": len(builds.filtered(lambda b: b.enroll == "public")),
-            "n_payants": len(builds.filtered(lambda b: b.enroll == "payment")),
-            "barre_active": "catalogue",
+            "series": series, "derniers": derniers, "holo_build": holo,
+            "couverture": self._couvertures(series),
+            "sources": self._sources(builds),
+            "ex_ligne": holo.layer_ids[:1].line_ids[:1],
+            "barre_active": "home",
         }
-        valeurs.update(self._contexte_cartes(builds))
+        valeurs.update(self._comptes(builds, series))
+        valeurs.update(self._contexte_cartes(derniers | holo))
         return request.render("besacraft_builds.catalogue", valeurs)
+
+    @staticmethod
+    def _sources(builds):
+        """The distinct (author, licence, url) the builds credit, for the credit section."""
+        vus = []
+        for build in builds:
+            source = (build.source_author, build.source_license, build.source_url)
+            if source[0] and source not in vus:
+                vus.append(source)
+        return vus[:4]
+
+    def _couvertures(self, series):
+        """Ids of the series that have a cover picture or a logo, for the home cards."""
+        return {
+            "cover": self._avec_piece(series, "cover_image"),
+            "logo": self._avec_piece(series, "logo"),
+        }
 
     @http.route("/builds/collections", type="http", auth="public", website=True,
                 sitemap=_site_besacraft)
@@ -165,19 +191,21 @@ class BesacraftBuilds(http.Controller):
         """
         if self._garde_site():
             return request.not_found()
-        builds = request.env["besacraft.build"].sudo().search(self._domaine_builds())
+        Build = request.env["besacraft.build"].sudo()
+        builds = Build.search(self._domaine_builds())
         series = self._site()._besacraft_series()
+        holo = self._tirer_holo()
         valeurs = {
             "builds": builds, "series": series,
             "serie_active": serie if serie in series.mapped("code") else None,
-            "total": len(builds),
-            "par_serie": {s.id: len(builds.filtered(lambda b, s=s: s in b.series()))
-                          for s in series},
-            "n_gratuits": len(builds.filtered(lambda b: b.enroll == "public")),
-            "n_payants": len(builds.filtered(lambda b: b.enroll == "payment")),
-            "barre_active": "collections",
+            "holo_build": holo, "barre_active": "collections",
         }
-        valeurs.update(self._contexte_cartes(builds))
+        valeurs.update(self._comptes(builds, series))
+        niveaux = set(builds.mapped("level"))
+        # « all Beginner » is only worth saying when it is true of the whole shelf.
+        valeurs["niveau_commun"] = (dict(Build._fields["level"]._description_selection(
+            Build.env)).get(niveaux.pop()) if len(niveaux) == 1 else False)
+        valeurs.update(self._contexte_cartes(builds | holo))
         return request.render("besacraft_builds.collections", valeurs)
 
     @http.route("/builds/shop", type="http", auth="public", website=True,
@@ -331,7 +359,7 @@ class BesacraftBuilds(http.Controller):
     @http.route("/builds/serie/<string:code>", type="http", auth="public", website=True,
                 sitemap=_site_besacraft)
     def serie(self, code, **kw):
-        """A series' page: who it is, its first builds, its latest episodes."""
+        """A series' page: who it is, its episodes, its builds, a hologram drawn within it."""
         if self._garde_site():
             return request.not_found()
         serie = self._serie_du_site(code)
@@ -339,16 +367,29 @@ class BesacraftBuilds(http.Controller):
             return request.not_found()
         Build = request.env["besacraft.build"].sudo()
         domaine = self._domaine_builds() + Build._domaine_series(serie)
-        builds = Build.search(domaine, limit=8)
+        tous = Build.search(domaine, order="code desc")
+        builds = tous[:5]
+        series = self._site()._besacraft_series()
         episodes = request.env["besacraft.episode"].sudo().search(
             self._filtre_publie() + [("serie_id", "=", serie.id)])
+        autorises = Build.search(self._domaine_builds())
+        par_serie = self._comptes(autorises, series)["par_serie"]
+        # The latest episode that shows each build of the shelf.
+        vu_dans = {}
+        for episode in episodes:
+            for build in episode.build_ids & builds:
+                vu_dans.setdefault(build.id, episode)
+        holo = self._tirer_holo(serie=serie.code)
         valeurs = {
-            "serie": serie.sudo(), "builds": builds,
-            "n_builds": Build.search_count(domaine),
-            "episodes": episodes[:3], "n_episodes": len(episodes),
-            "barre_active": serie.code,
+            "serie": serie.sudo(), "series": series, "par_serie": par_serie,
+            "builds": builds, "n_builds": len(tous),
+            "episodes": episodes, "n_episodes": len(episodes),
+            "n_blocs": sum(tous.mapped("block_count")),
+            "vu_dans": vu_dans, "holo_build": holo,
+            "couverture": self._couvertures(series),
+            "barre_active": "series", "serie_active": serie.code,
         }
-        valeurs.update(self._contexte_cartes(builds))
+        valeurs.update(self._contexte_cartes(builds | holo))
         return request.render("besacraft_builds.serie", valeurs)
 
     @http.route("/builds/serie/<string:code>/episodes", type="http", auth="public",

@@ -127,7 +127,7 @@ class TestAcces(HttpCase):
     def test_un_site_ne_montre_que_les_series_qu_il_publie(self):
         """Le catalogue est servi, mais la série d'à côté n'y est ni listée ni ouverte."""
         autre = self._build_d_une_autre_serie()
-        catalogue = self.url_open("/builds").text
+        catalogue = self.url_open("/builds/collections").text
         self.assertIn("Build payant", catalogue)
         self.assertNotIn(autre.name, catalogue)
         self.assertNotIn(autre.serie_id.name, catalogue, "son filtre non plus")
@@ -138,7 +138,7 @@ class TestAcces(HttpCase):
     def test_publier_la_serie_sur_le_site_ouvre_ses_builds(self):
         autre = self._build_d_une_autre_serie()
         autre.serie_id.website_ids = [(4, self.site.id)]
-        self.assertIn(autre.name, self.url_open("/builds").text)
+        self.assertIn(autre.name, self.url_open("/builds/collections").text)
         self.assertEqual(self.url_open("/t/912", allow_redirects=False).status_code, 200)
         self.assertEqual(self.url_open(
             "/besacraft/viewer/%d" % autre.id, allow_redirects=False).status_code, 200)

@@ -34,7 +34,7 @@ class TestMultiSeries(HttpCase):
         self.build.serie_ids = [(4, self.seconde.id)]
         self.seconde.website_ids = [(4, self.site.id)]
         self.assertTrue(self.build.is_shown_on(self.site))
-        self.assertIn(self.build.name, self.url_open("/builds").text)
+        self.assertIn(self.build.name, self.url_open("/builds/collections").text)
         self.assertEqual(self.url_open("/builds/900", allow_redirects=False).status_code, 200)
 
     def test_sans_serie_supplementaire_le_build_reste_hors_du_site(self):
@@ -54,7 +54,7 @@ class TestMultiSeries(HttpCase):
         """Le filtre du catalogue se joue dans le navigateur, sur `data-series`."""
         self.build.serie_ids = [(4, self.seconde.id)]
         self.principale.website_ids = [(4, self.site.id)]
-        page = self.url_open("/builds").text
+        page = self.url_open("/builds/collections").text
         self.assertIn('data-series="%s %s"' % (self.principale.code, self.seconde.code), page)
 
     def test_le_compteur_du_filtre_compte_le_build_dans_chaque_serie(self):
