@@ -9,7 +9,7 @@ class BesacraftBuildImport(models.Model):
     _inherit = "besacraft.build"
 
     @api.model
-    def import_depuis_buildplan(self, build_json, plan_json, code, serie_code):
+    def import_depuis_buildplan(self, build_json, plan_json, code, serie_code, paquet=None):
         """JSON-RPC entry point: the same import, addressed by codes.
 
         `import_build_json` takes a besacraft.serie recordset and reads `.id` on it.
@@ -29,6 +29,8 @@ class BesacraftBuildImport(models.Model):
                 % (serie_code, ", ".join(sorted(connues)) or "none")
             )
         build = self.import_build_json(build_json, plan_json, code, serie)
+        if paquet:
+            build.poser_paquet(paquet)
         return {"id": build.id, "code": build.code, "name": build.name,
                 "serie": serie.name, "layer_count": build.layer_count,
                 "block_count": build.block_count,
@@ -84,6 +86,89 @@ class BesacraftBuildImport(models.Model):
             "mimetype": "application/json",
             "datas": contenu,
         })
+
+    # Fichiers optionnels du paquet d'un tuto -> champ du build. Le glb et chapters.json
+    # ont leur propre traitement : l'un est une pièce jointe, l'autre des enregistrements.
+    PAQUET_IMAGES = {"detoure.webp": "cutout_image", "face.webp": "box_face_image"}
+
+    def poser_paquet(self, paquet):
+        """Lay the optional files of a tutorial's package on the build.
+
+        `paquet` maps a file name to its content in base64 (`chapters.json` may also come
+        already decoded). Every file is optional: a missing one leaves its field as it is,
+        so a package made before these files existed imports exactly as it used to.
+        Unknown names are ignored rather than refused, for the same reason.
+
+        Public on purpose, like `stocker_le_plan`: the import script calls it over JSON-RPC.
+        """
+        self.ensure_one()
+        paquet = paquet or {}
+        valeurs = {champ: paquet[nom] for nom, champ in self.PAQUET_IMAGES.items()
+                   if paquet.get(nom)}
+        if valeurs:
+            self.write(valeurs)
+        if paquet.get("vitrine.glb"):
+            self._stocker_la_vitrine(paquet["vitrine.glb"])
+        if paquet.get("chapters.json"):
+            self._poser_chapitres(self._lire_chapitres(paquet["chapters.json"]))
+        return True
+
+    def _stocker_la_vitrine(self, contenu_b64):
+        """Keep vitrine.glb as an attachment, refreshing the one already there.
+
+        Only `datas` is rewritten on an existing attachment, for the reason given in
+        `stocker_le_plan`.
+        """
+        self.ensure_one()
+        if self.vitrine_glb_attachment_id:
+            self.vitrine_glb_attachment_id.write({"datas": contenu_b64})
+            return
+        self.vitrine_glb_attachment_id = self.env["ir.attachment"].create({
+            "name": "vitrine-%s.glb" % self.code,
+            "res_model": "besacraft.build",
+            "res_id": self.id,
+            "mimetype": "model/gltf-binary",
+            "datas": contenu_b64,
+        })
+
+    @staticmethod
+    def _lire_chapitres(contenu):
+        """The chapter list out of chapters.json, given decoded or in base64.
+
+        Accepts a bare list or `{"chapters": [...]}`, and the French keys buildplan's guide
+        uses as well as the English ones.
+        """
+        if isinstance(contenu, (bytes, str)):
+            try:
+                contenu = json.loads(base64.b64decode(contenu))
+            except ValueError as erreur:
+                raise ValidationError("chapters.json is not valid JSON: %s" % erreur) from erreur
+        if isinstance(contenu, dict):
+            contenu = contenu.get("chapters") or []
+        if not isinstance(contenu, list):
+            raise ValidationError("chapters.json must hold a list of chapters.")
+        chapitres = []
+        for position, brut in enumerate(contenu, start=1):
+            if not isinstance(brut, dict):
+                raise ValidationError("chapters.json: chapter %d is not an object." % position)
+            titre = brut.get("title") or brut.get("titre") or brut.get("name")
+            if not titre:
+                raise ValidationError("chapters.json: chapter %d has no title." % position)
+            chapitres.append({
+                "sequence": int(brut.get("sequence") or position),
+                "name": titre,
+                "first_layer": int(brut.get("first_layer") or brut.get("first")
+                                   or brut.get("debut") or 0),
+                "last_layer": int(brut.get("last_layer") or brut.get("last")
+                                  or brut.get("fin") or 0),
+                "free": bool(brut.get("free") or brut.get("offert")),
+            })
+        return chapitres
+
+    def _poser_chapitres(self, chapitres):
+        """Replace the build's chapters: chapters.json is their only source."""
+        self.ensure_one()
+        self.chapter_ids = [(5, 0, 0)] + [(0, 0, valeurs) for valeurs in chapitres]
 
     @api.model
     def import_build_json(self, build_json, plan_json, code, serie):
