@@ -71,7 +71,7 @@ class TestFiche(HttpCase):
     def test_les_chapitres_offerts_se_lancent(self):
         page = self.url_open("/t/9951").text
         # The site of the test database may speak French: the link, not its words.
-        self.assertIn('class="ac-lien" href="/builds/9951"', page)
+        self.assertIn('class="ac-lien" href="/builds/9951?apercu=1"', page)
         self.assertIn("· 1, 2", page)
         self.assertLess(page.index("La quille"), page.index("Les membrures"))
         self.assertLess(page.index("Les membrures"), page.index("Le pont"))

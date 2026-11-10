@@ -1,3 +1,5 @@
+import base64
+import json
 import re
 
 from odoo import api, fields, models
@@ -356,6 +358,69 @@ Jouable en survie — aucun bloc inaccessible, aucune commande, aucun mod obliga
             return False
         return bool(self.env["besacraft.build.member"].sudo().search_count(
             [("build_id", "=", self.id), ("partner_id", "=", partner.id)]))
+
+    def _chapitres_offerts(self):
+        """The free chapters that open the build, in order.
+
+        Only the leading run counts: the preview plays the build from its first layer, and a
+        free chapter further on cannot be shown without the locked ones before it.
+        """
+        self.ensure_one()
+        offerts = self.env["besacraft.build.chapter"]
+        for chapitre in self.chapter_ids:
+            if not chapitre.free or not chapitre.last_layer:
+                break
+            offerts |= chapitre
+        return offerts
+
+    def _viewer_apercu(self):
+        """The viewer cut down to the free chapters, as bytes, or None when there is none.
+
+        The cut is made here, on the data the viewer embeds, and not by hiding layers in the
+        browser: a preview that carried the whole build would only be a lock painted on.
+        Layers past the free chapters are dropped from `DATA`, and so are the guided steps
+        and zones past them when the viewer has a `GUIDE_DATA`.
+        """
+        self.ensure_one()
+        offerts = self._chapitres_offerts()
+        piece = self.sudo().viewer_attachment_id
+        if not offerts or not piece:
+            return None
+        html = base64.b64decode(piece.datas).decode("utf-8")
+        couches = max(offerts.mapped("last_layer")) + (self.layer_offset or 0)
+
+        def couper(texte, nom, transformer):
+            debut = texte.find("const %s = " % nom)
+            if debut < 0:
+                return texte, False
+            debut += len("const %s = " % nom)
+            donnees, fin = json.JSONDecoder().raw_decode(texte, debut)
+            transformer(donnees)
+            nouveau = json.dumps(donnees, ensure_ascii=False, separators=(",", ":"))
+            return texte[:debut] + nouveau + texte[fin:], True
+
+        def couper_data(donnees):
+            donnees["layers"] = donnees.get("layers", [])[:couches]
+            donnees["block_count"] = sum(
+                len(c.get("blocks", ())) for c in donnees["layers"])
+
+        def couper_guide(donnees):
+            # The guide's zones are the chapters, in the same order (chapters.json is
+            # written from them).
+            donnees["zones"] = donnees.get("zones", [])[:len(offerts)]
+            donnees["steps"] = [s for s in donnees.get("steps", [])
+                                if s.get("zone", 0) < len(offerts)
+                                and s.get("layer", 0) < couches]
+
+        try:
+            html, trouve = couper(html, "DATA", couper_data)
+            if not trouve:
+                return None
+            html, _trouve = couper(html, "GUIDE_DATA", couper_guide)
+        except (ValueError, TypeError, AttributeError):
+            # A viewer laid out differently: no preview rather than the whole build.
+            return None
+        return html.encode("utf-8")
 
     def _compute_website_url(self):
         # website.published.mixin's hook: the public URL drops the padding zeros.

@@ -1,0 +1,120 @@
+<odoo>
+    <!-- Builds v2, direction « La Console »: the build screen, /builds/<n>. The guide fills the
+         screen under a thin console bar that folds into a tab. No site header nor footer here:
+         the page is the tool, the way back is the bar. Without access the guide is not loaded;
+         a veil says what is locked, and the free chapters can be tried in a viewer cut down on
+         the server. Every text lives in the markup, so the website editor can change it. -->
+    <template id="ac_build" name="Besacraft — v2 build screen">
+        <t t-call="website.layout">
+            <t t-set="additional_title"><t t-out="build.name"/></t>
+            <t t-set="no_header" t-value="True"/>
+            <t t-set="no_footer" t-value="True"/>
+            <t t-set="acb_n" t-value="int(build.code)"/>
+            <t t-set="acb_nums_clos" t-value="[i + 1 for i, c in enumerate(chapitres) if c in verrouilles]"/>
+            <div id="wrap" t-attf-class="ac acb bc-notice#{accessible and ' is-ouvert' or ''}"
+                  t-att-data-chapitres="chapitres_json" t-att-data-decalage="build.layer_offset or 0"
+                  t-att-data-src="accessible and a_viewer and src_guide or None"
+                  t-att-data-apercu="peut_essayer and src_apercu or None"
+                  t-att-data-apercu-direct="apercu_direct and '1' or None">
+
+                <!-- Console bar: back, the build, the chapter, the section links, the tools. -->
+                <header class="acb-barre" aria-label="Build bar">
+                    <a class="acb-bt" href="/builds/collections" title="Back to the collections">←<span class="acb-txt"> Collections</span></a>
+                    <span class="acb-sep" aria-hidden="true"/>
+                    <p class="acb-id"><span class="acb-n">N°<t t-out="build.code"/></span><a class="acb-nom" t-attf-href="/t/#{acb_n}" t-out="build.name" title="View the sheet"/></p>
+                    <p class="acb-chap" aria-live="polite">
+                        <t t-if="chapitres">
+                            <b><t>Ch.</t> <span data-acb-chap-n="1">1</span> / <t t-out="len(chapitres)"/></b>
+                            <span data-acb-chap-nom="1" t-out="chapitres[0].name"/>
+                        </t>
+                        <t t-else="">
+                            <b><span data-acb-couche="1" t-out="build.layer_count"/> / <t t-out="build.layer_count"/></b>
+                            <span>layers</span>
+                        </t>
+                    </p>
+                    <nav class="acb-nav" aria-label="Builds Minecraft">
+                        <a href="/builds">Home</a>
+                        <a href="/builds/collections">Collections</a>
+                        <a t-att-href="serie_lien and '/builds/serie/%s' % serie_lien.code or '/builds'">Series</a>
+                        <a href="/builds/shop">Shop</a>
+                    </nav>
+                    <div class="acb-outils">
+                        <button class="acb-bt" type="button" data-acb="tele" aria-expanded="false"
+                                aria-controls="acb-bulle" title="Remote" hidden="hidden">📱<span class="acb-txt"> Remote</span></button>
+                        <button class="acb-bt acb-plein" type="button" data-acb="plein" title="Full screen">⤢<span class="acb-txt" data-acb-plein="off"> Full screen</span><span class="acb-txt" data-acb-plein="on" hidden="hidden"> Exit</span></button>
+                        <button class="acb-bt" type="button" data-acb="replier" title="Hide the bar">▴</button>
+                    </div>
+                </header>
+                <button class="acb-languette" type="button" data-acb="deplier" title="Show the bar">▾ Show the bar</button>
+
+                <!-- The engine: the build's own guide, not redrawn. -->
+                <section class="acb-moteur" aria-label="Step-by-step guide">
+                    <img t-if="fond" class="acb-fond" t-att-src="fond" alt="" aria-hidden="true"/>
+                    <iframe t-if="a_viewer" class="acb-guide" allow="fullscreen; autoplay"
+                            t-att-title="build.name"/>
+                    <p t-if="a_viewer" class="acb-charge" aria-hidden="true">Loading the guide…<i/></p>
+                    <div t-else="" class="acb-vide">
+                        <p>The guide of this build is in preparation.</p>
+                        <a class="ac-lien" t-attf-href="/t/#{acb_n}">View the sheet</a>
+                    </div>
+                </section>
+
+                <!-- Remote: the controller is inside the guide; this only explains it. -->
+                <aside class="acb-bulle" id="acb-bulle" hidden="hidden" aria-labelledby="acb-bulle-titre">
+                    <h2 id="acb-bulle-titre">Your phone as a remote</h2>
+                    <ol>
+                        <li>In the guide, click the <strong>📱 Remote</strong> button, in the row of buttons at the bottom left.</li>
+                        <li>A QR code shows up: scan it with your phone's camera.</li>
+                        <li>Your phone becomes the <strong>◀ ▶</strong> controller. This computer keeps the build on screen, Minecraft stays open next to it.</li>
+                    </ol>
+                    <button class="acb-bulle__ok" type="button" data-acb="compris">Got it</button>
+                </aside>
+
+                <!-- Veil: what is locked, how to unlock it, and the free chapters to try. -->
+                <section t-if="not accessible" class="acb-voile" aria-labelledby="acb-voile-titre">
+                    <div class="acb-voile__carte">
+                        <p class="acb-voile__cad">N°<t t-out="build.code"/> · <t t-out="build.name"/> · <t t-out="build.layer_count"/> <t>layers</t></p>
+                        <h2 id="acb-voile-titre">
+                            <t t-if="build.enroll == 'invite'">This guide opens on invitation</t>
+                            <t t-elif="acb_nums_clos and offerts and len(acb_nums_clos) &gt; 1"><t>Chapters</t> <t t-out="acb_nums_clos[0]"/>–<t t-out="acb_nums_clos[-1]"/> <t>are locked</t></t>
+                            <t t-elif="acb_nums_clos and offerts"><t>Chapter</t> <t t-out="acb_nums_clos[0]"/> <t>is locked</t></t>
+                            <t t-else="">The guide unlocks with the purchase</t>
+                        </h2>
+                        <p t-if="offerts">
+                            <t t-if="len(offerts) == 1">The first chapter is free:</t>
+                            <t t-else="">The first chapters are free:</t>
+                            <t t-out="', '.join(offerts.mapped('name'))"/>.
+                            <t t-if="build.enroll == 'payment'">The rest of the build unlocks with the purchase.</t>
+                        </p>
+                        <p t-elif="build.enroll == 'payment'">The complete guide opens as soon as the order is confirmed: every layer, every block, the remote.</p>
+                        <p t-else="">Ask the person who shares this build to invite you.</p>
+                        <t t-if="chapitres">
+                            <ol class="acb-voile__chap" aria-label="Chapters">
+                                <li t-foreach="chapitres" t-as="acb_c" t-att-title="acb_c.name"
+                                    t-attf-class="#{acb_c in verrouilles and 'is-clos' or 'is-libre'}" t-out="acb_c_index + 1"/>
+                            </ol>
+                            <p class="acb-voile__leg">Turquoise: open · dark: to unlock</p>
+                        </t>
+                        <div class="acb-voile__agir">
+                            <form t-if="payant" action="/shop/cart/update" method="post">
+                                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                <input type="hidden" name="product_id" t-att-value="produit.id"/>
+                                <input type="hidden" name="add_qty" value="1"/>
+                                <button class="ac-plaque" type="submit"><i/><i/><span>Unlock · <t t-out="build.price_label"/></span></button>
+                            </form>
+                            <a t-else="" class="ac-plaque" t-attf-href="/t/#{acb_n}"><i/><i/><span>View the sheet</span></a>
+                            <button t-if="peut_essayer" class="acb-voile__essai" type="button" data-acb="essayer">
+                                <t t-if="len(offerts) == 1">Try the free chapter</t>
+                                <t t-else="">Try the free chapters</t>
+                            </button>
+                        </div>
+                    </div>
+                </section>
+                <div t-if="peut_essayer" class="acb-apercu" hidden="hidden">
+                    <span><t>Preview:</t> <b><t t-if="len(offerts) == 1">chapter</t><t t-else="">chapters</t> <t t-out="', '.join(str(i + 1) for i in range(len(offerts)))"/></b> <t>open</t></span>
+                    <button type="button" data-acb="debloquer">Unlock the rest</button>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>

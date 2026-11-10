@@ -1,6 +1,6 @@
 {
     "name": "Besacraft — Build Catalogue",
-    "version": "18.0.1.14.0",
+    "version": "18.0.1.15.0",
     "license": "LGPL-3",
     "author": "Nicolas JEUDY",
     "website": "https://besacraft.fr",
@@ -18,7 +18,6 @@
         "views/menus.xml",
         "views/res_config_settings_views.xml",
         "views/website_catalogue.xml",
-        "views/website_build.xml",
         "views/website_serie.xml",
         "views/website_tuto.xml",
         "views/website_ac.xml",
@@ -27,6 +26,7 @@
         "views/website_ac_serie.xml",
         "views/website_ac_fiche.xml",
         "views/website_ac_shop.xml",
+        "views/website_ac_build.xml",
     ],
     "assets": {
         "web.assets_frontend": [
@@ -35,9 +35,11 @@
             "besacraft_builds/static/src/scss/ac.scss",
             "besacraft_builds/static/src/scss/ac_fiche.scss",
             "besacraft_builds/static/src/scss/ac_shop.scss",
+            "besacraft_builds/static/src/scss/ac_build.scss",
             "besacraft_builds/static/src/js/ac_collections.js",
             "besacraft_builds/static/src/js/ac_fiche.js",
             "besacraft_builds/static/src/js/ac_shop.js",
+            "besacraft_builds/static/src/js/ac_build.js",
             "besacraft_builds/static/src/js/catalogue.js",
             "besacraft_builds/static/src/js/tuto.js",
         ],

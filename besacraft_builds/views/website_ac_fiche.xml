@@ -107,7 +107,7 @@
                             </t>
                         </div>
                         <div t-if="(payant and not accessible and offerts) or peut_rejoindre" class="fi-offert">
-                            <a t-if="payant and not accessible and offerts" class="ac-lien" t-attf-href="/builds/#{fi_n}"><t t-if="len(offerts) == 1">▶ Launch the free chapter</t><t t-else="">▶ Launch the free chapters</t> · <t t-out="', '.join(str(n) for n in offerts)"/></a>
+                            <a t-if="payant and not accessible and offerts" class="ac-lien" t-attf-href="/builds/#{fi_n}?apercu=1"><t t-if="len(offerts) == 1">▶ Launch the free chapter</t><t t-else="">▶ Launch the free chapters</t> · <t t-out="', '.join(str(n) for n in offerts)"/></a>
                             <form t-if="peut_rejoindre" method="post" t-attf-action="/builds/#{fi_n}/rejoindre">
                                 <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
                                 <input type="hidden" name="retour" value="fiche"/>
@@ -173,6 +173,9 @@
                             <figcaption>
                                 <b>▶ <t t-out="build.name"/> in one minute</b>
                                 <span>The <t t-out="build.layer_count"/> layers go down one after the other, as in the guide.</span>
+                                <a t-if="build.short_youtube_id" class="ac-lien"
+                                   t-attf-href="https://www.youtube.com/shorts/#{build.short_youtube_id}"
+                                   target="_blank" rel="noopener">Watch the short on YouTube</a>
                             </figcaption>
                         </figure>
                     </div>

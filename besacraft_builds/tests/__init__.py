@@ -16,3 +16,4 @@ from . import test_plan_prive
 from . import test_v2
 from . import test_fiche
 from . import test_shop
+from . import test_ecran
