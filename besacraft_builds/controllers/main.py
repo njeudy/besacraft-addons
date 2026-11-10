@@ -332,49 +332,49 @@ class BesacraftBuilds(http.Controller):
     @http.route("/builds/<int:code>", type="http", auth="public", website=True,
                 sitemap=_site_besacraft)
     def build(self, code, **kw):
-        """A build's own page: the box, the short, what the tutorial holds, how to get it."""
+        """The build screen: the guide full screen under a thin console bar.
+
+        Without access the guide is not loaded at all: a veil says what is locked and how
+        to unlock it, and the free chapters can be tried in a viewer cut down on the server
+        (`?apercu=1` opens them straight away). `?holo=1` is handed to the guide, which then
+        starts with its hologram on.
+        """
         if self._garde_site():
             return request.not_found()
         build = self._build(code)
         if not build:
             return request.not_found()
-        partner = request.env.user.partner_id
-        couches = build.layer_ids
-        apercu = []
-        if couches:
-            # Première, milieu, dernière : trois vraies couches de la notice, pas la notice.
-            milieu = couches[(len(couches) + 1) // 2 - 1]
-            roles = [(couches[0], "Première couche"), (milieu, "Couche du milieu"),
-                     (couches[-1], "Dernière couche")]
-            vus = []
-            for couche, role in roles:
-                if couche not in vus:
-                    vus.append(couche)
-                    apercu.append(self._couche_apercu(couche, role))
-        # Le OR des séries vient en tête : un domaine Odoo ANDe implicitement les
-        # expressions qui suivent, donc l'ordre inverse ferait porter le OR sur le reste.
-        voisins = build.sudo().search(
-            build._domaine_series(build.series())
-            + [("id", "!=", build.id)] + self._domaine_builds())
-        voisins = sorted(voisins, key=lambda b: abs(int(b.code) - int(build.code)))[:4]
-        voisins = request.env["besacraft.build"].sudo().browse(
-            [b.id for b in sorted(voisins, key=lambda b: b.code)])
-        valeurs = {
+        accessible = build.is_accessible_by(request.env.user.partner_id)
+        chapitres = build.chapter_ids
+        offerts = build._chapitres_offerts()
+        a_viewer = bool(build.sudo().viewer_attachment_id)
+        peut_essayer = not accessible and bool(offerts) and a_viewer
+        series = self._site()._besacraft_series()
+        holo = "?holo=1" if kw.get("holo") == "1" else ""
+        # Behind the veil, the build's picture blurred: the guide itself is not loaded.
+        fond = False
+        if not accessible:
+            champ = next((c for c in ("overview_image", "box_image")
+                          if build.id in self._avec_piece(build, c)), None)
+            fond = champ and "/web/image/besacraft.build/%d/%s/1400x1400" % (build.id, champ)
+        return request.render("besacraft_builds.ac_build", {
+            "fond": fond,
             "build": build, "main_object": build,
-            "accessible": build.is_accessible_by(partner),
-            # Un build gratuit est lisible par tout le monde, mais il n'entre dans les
-            # livres du mod que si son lecteur l'y met : d'où un bouton qui ne regarde
-            # pas l'accès mais l'adhésion.
-            "peut_rejoindre": (build.enroll == "public"
-                               and not request.env.user._is_public()
-                               and partner not in build.partner_ids),
-            "apercu": apercu, "voisins": voisins,
-            "a_un_court": build.id in self._avec_piece(build, "short_video"),
-            "barre_active": "catalogue",
-            "produit": build.product_id,
-        }
-        valeurs.update(self._contexte_cartes(build | voisins))
-        return request.render("besacraft_builds.build", valeurs)
+            "accessible": accessible, "a_viewer": a_viewer,
+            "payant": build.enroll == "payment" and bool(build.product_id),
+            "produit": build.sudo().product_id,
+            "chapitres": chapitres,
+            "offerts": offerts,
+            "verrouilles": chapitres - offerts if not accessible else chapitres.browse(),
+            "peut_essayer": peut_essayer,
+            "apercu_direct": peut_essayer and kw.get("apercu") == "1",
+            "src_guide": "/besacraft/viewer/%d%s" % (build.id, holo),
+            "src_apercu": "/besacraft/viewer/%d?apercu=1" % build.id,
+            "chapitres_json": json.dumps([
+                {"n": i + 1, "nom": c.name, "de": c.first_layer, "a": c.last_layer}
+                for i, c in enumerate(chapitres)]),
+            "serie_lien": series[:1],
+        })
 
     @http.route("/builds/<int:code>/rejoindre", type="http", auth="user",
                 methods=["POST"], website=True, sitemap=False)
@@ -686,15 +686,30 @@ class BesacraftBuilds(http.Controller):
         build = request.env["besacraft.build"].sudo().browse(build_id).exists()
         if not build or not build.viewer_attachment_id or not build.is_shown_on(self._site()):
             return request.not_found()
-        redirection = self._vers_le_produit(build)
-        if redirection:
-            return redirection
         piece = build.viewer_attachment_id
-        contenu = base64.b64decode(piece.datas)
+        apercu = kw.get("apercu") == "1" and not build.is_accessible_by(
+            request.env.user.partner_id)
+        if apercu:
+            # The free chapters only, cut on the server: a 404 when there are none.
+            contenu = build._viewer_apercu()
+            if not contenu:
+                return request.not_found()
+        else:
+            redirection = self._vers_le_produit(build)
+            if redirection:
+                return redirection
+            if not build.is_accessible_by(request.env.user.partner_id):
+                # By invitation and not invited: nothing to buy, and nothing to see.
+                return request.not_found()
+            contenu = base64.b64decode(piece.datas)
         # A long cache plus an ETag avoids shipping several megabytes on every layer change.
         # The ETag follows the CONTENT: the import refreshes the viewer by rewriting the same
-        # attachment, and an ETag on its id kept browsers on the old viewer for a day.
+        # attachment, and an ETag on its id kept browsers on the old viewer for a day. The
+        # preview also depends on the chapters, hence their last write in its ETag.
         etag = '"%s-%s"' % (build.id, piece.checksum or piece.id)
+        if apercu:
+            chapitres = build.chapter_ids
+            etag = '%s-apercu-%d"' % (etag[:-1], max(chapitres.mapped("write_date")).timestamp())
         if request.httprequest.headers.get("If-None-Match") == etag:
             return request.make_response("", status=304, headers=[("ETag", etag)])
         return request.make_response(contenu, headers=[

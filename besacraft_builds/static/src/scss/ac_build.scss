@@ -1,0 +1,191 @@
+// Builds v2, direction « La Console »: the build screen, /builds/<n>.
+//
+// The guide fills the screen (100vw x 100dvh) under a thin translucent bar that folds into a
+// tab. Everything is scoped to `.ac.acb`; the charter's tokens come from `.ac` (ac.scss).
+
+html:has(.ac.acb), body:has(.ac.acb) { overflow: hidden; }
+
+.ac.acb {
+    --barre: 46px;
+    position: relative; width: 100%; height: 100vh; height: 100dvh; overflow: hidden;
+    font: 400 15px/1.5 var(--f-texte);
+
+    button { cursor: pointer; color: inherit; }
+    [hidden] { display: none !important; }
+
+    // --- The engine --------------------------------------------------------------------
+    .acb-moteur {
+        position: absolute; inset: 0; padding-top: var(--barre); transition: padding-top .25s ease;
+    }
+    .acb-guide { display: block; width: 100%; height: 100%; border: 0; background: #0F1218; }
+    .acb-guide:not([src]) { display: none; }
+    // A locked build: its picture, blurred and dimmed, stands where the guide would be.
+    .acb-fond {
+        position: absolute; inset: var(--barre) 0 0 0; width: 100%; height: calc(100% - var(--barre));
+        max-width: none; object-fit: cover; filter: blur(14px) saturate(.8) brightness(.55);
+        transform: scale(1.06); pointer-events: none;
+    }
+    &.is-charge .acb-fond { display: none; }
+    .acb-charge {
+        position: absolute; inset: var(--barre) 0 0 0; display: flex; flex-direction: column;
+        align-items: center; justify-content: center; gap: 14px; pointer-events: none;
+        font: 500 13px/1.4 var(--f-mono); color: var(--c-etat); transition: opacity .4s;
+        &.is-fini { opacity: 0; }
+        i { width: 160px; height: 2px; background: rgba(54, 207, 192, .18); overflow: hidden; position: relative; }
+        i::after {
+            content: ""; position: absolute; inset: 0; width: 40%; background: var(--c-etat);
+            animation: acb-charge 1.1s ease-in-out infinite;
+        }
+    }
+    // Before any guide is asked for (locked build), nothing loads: the bar says nothing.
+    &:not(.is-charge) .acb-charge { opacity: 0; }
+    .acb-vide {
+        height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center;
+        gap: 16px; padding: 20px; text-align: center; color: var(--c-gris);
+    }
+
+    // --- Console bar -------------------------------------------------------------------
+    .acb-barre {
+        position: absolute; left: 0; right: 0; top: 0; z-index: 10; height: var(--barre);
+        display: flex; align-items: center; gap: 6px; padding: 0 10px 0 6px;
+        background: rgba(20, 17, 14, .82); border-bottom: 1px solid var(--c-filet);
+        backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+        transition: transform .25s ease;
+    }
+    .acb-bt {
+        display: inline-flex; align-items: center; gap: 7px; height: 32px; padding: 0 11px;
+        border: 1px solid transparent; border-radius: var(--r); background: none;
+        font: 500 12.5px/1 var(--f-mono); color: var(--c-gris); text-decoration: none; white-space: nowrap;
+        &:hover { color: var(--c-encre); border-color: var(--c-filet2); background: rgba(201, 174, 114, .06); }
+        &[aria-expanded="true"] { color: var(--c-etat); border-color: rgba(54, 207, 192, .4); }
+    }
+    .acb-sep { width: 1px; height: 22px; background: var(--c-filet2); flex: none; }
+    .acb-id { display: flex; align-items: baseline; gap: 10px; min-width: 0; padding: 0 8px; margin: 0; }
+    .acb-n { font: 700 13px/1 var(--f-mono); color: var(--c-laiton); }
+    .acb-nom {
+        font: 700 16px/1 var(--f-titre); letter-spacing: .06em; color: var(--c-encre);
+        white-space: nowrap; text-decoration: none;
+        &:hover { color: var(--c-laiton-hi); }
+    }
+    .acb-chap {
+        display: flex; align-items: center; gap: 8px; min-width: 0; margin: 0; overflow: hidden;
+        font: 400 12px/1 var(--f-mono); color: var(--c-gris);
+        b { color: var(--c-etat); font-weight: 500; white-space: nowrap; }
+        > span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    }
+    .acb-nav {
+        display: flex; margin-left: auto;
+        a { font: 500 12px/1 var(--f-mono); color: var(--c-gris); text-decoration: none; padding: 8px 9px; }
+        a:hover { color: var(--c-encre); }
+    }
+    .acb-outils { display: flex; gap: 4px; align-items: center; }
+    .acb-plein {
+        color: #1A140E; font-weight: 700; box-shadow: 0 2px 0 #0B0907;
+        background: linear-gradient(180deg, #DCC48C, #C2A466 55%, #A88A50);
+        &:hover {
+            color: #1A140E; border-color: transparent;
+            background: linear-gradient(180deg, #E6CF97, #C9AE72 55%, #A88A50);
+        }
+    }
+    .acb-languette {
+        position: absolute; top: 0; left: 50%; z-index: 11; transform: translate(-50%, -110%);
+        display: flex; align-items: center; gap: 8px; height: 24px; padding: 0 14px;
+        border: 1px solid var(--c-filet); border-top: 0; border-radius: 0 0 var(--r) var(--r);
+        background: rgba(20, 17, 14, .86); font: 500 11px/1 var(--f-mono); color: var(--c-laiton);
+        transition: transform .25s ease;
+        &:hover { color: var(--c-etat); }
+    }
+
+    // Folded: the bar slides up, the tab comes down, the guide takes the whole height.
+    &.is-replie {
+        .acb-moteur { padding-top: 0; }
+        .acb-barre { transform: translateY(-100%); }
+        .acb-languette { transform: translate(-50%, 0); }
+        .acb-voile, .acb-charge { inset: 0; }
+    }
+
+    // --- Remote bubble -----------------------------------------------------------------
+    .acb-bulle {
+        position: absolute; z-index: 12; top: calc(var(--barre) + 8px); right: 10px;
+        width: #{'min(340px, calc(100vw - 20px))'}; padding: 16px 18px 18px;
+        background: rgba(29, 25, 21, .97); border: 1px solid rgba(54, 207, 192, .4);
+        border-radius: var(--r); box-shadow: 0 16px 40px rgba(0, 0, 0, .55);
+        h2 { margin: 0 0 8px; font: 700 16px/1.2 var(--f-titre); letter-spacing: .04em; }
+        ol { margin: 0; padding-left: 20px; list-style: decimal; color: var(--c-gris); font-size: 14px; }
+        li + li { margin-top: 6px; }
+        strong { color: var(--c-etat); font-weight: 500; }
+    }
+    .acb-bulle__ok {
+        margin-top: 14px; height: 32px; padding: 0 12px; border: 1px solid var(--c-filet);
+        border-radius: var(--r); background: none; font: 500 12px/1 var(--f-mono); color: var(--c-encre);
+    }
+
+    // --- Veil of a locked guide ------------------------------------------------------------
+    .acb-voile {
+        position: absolute; inset: var(--barre) 0 0 0; z-index: 8; display: flex; align-items: center;
+        justify-content: center; padding: 20px; overflow-y: auto;
+        background: rgba(14, 11, 9, .78); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+    }
+    .acb-voile__carte {
+        width: #{'min(520px, 100%)'}; margin: auto; padding: 28px 28px 26px; background: var(--c-pan);
+        border: 1px solid var(--c-filet); border-radius: var(--r); box-shadow: 0 20px 60px rgba(0, 0, 0, .6);
+        h2 { margin: 10px 0 0; font: 700 #{'clamp(24px, 3.4vw, 32px)'}/1.1 var(--f-titre); letter-spacing: .03em; }
+        > p { margin: 12px 0 0; color: var(--c-gris); }
+    }
+    .acb-voile__cad { font: 500 12px/1.4 var(--f-mono); color: var(--c-laiton) !important; margin: 0 !important; }
+    .acb-voile__chap {
+        margin: 18px 0 0; display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px;
+        li {
+            height: 26px; display: flex; align-items: center; justify-content: center; border-radius: 2px;
+            font: 500 11px/1 var(--f-mono);
+        }
+        .is-libre { background: rgba(54, 207, 192, .14); color: var(--c-etat); border: 1px solid rgba(54, 207, 192, .4); }
+        .is-clos { background: var(--c-fond); color: #6E6352; border: 1px solid var(--c-filet2); }
+    }
+    .acb-voile__leg { margin-top: 8px !important; font: 400 12px/1.4 var(--f-mono); }
+    .acb-voile__agir {
+        margin-top: 22px; display: flex; flex-wrap: wrap; gap: 12px 18px; align-items: center;
+        form { margin: 0; }
+        .ac-plaque { border: 0; padding: 14px 26px; font-size: 14px; letter-spacing: .1em; }
+    }
+    .acb-voile__essai {
+        background: none; border: 0; padding: 4px 0; font: 500 13px/1.3 var(--f-mono); color: var(--c-etat);
+        border-bottom: 1px solid rgba(54, 207, 192, .35);
+    }
+    // Preview strip: the veil folded away while the free chapters play.
+    .acb-apercu {
+        position: absolute; z-index: 9; left: 50%; bottom: 84px; transform: translateX(-50%);
+        display: flex; align-items: center; gap: 12px; max-width: calc(100vw - 24px);
+        padding: 8px 8px 8px 14px; background: rgba(20, 17, 14, .92); border: 1px solid var(--c-filet);
+        border-radius: var(--r); font: 500 12px/1.3 var(--f-mono); color: var(--c-gris);
+        b { color: var(--c-etat); font-weight: 500; }
+        button {
+            height: 28px; padding: 0 10px; border: 1px solid var(--c-filet); border-radius: var(--r);
+            background: var(--c-pan2); color: var(--c-laiton-hi); white-space: nowrap;
+        }
+    }
+
+    @media (max-width: 1000px) {
+        .acb-nav, .acb-chap { display: none; }
+        .acb-outils { margin-left: auto; }
+    }
+    @media (max-width: 600px) {
+        .acb-barre { padding: 0 4px; }
+        .acb-bt { padding: 0 8px; }
+        .acb-txt { display: none; }
+        .acb-id { padding: 0 4px; gap: 6px; overflow: hidden; }
+        .acb-nom { font-size: 14px; overflow: hidden; text-overflow: ellipsis; }
+        .acb-sep { display: none; }
+        .acb-voile { align-items: flex-start; }
+        .acb-voile__carte { padding: 22px 18px; }
+        .acb-apercu { left: 12px; right: 12px; bottom: 12px; transform: none; justify-content: space-between; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after { transition: none !important; animation: none !important; }
+    }
+}
+
+@keyframes acb-charge {
+    from { transform: translateX(-100%); }
+    to { transform: translateX(260%); }
+}

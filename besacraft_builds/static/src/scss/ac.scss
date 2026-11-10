@@ -127,7 +127,8 @@ $ac-ease: cubic-bezier(.22, 1, .36, 1);
     .ac-holo.is-fixe { @include ac-holo-fixe; }
     .ac-holo.is-vide { display: none; }
     @media (prefers-reduced-motion: reduce) { .ac-holo { @include ac-holo-fixe; } }
-    > :not(.ac-holo):not(.ac-barre):not(.ac-lecture):not(.ac-filtres):not(.ac-choix) { position: relative; z-index: 1; }
+    // Not on the build screen (ac_build.scss), whose layers are all placed absolutely.
+    &:not(.acb) > :not(.ac-holo):not(.ac-barre):not(.ac-lecture):not(.ac-filtres):not(.ac-choix) { position: relative; z-index: 1; }
 
     // Readout of the hologram: which layer is being laid, live
     .ac-lecture {
