@@ -1,0 +1,157 @@
+<odoo>
+    <!-- Builds v2: the page of one series. A selector of the site's series, the hero, the
+         episodes, the builds of the series and a hologram drawn within the series. -->
+    <template id="serie" name="Besacraft — Series page">
+        <t t-call="website.layout">
+            <t t-set="additional_title"><t t-out="serie.name"/></t>
+            <div id="wrap" class="ac ac-serie-page bc-notice">
+                <t t-call="besacraft_builds.ac_barre"/>
+
+                <nav class="ac-choix" aria-label="Choose a series">
+                    <div class="ac-choix__in">
+                        <span class="ac-choix__lib">Series</span>
+                        <a t-foreach="series" t-as="un_serie" class="ac-choix__s"
+                           t-attf-href="/builds/serie/#{un_serie.code}" t-attf-style="--s:#{un_serie.color}"
+                           t-att-aria-current="un_serie == serie and 'page' or None">
+                            <i/><b t-out="un_serie.name"/>
+                            <small>
+                                <t t-if="un_serie.subtitle"><t t-out="un_serie.subtitle"/> · </t>
+                                <t t-if="par_serie.get(un_serie.id)"><t t-out="par_serie[un_serie.id]"/> <t t-if="par_serie[un_serie.id] == 1">build</t><t t-else="">builds</t></t>
+                                <t t-else="">coming soon</t>
+                            </small>
+                        </a>
+                    </div>
+                </nav>
+
+                <t t-call="besacraft_builds.ac_holo_fond">
+                    <t t-set="ac_holo_serie" t-value="serie.code"/>
+                </t>
+
+                <section class="ac-hero ac-hero--serie" aria-labelledby="ac-hero-titre"
+                         t-attf-style="--s:#{serie.color}">
+                    <p class="ac-hero__meta ac-mono"><span>Video series</span><span><b t-out="serie.name"/></span></p>
+                    <img t-if="serie.logo" class="ac-hero__logo"
+                         t-attf-src="/web/image/besacraft.serie/#{serie.id}/logo/512x512" alt=""
+                         width="280" height="280" loading="eager"/>
+                    <h1 id="ac-hero-titre" t-field="serie.name"/>
+                    <p t-if="serie.subtitle" class="ac-hero__dit" t-field="serie.subtitle"/>
+                    <div t-if="serie.description" class="ac-hero__dit" t-field="serie.description"/>
+                    <div class="ac-hero__agir">
+                        <a t-if="holo_build" class="ac-plaque" t-attf-href="/builds/#{int(holo_build.code)}"><i/><i/>▶ Launch <t t-out="holo_build.name"/></a>
+                        <a t-if="n_episodes" class="ac-lien" href="#ac-episodes">See the episodes</a>
+                        <a t-elif="n_builds" class="ac-lien" href="#ac-builds">See the builds</a>
+                    </div>
+                    <div class="ac-hero__compte">
+                        <div><b t-out="n_episodes"/><span>episodes online</span></div>
+                        <div><b t-out="n_builds"/><span>builds in the series</span></div>
+                        <div><b t-out="'{:,}'.format(n_blocs).replace(',', ' ')"/><span>blocks in all</span></div>
+                    </div>
+                </section>
+
+                <section class="ac-sec" id="ac-episodes" aria-labelledby="ac-ep-titre">
+                    <div class="ac-sec__tete">
+                        <p class="ac-sec__index"><span>›</span> The episodes</p>
+                        <h2 id="ac-ep-titre">Shot in the game, together</h2>
+                        <p>The buildings they put up in the episodes are in the catalogue, ready to follow.</p>
+                    </div>
+                    <div t-if="episodes" class="ac-ep">
+                        <t t-set="ac_une_ep" t-value="episodes[0]"/>
+                        <article class="ac-ep__une" aria-labelledby="ac-ep1-titre">
+                            <a class="ac-ep__ecran" t-attf-href="/builds/serie/#{serie.code}/episodes#episode-#{ac_une_ep.id}">
+                                <img t-if="ac_une_ep.poster" t-attf-src="/web/image/besacraft.episode/#{ac_une_ep.id}/poster/1280x720"
+                                     alt="" width="1280" height="720" loading="lazy"/>
+                                <span t-else="" class="ac-ep__sans" aria-hidden="true">▶</span>
+                            </a>
+                            <div class="ac-ep__info">
+                                <p class="ac-mono"><b><t>Ep.</t> <t t-out="ac_une_ep.number"/></b> · <t t-out="serie.name"/><t t-if="ac_une_ep.duration_minutes"> · <t t-out="ac_une_ep.duration_minutes"/> min</t></p>
+                                <h3 id="ac-ep1-titre" t-out="ac_une_ep.name"/>
+                                <p t-if="ac_une_ep.summary" t-out="ac_une_ep.summary"/>
+                                <div class="ac-ep__liens">
+                                    <a t-if="ac_une_ep.youtube_url" class="ac-lien" t-att-href="ac_une_ep.youtube_url"
+                                       target="_blank" rel="noopener">▶ Watch the episode on YouTube</a>
+                                    <a class="ac-lien" t-attf-href="/builds/serie/#{serie.code}/episodes">All the episodes</a>
+                                </div>
+                            </div>
+                        </article>
+                        <ol class="ac-ep__liste" aria-label="List of episodes">
+                            <li class="ac-ep__liste-tete" aria-hidden="true">
+                                <span>&gt; episodes --serie <t t-out="serie.code"/></span>
+                                <span><t t-out="n_episodes"/> <t t-if="n_episodes == 1">episode</t><t t-else="">episodes</t></span>
+                            </li>
+                            <li t-foreach="episodes" t-as="un_ep" class="ac-ep__ligne">
+                                <a class="ac-ep__vign" t-attf-href="/builds/serie/#{serie.code}/episodes#episode-#{un_ep.id}">
+                                    <img t-if="un_ep.poster" t-attf-src="/web/image/besacraft.episode/#{un_ep.id}/poster/320x180"
+                                         alt="" width="320" height="180" loading="lazy"/>
+                                </a>
+                                <div>
+                                    <span class="ac-ep__n"><t>Ep.</t> <t t-out="un_ep.number"/></span>
+                                    <span class="ac-ep__titre" t-out="un_ep.name"/>
+                                    <span t-if="un_ep.is_published" class="ac-ep__etat ac-ep__etat--en-ligne">online</span>
+                                    <span t-else="" class="ac-ep__etat">not published</span>
+                                </div>
+                            </li>
+                        </ol>
+                    </div>
+                    <div t-else="" class="ac-ep__vide">
+                        <strong>No episode yet</strong>
+                        <p>The series episodes will appear here, from the latest to the oldest.</p>
+                    </div>
+                </section>
+
+                <section class="ac-sec" id="ac-builds" aria-labelledby="ac-sb-titre">
+                    <div class="ac-sec__tete">
+                        <p class="ac-sec__index"><span>›</span> The builds of the series</p>
+                        <h2 id="ac-sb-titre">Built in the episodes</h2>
+                        <p>What you see going up on screen, you build in your own world: the step-by-step guide opens full screen.</p>
+                    </div>
+                    <div t-if="builds" class="ac-builds">
+                        <t t-foreach="builds" t-as="un_build">
+                            <t t-call="besacraft_builds.ac_carte">
+                                <t t-set="build" t-value="un_build"/>
+                                <t t-set="ac_une" t-value="un_build_first"/>
+                                <t t-set="ac_vu" t-value="vu_dans.get(un_build.id)"/>
+                            </t>
+                        </t>
+                    </div>
+                    <div t-else="" class="ac-ep__vide">
+                        <strong>The first tutorials of the series are coming</strong>
+                        <p>This series has no build in the catalogue yet.</p>
+                    </div>
+                    <p t-if="n_builds" class="ac-builds__tous">
+                        <a class="ac-lien" t-attf-href="/builds/collections?serie=#{serie.code}">All the builds of the series in the collections</a>
+                    </p>
+                </section>
+
+                <section t-if="len(series) &gt; 1" class="ac-autres" aria-labelledby="ac-autres-titre">
+                    <div class="ac-autres__in">
+                        <h2 id="ac-autres-titre">The other series</h2>
+                        <ul class="ac-autres__liste">
+                            <li t-foreach="series - serie" t-as="un_serie">
+                                <a class="ac-autre" t-attf-href="/builds/serie/#{un_serie.code}">
+                                    <span class="ac-autre__img">
+                                        <img t-if="un_serie.id in couverture['cover']"
+                                             t-attf-src="/web/image/besacraft.serie/#{un_serie.id}/cover_image/320x240"
+                                             alt="" width="320" height="240" loading="lazy"/>
+                                        <img t-elif="un_serie.id in couverture['logo']" class="is-logo"
+                                             t-attf-src="/web/image/besacraft.serie/#{un_serie.id}/logo/256x256"
+                                             alt="" width="256" height="256" loading="lazy"/>
+                                    </span>
+                                    <span>
+                                        <strong t-out="un_serie.name"/>
+                                        <span>
+                                            <t t-if="par_serie.get(un_serie.id)"><b t-out="par_serie[un_serie.id]"/> <t t-if="par_serie[un_serie.id] == 1">build</t><t t-else="">builds</t></t>
+                                            <t t-else="">No build yet</t>
+                                            · <em>View</em>
+                                        </span>
+                                    </span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </section>
+
+                <script type="module" src="/besacraft_builds/static/src/js/holo.js"/>
+            </div>
+        </t>
+    </template>
+</odoo>

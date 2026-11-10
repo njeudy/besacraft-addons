@@ -1,88 +1,5 @@
 <odoo>
-    <!-- Une vignette d'épisode, partagée par la page de série. -->
-    <template id="episode_carte" name="Besacraft — Carte d'épisode">
-        <a t-attf-href="/builds/serie/#{episode.serie_id.code}/episodes#episode-#{episode.id}"
-           class="bc-episode-carte bc-lueur">
-            <span class="bc-episode-vis">
-                <img t-if="episode.poster" t-attf-src="/web/image/besacraft.episode/#{episode.id}/poster"
-                     t-att-alt="episode.name" width="1280" height="720" loading="lazy"/>
-                <span t-else="" class="bc-episode-sans" aria-hidden="true">▶</span>
-            </span>
-            <span class="bc-episode-corps">
-                <span class="bc-episode-n">Épisode <t t-out="episode.number"/>
-                    <span t-if="not episode.is_published" class="bc-acces">Non publié</span></span>
-                <span class="bc-episode-titre" t-out="episode.name"/>
-                <span class="bc-episode-meta">
-                    <span t-if="episode.date" t-out="episode.date" t-options='{"widget": "date"}'/>
-                    <span t-if="episode.duration_minutes"><t t-out="episode.duration_minutes"/> min</span>
-                </span>
-            </span>
-        </a>
-    </template>
 
-    <template id="serie" name="Besacraft — Page de série">
-        <t t-call="website.layout">
-            <t t-set="additional_title"><t t-out="serie.name"/></t>
-            <div id="wrap" class="bc-notice bc-serie-page">
-                <t t-call="besacraft_builds.barre"/>
-                <div class="bc-page">
-
-                    <section class="bc-sec bc-serie-hero" t-attf-style="--serie:#{serie.color}">
-                        <img t-if="serie.logo" class="bc-serie-logo"
-                             t-attf-src="/web/image/besacraft.serie/#{serie.id}/logo"
-                             t-att-alt="'Logo de la série %s' % serie.name" loading="eager"/>
-                        <div class="bc-serie-texte">
-                            <span class="bc-surtitre">Série</span>
-                            <h1 class="bc-titre" t-field="serie.name"/>
-                            <p t-if="serie.subtitle" class="bc-serie-sous" t-field="serie.subtitle"/>
-                            <div class="bc-serie-desc" t-field="serie.description"/>
-                            <div class="bc-actions">
-                                <a t-if="n_builds" t-attf-href="/builds?serie=#{serie.code}" class="bc-btn-achat">
-                                    Voir les <t t-out="n_builds"/> builds</a>
-                                <a t-if="n_episodes" t-attf-href="/builds/serie/#{serie.code}/episodes"
-                                   class="bc-btn-second">Les épisodes</a>
-                            </div>
-                        </div>
-                    </section>
-
-                    <section class="bc-sec">
-                        <h2 class="bc-h2">Les builds de la série</h2>
-                        <ul t-if="builds" class="bc-grille">
-                            <li t-foreach="builds" t-as="un_build" class="bc-cell">
-                                <t t-call="besacraft_builds.carte"><t t-set="build" t-value="un_build"/></t>
-                            </li>
-                        </ul>
-                        <div t-else="" class="bc-vide">
-                            <span class="bc-vide-t">Les premiers tutos de la série arrivent</span>
-                            <p>Cette série n'a pas encore de build au catalogue.</p>
-                        </div>
-                        <p t-if="n_builds &gt; len(builds)" class="bc-suite">
-                            <a t-attf-href="/builds?serie=#{serie.code}" class="bc-btn-second">
-                                Voir les <t t-out="n_builds"/> builds ›</a>
-                        </p>
-                    </section>
-
-                    <section class="bc-sec" id="bc-episodes">
-                        <h2 class="bc-h2">Épisodes</h2>
-                        <ul t-if="episodes" class="bc-episodes-grille">
-                            <li t-foreach="episodes" t-as="un_episode">
-                                <t t-call="besacraft_builds.episode_carte"><t t-set="episode" t-value="un_episode"/></t>
-                            </li>
-                        </ul>
-                        <div t-else="" class="bc-vide">
-                            <span class="bc-vide-t">Pas encore d'épisode</span>
-                            <p>Les épisodes de la série apparaîtront ici, du plus récent au plus ancien.</p>
-                        </div>
-                        <p t-if="n_episodes" class="bc-suite">
-                            <a t-attf-href="/builds/serie/#{serie.code}/episodes" class="bc-btn-second">
-                                Tous les épisodes ›</a>
-                        </p>
-                    </section>
-
-                </div>
-            </div>
-        </t>
-    </template>
 
     <template id="episodes" name="Besacraft — Épisodes d'une série">
         <t t-call="website.layout">
@@ -98,7 +15,7 @@
                             <p t-if="serie.subtitle" class="bc-serie-sous" t-out="serie.subtitle"/>
                             <p class="bc-actions">
                                 <a t-attf-href="/builds/serie/#{serie.code}" class="bc-btn-second">‹ La page de la série</a>
-                                <a t-attf-href="/builds?serie=#{serie.code}" class="bc-btn-second">Les builds de la série</a>
+                                <a t-attf-href="/builds/collections?serie=#{serie.code}" class="bc-btn-second">Les builds de la série</a>
                             </p>
                         </div>
                     </header>
