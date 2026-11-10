@@ -101,6 +101,18 @@ class BesacraftBuild(models.Model):
     source_author = fields.Char("Original Author")
     source_license = fields.Char("Licence")
     source_url = fields.Char("Source")
+    # Ce qu'il faut à la fiche produit v2 : la galerie montre la boîte (`box_image`, photo
+    # produit), le build détouré qui déborde de l'anneau, la face du coffret à plat, et la
+    # vitrine 3D -- un glb qui peut peser 20 Mo, d'où une pièce jointe servie à la demande
+    # plutôt qu'un champ binaire lu avec la fiche.
+    cutout_image = fields.Image(
+        "Cutout", help="The build alone on a transparent background.")
+    box_face_image = fields.Image(
+        "Box Face", help="The front of the box, laid flat: the third view of the gallery.")
+    vitrine_glb_attachment_id = fields.Many2one(
+        "ir.attachment", "Showcase Model", ondelete="set null", copy=False,
+        help="The glTF model (.glb) mounted in the 3D showcase of the product sheet.")
+    chapter_ids = fields.One2many("besacraft.build.chapter", "build_id", string="Chapters")
     viewer_attachment_id = fields.Many2one("ir.attachment", ondelete="set null")
     build_json_attachment_id = fields.Many2one("ir.attachment", ondelete="set null")
     layer_ids = fields.One2many("besacraft.build.layer", "build_id")
