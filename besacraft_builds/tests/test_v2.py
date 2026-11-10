@@ -184,6 +184,8 @@ class TestChapitres(TransactionCase):
         Chapitre = self.env["besacraft.build.chapter"]
         for sequence, nom in ((30, "Toit"), (10, "Fondations"), (20, "Murs")):
             Chapitre.create({"build_id": self.build.id, "sequence": sequence, "name": nom})
+        # Le cache du One2many garde l'ordre des créations : relire la base, comme la page.
+        self.build.invalidate_recordset(["chapter_ids"])
         self.assertEqual(self.build.chapter_ids.mapped("name"),
                          ["Fondations", "Murs", "Toit"])
 
