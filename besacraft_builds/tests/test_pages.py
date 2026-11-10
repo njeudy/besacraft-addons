@@ -132,7 +132,7 @@ class TestPages(HttpCase):
         self.assertEqual(self._statut("/builds/serie/inconnue"), 404)
 
     def test_la_serie_sans_episode_montre_l_etat_vide(self):
-        self.assertIn("Pas encore d'épisode", self.url_open("/builds/serie/schematics").text)
+        self.assertIn("ac-ep__vide", self.url_open("/builds/serie/schematics").text)
 
     def test_les_episodes_non_publies_ne_se_montrent_qu_aux_editeurs(self):
         episode = self.env["besacraft.episode"].create({
@@ -156,21 +156,21 @@ class TestPages(HttpCase):
 
     # --- catalogue et barre ---------------------------------------------------------------------
 
-    def test_le_catalogue_porte_les_donnees_des_filtres(self):
-        page = self.url_open("/builds").text
+    def test_les_collections_portent_les_donnees_des_filtres(self):
+        page = self.url_open("/builds/collections").text
         for attribut in ('data-series="schematics"', 'data-acces="payant"',
                          'data-acces="gratuit"', 'data-blocs="120"', 'data-couches="2"'):
             self.assertIn(attribut, page)
-        self.assertIn("Tuto payant", page)
+        self.assertIn("ac-etat--payant", page)
 
     def test_la_barre_porte_le_projet_quand_il_est_renseigne(self):
         # Une base de dev peut déjà porter l'adresse : on part d'un site sans projet.
         self.site.besacraft_projet_url = False
-        self.assertNotIn(">Le projet<", self.url_open("/builds").text)
+        self.assertNotIn("data-ac-projet", self.url_open("/builds").text)
         self.site.besacraft_projet_url = "/builds-minecraft"
         page = self.url_open("/builds").text
         self.assertIn('href="/builds-minecraft"', page)
-        self.assertIn(">Le projet<", page)
+        self.assertIn("data-ac-projet", page)
 
     # --- hologramme ---------------------------------------------------------------------------------
 
@@ -198,6 +198,56 @@ class TestPages(HttpCase):
         donnees = reponse.json()
         self.assertIsNone(donnees["build"])
         self.assertEqual(donnees["stats"], {"builds": 0, "blocs": 0, "series": 0})
+
+    def test_holo_dans_une_serie_ne_tire_que_dans_cette_serie(self):
+        autre = self.env.ref("besacraft_builds.serie_hardcore")
+        autre.website_ids = [(4, self.site.id)]
+        voisin = self.env["besacraft.build"].create({
+            "name": "Voisin holo", "code": "9924", "enroll": "public", "is_published": True,
+            "serie_id": autre.id,
+            "holo_data": json.dumps({"taille": [1, 1, 1], "couches": [[0, 0]]})})
+        for _ in range(8):
+            donnees = self.url_open("/besacraft/holo?serie=%s" % autre.code).json()
+            self.assertTrue(donnees["build"])
+            tire = self.env["besacraft.build"].search(
+                [("code", "=", donnees["build"]["code"])])
+            self.assertIn(autre, tire.series())
+        self.assertEqual(self.url_open(
+            "/besacraft/holo?serie=%s&code=9924" % autre.code).json()["build"]["code"], "9924")
+        self.assertIsNone(self.url_open(
+            "/besacraft/holo?serie=%s&code=9922" % autre.code).json()["build"],
+            "le build d'une autre série ne sort pas")
+        self.assertTrue(voisin)
+
+    def test_holo_d_une_serie_hors_du_site_ne_donne_rien(self):
+        autre = self.env.ref("besacraft_builds.serie_hardcore")
+        autre.website_ids = [(3, self.site.id)]
+        self.env["besacraft.build"].create({
+            "name": "Hors site holo", "code": "9925", "enroll": "public", "is_published": True,
+            "serie_id": autre.id,
+            "holo_data": json.dumps({"taille": [1, 1, 1], "couches": [[0, 0]]})})
+        for url in ("/besacraft/holo?serie=%s" % autre.code, "/besacraft/holo?serie=inconnue"):
+            self.assertIsNone(self.url_open(url).json()["build"], url)
+
+    # --- accueil v2 -----------------------------------------------------------------------------------
+
+    def test_l_accueil_montre_les_derniers_builds_et_les_series_du_site(self):
+        page = self.url_open("/builds").text
+        self.assertIn("ac-accueil", page)
+        self.assertIn("Build gratuit", page)
+        self.assertIn("/t/9922", page)
+        self.assertIn('href="/builds/9922"', page)
+        self.assertIn("/builds/serie/schematics", page)
+
+    def test_l_ancien_filtre_de_serie_renvoie_aux_collections(self):
+        reponse = self.url_open("/builds?serie=schematics", allow_redirects=False)
+        self.assertIn(reponse.status_code, (302, 303))
+        self.assertIn("/builds/collections?serie=schematics", reponse.headers["Location"])
+
+    def test_la_page_de_serie_porte_le_tirage_dans_la_serie(self):
+        page = self.url_open("/builds/serie/schematics").text
+        self.assertIn('data-serie="schematics"', page)
+        self.assertIn("ac-choix", page)
 
     def test_holo_tire_parmi_les_builds_qui_ont_des_positions(self):
         # Le payant n'a pas de holo_data : seul le gratuit peut sortir (parmi ceux du test).

@@ -1,0 +1,169 @@
+<odoo>
+    <!-- Builds v2: the home page. The hero, how it works, the series, the latest builds, a shop
+         teaser and the credit; the hologram behind them is drawn by holo.js. -->
+    <template id="catalogue" name="Besacraft — Builds home">
+        <t t-call="website.layout">
+            <t t-set="additional_title">Builds Minecraft</t>
+            <!-- `bc-notice`: the site theme leaves the links of this class alone (its content-link style would repaint ours). -->
+            <div id="wrap" class="ac ac-accueil bc-notice">
+                <t t-call="besacraft_builds.ac_barre"/>
+                <t t-call="besacraft_builds.ac_holo_fond"/>
+
+                <section class="ac-hero" aria-labelledby="ac-hero-titre">
+                    <p t-if="holo_build" class="ac-hero__meta ac-mono">
+                        <span><b>N°<t t-out="holo_build.code"/></b> <t t-out="holo_build.name"/></span>
+                        <span><t t-out="holo_build.layer_count"/> <t>layers</t></span>
+                        <span><t t-out="'{:,}'.format(holo_build.block_count).replace(',', ' ')"/> <t>blocks</t></span>
+                        <span t-out="holo_build.serie_id.name"/>
+                    </p>
+                    <h1 id="ac-hero-titre">Build it block by block</h1>
+                    <p class="ac-hero__dit">Pick a building and open its guide full screen: every block drops into place, with the sound of the game. You place yours in Minecraft, your phone is the remote control.</p>
+                    <div class="ac-hero__agir">
+                        <a class="ac-plaque"
+                           t-att-href="holo_build and '/builds/%d' % int(holo_build.code) or '/builds/collections'"><i/><i/>▶ Launch the build</a>
+                        <a class="ac-lien" href="/builds/collections">Choose another building</a>
+                    </div>
+                    <div class="ac-hero__compte">
+                        <div><b t-out="total"/><span>builds in the catalogue</span></div>
+                        <div><b t-out="'{:,}'.format(n_blocs).replace(',', ' ')"/><span>blocks in all</span></div>
+                        <div><b t-out="len(series)"/><span>series</span></div>
+                    </div>
+                </section>
+
+                <section class="ac-sec ac-comment" aria-labelledby="ac-comment-titre">
+                    <div class="ac-sec__tete">
+                        <p class="ac-sec__index"><span>›</span> How it works</p>
+                        <h2 id="ac-comment-titre">Three steps, then you build</h2>
+                    </div>
+                    <ol class="ac-etapes">
+                        <li class="ac-etape">
+                            <p class="ac-etape__n">1<small>/ 3</small></p>
+                            <div>
+                                <h3>Choose</h3>
+                                <p>A building in the collections or in a series. The guide starts with the room you need.</p>
+                                <div t-if="holo_build and holo_build.size_x" class="ac-etape__vue ac-emprise">
+                                    <i/>
+                                    <div>
+                                        <p>The room you need</p>
+                                        <p><b><t t-out="holo_build.size_x"/> × <t t-out="holo_build.size_z"/> <t>blocks</t></b></p>
+                                        <p>of flat, clear ground for <t t-out="holo_build.name"/></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="ac-etape">
+                            <p class="ac-etape__n">2<small>/ 3</small></p>
+                            <div>
+                                <h3>Follow step by step</h3>
+                                <p>One layer at a time. A yellow frame shows where to place the block; the white numbers count the empty cells up to the block already in place.</p>
+                                <div t-if="ex_ligne" class="ac-etape__vue ac-carte-pose">
+                                    <svg class="ac-carte-pose__cube" viewBox="0 0 72 72" fill="none" stroke="#36CFC0" stroke-width="2.4" aria-hidden="true"><path d="M36 8 62 22v28L36 64 10 50V22z"/><path d="M10 22l26 14 26-14M36 36v28" opacity=".6"/></svg>
+                                    <div>
+                                        <b>PLACE</b>
+                                        <strong><t t-out="ex_ligne.qty"/>× <t t-out="ex_ligne.name_fr or ex_ligne.item_key"/></strong>
+                                        <span><t>Layer</t> 1 / <t t-out="holo_build.layer_count"/></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="ac-etape">
+                            <p class="ac-etape__n">3<small>/ 3</small></p>
+                            <div>
+                                <h3>Your phone as a remote</h3>
+                                <p>Minecraft on one screen, the guide on the other. Scan the QR code of the Remote button: your phone moves one step forward or back.</p>
+                                <div class="ac-etape__vue ac-tel">
+                                    <div class="ac-tel__ecran"><span>◀</span><span>▶</span></div>
+                                    <div class="ac-mono"><p>📱 Remote</p><p>QR code → ◀ ▶ pad</p></div>
+                                </div>
+                            </div>
+                        </li>
+                    </ol>
+                </section>
+
+                <section class="ac-sec ac-series-sec" aria-labelledby="ac-series-titre">
+                    <div class="ac-sec__tete">
+                        <p class="ac-sec__index"><span>›</span> The series</p>
+                        <h2 id="ac-series-titre">We build what we see in the videos</h2>
+                        <p>Each series is made of episodes shot in the game by Zunk and his dad, and the buildings they put up in them, ready to follow in the guide.</p>
+                    </div>
+                    <ul class="ac-series">
+                        <li t-foreach="series" t-as="un_serie">
+                            <a class="ac-serie" t-attf-href="/builds/serie/#{un_serie.code}">
+                                <div class="ac-serie__img">
+                                    <t t-if="un_serie.id in couverture['cover']">
+                                        <img t-attf-src="/web/image/besacraft.serie/#{un_serie.id}/cover_image/1620x770"
+                                             alt="" width="1620" height="770" loading="lazy"/>
+                                        <img t-if="un_serie.id in couverture['logo']" class="ac-serie__logo"
+                                             t-attf-src="/web/image/besacraft.serie/#{un_serie.id}/logo/256x256"
+                                             alt="" width="110" height="110" loading="lazy"/>
+                                    </t>
+                                    <img t-elif="un_serie.id in couverture['logo']" class="is-logo"
+                                         t-attf-src="/web/image/besacraft.serie/#{un_serie.id}/logo/512x512"
+                                         alt="" width="512" height="512" loading="lazy"/>
+                                    <span t-else="" class="ac-serie__sans" aria-hidden="true">▶</span>
+                                </div>
+                                <div class="ac-serie__corps">
+                                    <h3 t-out="un_serie.name"/>
+                                    <p t-if="un_serie.subtitle" t-out="un_serie.subtitle"/>
+                                    <div class="ac-serie__pied">
+                                        <span class="ac-mono">
+                                            <t t-if="par_serie.get(un_serie.id)">
+                                                <b t-out="par_serie[un_serie.id]"/> <t t-if="par_serie[un_serie.id] == 1">build</t><t t-else="">builds</t>
+                                            </t>
+                                            <t t-else="">No build yet</t>
+                                        </span>
+                                        <span class="ac-serie__go">View the series</span>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                </section>
+
+                <section t-if="derniers" class="ac-sec ac-derniers" aria-labelledby="ac-derniers-titre">
+                    <div class="ac-sec__tete">
+                        <p class="ac-sec__index"><span>›</span> Latest builds</p>
+                        <h2 id="ac-derniers-titre">Fresh out of the workshop</h2>
+                    </div>
+                    <div class="ac-builds">
+                        <t t-foreach="derniers" t-as="un_build">
+                            <t t-call="besacraft_builds.ac_carte">
+                                <t t-set="build" t-value="un_build"/>
+                                <t t-set="ac_une" t-value="un_build_first"/>
+                                <t t-set="ac_serie_nom" t-value="True"/>
+                            </t>
+                        </t>
+                    </div>
+                    <p class="ac-builds__tous"><a class="ac-lien" href="/builds/collections">All the builds in the collections</a></p>
+                </section>
+
+                <section class="ac-sec ac-shop" aria-labelledby="ac-shop-titre">
+                    <div class="ac-sec__tete">
+                        <p class="ac-sec__index"><span>›</span> Shop</p>
+                        <h2 id="ac-shop-titre">Free to start with</h2>
+                    </div>
+                    <div class="ac-shop__grille">
+                        <div class="ac-shop__texte">
+                            <p t-if="not n_payants">Today, every build in the catalogue is free.</p>
+                            <p t-else=""><b t-out="n_gratuits"/> <t>builds are free, </t><b t-out="n_payants"/> <t>are paid.</t></p>
+                            <p>Some complete guides will become paid. The first chapters stay open, to try the guide before buying it. Paid builds are shelved by collection and series in the shop.</p>
+                            <a class="ac-plaque" href="/builds/shop"><i/><i/>Open the shop</a>
+                        </div>
+                        <ul class="ac-etats">
+                            <li><span class="ac-build__etat ac-etat--libre">Free</span><p><strong>The whole guide is open.</strong> You launch the build and go all the way.</p></li>
+                            <li><span class="ac-build__etat ac-etat--payant">Paid</span><p><strong>The first chapters are open.</strong> The rest unlocks when you buy.</p></li>
+                            <li><span class="ac-build__etat ac-etat--achete">Bought</span><p><strong>The whole guide is yours.</strong> It opens from your account, on all your screens.</p></li>
+                        </ul>
+                    </div>
+                </section>
+
+                <t t-call="besacraft_builds.ac_credit">
+                    <t t-set="ac_credit_cta" t-value="True"/>
+                    <p>The videos are shot by Zunk and his dad, with the Besacraft modpack on Modrinth.</p>
+                </t>
+
+                <script type="module" src="/besacraft_builds/static/src/js/holo.js"/>
+            </div>
+        </t>
+    </template>
+</odoo>
