@@ -70,12 +70,12 @@ class TestShortYoutube(HttpCase):
         self.assertEqual(self.build.short_youtube_id, "dQw4w9WgXcQ")
 
     def test_sans_adresse_la_page_ne_montre_aucun_lien_youtube(self):
-        page = self.url_open("/builds/9931").text
+        page = self.url_open("/t/9931").text
         self.assertNotIn("youtube.com/shorts/", page)
 
     def test_la_page_renvoie_vers_le_short_publie(self):
         """The player stays local -- the link only points at the publication."""
         self.build.short_youtube_url = "https://youtu.be/dQw4w9WgXcQ"
-        page = self.url_open("/builds/9931").text
+        page = self.url_open("/t/9931").text
         self.assertIn("https://www.youtube.com/shorts/dQw4w9WgXcQ", page)
         self.assertIn("/builds/9931/court", page, "le lecteur reste servi par Odoo")

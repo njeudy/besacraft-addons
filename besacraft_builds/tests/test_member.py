@@ -109,8 +109,8 @@ class TestRejoindre(HttpCase):
             [("build_id", "=", self.gratuit.id)]), 0)
 
     def test_le_bouton_s_affiche_tant_qu_on_n_est_pas_membre(self):
-        """The page offers the button, and stops offering it once joined."""
+        """The product sheet offers the button, and stops offering it once joined."""
         self.authenticate("zoe-rejoindre", "zoe-rejoindre")
-        self.assertIn("/builds/9145/rejoindre", self.url_open("/builds/9145").text)
+        self.assertIn("/builds/9145/rejoindre", self.url_open("/t/9145").text)
         self.gratuit._action_add_members(self.utilisateur.partner_id)
-        self.assertNotIn("/builds/9145/rejoindre", self.url_open("/builds/9145").text)
+        self.assertNotIn("/builds/9145/rejoindre", self.url_open("/t/9145").text)

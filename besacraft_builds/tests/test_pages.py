@@ -53,7 +53,8 @@ class TestPages(HttpCase):
         self.assertTrue(feuille, "pas de feuille de style frontend dans la page")
         css = self.url_open(feuille.group(0)).text
         self.assertNotIn("Internal Error", css)
-        for classe in (".bc-carte", ".bc-barre-section", ".bc-plaque-prix", ".bc-lueur"):
+        for classe in (".bc-carte", ".bc-barre-section", ".bc-plaque-prix", ".bc-lueur",
+                       ".acb-barre", ".acb-voile__chap"):
             self.assertIn(classe, css)
 
     # --- écran d'un build -----------------------------------------------------------------
@@ -71,32 +72,21 @@ class TestPages(HttpCase):
         self.serie.website_ids = [(3, self.site.id)]
         self.assertEqual(self._statut("/builds/9921"), 404)
 
-    def test_le_bouton_d_achat_n_est_que_sur_un_payant_non_acquis(self):
+    def test_l_ecran_d_un_payant_non_acquis_montre_le_voile_et_l_achat(self):
         payant = self.url_open("/builds/9921").text
+        self.assertIn("acb-voile", payant)
         self.assertIn('action="/shop/cart/update"', payant)
-        self.assertIn("Obtenir ce tutoriel", payant)
         self.assertIn("4,00", payant)
         gratuit = self.url_open("/builds/9922").text
+        self.assertNotIn("acb-voile", gratuit)
         self.assertNotIn("/shop/cart/update", gratuit)
-        self.assertIn("Ouvrir le tuto", gratuit)
 
-    def test_un_acquereur_voit_le_badge_et_plus_l_achat(self):
+    def test_un_acquereur_n_a_plus_de_voile(self):
         admin = self._connecter_admin()
         self.payant._action_add_members(admin.partner_id)
         page = self.url_open("/builds/9921").text
+        self.assertNotIn("acb-voile", page)
         self.assertNotIn("/shop/cart/update", page)
-        self.assertIn("Acheté", page)
-
-    def test_l_apercu_montre_trois_couches_reelles(self):
-        for sequence in (1, 2, 3):
-            couche = self.env["besacraft.build.layer"].create({
-                "build_id": self.payant.id, "sequence": sequence, "block_count": 10})
-            self.env["besacraft.build.layer.line"].create({
-                "layer_id": couche.id, "item_key": "minecraft:b%d" % sequence,
-                "name_fr": "Bloc numero %d" % sequence, "qty": sequence})
-        page = self.url_open("/builds/9921").text
-        for sequence in (1, 2, 3):
-            self.assertIn("Bloc numero %d" % sequence, page)
 
     def test_le_court_se_sert_avec_la_meme_garde(self):
         self.assertEqual(self._statut("/builds/9922/court"), 404, "pas de court posé")
