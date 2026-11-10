@@ -51,6 +51,10 @@
                         <page string="Description" name="description">
                             <field name="description"/>
                         </page>
+                        <page string="Cover Image" name="cover_image">
+                            <field name="cover_image" widget="image"
+                                   options="{'size': [0, 240]}"/>
+                        </page>
                         <page string="Episodes" name="episodes">
                             <field name="episode_ids">
                                 <list>

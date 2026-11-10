@@ -48,6 +48,9 @@ class BesacraftSerie(models.Model):
     # pas un gabarit à redéployer.
     description = fields.Html(translate=True)
     logo = fields.Image(max_width=1024, max_height=1024)
+    cover_image = fields.Image(
+        "Cover Image", max_width=1920, max_height=1080,
+        help="Picture of the series on the home page card. Falls back to the logo.")
     episode_ids = fields.One2many("besacraft.episode", "serie_id")
     episode_count = fields.Integer(compute="_compute_episode_count")
 
