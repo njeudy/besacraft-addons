@@ -1,0 +1,138 @@
+<odoo>
+    <!-- Builds v2, direction « La Console »: the pieces shared by the home, collections and
+         series pages (section bar, build card, hologram, credit) and the pages themselves.
+         All the editorial text lives here, in the markup, so the website editor can change it;
+         nothing is injected by script. The figures, names and pictures come from the records. -->
+
+    <!-- Section bar. `barre_active` is home, collections, series or shop. -->
+    <template id="ac_barre" name="Besacraft — v2 section bar">
+        <t t-set="ac_series" t-value="website._besacraft_series()"/>
+        <div class="ac-barre">
+            <div class="ac-barre__in">
+                <span class="ac-barre__nom">Builds Minecraft</span>
+                <nav aria-label="Builds Minecraft">
+                    <a t-if="website.besacraft_projet_url" t-att-href="website.besacraft_projet_url"
+                       data-ac-projet="1">Project</a>
+                    <a href="/builds" t-att-aria-current="barre_active == 'home' and 'page' or None">Home</a>
+                    <a href="/builds/collections"
+                       t-att-aria-current="barre_active == 'collections' and 'page' or None">Collections</a>
+                    <a t-att-href="ac_series and '/builds/serie/%s' % ac_series[0].code or '/builds'"
+                       t-att-aria-current="barre_active == 'series' and 'page' or None">Series</a>
+                    <a href="/builds/shop" t-att-aria-current="barre_active == 'shop' and 'page' or None">Shop</a>
+                </nav>
+            </div>
+        </div>
+    </template>
+
+    <!-- The build card. Variables: `build`; optional `ac_une` (the big card), `ac_badges`
+         (series badges and a link to the series), `ac_serie_nom` (series name in the figures),
+         `ac_vu` (episode where the build shows up). `acquis`, `avec_boite`, `avec_vue` come
+         from the controller (one query for the whole shelf rather than one per card). The
+         product sheet has three ways in: the picture, the name and the brass button. -->
+    <template id="ac_carte" name="Besacraft — v2 build card">
+        <t t-set="ac_n" t-value="int(build.code)"/>
+        <t t-set="ac_acces" t-value="build.enroll == 'payment' and 'payant' or (build.enroll == 'invite' and 'invite' or 'gratuit')"/>
+        <article t-attf-class="ac-build#{ac_une and ' ac-build--une' or ''}"
+                 t-att-data-n="build.code" t-att-data-nom="build.name"
+                 t-att-data-series="' '.join(build.series().mapped('code'))"
+                 t-att-data-series-noms="' '.join(build.series().mapped('name'))"
+                 t-att-data-acces="ac_acces" t-att-data-blocs="build.block_count"
+                 t-att-data-couches="build.layer_count">
+            <div class="ac-build__boite">
+                <span t-if="build.enroll == 'invite'" class="ac-build__etat ac-etat--payant">By invitation</span>
+                <span t-elif="build.enroll == 'payment' and build.id in (acquis or ())"
+                      class="ac-build__etat ac-etat--achete">Bought</span>
+                <span t-elif="build.enroll == 'payment'" class="ac-build__etat ac-etat--payant">
+                    <t t-if="build.price_label" t-out="build.price_label"/><t t-else="">Paid</t>
+                </span>
+                <span t-else="" class="ac-build__etat ac-etat--libre">Free</span>
+                <a class="ac-build__lien-img" t-attf-href="/t/#{ac_n}" tabindex="-1" aria-hidden="true">
+                    <img t-if="build.id in (avec_boite or ())"
+                         t-attf-src="/web/image/besacraft.build/#{build.id}/box_image/700x700"
+                         alt="" width="700" height="700" loading="lazy"/>
+                    <img t-elif="build.id in (avec_vue or ())"
+                         t-attf-src="/web/image/besacraft.build/#{build.id}/overview_image/700x700"
+                         alt="" width="700" height="700" loading="lazy"/>
+                    <div t-else="" class="ac-build__vide">
+                        <svg viewBox="0 0 72 72" fill="none" stroke="#36CFC0" stroke-width="1.2" aria-hidden="true"><path d="M36 8 62 22v28L36 64 10 50V22z" opacity=".9"/><path d="M10 22l26 14 26-14M36 36v28" opacity=".6"/><path d="M23 15l26 14M23 43V29" opacity=".3"/></svg>
+                        <span>Box in preparation</span>
+                    </div>
+                </a>
+            </div>
+            <div class="ac-build__info">
+                <p class="ac-build__n">N°<t t-out="build.code"/></p>
+                <h3><a class="ac-build__lien-nom" t-attf-href="/t/#{ac_n}" t-out="build.name"/></h3>
+                <p t-if="ac_badges" class="ac-build__badges">
+                    <span t-foreach="build.series()" t-as="ac_s" class="ac-badge"
+                          t-attf-style="--s:#{ac_s.color}" t-out="ac_s.name"/>
+                </p>
+                <p class="ac-build__chiffres">
+                    <span><b t-out="build.layer_count"/> layers</span>
+                    <span><b t-out="'{:,}'.format(build.block_count).replace(',', ' ')"/> blocks</span>
+                    <span t-if="ac_serie_nom" t-out="build.serie_id.name"/>
+                </p>
+                <p t-if="ac_vu" class="ac-build__vu"><span>Seen in</span> <b><t>Ep.</t> <t t-out="ac_vu.number"/></b></p>
+                <div t-attf-class="ac-build__#{ac_badges and 'agir' or 'duo'}">
+                    <a class="ac-build__lancer" t-attf-href="/builds/#{ac_n}">▶ Launch the build</a>
+                    <a class="ac-build__fiche" t-attf-href="/t/#{ac_n}">View sheet</a>
+                    <a t-if="ac_badges and ac_serie_lien" class="ac-build__serie"
+                       t-attf-href="/builds/serie/#{ac_serie_lien.code}">View the series</a>
+                </div>
+            </div>
+        </article>
+    </template>
+
+    <!-- Hologram as a fixed backdrop, with its readout. Decoration only: aria-hidden and never
+         catches a click. `data-code` is the build drawn on the server (so the hero text and the
+         hologram agree), `data-serie` keeps a series page's draw inside the series. -->
+    <template id="ac_holo_fond" name="Besacraft — v2 hologram backdrop">
+        <t t-if="holo_build">
+            <div class="ac-holo" aria-hidden="true" data-ac-holo="fond"
+                 t-att-data-code="holo_build.code" t-att-data-serie="ac_holo_serie or None">
+                <canvas/>
+                <img t-if="holo_build.id in (avec_vue or ())" class="ac-holo__fixe"
+                     t-attf-src="/web/image/besacraft.build/#{holo_build.id}/overview_image/1024x1024"
+                     alt="" width="1024" height="1024"/>
+            </div>
+            <div class="ac-lecture" aria-hidden="true">
+                <t t-call="besacraft_builds.ac_holo_lecture"/>
+            </div>
+        </t>
+    </template>
+
+    <template id="ac_holo_lecture" name="Besacraft — v2 hologram readout">
+        <div class="ac-lecture__ligne">
+            <span data-holo-nom="1">N°<t t-out="holo_build.code"/> <t t-out="holo_build.name"/></span>
+            <div class="ac-lecture__etat">
+                <t><span data-etat="build">under construction</span></t>
+                <t><span data-etat="done" hidden="hidden">complete</span></t>
+            </div>
+        </div>
+        <div class="ac-lecture__ligne ac-lecture__c-ligne">
+            <span>layer</span>
+            <div><span class="ac-lecture__c">1</span><t t-out="' / '"/><span data-holo-n="1" t-out="holo_build.layer_count"/></div>
+        </div>
+        <div class="ac-lecture__jauge"><i/></div>
+    </template>
+
+    <!-- Credit: the sources the builds declare, read from the builds themselves. -->
+    <template id="ac_credit" name="Besacraft — v2 credit">
+        <section class="ac-credit" aria-labelledby="ac-credit-titre">
+            <div class="ac-credit__in">
+                <div>
+                    <h2 id="ac-credit-titre">Credit</h2>
+                    <p t-foreach="sources or []" t-as="ac_src">
+                        <span>Structures by</span> <t t-out="ac_src[0]"/><t t-if="ac_src[1]"> — <t t-out="ac_src[1]"/></t>.
+                        <a t-if="ac_src[2]" t-att-href="ac_src[2]" rel="noopener">See the source</a>
+                    </p>
+                    <p>These tutorials teach how to build; they do not hand out the schematic.</p>
+                    <t t-out="0"/>
+                </div>
+                <t t-if="holo_build and ac_credit_cta">
+                    <a class="ac-plaque" t-attf-href="/builds/#{int(holo_build.code)}"><i/><i/>▶ Launch the build</a>
+                </t>
+            </div>
+        </section>
+    </template>
+
+</odoo>
