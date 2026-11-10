@@ -55,11 +55,15 @@ class TestRoutesV2(HttpCase):
         self.assertIn("Moulin gratuit", page.text)
         self.assertNotIn("Phare hors site", page.text)
 
-    def test_le_shop_ne_range_que_les_builds_vendables_du_site(self):
+    def test_le_shop_range_les_builds_du_site(self):
+        """Free builds are shelved too, in their « free » state, up to one full row; the
+        others are one link away in the collections (a dev database files real builds in
+        the data series, so either may happen here)."""
         page = self.url_open("/builds/shop")
         self.assertEqual(page.status_code, 200)
         self.assertIn("Navire payant", page.text)
-        self.assertNotIn("Moulin gratuit", page.text, "un build gratuit ne se vend pas")
+        self.assertTrue("Moulin gratuit" in page.text
+                        or "/builds/collections?serie=%s" % self.serie.code in page.text)
         self.assertNotIn("Phare hors site", page.text)
         self.assertIn('data-serie="%s"' % self.serie.code, page.text)
 
