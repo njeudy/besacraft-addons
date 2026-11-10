@@ -21,6 +21,8 @@ def _site_besacraft(env, rule=None, qs=None):
         return
     Build = env["besacraft.build"].sudo()
     yield {"loc": "/builds"}
+    yield {"loc": "/builds/collections"}
+    yield {"loc": "/builds/shop"}
     for build in Build.search(Build._domaine_site(site) + [("is_published", "=", True)]):
         yield {"loc": "/builds/%d" % int(build.code)}
         yield {"loc": "/t/%d" % int(build.code)}
@@ -61,8 +63,10 @@ class BesacraftBuilds(http.Controller):
 
     def _domaine_builds(self):
         """Builds a visitor may see here: published (editors: all) and in this site's series."""
+        # `_site()` et non `request.website` : la route de la vitrine sert un fichier et
+        # n'est pas `website=True`, `request.website` n'y existe pas.
         return self._filtre_publie() + request.env["besacraft.build"]._domaine_site(
-            request.website)
+            self._site())
 
     @staticmethod
     def _code(code):
@@ -127,6 +131,55 @@ class BesacraftBuilds(http.Controller):
         }
         valeurs.update(self._contexte_cartes(builds))
         return request.render("besacraft_builds.catalogue", valeurs)
+
+    @http.route("/builds/collections", type="http", auth="public", website=True,
+                sitemap=_site_besacraft)
+    def collections(self, serie=None, **kw):
+        """Every build of the site, to search, filter and sort in the browser.
+
+        Same context as the catalogue: the page differs by its layout, not by its data.
+        """
+        if self._garde_site():
+            return request.not_found()
+        builds = request.env["besacraft.build"].sudo().search(self._domaine_builds())
+        series = self._site()._besacraft_series()
+        valeurs = {
+            "builds": builds, "series": series,
+            "serie_active": serie if serie in series.mapped("code") else None,
+            "total": len(builds),
+            "par_serie": {s.id: len(builds.filtered(lambda b, s=s: s in b.series()))
+                          for s in series},
+            "n_gratuits": len(builds.filtered(lambda b: b.enroll == "public")),
+            "n_payants": len(builds.filtered(lambda b: b.enroll == "payment")),
+            "barre_active": "collections",
+        }
+        valeurs.update(self._contexte_cartes(builds))
+        return request.render("besacraft_builds.collections", valeurs)
+
+    @http.route("/builds/shop", type="http", auth="public", website=True,
+                sitemap=_site_besacraft)
+    def shop(self, **kw):
+        """The builds for sale on this site, shelved by series.
+
+        A build filed in several series shows on each of their shelves, as it does on the
+        series pages. Only series of this site get a shelf, and an empty one is left out.
+        """
+        if self._garde_site():
+            return request.not_found()
+        Build = request.env["besacraft.build"].sudo()
+        vendables = Build.search(self._domaine_builds() + [
+            ("enroll", "=", "payment"), ("product_id", "!=", False)])
+        rayons = []
+        for serie in self._site()._besacraft_series():
+            builds = vendables.filtered(lambda b, s=serie: s in b.series())
+            if builds:
+                rayons.append({"serie": serie, "builds": builds})
+        valeurs = {
+            "rayons": rayons, "builds": vendables, "total": len(vendables),
+            "barre_active": "shop",
+        }
+        valeurs.update(self._contexte_cartes(vendables))
+        return request.render("besacraft_builds.shop", valeurs)
 
     @http.route("/builds/<int:code>", type="http", auth="public", website=True,
                 sitemap=_site_besacraft)
@@ -343,6 +396,25 @@ class BesacraftBuilds(http.Controller):
         if build.enroll == "payment" and produit:
             return request.redirect(produit.product_tmpl_id.website_url, code=303)
         return None     # enroll=invite : la fiche s'affiche, verrouillée et sans achat
+
+    @http.route("/besacraft/vitrine/<int:code>.glb", type="http", auth="public",
+                methods=["GET"], sitemap=False)
+    def vitrine(self, code, **kw):
+        """The 3D model of the product sheet's showcase, with the guards of the pages.
+
+        No payment check: the showcase is what makes someone buy, it shows the finished
+        building and none of the notice. Streamed by the core, which handles the ETag and
+        Range requests -- a glb weighs up to 20 MB.
+        """
+        if self._garde_site():
+            return request.not_found()
+        build = self._build(code)
+        if not build or not build.vitrine_glb_attachment_id:
+            return request.not_found()
+        return request.env["ir.binary"]._get_stream_from(
+            build.vitrine_glb_attachment_id.sudo(), "raw",
+            filename="%s.glb" % build.code, mimetype="model/gltf-binary",
+        ).get_response()
 
     @http.route("/besacraft/viewer/<int:build_id>", type="http", auth="public", sitemap=False)
     def viewer(self, build_id, **kw):

@@ -262,6 +262,7 @@ msgstr "Couches de fondation enfouies sous le niveau du sol, que le tutoriel sau
 
 #. module: besacraft_builds
 #: model:ir.model.fields.selection,name:besacraft_builds.selection__besacraft_build__enroll__public
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build_chapter__free
 msgid "Free"
 msgstr "Gratuit"
 
@@ -705,6 +706,7 @@ msgstr "Cet article donne accès au tutoriel d'un build."
 
 #. module: besacraft_builds
 #: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build_layer__title
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build_chapter__name
 msgid "Title"
 msgstr "Titre"
 
@@ -804,3 +806,109 @@ msgstr "URL YouTube"
 #: model_terms:ir.ui.view,arch_db:besacraft_builds.build
 msgid "Add to my books"
 msgstr "Ajouter à mes livres"
+
+#. module: besacraft_builds
+#: model:ir.model,name:besacraft_builds.model_besacraft_build_chapter
+msgid "Build Chapter"
+msgstr "Chapitre de build"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build_chapter__first_layer
+msgid "First Layer"
+msgstr "Première couche"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build_chapter__last_layer
+msgid "Last Layer"
+msgstr "Dernière couche"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,help:besacraft_builds.field_besacraft_build_chapter__first_layer
+msgid "First layer (or step) of the chapter, as numbered in the tutorial."
+msgstr "Première couche (ou étape) du chapitre, numérotée comme dans le tutoriel."
+
+#. module: besacraft_builds
+#: model:ir.model.fields,help:besacraft_builds.field_besacraft_build_chapter__last_layer
+msgid "Last layer (or step) of the chapter, included."
+msgstr "Dernière couche (ou étape) du chapitre, incluse."
+
+#. module: besacraft_builds
+#: model:ir.model.fields,help:besacraft_builds.field_besacraft_build_chapter__free
+msgid "Given away: readable without buying the tutorial."
+msgstr "Offert : lisible sans acheter le tutoriel."
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build__chapter_ids
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.view_besacraft_build_form
+msgid "Chapters"
+msgstr "Chapitres"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build__cutout_image
+msgid "Cutout"
+msgstr "Détouré"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,help:besacraft_builds.field_besacraft_build__cutout_image
+msgid "The build alone on a transparent background."
+msgstr "Le build seul, sur fond transparent."
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build__box_face_image
+msgid "Box Face"
+msgstr "Face du coffret"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,help:besacraft_builds.field_besacraft_build__box_face_image
+msgid "The front of the box, laid flat: the third view of the gallery."
+msgstr "La face du coffret, à plat : la troisième vue de la galerie."
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build__vitrine_glb_attachment_id
+msgid "Showcase Model"
+msgstr "Modèle de la vitrine"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,help:besacraft_builds.field_besacraft_build__vitrine_glb_attachment_id
+msgid "The glTF model (.glb) mounted in the 3D showcase of the product sheet."
+msgstr "Le modèle glTF (.glb) monté dans la vitrine 3D de la fiche produit."
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.view_besacraft_build_form
+msgid "Showcase"
+msgstr "Vitrine"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.collections
+msgid "Collections"
+msgstr "Collections"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.collections
+msgid "No build published yet."
+msgstr "Aucun build publié pour l'instant."
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.collections
+msgid "series"
+msgstr "séries"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop
+msgid "Shop"
+msgstr "Boutique"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop
+msgid "tutorials for sale"
+msgstr "tutos en vente"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop
+msgid "Nothing for sale yet."
+msgstr "Rien en vente pour l'instant."
+
+#. module: besacraft_builds
+#: code:addons/besacraft_builds/models/besacraft_build_chapter.py:0
+msgid "A chapter cannot end before the layer it starts with."
+msgstr "Un chapitre ne peut pas finir avant la couche où il commence."
