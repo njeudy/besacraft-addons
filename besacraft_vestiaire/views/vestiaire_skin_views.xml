@@ -34,6 +34,7 @@
                     <group>
                         <field name="vestiaire_points"/>
                         <field name="vestiaire_tenue_ids" widget="many2many_tags"/>
+                        <field name="vestiaire_reglages" groups="base.group_no_one"/>
                     </group>
                     <field name="vestiaire_case_ids" context="{'default_partner_id': id}">
                         <list editable="bottom">

@@ -29,6 +29,11 @@ Routes
 ``PUT /mc/v1/vestiaire/equipement`` ``{tenue: [codes], roue: [8 codes or null]}``
     Saves the outfit and the wheel. Unowned codes, a second item on a slot and a
     head under a hat are dropped silently; the answer is what was kept.
+    An outfit entry may carry the game's settings after the code
+    (``chapeau_sorcier|noir||d|2``: colour, side, back, height). Only the code is
+    checked; the suffix (60 characters at most, otherwise ignored) is kept as is and
+    given back by ``moi``. A code sent bare forgets its settings. Colours are free:
+    nothing about them is sold.
 
 ``POST /mc/v1/vestiaire/achat`` ``{code, prix}``
     Buys an item at the price the player saw. ``409`` with ``deja_possede``,

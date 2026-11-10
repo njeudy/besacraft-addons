@@ -774,6 +774,12 @@ msgid "Origin"
 msgstr "Origine"
 
 #. module: besacraft_vestiaire
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_res_partner__vestiaire_reglages
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_res_users__vestiaire_reglages
+msgid "Outfit settings"
+msgstr "Réglages de la tenue"
+
+#. module: besacraft_vestiaire
 #: model:ir.model.fields,field_description:besacraft_vestiaire.field_res_partner__vestiaire_tenue_ids
 #: model:ir.model.fields,field_description:besacraft_vestiaire.field_res_users__vestiaire_tenue_ids
 msgid "Outfit"

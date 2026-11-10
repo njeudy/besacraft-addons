@@ -1,4 +1,5 @@
 import base64
+import json
 import logging
 
 from odoo import _, api, fields, models
@@ -91,6 +92,8 @@ class AchatRefuse(Exception):
 
 # Slots that cannot be worn together, both ways: a whole head does not fit under a hat.
 INCOMPATIBLES = {"tete": {"chapeau"}, "chapeau": {"tete"}}
+# Longest settings suffix kept after a code; the game never writes more than 64 characters.
+REGLAGE_MAX = 60
 
 
 class ResPartnerPoints(models.Model):
@@ -106,6 +109,9 @@ class ResPartnerPoints(models.Model):
                                            domain=[("genre", "=", "cosmetique")])
     vestiaire_case_ids = fields.One2many("besacraft.vestiaire.case", "partner_id",
                                          string="Emote wheel")
+    # Colour and settings of each worn cosmetic, as the game writes them after the code
+    # ("noir||d|2"). Purely visual: stored as received, never interpreted here.
+    vestiaire_reglages = fields.Text(string="Outfit settings")
 
     @api.depends("vestiaire_mouvement_ids.points")
     def _compute_vestiaire_points(self):
@@ -126,6 +132,20 @@ class ResPartnerPoints(models.Model):
         """The worn cosmetics, without what the player no longer owns."""
         self.ensure_one()
         return self.sudo().vestiaire_tenue_ids & self._vestiaire_possede()
+
+    def _vestiaire_tenue_codes(self):
+        """The worn codes, each followed by its settings when it has some ("code|noir")."""
+        self.ensure_one()
+        reglages = self._vestiaire_lire_reglages()
+        return [code + ("|" + reglages[code] if reglages.get(code) else "")
+                for code in self._vestiaire_tenue().mapped("code")]
+
+    def _vestiaire_lire_reglages(self):
+        try:
+            reglages = json.loads(self.sudo().vestiaire_reglages or "{}")
+        except ValueError:
+            return {}
+        return reglages if isinstance(reglages, dict) else {}
 
     def _vestiaire_roue(self):
         """The eight wheel slots as codes, None for an empty slot."""
@@ -156,8 +176,10 @@ class ResPartnerPoints(models.Model):
 
         tenue = self.env["besacraft.vestiaire.cosmetique"]
         pris = set()
-        for code in (codes_tenue or [])[:24]:
-            cosmetique = par_code.get(code) if isinstance(code, str) else None
+        reglages = {}
+        for entree in (codes_tenue or [])[:24]:
+            code, _sep, suffixe = entree.partition("|") if isinstance(entree, str) else (None, "", "")
+            cosmetique = par_code.get(code) if code else None
             if not cosmetique or cosmetique.genre != "cosmetique" or cosmetique in tenue:
                 continue
             slot = cosmetique.emplacement or cosmetique.code
@@ -165,7 +187,10 @@ class ResPartnerPoints(models.Model):
                 continue
             pris.add(slot)
             tenue |= cosmetique
+            if suffixe and len(suffixe) <= REGLAGE_MAX:
+                reglages[code] = suffixe
         partner.vestiaire_tenue_ids = [(6, 0, tenue.ids)]
+        partner.vestiaire_reglages = json.dumps(reglages) if reglages else False
 
         partner.vestiaire_case_ids.unlink()
         roue = [None] * 8
@@ -178,7 +203,8 @@ class ResPartnerPoints(models.Model):
             roue[index] = emote.code
             self.env["besacraft.vestiaire.case"].sudo().create(
                 {"partner_id": partner.id, "index": index, "emote_id": emote.id})
-        return {"tenue": tenue.mapped("code"), "roue": roue}
+        return {"tenue": [c + ("|" + reglages[c] if c in reglages else "") for c in tenue.mapped("code")],
+                "roue": roue}
 
     # -- points ---------------------------------------------------------------------
 
