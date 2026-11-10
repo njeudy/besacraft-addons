@@ -1,0 +1,58 @@
+<odoo>
+    <!-- Provisional pages of the v2 routes: they only lay out the controller's context with
+         the existing card. Their final look is the object of the following lots. -->
+
+    <template id="collections" name="Besacraft — Collections">
+        <t t-call="website.layout">
+            <t t-set="additional_title">Collections</t>
+            <div id="wrap" class="bc-notice bc-catalogue">
+                <t t-call="besacraft_builds.barre"/>
+                <div class="bc-page">
+                    <header class="bc-entete">
+                        <div class="bc-entete-texte">
+                            <h1 class="bc-titre">Collections</h1>
+                            <p class="bc-compteur">
+                                <span><b t-out="total"/> builds</span>
+                                <span aria-hidden="true">·</span>
+                                <span><b t-out="len(series)"/> series</span>
+                            </p>
+                        </div>
+                    </header>
+                    <ul class="bc-grille">
+                        <li t-foreach="builds" t-as="un_build" class="bc-cell">
+                            <t t-call="besacraft_builds.carte"><t t-set="build" t-value="un_build"/></t>
+                        </li>
+                    </ul>
+                    <p t-if="not builds" class="bc-vide-t">No build published yet.</p>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <template id="shop" name="Besacraft — Shop">
+        <t t-call="website.layout">
+            <t t-set="additional_title">Shop</t>
+            <div id="wrap" class="bc-notice bc-catalogue">
+                <t t-call="besacraft_builds.barre"/>
+                <div class="bc-page">
+                    <header class="bc-entete">
+                        <div class="bc-entete-texte">
+                            <h1 class="bc-titre">Shop</h1>
+                            <p class="bc-compteur"><span><b t-out="total"/> tutorials for sale</span></p>
+                        </div>
+                    </header>
+                    <section t-foreach="rayons" t-as="rayon" class="bc-rayon"
+                             t-att-data-serie="rayon['serie'].code">
+                        <h2 t-out="rayon['serie'].name"/>
+                        <ul class="bc-grille">
+                            <li t-foreach="rayon['builds']" t-as="un_build" class="bc-cell">
+                                <t t-call="besacraft_builds.carte"><t t-set="build" t-value="un_build"/></t>
+                            </li>
+                        </ul>
+                    </section>
+                    <p t-if="not rayons" class="bc-vide-t">Nothing for sale yet.</p>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>
