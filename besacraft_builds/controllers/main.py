@@ -6,7 +6,9 @@ import werkzeug
 
 from odoo import http
 from odoo.http import request
-from odoo.tools import is_html_empty
+from odoo.tools import format_amount, is_html_empty
+
+from ..models.besacraft_build import prix_affiche
 
 
 def _site_besacraft(env, rule=None, qs=None):
@@ -212,27 +214,120 @@ class BesacraftBuilds(http.Controller):
     @http.route("/builds/shop", type="http", auth="public", website=True,
                 sitemap=_site_besacraft)
     def shop(self, **kw):
-        """The builds for sale on this site, shelved by series.
+        """The shop: a featured build, then every series of the site with its builds.
 
-        A build filed in several series shows on each of their shelves, as it does on the
-        series pages. Only series of this site get a shelf, and an empty one is left out.
+        Every build of a series is shelved, free ones included: the shop shows the three
+        states side by side (free, paid, bought), and a series with nothing to sell yet
+        still says what is coming. A build filed in several series shows on each of their
+        shelves, as on the series pages. The cart is the site's own website_sale cart.
         """
         if self._garde_site():
             return request.not_found()
         Build = request.env["besacraft.build"].sudo()
-        vendables = Build.search(self._domaine_builds() + [
-            ("enroll", "=", "payment"), ("product_id", "!=", False)])
+        builds = Build.search(self._domaine_builds())
+        payants = builds.filtered(lambda b: b.enroll == "payment" and b.product_id)
+        vedette = self._vedette(payants or builds)
+        holo = (self._tirer_holo(code=int(vedette.code)) if vedette else Build) \
+            or self._tirer_holo()
+        cartes = self._contexte_cartes(builds | holo)
+        series = self._site()._besacraft_series()
         rayons = []
-        for serie in self._site()._besacraft_series():
-            builds = vendables.filtered(lambda b, s=serie: s in b.series())
-            if builds:
-                rayons.append({"serie": serie, "builds": builds})
+        for serie in series:
+            rayon = builds.filtered(lambda b, s=serie: s in b.series())
+            pack = serie.sudo().pack_product_id
+            payants_rayon = rayon & payants
+            # What is for sale first, all of it; then free builds up to one full row, so
+            # that the three states sit side by side. The rest of the free builds is in
+            # the collections, one link away: a shop that lists 30 free guides is a
+            # catalogue, and the one paid guide drowns in it.
+            autres = rayon - payants_rayon
+            montres = payants_rayon | autres[:max(self.RANGEE - len(payants_rayon), 0)]
+            rayons.append({
+                "serie": serie, "builds": montres, "n_builds": len(rayon),
+                "n_caches": len(rayon - montres),
+                "pack": pack,
+                "pack_prix": pack and prix_affiche(pack),
+                # Bought when every paid guide of the series already is: nothing left to unlock.
+                "pack_acquis": bool(payants_rayon) and set(payants_rayon.ids) <= cartes["acquis"],
+            })
         valeurs = {
-            "rayons": rayons, "builds": vendables, "total": len(vendables),
+            "rayons": rayons, "builds": builds, "total": len(payants),
+            "vedette": vedette, "holo_build": holo,
+            "offerts": {b.id: [i + 1 for i, c in enumerate(b.chapter_ids) if c.free]
+                        for b in builds},
+            "sources": self._sources(builds),
+            "couverture": self._couvertures(series),
             "barre_active": "shop",
         }
-        valeurs.update(self._contexte_cartes(vendables))
+        valeurs.update(cartes)
+        valeurs.update(self._panier())
         return request.render("besacraft_builds.shop", valeurs)
+
+    # Cards per row of a shelf on a wide screen.
+    RANGEE = 4
+
+    @staticmethod
+    def _vedette(builds):
+        """The featured build: the tallest of the shelf, the one with the most layers."""
+        if not builds:
+            return builds
+        return max(builds, key=lambda b: (b.layer_count, b.block_count, b.code))
+
+    def _montant(self, montant, devise):
+        return format_amount(request.env, montant, devise)
+
+    def _panier(self):
+        """The site's cart as the shop's drawer shows it.
+
+        The real website_sale cart, read here and changed through /shop/cart/update_json:
+        no cart of our own to keep in step with the one checkout uses. Every line is listed,
+        a build's or not -- hiding what the visitor put in elsewhere would make the total lie.
+        """
+        commande = request.website.sale_get_order()
+        lignes = []
+        if commande:
+            commande = commande.sudo()
+            produits = commande.order_line.product_id
+            par_produit = {b.product_id.id: b for b in request.env["besacraft.build"].sudo().search(
+                [("product_id", "in", produits.ids)])}
+            packs = {s.pack_product_id.id: s for s in request.env["besacraft.serie"].sudo().search(
+                [("pack_product_id", "in", produits.ids)])}
+            avec_boite = self._avec_piece(
+                request.env["besacraft.build"].browse([b.id for b in par_produit.values()]),
+                "box_image")
+            ht = request.website.show_line_subtotals_tax_selection == "tax_excluded"
+            for ligne in commande.website_order_line:
+                build = par_produit.get(ligne.product_id.id)
+                lignes.append({
+                    "ligne": ligne, "build": build, "pack": packs.get(ligne.product_id.id),
+                    "image": (build and build.id in avec_boite
+                              and "/web/image/besacraft.build/%d/box_image/96x96" % build.id),
+                    # The site's choice, as website_sale's own cart lines make it: a line
+                    # tax excluded on a site that shows prices tax excluded.
+                    "prix": self._montant(
+                        ligne.price_subtotal if ht else ligne.price_total, commande.currency_id),
+                })
+        return {
+            "panier": lignes,
+            "panier_produits": [l["ligne"].product_id.id for l in lignes],
+            "panier_n": int(commande.cart_quantity) if commande else 0,
+            "panier_total": self._montant(
+                commande.amount_total if commande else 0.0,
+                commande.currency_id if commande else request.website.currency_id),
+        }
+
+    @http.route("/builds/shop/panier", type="json", auth="public", website=True)
+    def shop_panier(self, **kw):
+        """The drawer, re-rendered after the cart changed through /shop/cart/update_json."""
+        if self._garde_site():
+            raise werkzeug.exceptions.NotFound()
+        valeurs = self._panier()
+        return {
+            "html": request.env["ir.ui.view"]._render_template(
+                "besacraft_builds.shop_panier_lignes", valeurs),
+            "n": valeurs["panier_n"], "total": valeurs["panier_total"],
+            "produits": valeurs["panier_produits"],
+        }
 
     @http.route("/builds/<int:code>", type="http", auth="public", website=True,
                 sitemap=_site_besacraft)

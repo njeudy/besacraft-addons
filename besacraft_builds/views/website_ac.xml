@@ -131,6 +131,7 @@
                 <t t-if="holo_build and ac_credit_cta">
                     <a class="ac-plaque" t-attf-href="/builds/#{int(holo_build.code)}"><i/><i/>▶ Launch the build</a>
                 </t>
+                <t t-elif="ac_credit_droite" t-out="ac_credit_droite"/>
             </div>
         </section>
     </template>
