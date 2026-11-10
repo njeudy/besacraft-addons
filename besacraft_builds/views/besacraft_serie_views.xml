@@ -39,6 +39,7 @@
                             <field name="badge_ink"/>
                             <field name="website_ids" widget="many2many_tags"
                                    options="{'no_create': True}"/>
+                            <field name="pack_product_id"/>
                         </group>
                     </group>
                     <group string="YouTube">

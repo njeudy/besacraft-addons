@@ -2,10 +2,29 @@ import re
 
 from odoo import api, fields, models
 from odoo.exceptions import ValidationError
+from odoo.http import request
 
 from .youtube import youtube_id
 
 CODE_RE = re.compile(r"^\d+$")
+
+
+def prix_affiche(produit):
+    """What a product costs, as the site's shop will charge it, ready to print.
+
+    On a website request the price is the shop's: its pricelist, with the taxes the site
+    displays -- otherwise a card says 4,00 € and the cart 4,80 €. Elsewhere (back office,
+    crons) the product's list price.
+    """
+    produit = produit.sudo()
+    montant, devise = produit.list_price, produit.currency_id
+    if request and getattr(request, "website", None):
+        infos = produit._get_combination_info_variant()
+        montant, devise = infos["price"], request.website.currency_id
+    texte = "{:,.2f}".format(montant)
+    # Format français : espace fine insécable pour les milliers, virgule décimale.
+    texte = texte.replace(",", "\u202f").replace(".", ",")
+    return "%s\u00a0%s" % (texte, devise.symbol or "€")
 
 
 class BesacraftBuild(models.Model):
@@ -314,17 +333,14 @@ Jouable en survie — aucun bloc inaccessible, aucune commande, aucun mod obliga
         return self.sudo().product_id.list_price if self.product_id else 0.0
 
     @api.depends("product_id.list_price", "enroll")
+    @api.depends_context("website_id")
     def _compute_price_label(self):
         for build in self:
             produit = build.sudo().product_id
             if build.enroll != "payment" or not produit:
                 build.price_label = False
                 continue
-            symbole = produit.currency_id.symbol or "€"
-            montant = "{:,.2f}".format(produit.list_price)
-            # Format français : espace insécable pour les milliers, virgule décimale.
-            montant = montant.replace(",", "\u202f").replace(".", ",")
-            build.price_label = "%s\u00a0%s" % (montant, symbole)
+            build.price_label = prix_affiche(produit)
 
     @api.depends("short_youtube_url")
     def _compute_short_youtube_id(self):
