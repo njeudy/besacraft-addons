@@ -1,0 +1,3 @@
+Cinzel, IBM Plex Sans and JetBrains Mono (latin subset, variable woff2), as served by
+Google Fonts. All three are licensed under the SIL Open Font License 1.1
+(https://openfontlicense.org/).
