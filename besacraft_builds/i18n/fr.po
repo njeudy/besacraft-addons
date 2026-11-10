@@ -94,6 +94,7 @@ msgstr "Boîte"
 #: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build_layer__build_id
 #: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build_member__build_id
 #: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_vendre__build_id
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_episode_appearance__build_id
 msgid "Build"
 msgstr "Build"
 
@@ -159,6 +160,7 @@ msgstr "Configuration"
 #: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build_layer__create_uid
 #: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_vendre__create_uid
 #: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build__create_uid
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_episode_appearance__create_uid
 msgid "Created by"
 msgstr "Créé par"
 
@@ -170,6 +172,7 @@ msgstr "Créé par"
 #: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build_layer__create_date
 #: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build_member__create_date
 #: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_vendre__create_date
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_episode_appearance__create_date
 msgid "Created on"
 msgstr "Créé le"
 
@@ -180,6 +183,8 @@ msgstr "Date"
 
 #. module: besacraft_builds
 #: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_serie__description
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build__description
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.view_besacraft_build_form
 msgid "Description"
 msgstr "Description"
 
@@ -191,6 +196,7 @@ msgstr "Description"
 #: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build__display_name
 #: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build_member__display_name
 #: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build_layer__display_name
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_episode_appearance__display_name
 msgid "Display Name"
 msgstr "Nom affiché"
 
@@ -226,6 +232,7 @@ msgstr "Accès"
 
 #. module: besacraft_builds
 #: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_serie__episode_ids
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_episode_appearance__episode_id
 msgid "Episode"
 msgstr "Épisodes"
 
@@ -263,6 +270,7 @@ msgstr "Couches de fondation enfouies sous le niveau du sol, que le tutoriel sau
 #. module: besacraft_builds
 #: model:ir.model.fields.selection,name:besacraft_builds.selection__besacraft_build__enroll__public
 #: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build_chapter__free
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
 msgid "Free"
 msgstr "Gratuit"
 
@@ -362,6 +370,7 @@ msgstr "Dernière couche atteinte par le membre."
 #: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build_member__write_uid
 #: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_vendre__write_uid
 #: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build_layer_line__write_uid
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_episode_appearance__write_uid
 msgid "Last Updated by"
 msgstr "Dernière modification par"
 
@@ -373,6 +382,7 @@ msgstr "Dernière modification par"
 #: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build__write_date
 #: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_episode__write_date
 #: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_serie__write_date
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_episode_appearance__write_date
 msgid "Last Updated on"
 msgstr "Dernière modification le"
 
@@ -409,6 +419,7 @@ msgstr "Les aventures de Zunk"
 
 #. module: besacraft_builds
 #: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build__level
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
 msgid "Level"
 msgstr "Niveau"
 
@@ -593,6 +604,7 @@ msgstr "Série"
 #. module: besacraft_builds
 #: model:ir.actions.act_window,name:besacraft_builds.action_serie
 #: model:ir.ui.menu,name:besacraft_builds.menu_serie
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
 msgid "Series"
 msgstr "Séries"
 
@@ -804,6 +816,7 @@ msgstr "URL YouTube"
 
 #. module: besacraft_builds
 #: model_terms:ir.ui.view,arch_db:besacraft_builds.build
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
 msgid "Add to my books"
 msgstr "Ajouter à mes livres"
 
@@ -840,6 +853,7 @@ msgstr "Offert : lisible sans acheter le tutoriel."
 #. module: besacraft_builds
 #: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build__chapter_ids
 #: model_terms:ir.ui.view,arch_db:besacraft_builds.view_besacraft_build_form
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
 msgid "Chapters"
 msgstr "Chapitres"
 
@@ -880,6 +894,7 @@ msgstr "Vitrine"
 
 #. module: besacraft_builds
 #: model_terms:ir.ui.view,arch_db:besacraft_builds.collections
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
 msgid "Collections"
 msgstr "Collections"
 
@@ -895,6 +910,7 @@ msgstr "séries"
 
 #. module: besacraft_builds
 #: model_terms:ir.ui.view,arch_db:besacraft_builds.shop
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
 msgid "Shop"
 msgstr "Boutique"
 
@@ -999,6 +1015,7 @@ msgstr "<span data-etat=\"done\" hidden=\"hidden\">achevé</span>"
 
 #. module: besacraft_builds
 #: model_terms:ir.ui.view,arch_db:besacraft_builds.ac_carte
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
 msgid "<span>Box in preparation</span>"
 msgstr "<span>Boîte en préparation</span>"
 
@@ -1161,16 +1178,19 @@ msgstr "Les builds de la série dans les collections"
 
 #. module: besacraft_builds
 #: model_terms:ir.ui.view,arch_db:besacraft_builds.serie
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
 msgid "All the episodes"
 msgstr "Tous les épisodes"
 
 #. module: besacraft_builds
 #: model_terms:ir.ui.view,arch_db:besacraft_builds.collections
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
 msgid "Blocks"
 msgstr "Blocs"
 
 #. module: besacraft_builds
 #: model_terms:ir.ui.view,arch_db:besacraft_builds.ac_carte
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
 msgid "Bought"
 msgstr "Acheté"
 
@@ -1197,6 +1217,7 @@ msgstr "Construits dans les épisodes"
 
 #. module: besacraft_builds
 #: model_terms:ir.ui.view,arch_db:besacraft_builds.ac_carte
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
 msgid "By invitation"
 msgstr "Sur invitation"
 
@@ -1310,6 +1331,8 @@ msgstr "Pas encore de build"
 #: model_terms:ir.ui.view,arch_db:besacraft_builds.ac_holo_lecture
 #: model_terms:ir.ui.view,arch_db:besacraft_builds.catalogue
 #: model_terms:ir.ui.view,arch_db:besacraft_builds.collections
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.vitrine_page
 msgid "N°"
 msgstr "N°"
 
@@ -1494,6 +1517,8 @@ msgstr "sont payants."
 #: model_terms:ir.ui.view,arch_db:besacraft_builds.ac_carte
 #: model_terms:ir.ui.view,arch_db:besacraft_builds.catalogue
 #: model_terms:ir.ui.view,arch_db:besacraft_builds.collections
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.vitrine_page
 msgid "blocks"
 msgstr "blocs"
 
@@ -1528,6 +1553,7 @@ msgstr "builds affichés"
 
 #. module: besacraft_builds
 #: model_terms:ir.ui.view,arch_db:besacraft_builds.serie
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
 msgid "coming soon"
 msgstr "à venir"
 
@@ -1545,11 +1571,13 @@ msgstr "épisodes"
 #: model_terms:ir.ui.view,arch_db:besacraft_builds.ac_carte
 #: model_terms:ir.ui.view,arch_db:besacraft_builds.catalogue
 #: model_terms:ir.ui.view,arch_db:besacraft_builds.collections
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
 msgid "layers"
 msgstr "couches"
 
 #. module: besacraft_builds
 #: model_terms:ir.ui.view,arch_db:besacraft_builds.serie
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
 msgid "min"
 msgstr "min"
 
@@ -1565,6 +1593,7 @@ msgstr "de terrain plat et dégagé pour"
 
 #. module: besacraft_builds
 #: model_terms:ir.ui.view,arch_db:besacraft_builds.serie
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
 msgid "online"
 msgstr "en ligne"
 
@@ -1598,3 +1627,413 @@ msgstr "▶ Regarder l'épisode sur YouTube"
 msgid "📱 Remote"
 msgstr "📱 Télécommande"
 
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid ", every block in its place, with the sound of the game"
+msgstr ", chaque bloc à sa place, avec le son du jeu"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid ", like a scale model"
+msgstr ", comme une maquette"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "3D"
+msgstr "3D"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "<b>Brass box</b> · the build's box"
+msgstr "<b>Coffret de laiton</b> · la boîte du build"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "<b>Showcase box</b> · the 3D model mounted in its box"
+msgstr "<b>Coffret vitrine</b> · le modèle 3D monté dans sa boîte"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "<b>The build</b> · finished"
+msgstr "<b>Le build</b> · terminé"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "<b>The front</b> · plate and figures"
+msgstr "<b>La face</b> · plaque et chiffres"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "<i/><i/><span>Add to cart</span>"
+msgstr "<i/><i/><span>Ajouter au panier</span>"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "<i/><i/><span>▶ Launch the build</span>"
+msgstr "<i/><i/><span>▶ Lancer le build</span>"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "<small>the complete guide, for life</small>"
+msgstr "<small>le guide complet, à vie</small>"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.vitrine_page
+msgid ""
+"<span data-err=\"webgl\">WebGL is turned off in this browser: turn hardware acceleration on, then reload the page.</span>\n"
+"                    <span data-err=\"modele\" hidden=\"hidden\">The model could not be loaded.</span>"
+msgstr ""
+"<span data-err=\"webgl\">WebGL est désactivé dans ce navigateur : active l'accélération matérielle puis recharge la page.</span>\n"
+"                    <span data-err=\"modele\" hidden=\"hidden\">Le modèle n'a pas pu être chargé.</span>"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.vitrine_page
+msgid ""
+"<span data-mot=\"blocs\">blocks</span>\n"
+"                    <span data-mot=\"couches\">layers</span>\n"
+"                    <span data-mot=\"emprise\">ground</span>"
+msgstr ""
+"<span data-mot=\"blocs\">blocs</span>\n"
+"                    <span data-mot=\"couches\">couches</span>\n"
+"                    <span data-mot=\"emprise\">emprise</span>"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "<span><b>The remote</b>: your phone steps forward and back</span>"
+msgstr "<span><b>La télécommande</b> : ton téléphone avance et recule d'une étape</span>"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "<span>blocks</span>"
+msgstr "<span>blocs</span>"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "<span>chapters</span>"
+msgstr "<span>chapitres</span>"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "<span>layers</span>"
+msgstr "<span>couches</span>"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "<span>of ground</span>"
+msgstr "<span>de terrain</span>"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "<span>›</span>"
+msgstr "<span>›</span>"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "<span>›</span> Mounted in a showcase"
+msgstr "<span>›</span> Monté en vitrine"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "<span>›</span> Seen in the series"
+msgstr "<span>›</span> Vu dans la série"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "<span>›</span> Technical sheet"
+msgstr "<span>›</span> Fiche technique"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "<span>›</span> The build"
+msgstr "<span>›</span> Le build"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "<span>›</span>N°"
+msgstr "<span>›</span>N°"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "<span>⟳ TURN THE SHOWCASE IN 3D</span>"
+msgstr "<span>⟳ TOURNER LA VITRINE EN 3D</span>"
+
+#. module: besacraft_builds
+#: model:ir.model.constraint,message:besacraft_builds.constraint_besacraft_episode_appearance_episode_build_uniq
+msgid "A build has one moment per episode."
+msgstr "Un build a un seul moment par épisode."
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "BOX"
+msgstr "BOÎTE"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "BUILD"
+msgstr "BUILD"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "Before you start"
+msgstr "Avant de commencer"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "Bought<small>the complete guide, yours for life</small>"
+msgstr "Acheté<small>le guide complet, à toi pour toujours</small>"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "Breadcrumb"
+msgstr "Fil d'Ariane"
+
+#. module: besacraft_builds
+#: model:ir.model,name:besacraft_builds.model_besacraft_episode_appearance
+msgid "Build Appearance in an Episode"
+msgstr "Apparition d'un build dans un épisode"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "By invitation<small>this guide opens on invitation</small>"
+msgstr "Sur invitation<small>ce guide s'ouvre sur invitation</small>"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "Drag to turn, scroll or pinch to come closer."
+msgstr "Glisse pour tourner, molette ou pincement pour approcher."
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "EP."
+msgstr "ÉP."
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "FRONT"
+msgstr "FACE"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "Format"
+msgstr "Format"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "Free<small>the complete guide, open to everyone</small>"
+msgstr "Gratuit<small>le guide complet, ouvert à tous</small>"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "Game"
+msgstr "Jeu"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.vitrine_page
+msgid "Glass"
+msgstr "Vitre"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "Ground"
+msgstr "Terrain"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "Guide"
+msgstr "Guide"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "Height"
+msgstr "Hauteur"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "Layer after layer"
+msgstr "Couche après couche"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.vitrine_page
+msgid "Loading the model…"
+msgstr "Chargement du modèle…"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "Minecraft Java, Besacraft modpack"
+msgstr "Minecraft Java, modpack Besacraft"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_episode__appearance_ids
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.view_besacraft_episode_form
+msgid "Moments"
+msgstr "Moments"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "Number"
+msgstr "Numéro"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_episode_appearance__minute
+msgid "On Screen At"
+msgstr "À l'écran à"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "Online guide, nothing to install"
+msgstr "Guide en ligne, pas de fichier à installer"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "Open the showcase full screen ↗"
+msgstr "Ouvrir la vitrine en plein écran ↗"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "Original structure"
+msgstr "Structure d'origine"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "Palette"
+msgstr "Palette"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "Product views"
+msgstr "Vues du produit"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_episode_appearance__seconds
+msgid "Seconds"
+msgstr "Secondes"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.vitrine_page
+msgid "Showcase box in 3D: the build mounted behind the glass, to turn around"
+msgstr "Coffret vitrine en 3D : le build monté derrière la vitre, à faire tourner"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.vitrine_page
+msgid "Showcase box ·"
+msgstr "Coffret vitrine ·"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "The"
+msgstr "Les"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "The 3D model is the guide's:"
+msgstr "Le modèle 3D est celui du guide :"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.view_besacraft_build_form
+msgid "The build told on its product sheet"
+msgstr "Le build raconté sur sa fiche produit"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,help:besacraft_builds.field_besacraft_build__description
+msgid "The build told on its product sheet. Edited on the website."
+msgstr "Le build raconté sur sa fiche produit. Se modifie depuis le site."
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "The finished build, under glass in its leather and brass box. Turn around it, come closer, take the glass off: it is the real model, block for block, the one you are going to build."
+msgstr "Le build fini, posé sous verre dans son coffret de cuir et de laiton. Tourne autour, approche-toi, enlève la vitre : c'est le vrai modèle, bloc pour bloc, celui que tu vas construire."
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_episode_appearance__timecode
+msgid "Timecode"
+msgstr "Minutage"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "Vertical short of the build"
+msgstr "Court vertical du build"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,help:besacraft_builds.field_besacraft_episode_appearance__minute
+msgid "Where the build shows up in the video, as minutes:seconds."
+msgstr "Où le build apparaît dans la vidéo, en minutes:secondes."
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "You buy access to the guide, not an object nor a file. The box is the picture of the build."
+msgstr "Tu achètes l'accès au guide, pas un objet ni un fichier. La boîte est l'image du build."
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "blocks."
+msgstr "blocs."
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "chapters"
+msgstr "chapitres"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "complete guide"
+msgstr "guide complet"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.vitrine_page
+msgid "drag to turn · scroll to come closer"
+msgstr "glisser pour tourner · molette pour approcher"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "free"
+msgstr "offert"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "in"
+msgstr "en"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "in one minute"
+msgstr "en une minute"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "in the episodes"
+msgstr "dans les épisodes"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "layers go down one after the other, as in the guide."
+msgstr "couches se posent l'une après l'autre, comme dans le guide."
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "layers,"
+msgstr "couches,"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "on screen at"
+msgstr "à l'écran à"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "source"
+msgstr "source"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.vitrine_page
+msgid "· real 3D model,"
+msgstr "· modèle 3D réel,"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "▶ Launch the free chapter"
+msgstr "▶ Lancer le chapitre offert"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "▶ Launch the free chapters"
+msgstr "▶ Lancer les chapitres offerts"

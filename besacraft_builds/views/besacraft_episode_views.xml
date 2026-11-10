@@ -50,6 +50,14 @@
                                 </list>
                             </field>
                         </page>
+                        <page string="Moments" name="moments">
+                            <field name="appearance_ids">
+                                <list editable="bottom">
+                                    <field name="build_id" options="{'no_create': True}"/>
+                                    <field name="minute" widget="float_time"/>
+                                </list>
+                            </field>
+                        </page>
                     </notebook>
                 </sheet>
             </form>
