@@ -251,6 +251,7 @@
         i {
             font-style: normal; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;
             border: 1px solid rgba(54, 207, 192, .4); border-radius: var(--r); color: var(--c-etat); font: 600 15px/1 var(--f-mono);
+            background: rgba(54, 207, 192, .06);
         }
         strong { display: block; color: var(--c-encre); font-weight: 500; }
         p { font-size: 14px; color: var(--c-gris); margin: 0; }
