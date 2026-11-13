@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <!-- Christine's outfits: not sold (price 0), not owned by everyone; an administrator gives them
+         to Christine's account only. -->
+    <record id="cosmetique_christine_corsage" model="besacraft.vestiaire.cosmetique">
+        <field name="code">christine_corsage</field>
+        <field name="name">Chemisier et corset de Christine</field>
+        <field name="genre">cosmetique</field>
+        <field name="emplacement">torse</field>
+        <field name="sequence">600</field>
+    </record>
+    <record id="cosmetique_christine_jupe" model="besacraft.vestiaire.cosmetique">
+        <field name="code">christine_jupe</field>
+        <field name="name">Jupe de Christine</field>
+        <field name="genre">cosmetique</field>
+        <field name="emplacement">taille</field>
+        <field name="sequence">610</field>
+    </record>
+    <record id="cosmetique_christine_bottines" model="besacraft.vestiaire.cosmetique">
+        <field name="code">christine_bottines</field>
+        <field name="name">Bottines de Christine</field>
+        <field name="genre">cosmetique</field>
+        <field name="emplacement">chaussures</field>
+        <field name="sequence">620</field>
+    </record>
+    <record id="cosmetique_christine_lunettes" model="besacraft.vestiaire.cosmetique">
+        <field name="code">christine_lunettes</field>
+        <field name="name">Lunettes de Christine</field>
+        <field name="genre">cosmetique</field>
+        <field name="emplacement">chapeau</field>
+        <field name="sequence">630</field>
+    </record>
+    <record id="cosmetique_christine_monocle" model="besacraft.vestiaire.cosmetique">
+        <field name="code">christine_monocle</field>
+        <field name="name">Monocle de Christine</field>
+        <field name="genre">cosmetique</field>
+        <field name="emplacement">visage</field>
+        <field name="sequence">640</field>
+    </record>
+</odoo>
