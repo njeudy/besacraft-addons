@@ -17,6 +17,7 @@
         "views/vestiaire_cape_views.xml",
         "views/vestiaire_points_views.xml",
         "data/vestiaire_catalogue_v50.xml",
+        "data/vestiaire_catalogue_pao.xml",
         "wizards/vestiaire_offrir_views.xml",
         "views/vestiaire_skin_views.xml",
         "views/portal_vestiaire.xml",
