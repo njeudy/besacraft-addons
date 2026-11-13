@@ -292,3 +292,39 @@ class ResPartnerPoints(models.Model):
                        "code": p.cosmetique_id.code} for p in cadeaux]
         cadeaux.write({"annonce": True})
         return nouvelles
+
+
+class ResPartnerJoueur(models.Model):
+    """What the back office shows of a player at a glance (Players kanban)."""
+
+    _inherit = "res.partner"
+
+    vestiaire_compte_valide = fields.Boolean(string="Account validated",
+                                             compute="_compute_vestiaire_compte_valide")
+    vestiaire_skin_apercu = fields.Binary(string="Active skin",
+                                          compute="_compute_vestiaire_skin_apercu")
+    vestiaire_cosmetique_count = fields.Integer(string="Owned cosmetics",
+                                                compute="_compute_vestiaire_counts")
+    vestiaire_emote_count = fields.Integer(string="Owned emotes",
+                                           compute="_compute_vestiaire_counts")
+
+    @api.depends("minecraft_uuid", "user_ids")
+    def _compute_vestiaire_compte_valide(self):
+        for partner in self:
+            partner.vestiaire_compte_valide = bool(partner.minecraft_uuid) and bool(partner.user_ids)
+
+    @api.depends("vestiaire_skin_ids.image", "vestiaire_skin_ids.actif")
+    def _compute_vestiaire_skin_apercu(self):
+        for partner in self:
+            partner.vestiaire_skin_apercu = partner._vestiaire_skin_actif().image or False
+
+    @api.depends("vestiaire_possession_ids.cosmetique_id")
+    def _compute_vestiaire_counts(self):
+        # Same rule as _vestiaire_possede(), with the "owned by everyone" items read once
+        # for the whole batch instead of once per card.
+        de_base = self.env["besacraft.vestiaire.cosmetique"].sudo().search(
+            [("publie", "=", True), ("de_base", "=", True)])
+        for partner in self:
+            possede = de_base | partner.sudo().vestiaire_possession_ids.cosmetique_id.filtered("publie")
+            partner.vestiaire_cosmetique_count = len(possede.filtered(lambda c: c.genre == "cosmetique"))
+            partner.vestiaire_emote_count = len(possede.filtered(lambda c: c.genre == "emote"))

@@ -21,7 +21,13 @@
         "data/vestiaire_catalogue_christine.xml",
         "wizards/vestiaire_offrir_views.xml",
         "views/vestiaire_skin_views.xml",
+        "views/vestiaire_joueur_views.xml",
         "views/portal_vestiaire.xml",
     ],
+    "assets": {
+        "web.assets_backend": [
+            "besacraft_vestiaire/static/src/scss/vestiaire_backend.scss",
+        ],
+    },
     "installable": True,
 }

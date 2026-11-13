@@ -825,7 +825,9 @@ msgid "Player"
 msgstr "Joueur"
 
 #. module: besacraft_vestiaire
+#: model:ir.actions.act_window,name:besacraft_vestiaire.vestiaire_joueur_action
 #: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_offrir__partner_ids
+#: model:ir.ui.menu,name:besacraft_vestiaire.menu_vestiaire_joueurs
 msgid "Players"
 msgstr "Joueurs"
 
@@ -1270,3 +1272,79 @@ msgstr "points. Tu les gagnes en jouant et tu les dépenses dans le Vestiaire du
 #: model:ir.ui.menu,name:besacraft_vestiaire.menu_vestiaire_configuration
 msgid "Configuration"
 msgstr "Configuration"
+
+#. module: besacraft_vestiaire
+#: model_terms:ir.ui.view,arch_db:besacraft_vestiaire.vestiaire_joueur_view_kanban
+#: model_terms:ir.ui.view,arch_db:besacraft_vestiaire.vestiaire_joueur_view_search
+msgid "Awaiting validation"
+msgstr "En attente de validation"
+
+#. module: besacraft_vestiaire
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_res_partner__vestiaire_compte_valide
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_res_users__vestiaire_compte_valide
+#: model_terms:ir.ui.view,arch_db:besacraft_vestiaire.vestiaire_joueur_view_kanban
+msgid "Account validated"
+msgstr "Compte validé"
+
+#. module: besacraft_vestiaire
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_res_partner__vestiaire_skin_apercu
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_res_users__vestiaire_skin_apercu
+msgid "Active skin"
+msgstr "Skin actif"
+
+#. module: besacraft_vestiaire
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_res_partner__vestiaire_cosmetique_count
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_res_users__vestiaire_cosmetique_count
+msgid "Owned cosmetics"
+msgstr "Cosmétiques possédés"
+
+#. module: besacraft_vestiaire
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_res_partner__vestiaire_emote_count
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_res_users__vestiaire_emote_count
+msgid "Owned emotes"
+msgstr "Émotes possédées"
+
+#. module: besacraft_vestiaire
+#: model_terms:ir.ui.view,arch_db:besacraft_vestiaire.vestiaire_joueur_view_search
+msgid "Validated accounts"
+msgstr "Comptes validés"
+
+#. module: besacraft_vestiaire
+#: model_terms:ir.ui.view,arch_db:besacraft_vestiaire.vestiaire_joueur_view_search
+msgid "Without skin"
+msgstr "Sans skin"
+
+#. module: besacraft_vestiaire
+#: model_terms:ir.ui.view,arch_db:besacraft_vestiaire.vestiaire_joueur_view_kanban
+msgid "pts"
+msgstr "pts"
+
+#. module: besacraft_vestiaire
+#: model_terms:ir.ui.view,arch_db:besacraft_vestiaire.vestiaire_joueur_view_kanban
+msgid "cosmetics"
+msgstr "cosmétiques"
+
+#. module: besacraft_vestiaire
+#: model_terms:ir.ui.view,arch_db:besacraft_vestiaire.vestiaire_joueur_view_kanban
+msgid "<i class=\"fa fa-star me-1\" title=\"Points\"/>"
+msgstr "<i class=\"fa fa-star me-1\" title=\"Points\"/>"
+
+#. module: besacraft_vestiaire
+#: model_terms:ir.ui.view,arch_db:besacraft_vestiaire.vestiaire_joueur_view_kanban
+msgid "<i class=\"fa fa-magic me-1\" title=\"Owned cosmetics\"/>"
+msgstr "<i class=\"fa fa-magic me-1\" title=\"Cosmétiques possédés\"/>"
+
+#. module: besacraft_vestiaire
+#: model_terms:ir.ui.view,arch_db:besacraft_vestiaire.vestiaire_joueur_view_kanban
+msgid "<i class=\"fa fa-flag me-1\" title=\"Worn cape\"/>"
+msgstr "<i class=\"fa fa-flag me-1\" title=\"Cape portée\"/>"
+
+#. module: besacraft_vestiaire
+#: model_terms:ir.actions.act_window,help:besacraft_vestiaire.vestiaire_joueur_action
+msgid "No player yet"
+msgstr "Aucun joueur pour l'instant"
+
+#. module: besacraft_vestiaire
+#: model_terms:ir.actions.act_window,help:besacraft_vestiaire.vestiaire_joueur_action
+msgid "A player appears here once a Minecraft account is linked to a contact."
+msgstr "Un joueur apparaît ici dès qu'un compte Minecraft est lié à un contact."

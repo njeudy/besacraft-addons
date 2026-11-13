@@ -8,6 +8,17 @@
             <xpath expr="//notebook" position="inside">
                 <page name="vestiaire" string="Wardrobe"
                       groups="besacraft_vestiaire.group_vestiaire_admin">
+                    <div class="d-flex align-items-start gap-3 mb-3">
+                        <field name="vestiaire_skin_apercu" widget="image" readonly="1"
+                               class="o_vestiaire_pixel" options="{'size': [256, 256]}"
+                               invisible="not vestiaire_skin_apercu"/>
+                        <group>
+                            <field name="vestiaire_compte_valide"/>
+                            <field name="vestiaire_points"/>
+                            <field name="vestiaire_cosmetique_count"/>
+                            <field name="vestiaire_emote_count"/>
+                        </group>
+                    </div>
                     <button name="action_vestiaire_importer_skin_mojang" type="object"
                             string="Import Mojang skin"/>
                     <field name="vestiaire_skin_ids" context="{'default_partner_id': id}">
@@ -32,7 +43,6 @@
                         </list>
                     </field>
                     <group>
-                        <field name="vestiaire_points"/>
                         <field name="vestiaire_tenue_ids" widget="many2many_tags"/>
                         <field name="vestiaire_reglages" groups="base.group_no_one"/>
                     </group>
