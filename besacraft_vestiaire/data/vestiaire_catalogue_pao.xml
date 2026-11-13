@@ -37,11 +37,4 @@
         <field name="emplacement">bandouliere</field>
         <field name="sequence">540</field>
     </record>
-    <record id="cosmetique_pao_monocle" model="besacraft.vestiaire.cosmetique">
-        <field name="code">pao_monocle</field>
-        <field name="name">Monocle de PAO</field>
-        <field name="genre">cosmetique</field>
-        <field name="emplacement">visage</field>
-        <field name="sequence">550</field>
-    </record>
 </odoo>
