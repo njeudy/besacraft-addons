@@ -1265,3 +1265,8 @@ msgid ""
 "points. You earn them by playing, and spend them in the in-game wardrobe "
 "(key V)."
 msgstr "points. Tu les gagnes en jouant et tu les dépenses dans le Vestiaire du jeu (touche V)."
+
+#. module: besacraft_vestiaire
+#: model:ir.ui.menu,name:besacraft_vestiaire.menu_vestiaire_configuration
+msgid "Configuration"
+msgstr "Configuration"

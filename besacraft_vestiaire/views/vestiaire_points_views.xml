@@ -174,14 +174,17 @@
 
     <menuitem id="menu_vestiaire_cosmetiques" name="Cosmetics and emotes"
               parent="menu_vestiaire_root" action="vestiaire_cosmetique_action"
-              groups="besacraft_vestiaire.group_vestiaire_createur" sequence="40"/>
+              groups="besacraft_vestiaire.group_vestiaire_createur" sequence="20"/>
     <menuitem id="menu_vestiaire_mouvements" name="Points movements"
               parent="menu_vestiaire_root" action="vestiaire_mouvement_action"
-              groups="besacraft_vestiaire.group_vestiaire_admin" sequence="50"/>
-    <menuitem id="menu_vestiaire_bareme" name="Points scale"
-              parent="menu_vestiaire_root" action="vestiaire_bareme_action"
               groups="besacraft_vestiaire.group_vestiaire_admin" sequence="60"/>
+    <menuitem id="menu_vestiaire_configuration" name="Configuration"
+              parent="menu_vestiaire_root"
+              groups="besacraft_vestiaire.group_vestiaire_admin" sequence="90"/>
+    <menuitem id="menu_vestiaire_bareme" name="Points scale"
+              parent="menu_vestiaire_configuration" action="vestiaire_bareme_action"
+              groups="besacraft_vestiaire.group_vestiaire_admin" sequence="10"/>
     <menuitem id="menu_vestiaire_cles" name="Server keys"
-              parent="menu_vestiaire_root" action="vestiaire_cle_serveur_action"
-              groups="besacraft_vestiaire.group_vestiaire_admin" sequence="70"/>
+              parent="menu_vestiaire_configuration" action="vestiaire_cle_serveur_action"
+              groups="besacraft_vestiaire.group_vestiaire_admin" sequence="20"/>
 </odoo>
