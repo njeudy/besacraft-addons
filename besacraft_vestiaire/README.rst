@@ -104,3 +104,21 @@ Deployment
 without it every player shares the proxy's address: the ceiling then becomes global.
 Make sure the proxy sets ``X-Forwarded-For`` itself rather than passing on whatever
 the client sent.
+
+Back office
+===========
+
+The *Besacraft* app gathers everything under *Wardrobe*: *Players* (a kanban of
+the contacts with a Minecraft UUID: head, pseudo, points, owned cosmetics, worn
+cape, validated or awaiting validation), *Cosmetics*, *Emotes*, *Capes*,
+*Account requests*, *Points movements*, and *Configuration* (points scale and
+server keys).
+
+The cosmetic and emote cards show a picture taken, in this order, from:
+
+* a cosmetic's *Thumbnail* when it is set;
+* ``static/img/cosmetiques/<code>.png`` for a cosmetic;
+* ``static/img/emotes/<code>.gif`` for an emote, always: an animated GIF stored in
+  an image field would be flattened.
+
+A missing file simply leaves the card without a picture.

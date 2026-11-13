@@ -35,6 +35,14 @@ class TestJoueur(PointsCommon):
         lot = self.zoe | leo
         self.assertEqual(lot.mapped("vestiaire_cosmetique_count"), [4, 3])
 
+    def test_possesseurs(self):
+        self.assertEqual(self.chapeau.possesseur_count, 0)
+        leo = self.env["res.partner"].create({"name": "Léo"})
+        (self.zoe | leo)._vestiaire_offrir_cosmetique(self.chapeau)
+        self.chapeau.invalidate_recordset(["possesseur_count"])
+        self.assertEqual(self.chapeau.possesseur_count, 2)
+        self.assertEqual(self.guitare.possesseur_count, 0)
+
     def test_compte_valide(self):
         self.assertTrue(self.zoe.vestiaire_compte_valide)
         sans_compte = self.env["res.partner"].create({
@@ -50,6 +58,23 @@ class TestJoueur(PointsCommon):
                              "actif": True})
         self.zoe.invalidate_recordset(["vestiaire_skin_apercu"])
         self.assertEqual(self.zoe.vestiaire_skin_apercu, actif.image)
+
+    def test_menus_et_actions(self):
+        configuration = self.env.ref("besacraft_vestiaire.menu_vestiaire_configuration")
+        self.assertEqual(self.env.ref("besacraft_vestiaire.menu_vestiaire_bareme").parent_id,
+                         configuration)
+        self.assertEqual(self.env.ref("besacraft_vestiaire.menu_vestiaire_cles").parent_id,
+                         configuration)
+        joueurs = self.env.ref("besacraft_vestiaire.vestiaire_joueur_action")
+        self.assertEqual(joueurs.view_mode.split(",")[0], "kanban")
+        Partner = self.env["res.partner"]
+        self.assertIn(self.zoe, Partner.search(safe_eval(joueurs.domain)))
+        self.assertNotIn(Partner.create({"name": "Not a player"}),
+                         Partner.search(safe_eval(joueurs.domain)))
+        emotes = self.env.ref("besacraft_vestiaire.vestiaire_emote_action")
+        Cosmetique = self.env["besacraft.vestiaire.cosmetique"]
+        self.assertEqual(set(Cosmetique.search(safe_eval(emotes.domain)).mapped("genre")),
+                         {"emote"})
 
     def test_vues_par_defaut_des_contacts_inchangees(self):
         # The Players views carry a high priority so the Contacts app keeps its own.
