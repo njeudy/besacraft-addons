@@ -82,3 +82,10 @@ class TestJoueur(PointsCommon):
         for vue in ("kanban", "list", "search"):
             self.assertNotIn("vestiaire", Partner.get_view(view_type=vue)["arch"],
                              f"default {vue} view of res.partner must stay untouched")
+
+    def test_apercu_url_follows_code_and_kind(self):
+        Cosmetique = self.env["besacraft.vestiaire.cosmetique"]
+        cosmetique = Cosmetique.create({"code": "test_apercu", "name": "Preview", "genre": "cosmetique"})
+        emote = Cosmetique.create({"code": "test_salut", "name": "Wave", "genre": "emote"})
+        self.assertEqual(cosmetique.apercu_url, "/besacraft_vestiaire/static/img/cosmetiques/test_apercu.png")
+        self.assertEqual(emote.apercu_url, "/besacraft_vestiaire/static/img/emotes/test_salut.gif")

@@ -1390,3 +1390,22 @@ msgstr "Base"
 #: model_terms:ir.ui.view,arch_db:besacraft_vestiaire.vestiaire_cosmetique_view_kanban
 msgid "Reserved"
 msgstr "Réservé"
+
+#. module: besacraft_vestiaire
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_cosmetique__apercu_url
+msgid "Preview"
+msgstr "Aperçu"
+
+#. module: besacraft_vestiaire
+#: model:ir.model.fields,help:besacraft_vestiaire.field_besacraft_vestiaire_cosmetique__apercu_url
+msgid ""
+"Static picture shipped with the module for this code: a PNG for a cosmetic,"
+" an animated GIF for an emote."
+msgstr ""
+"Image statique livrée avec le module pour ce code : un PNG pour un "
+"cosmétique, un GIF animé pour une émote."
+
+#. module: besacraft_vestiaire
+#: model_terms:ir.ui.view,arch_db:besacraft_vestiaire.vestiaire_cosmetique_view_form
+msgid "Custom thumbnail"
+msgstr "Vignette personnalisée"

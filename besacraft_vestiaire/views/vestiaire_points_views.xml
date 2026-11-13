@@ -23,7 +23,9 @@
         <field name="arch" type="xml">
             <form>
                 <sheet>
-                    <field name="vignette" widget="image" class="oe_avatar"/>
+                    <field name="vignette" widget="image" class="oe_avatar" invisible="not vignette"/>
+                    <field name="apercu_url" widget="image_url" class="oe_avatar o_vestiaire_pixel"
+                           options="{'size': [128, 128]}" invisible="vignette"/>
                     <group>
                         <group>
                             <field name="code"/>
@@ -37,6 +39,8 @@
                             <field name="publie"/>
                         </group>
                         <group>
+                            <field name="vignette" widget="image" options="{'size': [64, 64]}"
+                                   string="Custom thumbnail"/>
                             <field name="createur_id"/>
                             <field name="source"/>
                             <field name="licence"/>
