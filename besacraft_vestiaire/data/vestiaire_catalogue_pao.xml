@@ -51,4 +51,11 @@
         <field name="emplacement">tete</field>
         <field name="sequence">570</field>
     </record>
+    <record id="cosmetique_pao_manteau" model="besacraft.vestiaire.cosmetique">
+        <field name="code">pao_manteau</field>
+        <field name="name">Manteau noir de PAO</field>
+        <field name="genre">cosmetique</field>
+        <field name="emplacement">torse</field>
+        <field name="sequence">580</field>
+    </record>
 </odoo>
