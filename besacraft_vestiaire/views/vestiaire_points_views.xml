@@ -13,6 +13,7 @@
                 <field name="prix"/>
                 <field name="de_base"/>
                 <field name="publie"/>
+                <field name="distant" optional="show"/>
             </list>
         </field>
     </record>
@@ -46,6 +47,33 @@
                             <field name="licence"/>
                         </group>
                     </group>
+                    <notebook invisible="genre != 'cosmetique'">
+                        <page name="distant" string="Remote files">
+                            <div class="text-muted mb-2">Drop the zip made by <code>generer.py --paquet</code>: the game then downloads this cosmetic from Odoo, no new mod version needed. Each accepted package raises the version.</div>
+                            <group>
+                                <group>
+                                    <field name="paquet" filename="paquet_nom"/>
+                                    <field name="paquet_nom" invisible="1"/>
+                                    <field name="distant"/>
+                                    <field name="version_distante"/>
+                                </group>
+                                <group>
+                                    <button name="action_retirer_paquet" type="object"
+                                            string="Remove the package" invisible="not distant"
+                                            confirm="The game will draw this cosmetic from the jar only, if the jar has it. Continue?"/>
+                                </group>
+                            </group>
+                            <field name="fichier_ids" readonly="1">
+                                <list>
+                                    <field name="chemin"/>
+                                    <field name="taille"/>
+                                    <field name="sha256"/>
+                                </list>
+                            </field>
+                            <field name="entree_distante" invisible="not entree_distante"
+                                   widget="code" options="{'mode': 'javascript'}"/>
+                        </page>
+                    </notebook>
                 </sheet>
             </form>
         </field>

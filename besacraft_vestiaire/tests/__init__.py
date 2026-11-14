@@ -11,3 +11,4 @@ from . import test_portail
 from . import test_points
 from . import test_api_points
 from . import test_joueur
+from . import test_distant
