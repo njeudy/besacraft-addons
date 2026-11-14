@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <!-- The Christmas pack: not owned by everyone; given by an administrator for now,
+         to be sold as a pack later. -->
+    <record id="cosmetique_pull_noel" model="besacraft.vestiaire.cosmetique">
+        <field name="code">pull_noel</field>
+        <field name="name">Pull moche de Noël</field>
+        <field name="genre">cosmetique</field>
+        <field name="emplacement">torse</field>
+        <field name="sequence">800</field>
+    </record>
+    <record id="cosmetique_bonnet_lutin" model="besacraft.vestiaire.cosmetique">
+        <field name="code">bonnet_lutin</field>
+        <field name="name">Bonnet de lutin</field>
+        <field name="genre">cosmetique</field>
+        <field name="emplacement">chapeau</field>
+        <field name="sequence">810</field>
+    </record>
+    <record id="cosmetique_bonnet_pere_noel" model="besacraft.vestiaire.cosmetique">
+        <field name="code">bonnet_pere_noel</field>
+        <field name="name">Bonnet de Père Noël</field>
+        <field name="genre">cosmetique</field>
+        <field name="emplacement">chapeau</field>
+        <field name="sequence">820</field>
+    </record>
+    <record id="cosmetique_veste_pere_noel" model="besacraft.vestiaire.cosmetique">
+        <field name="code">veste_pere_noel</field>
+        <field name="name">Veste de Père Noël</field>
+        <field name="genre">cosmetique</field>
+        <field name="emplacement">torse</field>
+        <field name="sequence">830</field>
+    </record>
+    <record id="cosmetique_pantalon_pere_noel" model="besacraft.vestiaire.cosmetique">
+        <field name="code">pantalon_pere_noel</field>
+        <field name="name">Pantalon de Père Noël</field>
+        <field name="genre">cosmetique</field>
+        <field name="emplacement">taille</field>
+        <field name="sequence">840</field>
+    </record>
+    <record id="cosmetique_bottes_noel" model="besacraft.vestiaire.cosmetique">
+        <field name="code">bottes_noel</field>
+        <field name="name">Bottes de Noël</field>
+        <field name="genre">cosmetique</field>
+        <field name="emplacement">chaussures</field>
+        <field name="sequence">850</field>
+    </record>
+    <record id="cosmetique_bois_cerf" model="besacraft.vestiaire.cosmetique">
+        <field name="code">bois_cerf</field>
+        <field name="name">Bois de cerf</field>
+        <field name="genre">cosmetique</field>
+        <field name="emplacement">chapeau</field>
+        <field name="sequence">860</field>
+    </record>
+    <record id="cosmetique_nez_renne" model="besacraft.vestiaire.cosmetique">
+        <field name="code">nez_renne</field>
+        <field name="name">Nez de renne</field>
+        <field name="genre">cosmetique</field>
+        <field name="emplacement">visage</field>
+        <field name="sequence">870</field>
+    </record>
+    <record id="cosmetique_barbe_pere_noel" model="besacraft.vestiaire.cosmetique">
+        <field name="code">barbe_pere_noel</field>
+        <field name="name">Barbe de Père Noël</field>
+        <field name="genre">cosmetique</field>
+        <field name="emplacement">visage</field>
+        <field name="sequence">880</field>
+    </record>
+    <record id="cosmetique_robe_mere_noel" model="besacraft.vestiaire.cosmetique">
+        <field name="code">robe_mere_noel</field>
+        <field name="name">Robe de Mère Noël</field>
+        <field name="genre">cosmetique</field>
+        <field name="emplacement">torse</field>
+        <field name="sequence">890</field>
+    </record>
+    <record id="cosmetique_robe_mere_noel_glamour" model="besacraft.vestiaire.cosmetique">
+        <field name="code">robe_mere_noel_glamour</field>
+        <field name="name">Robe de Mère Noël glamour</field>
+        <field name="genre">cosmetique</field>
+        <field name="emplacement">torse</field>
+        <field name="sequence">900</field>
+    </record>
+    <record id="cosmetique_capeline_mere_noel" model="besacraft.vestiaire.cosmetique">
+        <field name="code">capeline_mere_noel</field>
+        <field name="name">Capeline de Mère Noël</field>
+        <field name="genre">cosmetique</field>
+        <field name="emplacement">cape</field>
+        <field name="sequence">910</field>
+    </record>
+    <record id="cosmetique_bonnet_mere_noel" model="besacraft.vestiaire.cosmetique">
+        <field name="code">bonnet_mere_noel</field>
+        <field name="name">Bonnet de Mère Noël</field>
+        <field name="genre">cosmetique</field>
+        <field name="emplacement">chapeau</field>
+        <field name="sequence">920</field>
+    </record>
+</odoo>
