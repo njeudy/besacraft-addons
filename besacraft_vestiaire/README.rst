@@ -17,7 +17,7 @@ Routes
 ``GET /mc/v1/vestiaire/moi``
     The signed-in player's pseudo, active skin, worn cape, ``points``, the codes they
     own (``possede``), their ``tenue`` and the eight slots of their emote ``roue``,
-    and the ``nouvelles`` (gains and gifts) not yet told in game, which this call
+    their armour stand (``armures``, ``armure_derniere``), and the ``nouvelles`` (gains and gifts) not yet told in game, which this call
     marks as told. For an account that is not validated yet it answers
     ``403 compte_non_valide`` with a request ``code`` and the ``url`` of the request
     form; the other wardrobe routes do the same.
@@ -34,6 +34,13 @@ Routes
     checked; the suffix (60 characters at most, otherwise ignored) is kept as is and
     given back by ``moi``. A code sent bare forgets its settings. Colours are free:
     nothing about them is sold.
+
+    With ``armures`` (a list) and ``armure_derniere`` (a position, ``-1`` for none),
+    it also saves the armour stand: up to eight armours, each ``{nom, plastron,
+    teinte_plastron, casque, teinte_casque, style}``. A breastplate or helmet must be
+    an owned cosmetic marked as such (field *Armour piece*); otherwise the armour, or
+    its helmet alone, is dropped. A body without ``armures`` (a game from before the
+    deployable armours) keeps the stand as it is. The answer adds the kept stand.
 
 ``POST /mc/v1/vestiaire/achat`` ``{code, prix}``
     Buys an item at the price the player saw. ``409`` with ``deja_possede``,

@@ -49,6 +49,7 @@
         <field name="name">Armure cyber de Zoé</field>
         <field name="genre">cosmetique</field>
         <field name="emplacement">torse</field>
+        <field name="piece_armure">plastron</field>
         <field name="sequence">760</field>
     </record>
     <record id="cosmetique_zoe_casque_armure" model="besacraft.vestiaire.cosmetique">
@@ -56,6 +57,7 @@
         <field name="name">Casque cyber de Zoé</field>
         <field name="genre">cosmetique</field>
         <field name="emplacement">tete</field>
+        <field name="piece_armure">casque</field>
         <field name="sequence">770</field>
     </record>
     <record id="cosmetique_zoe_armure_neon" model="besacraft.vestiaire.cosmetique">
@@ -63,6 +65,7 @@
         <field name="name">Armure néon de Zoé</field>
         <field name="genre">cosmetique</field>
         <field name="emplacement">torse</field>
+        <field name="piece_armure">plastron</field>
         <field name="sequence">780</field>
     </record>
     <record id="cosmetique_zoe_casque_neon" model="besacraft.vestiaire.cosmetique">
@@ -70,6 +73,7 @@
         <field name="name">Casque néon de Zoé</field>
         <field name="genre">cosmetique</field>
         <field name="emplacement">tete</field>
+        <field name="piece_armure">casque</field>
         <field name="sequence">790</field>
     </record>
 </odoo>
