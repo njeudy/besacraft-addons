@@ -76,4 +76,20 @@
         <field name="piece_armure">casque</field>
         <field name="sequence">790</field>
     </record>
+    <record id="cosmetique_zoe_armure_ironman" model="besacraft.vestiaire.cosmetique">
+        <field name="code">zoe_armure_ironman</field>
+        <field name="name">Zoe's Iron Man armour</field>
+        <field name="genre">cosmetique</field>
+        <field name="emplacement">torse</field>
+        <field name="piece_armure">plastron</field>
+        <field name="sequence">800</field>
+    </record>
+    <record id="cosmetique_zoe_casque_ironman" model="besacraft.vestiaire.cosmetique">
+        <field name="code">zoe_casque_ironman</field>
+        <field name="name">Zoe's Iron Man helmet</field>
+        <field name="genre">cosmetique</field>
+        <field name="emplacement">tete</field>
+        <field name="piece_armure">casque</field>
+        <field name="sequence">810</field>
+    </record>
 </odoo>

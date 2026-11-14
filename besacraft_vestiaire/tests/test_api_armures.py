@@ -95,6 +95,8 @@ class TestApiArmures(common.HttpCase):
     def test_pieces_des_armures_livrees(self):
         self.assertEqual(self.env.ref("besacraft_vestiaire.cosmetique_pao_armure").piece_armure, "plastron")
         self.assertEqual(self.env.ref("besacraft_vestiaire.cosmetique_zoe_casque_neon").piece_armure, "casque")
+        self.assertEqual(self.env.ref("besacraft_vestiaire.cosmetique_zoe_armure_ironman").piece_armure, "plastron")
+        self.assertEqual(self.env.ref("besacraft_vestiaire.cosmetique_zoe_casque_ironman").piece_armure, "casque")
 
 
 class TestOutilsArmures(common.BaseCase):

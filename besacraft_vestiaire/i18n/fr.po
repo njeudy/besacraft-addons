@@ -1749,3 +1749,13 @@ msgstr "Dernière armure utilisée"
 #: model:ir.model.fields,help:besacraft_vestiaire.field_res_users__vestiaire_armure_derniere
 msgid "Position in the stand, -1 for none."
 msgstr "Position dans le stand, -1 pour aucune."
+
+#. module: besacraft_vestiaire
+#: model:besacraft.vestiaire.cosmetique,name:besacraft_vestiaire.cosmetique_zoe_armure_ironman
+msgid "Zoe's Iron Man armour"
+msgstr "Armure Iron Man de Zoé"
+
+#. module: besacraft_vestiaire
+#: model:besacraft.vestiaire.cosmetique,name:besacraft_vestiaire.cosmetique_zoe_casque_ironman
+msgid "Zoe's Iron Man helmet"
+msgstr "Casque Iron Man de Zoé"
