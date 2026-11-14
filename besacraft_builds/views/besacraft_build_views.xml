@@ -72,6 +72,27 @@
                                 </form>
                             </field>
                         </page>
+                        <page string="Description" name="description">
+                            <field name="description" placeholder="The build told on its product sheet"/>
+                        </page>
+                        <page string="Chapters" name="chapters">
+                            <field name="chapter_ids">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="name"/>
+                                    <field name="first_layer"/>
+                                    <field name="last_layer"/>
+                                    <field name="free"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Showcase" name="showcase">
+                            <group>
+                                <field name="cutout_image" widget="image"/>
+                                <field name="box_face_image" widget="image"/>
+                                <field name="vitrine_glb_attachment_id"/>
+                            </group>
+                        </page>
                         <page string="Members" name="members">
                             <field name="member_ids">
                                 <list>

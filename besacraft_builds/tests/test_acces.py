@@ -28,7 +28,7 @@ class TestAcces(HttpCase):
         Pas de redirection ici -- envoyer vers /shop ferait disparaître le build que le
         visiteur est venu voir, et c'est justement ce qui lui donne envie.
         """
-        reponse = self.url_open("/t/911", allow_redirects=False)
+        reponse = self.url_open("/builds/911/guide", allow_redirects=False)
         self.assertEqual(reponse.status_code, 200)
         self.assertIn(self.produit.product_tmpl_id.website_url, reponse.text)
 
@@ -44,13 +44,13 @@ class TestAcces(HttpCase):
                 "layer_id": couche.id, "item_key": "minecraft:block_%d" % sequence,
                 "name_fr": nom, "qty": 64})
         self.build.layer_count = 2
-        page = self.url_open("/t/911").text
+        page = self.url_open("/builds/911/guide").text
         self.assertIn("Planches de chene", page)
         self.assertNotIn("Pierre taillee", page)
 
     def test_un_build_gratuit_s_ouvre_directement(self):
         self.build.write({"enroll": "public", "product_id": False})
-        reponse = self.url_open("/t/911", allow_redirects=False)
+        reponse = self.url_open("/builds/911/guide", allow_redirects=False)
         self.assertEqual(reponse.status_code, 200)
 
     def test_le_viewer_d_un_build_payant_ne_se_sert_pas(self):
@@ -127,7 +127,7 @@ class TestAcces(HttpCase):
     def test_un_site_ne_montre_que_les_series_qu_il_publie(self):
         """Le catalogue est servi, mais la série d'à côté n'y est ni listée ni ouverte."""
         autre = self._build_d_une_autre_serie()
-        catalogue = self.url_open("/builds").text
+        catalogue = self.url_open("/builds/collections").text
         self.assertIn("Build payant", catalogue)
         self.assertNotIn(autre.name, catalogue)
         self.assertNotIn(autre.serie_id.name, catalogue, "son filtre non plus")
@@ -138,7 +138,7 @@ class TestAcces(HttpCase):
     def test_publier_la_serie_sur_le_site_ouvre_ses_builds(self):
         autre = self._build_d_une_autre_serie()
         autre.serie_id.website_ids = [(4, self.site.id)]
-        self.assertIn(autre.name, self.url_open("/builds").text)
+        self.assertIn(autre.name, self.url_open("/builds/collections").text)
         self.assertEqual(self.url_open("/t/912", allow_redirects=False).status_code, 200)
         self.assertEqual(self.url_open(
             "/besacraft/viewer/%d" % autre.id, allow_redirects=False).status_code, 200)

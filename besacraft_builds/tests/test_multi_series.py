@@ -34,7 +34,7 @@ class TestMultiSeries(HttpCase):
         self.build.serie_ids = [(4, self.seconde.id)]
         self.seconde.website_ids = [(4, self.site.id)]
         self.assertTrue(self.build.is_shown_on(self.site))
-        self.assertIn(self.build.name, self.url_open("/builds").text)
+        self.assertIn(self.build.name, self.url_open("/builds/collections").text)
         self.assertEqual(self.url_open("/builds/900", allow_redirects=False).status_code, 200)
 
     def test_sans_serie_supplementaire_le_build_reste_hors_du_site(self):
@@ -54,7 +54,7 @@ class TestMultiSeries(HttpCase):
         """Le filtre du catalogue se joue dans le navigateur, sur `data-series`."""
         self.build.serie_ids = [(4, self.seconde.id)]
         self.principale.website_ids = [(4, self.site.id)]
-        page = self.url_open("/builds").text
+        page = self.url_open("/builds/collections").text
         self.assertIn('data-series="%s %s"' % (self.principale.code, self.seconde.code), page)
 
     def test_le_compteur_du_filtre_compte_le_build_dans_chaque_serie(self):
@@ -68,15 +68,11 @@ class TestMultiSeries(HttpCase):
             self.assertIn(self.build, builds.filtered(lambda b, s=serie: s in b.series()),
                           "compté dans %s" % serie.code)
 
-    def test_un_build_voisin_peut_venir_de_la_serie_supplementaire(self):
-        """La page d'un build propose ses voisins : ceux qui partagent une série."""
+    def test_un_build_de_la_serie_supplementaire_est_dans_sa_page(self):
+        """La page d'une série montre aussi les builds qui n'y sont que par serie_ids."""
         self.build.serie_ids = [(4, self.seconde.id)]
-        voisin = self.env["besacraft.build"].create({
-            "name": "Hutte de survie", "code": "901", "enroll": "public",
-            "is_published": True, "serie_id": self.seconde.id,
-        })
         self.seconde.website_ids = [(4, self.site.id)]
-        self.assertIn(voisin.name, self.url_open("/builds/900").text)
+        self.assertIn(self.build.name, self.url_open("/builds/serie/%s" % self.seconde.code).text)
 
     def test_la_recherche_du_site_trouve_un_build_par_sa_serie_supplementaire(self):
         self.build.serie_ids = [(4, self.seconde.id)]

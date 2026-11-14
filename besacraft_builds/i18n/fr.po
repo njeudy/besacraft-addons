@@ -94,6 +94,7 @@ msgstr "Boîte"
 #: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build_layer__build_id
 #: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build_member__build_id
 #: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_vendre__build_id
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_episode_appearance__build_id
 msgid "Build"
 msgstr "Build"
 
@@ -159,6 +160,7 @@ msgstr "Configuration"
 #: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build_layer__create_uid
 #: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_vendre__create_uid
 #: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build__create_uid
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_episode_appearance__create_uid
 msgid "Created by"
 msgstr "Créé par"
 
@@ -170,6 +172,7 @@ msgstr "Créé par"
 #: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build_layer__create_date
 #: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build_member__create_date
 #: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_vendre__create_date
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_episode_appearance__create_date
 msgid "Created on"
 msgstr "Créé le"
 
@@ -180,6 +183,8 @@ msgstr "Date"
 
 #. module: besacraft_builds
 #: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_serie__description
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build__description
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.view_besacraft_build_form
 msgid "Description"
 msgstr "Description"
 
@@ -191,6 +196,7 @@ msgstr "Description"
 #: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build__display_name
 #: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build_member__display_name
 #: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build_layer__display_name
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_episode_appearance__display_name
 msgid "Display Name"
 msgstr "Nom affiché"
 
@@ -226,6 +232,7 @@ msgstr "Accès"
 
 #. module: besacraft_builds
 #: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_serie__episode_ids
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_episode_appearance__episode_id
 msgid "Episode"
 msgstr "Épisodes"
 
@@ -262,6 +269,10 @@ msgstr "Couches de fondation enfouies sous le niveau du sol, que le tutoriel sau
 
 #. module: besacraft_builds
 #: model:ir.model.fields.selection,name:besacraft_builds.selection__besacraft_build__enroll__public
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build_chapter__free
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop_carte
 msgid "Free"
 msgstr "Gratuit"
 
@@ -361,6 +372,7 @@ msgstr "Dernière couche atteinte par le membre."
 #: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build_member__write_uid
 #: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_vendre__write_uid
 #: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build_layer_line__write_uid
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_episode_appearance__write_uid
 msgid "Last Updated by"
 msgstr "Dernière modification par"
 
@@ -372,6 +384,7 @@ msgstr "Dernière modification par"
 #: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build__write_date
 #: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_episode__write_date
 #: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_serie__write_date
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_episode_appearance__write_date
 msgid "Last Updated on"
 msgstr "Dernière modification le"
 
@@ -408,6 +421,7 @@ msgstr "Les aventures de Zunk"
 
 #. module: besacraft_builds
 #: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build__level
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
 msgid "Level"
 msgstr "Niveau"
 
@@ -592,6 +606,8 @@ msgstr "Série"
 #. module: besacraft_builds
 #: model:ir.actions.act_window,name:besacraft_builds.action_serie
 #: model:ir.ui.menu,name:besacraft_builds.menu_serie
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.ac_build
 msgid "Series"
 msgstr "Séries"
 
@@ -705,6 +721,7 @@ msgstr "Cet article donne accès au tutoriel d'un build."
 
 #. module: besacraft_builds
 #: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build_layer__title
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build_chapter__name
 msgid "Title"
 msgstr "Titre"
 
@@ -799,3 +816,1848 @@ msgstr "URL YouTube"
 #: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build__youtube_url
 msgid "Youtube Url"
 msgstr "URL YouTube"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "Add to my books"
+msgstr "Ajouter à mes livres"
+
+#. module: besacraft_builds
+#: model:ir.model,name:besacraft_builds.model_besacraft_build_chapter
+msgid "Build Chapter"
+msgstr "Chapitre de build"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build_chapter__first_layer
+msgid "First Layer"
+msgstr "Première couche"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build_chapter__last_layer
+msgid "Last Layer"
+msgstr "Dernière couche"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,help:besacraft_builds.field_besacraft_build_chapter__first_layer
+msgid "First layer (or step) of the chapter, as numbered in the tutorial."
+msgstr "Première couche (ou étape) du chapitre, numérotée comme dans le tutoriel."
+
+#. module: besacraft_builds
+#: model:ir.model.fields,help:besacraft_builds.field_besacraft_build_chapter__last_layer
+msgid "Last layer (or step) of the chapter, included."
+msgstr "Dernière couche (ou étape) du chapitre, incluse."
+
+#. module: besacraft_builds
+#: model:ir.model.fields,help:besacraft_builds.field_besacraft_build_chapter__free
+msgid "Given away: readable without buying the tutorial."
+msgstr "Offert : lisible sans acheter le tutoriel."
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build__chapter_ids
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.view_besacraft_build_form
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.ac_build
+msgid "Chapters"
+msgstr "Chapitres"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build__cutout_image
+msgid "Cutout"
+msgstr "Détouré"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,help:besacraft_builds.field_besacraft_build__cutout_image
+msgid "The build alone on a transparent background."
+msgstr "Le build seul, sur fond transparent."
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build__box_face_image
+msgid "Box Face"
+msgstr "Face du coffret"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,help:besacraft_builds.field_besacraft_build__box_face_image
+msgid "The front of the box, laid flat: the third view of the gallery."
+msgstr "La face du coffret, à plat : la troisième vue de la galerie."
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build__vitrine_glb_attachment_id
+msgid "Showcase Model"
+msgstr "Modèle de la vitrine"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,help:besacraft_builds.field_besacraft_build__vitrine_glb_attachment_id
+msgid "The glTF model (.glb) mounted in the 3D showcase of the product sheet."
+msgstr "Le modèle glTF (.glb) monté dans la vitrine 3D de la fiche produit."
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.view_besacraft_build_form
+msgid "Showcase"
+msgstr "Vitrine"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.collections
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.ac_build
+msgid "Collections"
+msgstr "Collections"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.collections
+msgid "No build published yet."
+msgstr "Aucun build publié pour l'instant."
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.collections
+msgid "series"
+msgstr "séries"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.ac_build
+msgid "Shop"
+msgstr "Boutique"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop
+msgid "tutorials for sale"
+msgstr "tutos en vente"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop
+msgid "Nothing for sale yet."
+msgstr "Rien en vente pour l'instant."
+
+#. module: besacraft_builds
+#: code:addons/besacraft_builds/models/besacraft_build_chapter.py:0
+msgid "A chapter cannot end before the layer it starts with."
+msgstr "Un chapitre ne peut pas finir avant la couche où il commence."
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_serie__cover_image
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.view_besacraft_serie_form
+msgid "Cover Image"
+msgstr "Image de couverture"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,help:besacraft_builds.field_besacraft_serie__cover_image
+msgid "Picture of the series on the home page card. Falls back to the logo."
+msgstr "Image de la série sur sa carte de la page d'accueil. À défaut, le logo."
+
+# v2 pages (generated)
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.serie
+msgid "&gt; episodes --serie"
+msgstr "&gt; episodes --serie"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.catalogue
+msgid "<b>PLACE</b>"
+msgstr "<b>JE POSE</b>"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.catalogue
+msgid "<i/><i/>Open the shop"
+msgstr "<i/><i/>Ouvrir le shop"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.collections
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.serie
+msgid "<i/><i/>▶ Launch"
+msgstr "<i/><i/>▶ Lancer"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.ac_credit
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.catalogue
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop
+msgid "<i/><i/>▶ Launch the build"
+msgstr "<i/><i/>▶ Lancer le build"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.ac_barre
+msgid "<span class=\"ac-barre__nom\">Builds Minecraft</span>"
+msgstr "<span class=\"ac-barre__nom\">Builds Minecraft</span>"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.catalogue
+msgid "<span class=\"ac-build__etat ac-etat--achete\">Bought</span>"
+msgstr "<span class=\"ac-build__etat ac-etat--achete\">Acheté</span>"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.catalogue
+msgid "<span class=\"ac-build__etat ac-etat--libre\">Free</span>"
+msgstr "<span class=\"ac-build__etat ac-etat--libre\">Gratuit</span>"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.catalogue
+msgid "<span class=\"ac-build__etat ac-etat--payant\">Paid</span>"
+msgstr "<span class=\"ac-build__etat ac-etat--payant\">Payant</span>"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.serie
+msgid "<span class=\"ac-choix__lib\">Series</span>"
+msgstr "<span class=\"ac-choix__lib\">Séries</span>"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.collections
+msgid "<span class=\"ac-compte__mot\">builds shown</span>"
+msgstr "<span class=\"ac-compte__mot\">builds affichés</span>"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.catalogue
+msgid "<span class=\"ac-serie__go\">View the series</span>"
+msgstr "<span class=\"ac-serie__go\">Voir la série</span>"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.ac_holo_lecture
+msgid "<span data-etat=\"build\">under construction</span>"
+msgstr "<span data-etat=\"build\">en construction</span>"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.ac_holo_lecture
+msgid "<span data-etat=\"done\" hidden=\"hidden\">complete</span>"
+msgstr "<span data-etat=\"done\" hidden=\"hidden\">achevé</span>"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.ac_carte
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop_carte
+msgid "<span>Box in preparation</span>"
+msgstr "<span>Boîte en préparation</span>"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.ac_carte
+msgid "<span>Seen in</span>"
+msgstr "<span>Vu dans</span>"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.ac_credit
+msgid "<span>Structures by</span>"
+msgstr "<span>Structures de</span>"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.serie
+msgid "<span>Video series</span>"
+msgstr "<span>Série vidéo</span>"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.collections
+msgid "<span>View the series</span>"
+msgstr "<span>Voir la série</span>"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.catalogue
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.serie
+msgid "<span>blocks in all</span>"
+msgstr "<span>blocs en tout</span>"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.catalogue
+msgid "<span>builds in the catalogue</span>"
+msgstr "<span>builds au catalogue</span>"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.serie
+msgid "<span>builds in the series</span>"
+msgstr "<span>builds dans la série</span>"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.serie
+msgid "<span>episodes online</span>"
+msgstr "<span>épisodes en ligne</span>"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.ac_holo_lecture
+msgid "<span>layer</span>"
+msgstr "<span>couche</span>"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.catalogue
+msgid "<span>series</span>"
+msgstr "<span>séries</span>"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.collections
+msgid "<span>›</span> All the builds"
+msgstr "<span>›</span> Tous les builds"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.catalogue
+msgid "<span>›</span> How it works"
+msgstr "<span>›</span> Comment ça marche"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.catalogue
+msgid "<span>›</span> Latest builds"
+msgstr "<span>›</span> Derniers builds"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.catalogue
+msgid "<span>›</span> Shop"
+msgstr "<span>›</span> Shop"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.serie
+msgid "<span>›</span> The builds of the series"
+msgstr "<span>›</span> Les builds de la série"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.serie
+msgid "<span>›</span> The episodes"
+msgstr "<span>›</span> Les épisodes"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.catalogue
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.collections
+msgid "<span>›</span> The series"
+msgstr "<span>›</span> Les séries"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.collections
+msgid "<strong>No build matches</strong>"
+msgstr "<strong>Aucun build ne correspond</strong>"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.serie
+msgid "<strong>No episode yet</strong>"
+msgstr "<strong>Pas encore d'épisode</strong>"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.catalogue
+msgid "<strong>The first chapters are open.</strong> The rest unlocks when you buy."
+msgstr "<strong>Les premiers chapitres sont ouverts.</strong> La suite se débloque à l'achat."
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.serie
+msgid "<strong>The first tutorials of the series are coming</strong>"
+msgstr "<strong>Les premiers tutos de la série arrivent</strong>"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.catalogue
+msgid "<strong>The whole guide is open.</strong> You launch the build and go all the way."
+msgstr "<strong>Le guide entier est ouvert.</strong> Tu lances le build et tu vas jusqu'au bout."
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.catalogue
+msgid "<strong>The whole guide is yours.</strong> It opens from your account, on all your screens."
+msgstr "<strong>Le guide entier est à toi.</strong> Il s'ouvre depuis ton compte, sur tous tes écrans."
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.catalogue
+msgid "A building in the collections or in a series. The guide starts with the room you need."
+msgstr "Un bâtiment dans les collections ou dans une série. Le guide commence par la place qu'il te faut."
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.collections
+msgid "A name, a number or a series: tavern, 088, steampunk…"
+msgstr "Un nom, un N° ou une série : taverne, 088, steampunk…"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.collections
+msgid "Access"
+msgstr "Accès"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.collections
+msgid "All"
+msgstr "Tous"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.collections
+msgid "All series"
+msgstr "Toutes"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.collections
+msgid "All the buildings of the catalogue. Filter by series, find the one you like, and launch its step-by-step guide full screen."
+msgstr "Tous les bâtiments du catalogue. Filtre par série, trouve celui qui te plaît, et lance son guide pas à pas en plein écran."
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.catalogue
+msgid "All the builds in the collections"
+msgstr "Tous les builds dans les collections"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.serie
+msgid "All the builds of the series in the collections"
+msgstr "Les builds de la série dans les collections"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.serie
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "All the episodes"
+msgstr "Tous les épisodes"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.collections
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "Blocks"
+msgstr "Blocs"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.ac_carte
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop_carte
+msgid "Bought"
+msgstr "Acheté"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.collections
+msgid "Browse the builds"
+msgstr "Parcourir les builds"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.catalogue
+msgid "Build it block by block"
+msgstr "Bâtis-le bloc par bloc"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.ac_barre
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.catalogue
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.ac_build
+msgid "Builds Minecraft"
+msgstr "Builds Minecraft"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.serie
+msgid "Built in the episodes"
+msgstr "Construits dans les épisodes"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.ac_carte
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop_carte
+msgid "By invitation"
+msgstr "Sur invitation"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.catalogue
+msgid "Choose"
+msgstr "Choisis"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.serie
+msgid "Choose a series"
+msgstr "Choisir une série"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.catalogue
+msgid "Choose another building"
+msgstr "Choisir un autre bâtiment"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.ac_barre
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.collections
+msgid "Collections"
+msgstr "Collections"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.ac_credit
+msgid "Credit"
+msgstr "Crédit"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.catalogue
+msgid "Each series is made of episodes shot in the game by Zunk and his dad, and the buildings they put up in them, ready to follow in the guide."
+msgstr "Chaque série, ce sont des épisodes tournés en jeu par Zunk et son papa, et les bâtiments qu'on y monte, prêts à suivre dans le guide."
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.ac_carte
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.serie
+msgid "Ep."
+msgstr "Ép."
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.collections
+msgid "Filter the builds"
+msgstr "Filtrer les builds"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.catalogue
+msgid "Follow step by step"
+msgstr "Suis pas à pas"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.ac_carte
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.collections
+msgid "Free"
+msgstr "Gratuit"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.catalogue
+msgid "Free to start with"
+msgstr "Gratuit pour commencer"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.catalogue
+msgid "Fresh out of the workshop"
+msgstr "Sortis de l'atelier"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.ac_barre
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.ac_build
+msgid "Home"
+msgstr "Accueil"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.catalogue
+msgid "Layer"
+msgstr "Couche"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.collections
+msgid "Layers"
+msgstr "Couches"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.serie
+msgid "List of episodes"
+msgstr "Liste des épisodes"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.catalogue
+msgid "Minecraft on one screen, the guide on the other. Scan the QR code of the Remote button: your phone moves one step forward or back."
+msgstr "Minecraft sur un écran, le guide sur l'autre. Scanne le QR code du bouton Télécommande : ton téléphone avance et recule d'une étape."
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.collections
+msgid "No build for “%s”."
+msgstr "Aucun build pour « %s »."
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.collections
+msgid "No build in this series yet: the first ones are coming."
+msgstr "Pas encore de build dans cette série : les premiers arrivent."
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.catalogue
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.collections
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.serie
+msgid "No build yet"
+msgstr "Pas encore de build"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.ac_carte
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.ac_holo_lecture
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.catalogue
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.collections
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.vitrine_page
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop_carte
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop_panier_lignes
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.ac_build
+msgid "N°"
+msgstr "N°"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.catalogue
+msgid "One layer at a time. A yellow frame shows where to place the block; the white numbers count the empty cells up to the block already in place."
+msgstr "Une couche après l'autre. Un cadre jaune montre où poser ; les chiffres blancs comptent les cases vides jusqu'au bloc déjà posé."
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.ac_carte
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.collections
+msgid "Paid"
+msgstr "Payant"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.catalogue
+msgid "Pick a building and open its guide full screen: every block drops into place, with the sound of the game. You place yours in Minecraft, your phone is the remote control."
+msgstr "Choisis un bâtiment et ouvre son guide en plein écran : chaque bloc tombe à sa place, avec le son du jeu. Tu poses le tien dans Minecraft, ton téléphone fait la télécommande."
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.collections
+msgid "Preview of the builds found"
+msgstr "Aperçu des builds trouvés"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.ac_barre
+msgid "Project"
+msgstr "Le projet"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.catalogue
+msgid "QR code → ◀ ▶ pad"
+msgstr "QR code → manette ◀ ▶"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.collections
+msgid "Search"
+msgstr "Rechercher"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.collections
+msgid "See the %s builds in the grid ↓"
+msgstr "Voir les %s builds dans la grille ↓"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.serie
+msgid "See the builds"
+msgstr "Voir les builds"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.serie
+msgid "See the episodes"
+msgstr "Voir les épisodes"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.ac_credit
+msgid "See the source"
+msgstr "Voir la source"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.ac_barre
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.collections
+msgid "Series"
+msgstr "Séries"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.ac_barre
+msgid "Shop"
+msgstr "Shop"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.serie
+msgid "Shot in the game, together"
+msgstr "Tournés en jeu, à deux"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.collections
+msgid "Show all"
+msgstr "Tout afficher"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.catalogue
+msgid "Some complete guides will become paid. The first chapters stay open, to try the guide before buying it. Paid builds are shelved by collection and series in the shop."
+msgstr "Certains guides complets deviendront payants. Les premiers chapitres restent libres, pour essayer le guide avant de l'acheter. Les builds payants sont rangés par collection et par série dans le shop."
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.collections
+msgid "Sort"
+msgstr "Tri"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.serie
+msgid "The buildings they put up in the episodes are in the catalogue, ready to follow."
+msgstr "Les bâtiments qu'ils montent dans les épisodes sont dans le catalogue, prêts à suivre."
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.collections
+msgid "The builds of the videos"
+msgstr "Les builds des vidéos"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.serie
+msgid "The other series"
+msgstr "Les autres séries"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.catalogue
+msgid "The room you need"
+msgstr "La place qu'il te faut"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.serie
+msgid "The series episodes will appear here, from the latest to the oldest."
+msgstr "Les épisodes de la série apparaîtront ici, du plus récent au plus ancien."
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.catalogue
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop
+msgid "The videos are shot by Zunk and his dad, with the Besacraft modpack on Modrinth."
+msgstr "Les vidéos sont tournées par Zunk et son papa, avec le modpack Besacraft sur Modrinth."
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.ac_credit
+msgid "These tutorials teach how to build; they do not hand out the schematic."
+msgstr "Ces tutoriels apprennent à construire ; ils ne distribuent pas le schematic."
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.serie
+msgid "This series has no build in the catalogue yet."
+msgstr "Cette série n'a pas encore de build au catalogue."
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.catalogue
+msgid "Three steps, then you build"
+msgstr "Trois temps, puis tu construis"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.catalogue
+msgid "Today, every build in the catalogue is free."
+msgstr "Aujourd'hui, tous les builds du catalogue sont gratuits."
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.collections
+msgid "Try another name, or another series."
+msgstr "Essaie un autre nom, ou une autre série."
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.ac_carte
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop_carte
+msgid "View sheet"
+msgstr "Voir la fiche"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.ac_carte
+msgid "View the series"
+msgstr "Voir la série"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.catalogue
+msgid "We build what we see in the videos"
+msgstr "On construit ce qu'on voit dans les vidéos"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.serie
+msgid "What you see going up on screen, you build in your own world: the step-by-step guide opens full screen."
+msgstr "Ce que tu vois monter à l'écran, tu le bâtis dans ton monde : le guide pas à pas s'ouvre en plein écran."
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.catalogue
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.ac_build
+msgid "Your phone as a remote"
+msgstr "Ton téléphone en télécommande"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.collections
+msgid "all"
+msgstr "tous"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.catalogue
+msgid "are paid."
+msgstr "sont payants."
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.ac_carte
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.catalogue
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.collections
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.vitrine_page
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop_carte
+msgid "blocks"
+msgstr "blocs"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.catalogue
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.collections
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.serie
+msgid "build"
+msgstr "build"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.collections
+msgid "build shown"
+msgstr "build affiché"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.catalogue
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.collections
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.serie
+msgid "builds"
+msgstr "builds"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.catalogue
+msgid "builds are free,"
+msgstr "builds sont gratuits,"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.collections
+msgid "builds shown"
+msgstr "builds affichés"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.serie
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "coming soon"
+msgstr "à venir"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.serie
+msgid "episode"
+msgstr "épisode"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.serie
+msgid "episodes"
+msgstr "épisodes"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.ac_carte
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.catalogue
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.collections
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop_carte
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.ac_build
+msgid "layers"
+msgstr "couches"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.serie
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "min"
+msgstr "min"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.serie
+msgid "not published"
+msgstr "non publié"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.catalogue
+msgid "of flat, clear ground for"
+msgstr "de terrain plat et dégagé pour"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.serie
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "online"
+msgstr "en ligne"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.collections
+msgid "series"
+msgstr "séries"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.serie
+msgid "· <em>View</em>"
+msgstr "· <em>Voir</em>"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.collections
+msgid "▶ Launch"
+msgstr "▶ Lancer"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.ac_carte
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop_carte
+msgid "▶ Launch the build"
+msgstr "▶ Lancer le build"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.serie
+msgid "▶ Watch the episode on YouTube"
+msgstr "▶ Regarder l'épisode sur YouTube"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.catalogue
+msgid "📱 Remote"
+msgstr "📱 Télécommande"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid ", every block in its place, with the sound of the game"
+msgstr ", chaque bloc à sa place, avec le son du jeu"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid ", like a scale model"
+msgstr ", comme une maquette"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "3D"
+msgstr "3D"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "<b>Brass box</b> · the build's box"
+msgstr "<b>Coffret de laiton</b> · la boîte du build"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "<b>Showcase box</b> · the 3D model mounted in its box"
+msgstr "<b>Coffret vitrine</b> · le modèle 3D monté dans sa boîte"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "<b>The build</b> · finished"
+msgstr "<b>Le build</b> · terminé"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "<b>The front</b> · plate and figures"
+msgstr "<b>La face</b> · plaque et chiffres"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "<i/><i/><span>Add to cart</span>"
+msgstr "<i/><i/><span>Ajouter au panier</span>"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "<i/><i/><span>▶ Launch the build</span>"
+msgstr "<i/><i/><span>▶ Lancer le build</span>"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "<small>the complete guide, for life</small>"
+msgstr "<small>le guide complet, à vie</small>"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.vitrine_page
+msgid ""
+"<span data-err=\"webgl\">WebGL is turned off in this browser: turn hardware acceleration on, then reload the page.</span>\n"
+"                    <span data-err=\"modele\" hidden=\"hidden\">The model could not be loaded.</span>"
+msgstr ""
+"<span data-err=\"webgl\">WebGL est désactivé dans ce navigateur : active l'accélération matérielle puis recharge la page.</span>\n"
+"                    <span data-err=\"modele\" hidden=\"hidden\">Le modèle n'a pas pu être chargé.</span>"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.vitrine_page
+msgid ""
+"<span data-mot=\"blocs\">blocks</span>\n"
+"                    <span data-mot=\"couches\">layers</span>\n"
+"                    <span data-mot=\"emprise\">ground</span>"
+msgstr ""
+"<span data-mot=\"blocs\">blocs</span>\n"
+"                    <span data-mot=\"couches\">couches</span>\n"
+"                    <span data-mot=\"emprise\">emprise</span>"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "<span><b>The remote</b>: your phone steps forward and back</span>"
+msgstr "<span><b>La télécommande</b> : ton téléphone avance et recule d'une étape</span>"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "<span>blocks</span>"
+msgstr "<span>blocs</span>"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "<span>chapters</span>"
+msgstr "<span>chapitres</span>"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.ac_build
+msgid "<span>layers</span>"
+msgstr "<span>couches</span>"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "<span>of ground</span>"
+msgstr "<span>de terrain</span>"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "<span>›</span>"
+msgstr "<span>›</span>"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "<span>›</span> Mounted in a showcase"
+msgstr "<span>›</span> Monté en vitrine"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "<span>›</span> Seen in the series"
+msgstr "<span>›</span> Vu dans la série"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "<span>›</span> Technical sheet"
+msgstr "<span>›</span> Fiche technique"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "<span>›</span> The build"
+msgstr "<span>›</span> Le build"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "<span>›</span>N°"
+msgstr "<span>›</span>N°"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "<span>⟳ TURN THE SHOWCASE IN 3D</span>"
+msgstr "<span>⟳ TOURNER LA VITRINE EN 3D</span>"
+
+#. module: besacraft_builds
+#: model:ir.model.constraint,message:besacraft_builds.constraint_besacraft_episode_appearance_episode_build_uniq
+msgid "A build has one moment per episode."
+msgstr "Un build a un seul moment par épisode."
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "BOX"
+msgstr "BOÎTE"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "BUILD"
+msgstr "BUILD"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "Before you start"
+msgstr "Avant de commencer"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "Bought<small>the complete guide, yours for life</small>"
+msgstr "Acheté<small>le guide complet, à toi pour toujours</small>"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "Breadcrumb"
+msgstr "Fil d'Ariane"
+
+#. module: besacraft_builds
+#: model:ir.model,name:besacraft_builds.model_besacraft_episode_appearance
+msgid "Build Appearance in an Episode"
+msgstr "Apparition d'un build dans un épisode"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "By invitation<small>this guide opens on invitation</small>"
+msgstr "Sur invitation<small>ce guide s'ouvre sur invitation</small>"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "Drag to turn, scroll or pinch to come closer."
+msgstr "Glisse pour tourner, molette ou pincement pour approcher."
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "EP."
+msgstr "ÉP."
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "FRONT"
+msgstr "FACE"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "Format"
+msgstr "Format"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "Free<small>the complete guide, open to everyone</small>"
+msgstr "Gratuit<small>le guide complet, ouvert à tous</small>"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "Game"
+msgstr "Jeu"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.vitrine_page
+msgid "Glass"
+msgstr "Vitre"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "Ground"
+msgstr "Terrain"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "Guide"
+msgstr "Guide"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "Height"
+msgstr "Hauteur"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "Layer after layer"
+msgstr "Couche après couche"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.vitrine_page
+msgid "Loading the model…"
+msgstr "Chargement du modèle…"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "Minecraft Java, Besacraft modpack"
+msgstr "Minecraft Java, modpack Besacraft"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_episode__appearance_ids
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.view_besacraft_episode_form
+msgid "Moments"
+msgstr "Moments"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "Number"
+msgstr "Numéro"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_episode_appearance__minute
+msgid "On Screen At"
+msgstr "À l'écran à"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "Online guide, nothing to install"
+msgstr "Guide en ligne, pas de fichier à installer"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "Open the showcase full screen ↗"
+msgstr "Ouvrir la vitrine en plein écran ↗"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "Original structure"
+msgstr "Structure d'origine"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "Palette"
+msgstr "Palette"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "Product views"
+msgstr "Vues du produit"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_episode_appearance__seconds
+msgid "Seconds"
+msgstr "Secondes"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.vitrine_page
+msgid "Showcase box in 3D: the build mounted behind the glass, to turn around"
+msgstr "Coffret vitrine en 3D : le build monté derrière la vitre, à faire tourner"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.vitrine_page
+msgid "Showcase box ·"
+msgstr "Coffret vitrine ·"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "The"
+msgstr "Les"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "The 3D model is the guide's:"
+msgstr "Le modèle 3D est celui du guide :"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.view_besacraft_build_form
+msgid "The build told on its product sheet"
+msgstr "Le build raconté sur sa fiche produit"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,help:besacraft_builds.field_besacraft_build__description
+msgid "The build told on its product sheet. Edited on the website."
+msgstr "Le build raconté sur sa fiche produit. Se modifie depuis le site."
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "The finished build, under glass in its leather and brass box. Turn around it, come closer, take the glass off: it is the real model, block for block, the one you are going to build."
+msgstr "Le build fini, posé sous verre dans son coffret de cuir et de laiton. Tourne autour, approche-toi, enlève la vitre : c'est le vrai modèle, bloc pour bloc, celui que tu vas construire."
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_episode_appearance__timecode
+msgid "Timecode"
+msgstr "Minutage"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "Vertical short of the build"
+msgstr "Court vertical du build"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,help:besacraft_builds.field_besacraft_episode_appearance__minute
+msgid "Where the build shows up in the video, as minutes:seconds."
+msgstr "Où le build apparaît dans la vidéo, en minutes:secondes."
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "You buy access to the guide, not an object nor a file. The box is the picture of the build."
+msgstr "Tu achètes l'accès au guide, pas un objet ni un fichier. La boîte est l'image du build."
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "blocks."
+msgstr "blocs."
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.ac_build
+msgid "chapters"
+msgstr "chapitres"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop_panier_lignes
+msgid "complete guide"
+msgstr "guide complet"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.vitrine_page
+msgid "drag to turn · scroll to come closer"
+msgstr "glisser pour tourner · molette pour approcher"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "free"
+msgstr "offert"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "in"
+msgstr "en"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "in one minute"
+msgstr "en une minute"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "in the episodes"
+msgstr "dans les épisodes"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "layers go down one after the other, as in the guide."
+msgstr "couches se posent l'une après l'autre, comme dans le guide."
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "layers,"
+msgstr "couches,"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "on screen at"
+msgstr "à l'écran à"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "source"
+msgstr "source"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.vitrine_page
+msgid "· real 3D model,"
+msgstr "· modèle 3D réel,"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "▶ Launch the free chapter"
+msgstr "▶ Lancer le chapitre offert"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "▶ Launch the free chapters"
+msgstr "▶ Lancer les chapitres offerts"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop
+msgid "1 more free build in the collections"
+msgstr "1 build gratuit de plus dans les collections"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop
+msgid "<b>0</b> build for now"
+msgstr "<b>0</b> build pour l'instant"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop
+msgid "<b>1</b> build in the series"
+msgstr "<b>1</b> build dans la série"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop
+msgid "<b>ALL YOUR SCREENS</b><span>The guide opens from your account, on the computer as on the tablet.</span>"
+msgstr "<b>TOUS TES ÉCRANS</b><span>Le guide s'ouvre depuis ton compte, sur l'ordinateur comme sur la tablette.</span>"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop
+msgid ""
+"<b>Bought</b>\n"
+"                                    <span class=\"sh-btn sh-btn--etat\" aria-disabled=\"true\">✓ Already bought</span>"
+msgstr ""
+"<b>Acheté</b>\n"
+"                                    <span class=\"sh-btn sh-btn--etat\" aria-disabled=\"true\">✓ Déjà acheté</span>"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop_carte
+msgid "<b>Bought</b><span>in your account</span>"
+msgstr "<b>Acheté</b><span>dans ton compte</span>"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop_carte
+msgid "<b>By invitation</b><span>on invitation only</span>"
+msgstr "<b>Sur invitation</b><span>ouvert sur invitation</span>"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop
+msgid "<b>EVERY STEP</b><span>Every block in its place, chapter after chapter, to the very last.</span>"
+msgstr "<b>TOUTES LES ÉTAPES</b><span>Chaque bloc à sa place, chapitre par chapitre, jusqu'au dernier.</span>"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop_carte
+msgid "<b>Free</b><span>whole guide open</span>"
+msgstr "<b>Gratuit</b><span>guide entier ouvert</span>"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop
+msgid "<b>📱 REMOTE</b><span>Your phone steps forward and back while you build.</span>"
+msgstr "<b>📱 TÉLÉCOMMANDE</b><span>Ton téléphone avance et recule d'une étape pendant que tu construis.</span>"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop
+msgid "<i/><i/>Checkout"
+msgstr "<i/><i/>Passer commande"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop
+msgid "<i/><i/>▶ Open the guide"
+msgstr "<i/><i/>▶ Ouvrir le guide"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop
+msgid "<i>€</i>"
+msgstr "<i>€</i>"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop
+msgid "<i>▭</i>"
+msgstr "<i>▭</i>"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop
+msgid "<i>◀▶</i>"
+msgstr "<i>◀▶</i>"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop
+msgid "<i>◉</i>"
+msgstr "<i>◉</i>"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop
+msgid "<span class=\"ac-mono\">› Shelved by series</span>"
+msgstr "<span class=\"ac-mono\">› Rangé par série</span>"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop
+msgid "<span class=\"ac-mono\">› in preparation</span>"
+msgstr "<span class=\"ac-mono\">› en préparation</span>"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop_carte
+msgid "<span class=\"sh-btn sh-btn--etat\" aria-disabled=\"true\">✓ Already bought</span>"
+msgstr "<span class=\"sh-btn sh-btn--etat\" aria-disabled=\"true\">✓ Déjà acheté</span>"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop_bouton
+msgid "<span class=\"sh-on\">✓ In the cart</span>"
+msgstr "<span class=\"sh-on\">✓ Dans le panier</span>"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop
+msgid ""
+"<span data-msg=\"pret\">› console ready</span>\n"
+"                    <span data-msg=\"ajout\" hidden=\"hidden\">› added</span>\n"
+"                    <span data-msg=\"retrait\" hidden=\"hidden\">› removed</span>\n"
+"                    <span data-msg=\"erreur\" hidden=\"hidden\">› the cart did not answer, try again</span>"
+msgstr ""
+"<span data-msg=\"pret\">› console prête</span>\n"
+"                    <span data-msg=\"ajout\" hidden=\"hidden\">› ajouté au panier</span>\n"
+"                    <span data-msg=\"retrait\" hidden=\"hidden\">› retiré du panier</span>\n"
+"                    <span data-msg=\"erreur\" hidden=\"hidden\">› le panier n'a pas répondu, réessaie</span>"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop
+msgid "<span>Builds shop</span><span>access to the guide, not an object</span><span>payment through the site's shop</span>"
+msgstr "<span>Shop des builds</span><span>accès au guide, pas d'objet</span><span>paiement via le shop du site</span>"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop
+msgid "<span>Cart</span>"
+msgstr "<span>Panier</span>"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop
+msgid "<span>Total</span>"
+msgstr "<span>Total</span>"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop_carte
+msgid "<span>complete guide</span>"
+msgstr "<span>guide complet</span>"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop
+msgid "<span>›</span> Before buying"
+msgstr "<span>›</span> Avant d'acheter"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop
+msgid "<span>›</span> Featured"
+msgstr "<span>›</span> À la une"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop
+msgid "<span>›</span> The catalogue"
+msgstr "<span>›</span> Le catalogue"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop
+msgid "<strong>In your account</strong>"
+msgstr "<strong>Dans ton compte</strong>"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop
+msgid "<strong>On all your screens</strong>"
+msgstr "<strong>Sur tous tes écrans</strong>"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop
+msgid "<strong>Payment through the site's shop</strong>"
+msgstr "<strong>Paiement par le shop du site</strong>"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop
+msgid "<strong>The phone as a remote</strong>"
+msgstr "<strong>Le téléphone en télécommande</strong>"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop
+msgid "A bought guide opens from your account, with no time limit."
+msgstr "Un guide acheté s'ouvre depuis ton compte, sans limite de temps."
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop
+msgid "A series is a video series and the buildings built in it. Each guide is sold on its own; the first chapters stay open."
+msgstr "Une série, c'est une série vidéo et les bâtiments qu'on y construit. Chaque guide se vend seul ; les premiers chapitres restent ouverts."
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop
+msgid "Access to the complete guide of a build: all its steps, chapter after chapter, with the remote. Not an object, not a file."
+msgstr "L'accès au guide complet d'un build : toutes ses étapes, chapitre par chapitre, avec la télécommande. Pas un objet, pas un fichier."
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop
+msgid "Add the pack"
+msgstr "Ajouter le pack"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop_carte
+msgid "Add to cart"
+msgstr "Ajouter au panier"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop
+msgid "Add to cart ·"
+msgstr "Ajouter au panier ·"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop
+msgid "Builds shop"
+msgstr "Shop des builds"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop
+msgid "Can I try first?"
+msgstr "Je peux essayer avant ?"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop
+msgid "Close ✕"
+msgstr "Fermer ✕"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop
+msgid "Computer, tablet, phone: sign in, the guide is there."
+msgstr "Ordinateur, tablette, téléphone : connecte-toi, le guide est là."
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop
+msgid "Do I get the schematic?"
+msgstr "Est-ce que je reçois le schematic ?"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop
+msgid "Do I need mods?"
+msgstr "Il me faut des mods ?"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop
+msgid "Every paid guide of the series at once. The next builds of the series join it too."
+msgstr "Tous les guides payants de la série, d'un coup. Les prochains builds de la série y entrent aussi."
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop
+msgid "In your account on the site (« Sign in » at the top of the page). On its card, the build turns to « Bought » and opens in full."
+msgstr "Dans ton compte du site (« Se connecter » en haut de page). Sur sa carte, le build passe à « Acheté » et s'ouvre en entier."
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop
+msgid "It depends on the series: the Schematics come from MineColonies, the Steampunk farms from the Create mod. The videos are shot with the Besacraft modpack on Modrinth."
+msgstr "Ça dépend de la série : les Schematics viennent de MineColonies, les fermes Steampunk du mod Create. Les vidéos sont tournées avec le modpack Besacraft sur Modrinth."
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop
+msgid "Minecraft on one screen, the guide on the other; the phone moves one step ahead."
+msgstr "Minecraft sur un écran, le guide sur l'autre ; le téléphone avance d'une étape."
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop
+msgid "No. These tutorials teach how to build; they do not hand out the schematic."
+msgstr "Non. Ces tutoriels apprennent à construire ; ils ne distribuent pas le schematic."
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop_panier_lignes
+msgid "PACK"
+msgstr "PACK"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop
+msgid "Pack"
+msgstr "Pack"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop
+msgid "Payment on the site's shop. The guide then opens from your account."
+msgstr "Paiement sur le shop du site. Le guide s'ouvre ensuite depuis ton compte."
+
+#. module: besacraft_builds
+#: model:ir.model.fields,help:besacraft_builds.field_besacraft_serie__pack_product_id
+msgid "Product selling every paid guide of the series at once, the ones to come included. When set, the shop offers the pack under the series' builds."
+msgstr "Produit qui vend d'un coup tous les guides payants de la série, ceux à venir compris. Renseigné, le shop propose le pack sous les builds de la série."
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop_panier_lignes
+msgid "Remove"
+msgstr "Retirer"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop
+msgid "See the free builds too"
+msgstr "Voir aussi les builds gratuits"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop
+msgid "See the series and its episodes"
+msgstr "Voir la série et ses épisodes"
+
+#. module: besacraft_builds
+#: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_serie__pack_product_id
+msgid "Series Pack"
+msgstr "Pack de série"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop
+msgid "Shelved by series"
+msgstr "Rangé par série"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop
+msgid "Shop series"
+msgstr "Séries du shop"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop
+msgid "The complete guide, yours"
+msgstr "Le guide complet, à toi"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop
+msgid "The first builds of the series are on their way. They will be shelved here, with the same three states: free, paid, bought."
+msgstr "Les premiers builds de la série arrivent. Ils se rangeront ici, avec les mêmes trois états : gratuit, payant, acheté."
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop
+msgid "The order goes through the shop of this site, like any purchase made here."
+msgstr "La commande passe par le shop du site, comme n'importe quel achat fait ici."
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop
+msgid "The tallest of the catalogue"
+msgstr "Le plus haut du catalogue"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop_carte
+msgid "Try ch."
+msgstr "Essayer ch."
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop
+msgid "Try chapters"
+msgstr "Essayer les chapitres"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.ac_build
+msgid "Turquoise: open · dark: to unlock"
+msgstr "Turquoise : offert · sombre : à débloquer"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop
+msgid "What do I buy?"
+msgstr "Qu'est-ce que j'achète ?"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop
+msgid "What you buy: <strong>the complete guide of a build</strong>. Every step, the remote, on all your screens. The first chapters stay open, to try before buying."
+msgstr "Ce que tu achètes : <strong>le guide complet d'un build</strong>. Toutes les étapes, la télécommande, sur tous tes écrans. Les premiers chapitres restent ouverts, pour essayer avant."
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop
+msgid "What you get, exactly"
+msgstr "Ce que tu reçois, exactement"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop
+msgid "Where do I find a bought guide?"
+msgstr "Où je retrouve un guide acheté ?"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop
+msgid "Yes. The first chapters of a paid guide are open to everyone. You see how the blocks fall before you decide."
+msgstr "Oui. Les premiers chapitres d'un guide payant sont ouverts à tous. Tu vois comment tombent les blocs avant de décider."
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop
+msgid "Your cart"
+msgstr "Ton panier"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop
+msgid "Your cart is empty. Add the guide of a build from the catalogue."
+msgstr "Ton panier est vide. Ajoute le guide d'un build depuis le catalogue."
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop
+msgid "builds in the series"
+msgstr "builds dans la série"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop
+msgid "more free builds in the collections"
+msgstr "builds gratuits de plus dans les collections"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop
+msgid "of ground"
+msgstr "de terrain"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop_panier_lignes
+msgid "series pack"
+msgstr "pack de série"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.shop_carte
+msgid "▶ Open the guide"
+msgstr "▶ Ouvrir le guide"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.ac_build
+msgid "<i/><i/><span>View the sheet</span>"
+msgstr "<i/><i/><span>Voir la fiche</span>"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.ac_build
+msgid "A QR code shows up: scan it with your phone's camera."
+msgstr "Un QR code s'affiche : scanne-le avec l'appareil photo de ton téléphone."
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.ac_build
+msgid "Ask the person who shares this build to invite you."
+msgstr "Demande à la personne qui partage ce build de t'inviter."
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.ac_build
+msgid "Back to the collections"
+msgstr "Retour aux collections"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.ac_build
+msgid "Build bar"
+msgstr "Barre du build"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.ac_build
+msgid "Ch."
+msgstr "Ch."
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.ac_build
+msgid "Chapter"
+msgstr "Chapitre"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.ac_build
+msgid "Full screen"
+msgstr "Plein écran"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.ac_build
+msgid "Got it"
+msgstr "Compris"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.ac_build
+msgid "Hide the bar"
+msgstr "Replier la barre"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.ac_build
+msgid "In the guide, click the <strong>📱 Remote</strong> button, in the row of buttons at the bottom left."
+msgstr "Dans le guide, clique sur le bouton <strong>📱 Télécommande</strong>, dans la rangée de boutons en bas à gauche."
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.ac_build
+msgid "Loading the guide…<i/>"
+msgstr "Chargement du guide…<i/>"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.ac_build
+msgid "Preview:"
+msgstr "Aperçu :"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.ac_build
+msgid "Remote"
+msgstr "Télécommande"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.ac_build
+msgid "Show the bar"
+msgstr "Afficher la barre"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.ac_build
+msgid "Step-by-step guide"
+msgstr "Guide pas à pas"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.ac_build
+msgid "The complete guide opens as soon as the order is confirmed: every layer, every block, the remote."
+msgstr "Le guide complet s'ouvre dès la commande confirmée : chaque couche, chaque bloc, la télécommande."
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.ac_build
+msgid "The first chapter is free:"
+msgstr "Le premier chapitre est offert :"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.ac_build
+msgid "The first chapters are free:"
+msgstr "Les premiers chapitres sont offerts :"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.ac_build
+msgid "The guide of this build is in preparation."
+msgstr "Le guide de ce build est en préparation."
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.ac_build
+msgid "The guide unlocks with the purchase"
+msgstr "Le guide se débloque à l'achat"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.ac_build
+msgid "The rest of the build unlocks with the purchase."
+msgstr "La suite du build se débloque à l'achat."
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.ac_build
+msgid "This guide opens on invitation"
+msgstr "Ce guide s'ouvre sur invitation"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.ac_build
+msgid "Try the free chapter"
+msgstr "Essayer le chapitre offert"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.ac_build
+msgid "Try the free chapters"
+msgstr "Essayer les chapitres offerts"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.ac_build
+msgid "Unlock the rest"
+msgstr "Débloquer la suite"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.ac_build
+msgid "Unlock ·"
+msgstr "Débloquer ·"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.ac_build
+msgid "View the sheet"
+msgstr "Voir la fiche"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.fiche
+msgid "Watch the short on YouTube"
+msgstr "Voir le short sur YouTube"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.ac_build
+msgid "Your phone becomes the <strong>◀ ▶</strong> controller. This computer keeps the build on screen, Minecraft stays open next to it."
+msgstr "Ton téléphone devient la manette <strong>◀ ▶</strong>. Cet ordinateur garde le build à l'écran, Minecraft reste ouvert à côté."
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.ac_build
+msgid "are locked"
+msgstr "réservés"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.ac_build
+msgid "chapter"
+msgstr "chapitre"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.ac_build
+msgid "is locked"
+msgstr "réservé"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.ac_build
+msgid "open"
+msgstr "ouverts"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.ac_build
+msgid "←<span class=\"acb-txt\"> Collections</span>"
+msgstr "←<span class=\"acb-txt\"> Collections</span>"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.ac_build
+msgid "▾ Show the bar"
+msgstr "▾ Afficher la barre"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.ac_build
+msgid "⤢<span class=\"acb-txt\" data-acb-plein=\"off\"> Full screen</span><span class=\"acb-txt\" data-acb-plein=\"on\" hidden=\"hidden\"> Exit</span>"
+msgstr "⤢<span class=\"acb-txt\" data-acb-plein=\"off\"> Plein écran</span><span class=\"acb-txt\" data-acb-plein=\"on\" hidden=\"hidden\"> Quitter</span>"
+
+#. module: besacraft_builds
+#: model_terms:ir.ui.view,arch_db:besacraft_builds.ac_build
+msgid "📱<span class=\"acb-txt\"> Remote</span>"
+msgstr "📱<span class=\"acb-txt\"> Télécommande</span>"

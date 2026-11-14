@@ -1,0 +1,276 @@
+<odoo>
+    <!-- Builds v2: a build's product sheet (/t/<n>) and its 3D showcase (/builds/<n>/vitrine).
+         The sheet's five sections follow the mock-up: product (gallery + buying column),
+         seen in the episodes, the build told (story, vertical short, chapters), the showcase,
+         the technical sheet. Every figure and name comes from the build; the story is the
+         build's own `description`, edited in place from the website. -->
+    <template id="fiche" name="Besacraft — Build product sheet">
+        <t t-call="website.layout">
+            <t t-set="additional_title" t-value="'N°%s %s' % (build.code, build.name)"/>
+            <t t-set="fi_n" t-value="int(build.code)"/>
+            <t t-set="fi_nb" t-value="lambda n: '{:,}'.format(n or 0).replace(',', ' ')"/>
+            <!-- `bc-notice`: the site theme leaves the links of this class alone. -->
+            <div id="wrap" class="ac fi bc-notice">
+                <t t-call="besacraft_builds.ac_barre"/>
+
+                <nav class="fi-fil" aria-label="Breadcrumb">
+                    <a t-if="payant" href="/builds/shop">Shop</a>
+                    <a t-else="" href="/builds/collections">Collections</a>
+                    <t t-if="series_build"><span>›</span><a t-attf-href="/builds/serie/#{series_build[0].code}" t-out="series_build[0].name"/></t>
+                    <span>›</span>N°<t t-out="build.code"/> <t t-out="build.name"/>
+                </nav>
+
+                <!-- 01 · Product: gallery + buying column -->
+                <section class="fi-tete" aria-labelledby="fi-titre">
+                    <div class="fi-gal">
+                        <ul t-if="len(vues) &gt; 1" class="fi-rail" role="tablist" aria-label="Product views">
+                            <li t-foreach="vues" t-as="vue">
+                                <button type="button" role="tab" t-att-aria-current="vue_first and 'true' or 'false'"
+                                        t-att-aria-controls="'fi-v-%s' % vue['cle']" t-att-data-vue="'fi-v-%s' % vue['cle']"
+                                        t-att-class="vue['cle'] == '3d' and 'is-plein' or None">
+                                    <img t-if="vue['image']" t-att-src="vue['image']" alt="" width="86" height="86"/>
+                                    <small t-if="vue['cle'] == 'boite'">BOX</small>
+                                    <small t-elif="vue['cle'] == 'vue'">BUILD</small>
+                                    <small t-elif="vue['cle'] == '3d'" class="is-3d">3D</small>
+                                    <small t-else="">FRONT</small>
+                                </button>
+                            </li>
+                        </ul>
+                        <div class="fi-scene">
+                            <span t-if="build.enroll == 'invite'" class="ac-build__etat ac-etat--payant">By invitation</span>
+                            <span t-elif="payant and accessible" class="ac-build__etat ac-etat--achete">Bought</span>
+                            <span t-elif="payant" class="ac-build__etat ac-etat--payant" t-out="build.price_label"/>
+                            <span t-else="" class="ac-build__etat ac-etat--libre">Free</span>
+                            <t t-foreach="vues" t-as="vue">
+                                <div t-if="vue['cle'] == '3d'" t-att-id="'fi-v-%s' % vue['cle']" role="tabpanel"
+                                     t-attf-class="fi-vue fi-vue--plein#{vue_first and ' is-on' or ''}"
+                                     t-attf-data-iframe="/builds/#{fi_n}/vitrine?seul=1">
+                                    <button class="fi-lancer3d" type="button">
+                                        <img t-if="vue['image']" t-att-src="vue['image']" alt=""/>
+                                        <span>⟳ TURN THE SHOWCASE IN 3D</span>
+                                    </button>
+                                </div>
+                                <div t-else="" t-att-id="'fi-v-%s' % vue['cle']" role="tabpanel"
+                                     t-attf-class="fi-vue#{vue_first and ' is-on' or ''}">
+                                    <img t-att-src="vue['image']" t-att-alt="'N°%s %s' % (build.code, build.name)"
+                                         width="1400" height="1400" t-att-loading="not vue_first and 'lazy' or None"/>
+                                </div>
+                            </t>
+                            <div t-if="not vues" class="fi-vue is-on fi-vue--vide">
+                                <svg viewBox="0 0 72 72" fill="none" stroke="#36CFC0" stroke-width="1.2" aria-hidden="true"><path d="M36 8 62 22v28L36 64 10 50V22z" opacity=".9"/><path d="M10 22l26 14 26-14M36 36v28" opacity=".6"/></svg>
+                                <span>Box in preparation</span>
+                            </div>
+                            <p t-if="vues" class="fi-scene__leg" aria-live="polite">
+                                <span class="fi-leg">
+                                    <t t-foreach="vues" t-as="vue">
+                                        <span t-att-data-leg="'fi-v-%s' % vue['cle']" t-att-hidden="not vue_first and 'hidden' or None">
+                                            <t t-if="vue['cle'] == 'boite'"><b>Brass box</b> · the build's box</t>
+                                            <t t-elif="vue['cle'] == 'vue'"><b>The build</b> · finished</t>
+                                            <t t-elif="vue['cle'] == '3d'"><b>Showcase box</b> · the 3D model mounted in its box</t>
+                                            <t t-else=""><b>The front</b> · plate and figures</t>
+                                        </span>
+                                    </t>
+                                </span>
+                                <span class="fi-leg__n">1 / <t t-out="len(vues)"/></span>
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="fi-achat">
+                        <p class="fi-achat__n">N°<t t-out="build.code"/><t t-foreach="series_build" t-as="s"> · <t t-out="s.name.upper()"/></t> · <t t-out="(niveau or '').upper()"/></p>
+                        <h1 id="fi-titre" t-field="build.name"/>
+                        <p t-if="build.accroche" class="fi-achat__dit" t-field="build.accroche"/>
+                        <div class="fi-chiffres">
+                            <div><b t-out="build.layer_count"/><span>layers</span></div>
+                            <div><b t-out="fi_nb(build.block_count)"/><span>blocks</span></div>
+                            <div t-if="build.size_x and build.size_z"><b><t t-out="build.size_x"/> × <t t-out="build.size_z"/></b><span>of ground</span></div>
+                            <div t-if="chapitres"><b t-out="len(chapitres)"/><span>chapters</span></div>
+                        </div>
+
+                        <div class="fi-prix">
+                            <t t-if="payant and not accessible">
+                                <p class="fi-prix__val"><t t-out="build.price_label"/><small>the complete guide, for life</small></p>
+                                <form action="/shop/cart/update" method="post" class="fi-prix__form">
+                                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                    <input type="hidden" name="product_id" t-att-value="produit.id"/>
+                                    <input type="hidden" name="add_qty" value="1"/>
+                                    <button class="ac-plaque" type="submit"><i/><i/><span>Add to cart</span></button>
+                                </form>
+                            </t>
+                            <t t-elif="build.enroll == 'invite' and not accessible">
+                                <p class="fi-prix__val">By invitation<small>this guide opens on invitation</small></p>
+                            </t>
+                            <t t-else="">
+                                <p t-if="payant" class="fi-prix__val">Bought<small>the complete guide, yours for life</small></p>
+                                <p t-else="" class="fi-prix__val">Free<small>the complete guide, open to everyone</small></p>
+                                <a class="ac-plaque" t-attf-href="/builds/#{fi_n}"><i/><i/><span>▶ Launch the build</span></a>
+                            </t>
+                        </div>
+                        <div t-if="(payant and not accessible and offerts) or peut_rejoindre" class="fi-offert">
+                            <a t-if="payant and not accessible and offerts" class="ac-lien" t-attf-href="/builds/#{fi_n}?apercu=1"><t t-if="len(offerts) == 1">▶ Launch the free chapter</t><t t-else="">▶ Launch the free chapters</t> · <t t-out="', '.join(str(n) for n in offerts)"/></a>
+                            <form t-if="peut_rejoindre" method="post" t-attf-action="/builds/#{fi_n}/rejoindre">
+                                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                <input type="hidden" name="retour" value="fiche"/>
+                                <button type="submit" class="ac-lien fi-bouton-lien">Add to my books</button>
+                            </form>
+                        </div>
+                        <ul class="fi-inclus">
+                            <li t-if="chapitres"><span><b>The <t t-out="len(chapitres)"/> chapters</b>, every block in its place, with the sound of the game</span></li>
+                            <li t-else=""><span><b>The <t t-out="build.layer_count"/> layers</b>, every block in its place, with the sound of the game</span></li>
+                            <li><span><b>The remote</b>: your phone steps forward and back</span></li>
+                        </ul>
+                        <p t-if="payant" class="fi-note">You buy access to the guide, not an object nor a file. The box is the picture of the build.</p>
+                    </div>
+                </section>
+
+                <!-- 02 · Seen in the episodes -->
+                <section t-if="episodes" class="fi-ep" aria-labelledby="fi-ep-titre">
+                    <div class="fi-ep__in">
+                        <div class="fi-ep__tete">
+                            <p class="ac-sec__index"><span>›</span> Seen in the series</p>
+                            <h2 id="fi-ep-titre"><t t-out="build.name"/> in the episodes</h2>
+                            <a class="ac-lien" t-attf-href="/builds/serie/#{episodes[0].serie_id.code}/episodes">All the episodes</a>
+                        </div>
+                        <ul class="fi-ep__liste">
+                            <li t-foreach="episodes" t-as="ep">
+                                <t t-set="fi_lien" t-value="liens_episodes.get(ep.id)"/>
+                                <t t-set="fi_vign">
+                                    <div class="fi-ep__vign">
+                                        <img t-if="ep.id in avec_poster" t-attf-src="/web/image/besacraft.episode/#{ep.id}/poster/640x360"
+                                             alt="" width="640" height="360" loading="lazy"/>
+                                        <img t-elif="pieces['overview_image']" t-attf-src="/web/image/besacraft.build/#{build.id}/overview_image/640x640"
+                                             alt="" width="640" height="640" loading="lazy" class="fi-ep__repli"/>
+                                        <span class="fi-ep__play" aria-hidden="true">▶</span>
+                                        <span t-if="ep.duration_minutes" class="fi-ep__duree"><t t-out="ep.duration_minutes"/> min</span>
+                                        <span t-if="fi_lien and moments.get(ep.id)" class="fi-ep__moment"><t t-out="build.name"/> on screen at <t t-out="moments[ep.id]"/></span>
+                                    </div>
+                                    <div class="fi-ep__txt">
+                                        <p>EP. <t t-out="'%02d' % (ep.number or 0)"/> · <t t-if="fi_lien">online</t><t t-else="">coming soon</t></p>
+                                        <h3 t-out="ep.name"/>
+                                    </div>
+                                </t>
+                                <a t-if="fi_lien" class="fi-ep__carte" t-att-href="fi_lien" target="_blank" rel="noopener"><t t-out="fi_vign"/></a>
+                                <div t-else="" class="fi-ep__carte is-avenir"><t t-out="fi_vign"/></div>
+                            </li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- 03 · The build told: story, the vertical short in full, the chapters -->
+                <section t-if="editeur or a_description or pieces['short_video'] or chapitres"
+                         t-attf-class="fi-desc#{not chapitres and ' fi-desc--seul' or ''}" aria-labelledby="fi-desc-titre">
+                    <div class="fi-desc__txt">
+                        <p class="ac-sec__index"><span>›</span> The build</p>
+                        <h2 id="fi-desc-titre">Layer after layer</h2>
+                        <div class="fi-desc__corps" t-field="build.description"/>
+                        <figure t-if="pieces['short_video']" class="fi-court">
+                            <!-- No poster: the short's own first frame, fetched with its metadata (a
+                                 range request), says more than any picture of the record. -->
+                            <video controls="controls" preload="metadata" playsinline="playsinline" width="1080" height="1920"
+                                   aria-label="Vertical short of the build">
+                                <source t-attf-src="/builds/#{fi_n}/court#t=0.5" type="video/mp4"/>
+                            </video>
+                            <figcaption>
+                                <b>▶ <t t-out="build.name"/> in one minute</b>
+                                <span>The <t t-out="build.layer_count"/> layers go down one after the other, as in the guide.</span>
+                                <a t-if="build.short_youtube_id" class="ac-lien"
+                                   t-attf-href="https://www.youtube.com/shorts/#{build.short_youtube_id}"
+                                   target="_blank" rel="noopener">Watch the short on YouTube</a>
+                            </figcaption>
+                        </figure>
+                    </div>
+                    <ol t-if="chapitres" class="fi-chap" aria-label="Chapters">
+                        <li t-foreach="chapitres" t-as="chap" t-att-class="chap.free and 'is-libre' or None">
+                            <span t-out="chap.name"/>
+                            <em t-if="chap.free">free</em><em t-else="">complete guide</em>
+                        </li>
+                    </ol>
+                </section>
+
+                <!-- 04 · The showcase box, interactive -->
+                <section t-if="a_vitrine" class="fi-vit" aria-labelledby="fi-vit-titre">
+                    <div class="fi-vit__cadre">
+                        <div class="fi-vit__scene" t-attf-data-iframe-lazy="/builds/#{fi_n}/vitrine?seul=1"/>
+                        <div class="fi-vit__txt">
+                            <p class="ac-sec__index"><span>›</span> Mounted in a showcase</p>
+                            <h2 id="fi-vit-titre"><t t-out="build.name"/>, like a scale model</h2>
+                            <p>The finished build, under glass in its leather and brass box. Turn around it, come closer, take the glass off: it is the real model, block for block, the one you are going to build.</p>
+                            <ul class="fi-vit__pts">
+                                <li>The 3D model is the guide's: <t t-out="build.layer_count"/> layers, <t t-out="fi_nb(build.block_count)"/> blocks.</li>
+                                <li>Drag to turn, scroll or pinch to come closer.</li>
+                            </ul>
+                            <a class="ac-lien" t-attf-href="/builds/#{fi_n}/vitrine" target="_blank" rel="noopener">Open the showcase full screen ↗</a>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 05 · Technical sheet -->
+                <section class="fi-tech" aria-labelledby="fi-tech-titre">
+                    <p class="ac-sec__index"><span>›</span> Technical sheet</p>
+                    <h2 id="fi-tech-titre">Before you start</h2>
+                    <dl>
+                        <div><dt>Number</dt><dd>N°<t t-out="build.code"/></dd></div>
+                        <div t-if="series_build"><dt>Series</dt><dd t-out="' · '.join(series_build.mapped('name'))"/></div>
+                        <div><dt>Level</dt><dd t-out="niveau"/></div>
+                        <div t-if="build.size_x and build.size_z"><dt>Ground</dt><dd><t t-out="build.size_x"/> × <t t-out="build.size_z"/> blocks</dd></div>
+                        <div><dt>Height</dt><dd><t t-out="build.layer_count"/> layers</dd></div>
+                        <div><dt>Blocks</dt><dd t-out="fi_nb(build.block_count)"/></div>
+                        <div t-if="build.palette_label"><dt>Palette</dt><dd t-out="build.palette_label"/></div>
+                        <div><dt>Guide</dt><dd><t t-out="build.layer_count"/> layers<t t-if="chapitres"> in <t t-out="len(chapitres)"/> chapters</t></dd></div>
+                        <div><dt>Game</dt><dd>Minecraft Java, Besacraft modpack</dd></div>
+                        <div><dt>Format</dt><dd>Online guide, nothing to install</dd></div>
+                        <div t-if="build.source_author"><dt>Original structure</dt><dd>
+                            <t t-out="build.source_author"/><t t-if="build.source_license"> — <t t-out="build.source_license"/></t>
+                            <a t-if="build.source_url" class="ac-lien" t-att-href="build.source_url" rel="noopener">source</a>
+                        </dd></div>
+                    </dl>
+                </section>
+            </div>
+        </t>
+    </template>
+
+    <!-- The 3D showcase on its own page, the content of the product sheet's iframes. No site
+         layout: three.js and its add-ons are loaded from the module through an import map. -->
+    <template id="vitrine_page" name="Besacraft — 3D showcase">
+        <t t-set="fi_nb" t-value="lambda n: '{:,}'.format(n or 0).replace(',', ' ')"/>
+        &lt;!DOCTYPE html&gt;
+        <html t-att-lang="(request.env.lang or 'en_US').replace('_', '-')">
+            <head>
+                <meta charset="utf-8"/>
+                <meta name="viewport" content="width=device-width, initial-scale=1"/>
+                <meta name="robots" content="noindex"/>
+                <link rel="icon" href="data:,"/>
+                <title>Showcase box · N°<t t-out="build.code"/> <t t-out="build.name"/></title>
+                <link rel="stylesheet" href="/besacraft_builds/static/src/css/vitrine.css"/>
+                <script type="importmap">{"imports": {"three": "/besacraft_builds/static/lib/three/three.module.min.js", "three/addons/": "/besacraft_builds/static/lib/three/addons/"}}</script>
+                <script type="module" src="/besacraft_builds/static/src/js/ac_vitrine.js"/>
+            </head>
+            <body t-att-class="seul and 'seul' or None"
+                  t-att-data-glb="'/besacraft/vitrine/%d.glb' % int(build.code)"
+                  t-att-data-code="build.code" t-att-data-titre="build.name"
+                  t-att-data-serie="serie.name" t-att-data-couleur="serie.color or '#C4583F'"
+                  t-att-data-blocs="build.block_count" t-att-data-couches="build.layer_count"
+                  t-att-data-emprise="'%s × %s' % (build.size_x, build.size_z)"
+                  t-att-data-niveau="niveau"
+                  t-att-data-logo="logo and '/web/image/besacraft.serie/%d/logo/512x512' % logo or None">
+                <canvas id="c" aria-label="Showcase box in 3D: the build mounted behind the glass, to turn around"/>
+                <div class="ui" id="ui">
+                    <div class="cap">Showcase box · <b>N°<t t-out="build.code"/> <t t-out="build.name"/></b> · real 3D model, <t t-out="fi_nb(build.block_count)"/> blocks</div>
+                    <button class="btn" id="bVitre" type="button" aria-pressed="true">Glass</button>
+                </div>
+                <div class="aide">drag to turn · scroll to come closer</div>
+                <div class="charge" id="charge" data-texte-charge="Loading the model…">Loading the model…</div>
+                <div class="err" id="err" hidden="hidden">
+                    <span data-err="webgl">WebGL is turned off in this browser: turn hardware acceleration on, then reload the page.</span>
+                    <span data-err="modele" hidden="hidden">The model could not be loaded.</span>
+                </div>
+                <!-- Words of the box's printed bands, translated with the page. -->
+                <div hidden="hidden" id="mots">
+                    <span data-mot="blocs">blocks</span>
+                    <span data-mot="couches">layers</span>
+                    <span data-mot="emprise">ground</span>
+                </div>
+            </body>
+        </html>
+    </template>
+</odoo>

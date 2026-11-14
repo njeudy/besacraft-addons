@@ -1,0 +1,341 @@
+<odoo>
+    <!-- Builds v2: the shop (/builds/shop). Heading, featured build, catalogue by series (with
+         the series pack when its product exists), reassurance and FAQ, credit; the cart is a
+         console and a drawer over the page, fed by the site's website_sale cart. Every name,
+         figure and price comes from the records; the editorial text lives here, editable. -->
+
+    <!-- Buy button of a build or a pack. Without JavaScript it is a plain form posting to the
+         shop's cart; with it, ac_shop.js sends the same product through /shop/cart/update_json
+         and the button toggles. Both labels are in the markup so they get translated. -->
+    <template id="shop_bouton" name="Besacraft — shop add-to-cart button">
+        <t t-set="sh_dans" t-value="sh_produit.id in panier_produits"/>
+        <form action="/shop/cart/update" method="post" class="sh-form">
+            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+            <input type="hidden" name="product_id" t-att-value="sh_produit.id"/>
+            <input type="hidden" name="add_qty" value="1"/>
+            <button t-if="sh_plaque" type="submit" class="ac-plaque sh-plaque-btn" t-att-data-ajout="sh_produit.id"
+                    t-att-aria-pressed="sh_dans and 'true' or 'false'">
+                <i/><i/>
+                <span class="sh-off"><t t-out="sh_libelle"/></span>
+                <span class="sh-on">✓ In the cart</span>
+            </button>
+            <button t-else="" type="submit" class="sh-btn" t-att-data-ajout="sh_produit.id"
+                    t-att-aria-pressed="sh_dans and 'true' or 'false'">
+                <span class="sh-off"><t t-out="sh_libelle"/></span>
+                <span class="sh-on">✓ In the cart</span>
+            </button>
+        </form>
+    </template>
+
+    <!-- The drawer's lines, rendered here and again by /builds/shop/panier after each change. -->
+    <template id="shop_panier_lignes" name="Besacraft — shop cart lines">
+        <li t-foreach="panier" t-as="sh_l" t-att-data-produit="sh_l['ligne'].product_id.id"
+            t-att-data-ligne="sh_l['ligne'].id">
+            <img t-if="sh_l['image']" t-att-src="sh_l['image']" alt="" width="48" height="48"/>
+            <span t-elif="sh_l['pack']" class="sh-tiroir__vig">PACK</span>
+            <span t-elif="sh_l['build']" class="sh-tiroir__vig" t-out="sh_l['build'].code"/>
+            <img t-else="" t-attf-src="/web/image/product.product/#{sh_l['ligne'].product_id.id}/image_128"
+                 alt="" width="48" height="48"/>
+            <div>
+                <strong t-if="sh_l['build']">N°<t t-out="sh_l['build'].code"/> <t t-out="sh_l['build'].name"/></strong>
+                <strong t-else="" t-out="sh_l['ligne'].name_short"/>
+                <span t-if="sh_l['build']">complete guide</span>
+                <span t-elif="sh_l['pack']">series pack</span>
+                <span t-elif="sh_l['ligne'].product_uom_qty != 1">× <t t-out="int(sh_l['ligne'].product_uom_qty)"/></span>
+            </div>
+            <div class="sh-tiroir__droite">
+                <b t-out="sh_l['prix']"/>
+                <button class="sh-tiroir__retire" type="button">Remove</button>
+            </div>
+        </li>
+    </template>
+
+    <!-- A build's card on a shelf: the shared card's look, with the price and the cart. -->
+    <template id="shop_carte" name="Besacraft — shop build card">
+        <t t-set="sh_n" t-value="int(build.code)"/>
+        <t t-set="sh_payant" t-value="build.enroll == 'payment' and build.product_id"/>
+        <t t-set="sh_acquis" t-value="build.id in acquis"/>
+        <t t-set="sh_offerts" t-value="offerts.get(build.id) or []"/>
+        <article class="ac-build sh-carte" t-att-data-n="build.code">
+            <div class="ac-build__boite">
+                <span t-if="build.enroll == 'invite'" class="ac-build__etat ac-etat--payant">By invitation</span>
+                <span t-elif="sh_payant and sh_acquis" class="ac-build__etat ac-etat--achete">Bought</span>
+                <span t-elif="sh_payant" class="ac-build__etat ac-etat--payant" t-out="build.price_label"/>
+                <span t-else="" class="ac-build__etat ac-etat--libre">Free</span>
+                <a class="ac-build__lien-img" t-attf-href="/t/#{sh_n}" tabindex="-1" aria-hidden="true">
+                    <img t-if="build.id in avec_boite" t-attf-src="/web/image/besacraft.build/#{build.id}/box_image/700x700"
+                         alt="" width="700" height="700" loading="lazy"/>
+                    <img t-elif="build.id in avec_vue" t-attf-src="/web/image/besacraft.build/#{build.id}/overview_image/700x700"
+                         alt="" width="700" height="700" loading="lazy"/>
+                    <div t-else="" class="ac-build__vide">
+                        <svg viewBox="0 0 72 72" fill="none" stroke="#36CFC0" stroke-width="1.2" aria-hidden="true"><path d="M36 8 62 22v28L36 64 10 50V22z" opacity=".9"/><path d="M10 22l26 14 26-14M36 36v28" opacity=".6"/><path d="M23 15l26 14M23 43V29" opacity=".3"/></svg>
+                        <span>Box in preparation</span>
+                    </div>
+                </a>
+            </div>
+            <div class="ac-build__info">
+                <p class="ac-build__n">N°<t t-out="build.code"/></p>
+                <h4 class="sh-carte__nom"><a class="ac-build__lien-nom" t-attf-href="/t/#{sh_n}" t-out="build.name"/></h4>
+                <p class="ac-build__chiffres">
+                    <span><b t-out="build.layer_count"/> layers</span>
+                    <span><b t-out="'{:,}'.format(build.block_count).replace(',', ' ')"/> blocks</span>
+                    <span t-out="niveaux.get(build.level)"/>
+                </p>
+                <p t-if="build.enroll == 'invite'" class="sh-carte__prix"><b>By invitation</b><span>on invitation only</span></p>
+                <p t-elif="sh_payant and sh_acquis" class="sh-carte__prix"><b>Bought</b><span>in your account</span></p>
+                <p t-elif="sh_payant" class="sh-carte__prix"><b t-out="build.price_label"/><span>complete guide</span></p>
+                <p t-else="" class="sh-carte__prix"><b>Free</b><span>whole guide open</span></p>
+                <div class="sh-carte__agir">
+                    <t t-if="sh_payant and not sh_acquis">
+                        <t t-call="besacraft_builds.shop_bouton">
+                            <t t-set="sh_produit" t-value="build.sudo().product_id"/>
+                            <t t-set="sh_libelle">Add to cart</t>
+                        </t>
+                        <a t-if="sh_offerts" class="sh-carte__essai" t-attf-href="/builds/#{sh_n}">Try ch. <t t-out="', '.join(str(n) for n in sh_offerts)"/></a>
+                    </t>
+                    <t t-elif="sh_payant">
+                        <span class="sh-btn sh-btn--etat" aria-disabled="true">✓ Already bought</span>
+                        <a class="sh-carte__essai" t-attf-href="/builds/#{sh_n}">▶ Open the guide</a>
+                    </t>
+                    <a t-elif="build.enroll != 'invite'" class="ac-build__lancer" t-attf-href="/builds/#{sh_n}">▶ Launch the build</a>
+                    <a class="ac-build__fiche" t-attf-href="/t/#{sh_n}">View sheet</a>
+                </div>
+            </div>
+        </article>
+    </template>
+
+    <template id="shop" name="Besacraft — Shop">
+        <t t-call="website.layout">
+            <t t-set="additional_title">Builds shop</t>
+            <t t-set="niveaux" t-value="dict(request.env['besacraft.build']._fields['level']._description_selection(request.env))"/>
+            <!-- `bc-notice`: the site theme leaves the links of this class alone. -->
+            <div id="wrap" class="ac sh bc-notice">
+                <t t-call="besacraft_builds.ac_barre"/>
+                <t t-call="besacraft_builds.ac_holo_fond"/>
+
+                <!-- 01 · Heading: what you buy, the series -->
+                <section class="sh-tete" aria-labelledby="sh-tete-titre">
+                    <p class="ac-hero__meta ac-mono"><span>Builds shop</span><span>access to the guide, not an object</span><span>payment through the site's shop</span></p>
+                    <h1 id="sh-tete-titre">The complete guide, yours</h1>
+                    <p class="sh-tete__dit">What you buy: <strong>the complete guide of a build</strong>. Every step, the remote, on all your screens. The first chapters stay open, to try before buying.</p>
+                    <ul class="sh-inclus">
+                        <li><b>EVERY STEP</b><span>Every block in its place, chapter after chapter, to the very last.</span></li>
+                        <li><b>📱 REMOTE</b><span>Your phone steps forward and back while you build.</span></li>
+                        <li><b>ALL YOUR SCREENS</b><span>The guide opens from your account, on the computer as on the tablet.</span></li>
+                    </ul>
+                    <nav t-if="rayons" class="sh-tete__series" aria-label="Shop series">
+                        <span class="ac-mono">› Shelved by series</span>
+                        <a t-foreach="rayons" t-as="sh_r" class="sh-puce" t-attf-href="#sh-#{sh_r['serie'].code}" t-out="sh_r['serie'].name"/>
+                    </nav>
+                </section>
+
+                <!-- 02 · Featured build -->
+                <section t-if="vedette" class="ac-sec sh-vedette-sec" aria-labelledby="sh-vedette-titre">
+                    <t t-set="sh_n" t-value="int(vedette.code)"/>
+                    <t t-set="sh_payant" t-value="vedette.enroll == 'payment' and vedette.product_id"/>
+                    <t t-set="sh_acquis" t-value="vedette.id in acquis"/>
+                    <t t-set="sh_offerts" t-value="offerts.get(vedette.id) or []"/>
+                    <div class="ac-sec__tete">
+                        <p class="ac-sec__index"><span>›</span> Featured</p>
+                        <h2 id="sh-vedette-titre">The tallest of the catalogue</h2>
+                    </div>
+                    <article class="sh-vedette">
+                        <div class="sh-vedette__boite">
+                            <span t-if="sh_payant and sh_acquis" class="ac-build__etat ac-etat--achete">Bought</span>
+                            <span t-elif="sh_payant" class="ac-build__etat ac-etat--payant" t-out="vedette.price_label"/>
+                            <span t-elif="vedette.enroll == 'invite'" class="ac-build__etat ac-etat--payant">By invitation</span>
+                            <span t-else="" class="ac-build__etat ac-etat--libre">Free</span>
+                            <a class="ac-build__lien-img" t-attf-href="/t/#{sh_n}" tabindex="-1" aria-hidden="true">
+                                <img t-if="vedette.id in avec_boite" t-attf-src="/web/image/besacraft.build/#{vedette.id}/box_image/700x700"
+                                     alt="" width="700" height="700"/>
+                                <img t-elif="vedette.id in avec_vue" t-attf-src="/web/image/besacraft.build/#{vedette.id}/overview_image/700x700"
+                                     alt="" width="700" height="700"/>
+                                <div t-else="" class="ac-build__vide">
+                                    <svg viewBox="0 0 72 72" fill="none" stroke="#36CFC0" stroke-width="1.2" aria-hidden="true"><path d="M36 8 62 22v28L36 64 10 50V22z" opacity=".9"/><path d="M10 22l26 14 26-14M36 36v28" opacity=".6"/></svg>
+                                    <span>Box in preparation</span>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="sh-vedette__corps">
+                            <p class="ac-build__n">N°<t t-out="vedette.code"/> · <t t-out="vedette.serie_id.name"/></p>
+                            <h3><a class="ac-build__lien-nom" t-attf-href="/t/#{sh_n}" t-out="vedette.name"/></h3>
+                            <p class="ac-build__chiffres">
+                                <span><b t-out="vedette.layer_count"/> layers</span>
+                                <span><b t-out="'{:,}'.format(vedette.block_count).replace(',', ' ')"/> blocks</span>
+                                <span t-if="vedette.size_x and vedette.size_z"><b><t t-out="vedette.size_x"/> × <t t-out="vedette.size_z"/></b> of ground</span>
+                            </p>
+                            <p t-if="vedette.accroche" t-out="vedette.accroche"/>
+                            <t t-if="vedette.chapter_ids">
+                                <ol class="sh-chap" t-att-aria-label="'%s · %s' % (vedette.name, len(vedette.chapter_ids))">
+                                    <li t-foreach="vedette.chapter_ids" t-as="sh_c"
+                                        t-att-class="(sh_c.free or not sh_payant or sh_acquis) and 'is-libre' or 'is-clos'"
+                                        t-att-title="sh_c.name" t-out="sh_c_index + 1"/>
+                                </ol>
+                                <p t-if="sh_payant and not sh_acquis" class="sh-chap__leg">Turquoise: open · dark: to unlock</p>
+                            </t>
+                            <div class="sh-vedette__agir">
+                                <t t-if="sh_payant and not sh_acquis">
+                                    <t t-call="besacraft_builds.shop_bouton">
+                                        <t t-set="sh_produit" t-value="vedette.sudo().product_id"/>
+                                        <t t-set="sh_plaque" t-value="True"/>
+                                        <t t-set="sh_libelle">Add to cart · <t t-out="vedette.price_label"/></t>
+                                    </t>
+                                    <a t-if="sh_offerts" class="ac-lien" t-attf-href="/builds/#{sh_n}">Try chapters <t t-out="', '.join(str(n) for n in sh_offerts)"/></a>
+                                </t>
+                                <a t-elif="sh_payant" class="ac-plaque" t-attf-href="/builds/#{sh_n}"><i/><i/>▶ Open the guide</a>
+                                <a t-elif="vedette.enroll != 'invite'" class="ac-plaque" t-attf-href="/builds/#{sh_n}"><i/><i/>▶ Launch the build</a>
+                                <a class="ac-build__fiche" t-attf-href="/t/#{sh_n}">View sheet</a>
+                            </div>
+                        </div>
+                    </article>
+                </section>
+
+                <!-- 03 · Catalogue by series -->
+                <section class="ac-sec sh-catalogue" aria-labelledby="sh-catalogue-titre">
+                    <div class="ac-sec__tete">
+                        <p class="ac-sec__index"><span>›</span> The catalogue</p>
+                        <h2 id="sh-catalogue-titre">Shelved by series</h2>
+                        <p>A series is a video series and the buildings built in it. Each guide is sold on its own; the first chapters stay open.</p>
+                    </div>
+                    <div t-foreach="rayons" t-as="rayon" class="sh-serie" t-att-id="'sh-%s' % rayon['serie'].code"
+                         t-att-data-serie="rayon['serie'].code">
+                        <t t-set="sh_s" t-value="rayon['serie']"/>
+                        <div class="sh-bandeau">
+                            <div class="sh-bandeau__img">
+                                <t t-if="sh_s.id in couverture['cover']">
+                                    <img t-attf-src="/web/image/besacraft.serie/#{sh_s.id}/cover_image/1024x0" alt="" loading="lazy" width="1024" height="486"/>
+                                    <img t-if="sh_s.id in couverture['logo']" class="ac-serie__logo"
+                                         t-attf-src="/web/image/besacraft.serie/#{sh_s.id}/logo/256x0" t-att-alt="sh_s.name" loading="lazy" width="256" height="143"/>
+                                </t>
+                                <img t-elif="sh_s.id in couverture['logo']" class="is-boite"
+                                     t-attf-src="/web/image/besacraft.serie/#{sh_s.id}/logo/512x0" t-att-alt="sh_s.name" loading="lazy" width="512" height="286"/>
+                            </div>
+                            <div class="sh-bandeau__corps">
+                                <div>
+                                    <h3 t-out="sh_s.name"/>
+                                    <p t-if="sh_s.subtitle" t-out="sh_s.subtitle"/>
+                                    <p class="ac-mono">
+                                        <t t-if="rayon['n_builds'] == 1"><b>1</b> build in the series</t>
+                                        <t t-elif="rayon['n_builds']"><b t-out="rayon['n_builds']"/> builds in the series</t>
+                                        <t t-else=""><b>0</b> build for now</t>
+                                    </p>
+                                </div>
+                                <a class="ac-lien" t-attf-href="/builds/serie/#{sh_s.code}">See the series and its episodes</a>
+                            </div>
+                        </div>
+                        <div t-if="rayon['builds']" class="sh-cartes">
+                            <t t-foreach="rayon['builds']" t-as="un_build">
+                                <t t-call="besacraft_builds.shop_carte"><t t-set="build" t-value="un_build"/></t>
+                            </t>
+                        </div>
+                        <div t-else="" class="sh-avenir">
+                            <p>The first builds of the series are on their way. They will be shelved here, with the same three states: free, paid, bought.</p>
+                            <span class="ac-mono">› in preparation</span>
+                        </div>
+                        <p t-if="rayon['n_caches']" class="sh-reste">
+                            <a class="ac-lien" t-attf-href="/builds/collections?serie=#{sh_s.code}">
+                                <t t-if="rayon['n_caches'] == 1">1 more free build in the collections</t>
+                                <t t-else=""><t t-out="rayon['n_caches']"/> more free builds in the collections</t>
+                            </a>
+                        </p>
+                        <div t-if="rayon['pack']" class="sh-pack">
+                            <div>
+                                <h4>Pack <t t-out="sh_s.name"/></h4>
+                                <p>Every paid guide of the series at once. The next builds of the series join it too.</p>
+                            </div>
+                            <div class="sh-pack__droite">
+                                <t t-if="rayon['pack_acquis']">
+                                    <b>Bought</b>
+                                    <span class="sh-btn sh-btn--etat" aria-disabled="true">✓ Already bought</span>
+                                </t>
+                                <t t-else="">
+                                    <b t-out="rayon['pack_prix']"/>
+                                    <t t-call="besacraft_builds.shop_bouton">
+                                        <t t-set="sh_produit" t-value="rayon['pack']"/>
+                                        <t t-set="sh_libelle">Add the pack</t>
+                                    </t>
+                                </t>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 05 · Reassurance and FAQ -->
+                <section class="ac-sec sh-faq-sec" aria-labelledby="sh-faq-titre">
+                    <div class="ac-sec__tete">
+                        <p class="ac-sec__index"><span>›</span> Before buying</p>
+                        <h2 id="sh-faq-titre">What you get, exactly</h2>
+                    </div>
+                    <div class="sh-rassure">
+                        <ul class="sh-garanties">
+                            <li><i><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18M7 15h4"/></svg></i><div><strong>Payment through the site's shop</strong><p>The order goes through the shop of this site, like any purchase made here.</p></div></li>
+                            <li><i><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="3.5"/><path d="M5 20c.8-3.6 3.6-5.5 7-5.5s6.2 1.9 7 5.5"/></svg></i><div><strong>In your account</strong><p>A bought guide opens from your account, with no time limit.</p></div></li>
+                            <li><i><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="14" height="10" rx="1.5"/><path d="M6 19h6M9 15v4"/><rect x="17" y="8" width="5" height="11" rx="1.2"/></svg></i><div><strong>On all your screens</strong><p>Computer, tablet, phone: sign in, the guide is there.</p></div></li>
+                            <li><i><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M10.5 9.5 13 12l-2.5 2.5M11 18.5h2"/></svg></i><div><strong>The phone as a remote</strong><p>Minecraft on one screen, the guide on the other; the phone moves one step ahead.</p></div></li>
+                        </ul>
+                        <div class="sh-faq">
+                            <details open="open">
+                                <summary>What do I buy?</summary>
+                                <p>Access to the complete guide of a build: all its steps, chapter after chapter, with the remote. Not an object, not a file.</p>
+                            </details>
+                            <details>
+                                <summary>Can I try first?</summary>
+                                <p>Yes. The first chapters of a paid guide are open to everyone. You see how the blocks fall before you decide.</p>
+                            </details>
+                            <details>
+                                <summary>Where do I find a bought guide?</summary>
+                                <p>In your account on the site (« Sign in » at the top of the page). On its card, the build turns to « Bought » and opens in full.</p>
+                            </details>
+                            <details>
+                                <summary>Do I get the schematic?</summary>
+                                <p class="sh-faq__fixe">No. These tutorials teach how to build; they do not hand out the schematic.</p>
+                            </details>
+                            <details>
+                                <summary>Do I need mods?</summary>
+                                <p>It depends on the series: the Schematics come from MineColonies, the Steampunk farms from the Create mod. The videos are shot with the Besacraft modpack on Modrinth.</p>
+                            </details>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 06 · Credit -->
+                <t t-call="besacraft_builds.ac_credit">
+                    <t t-set="ac_credit_droite">
+                        <a class="ac-lien" href="/builds/collections">See the free builds too</a>
+                    </t>
+                    <p>The videos are shot by Zunk and his dad, with the Besacraft modpack on Modrinth.</p>
+                </t>
+
+                <script type="module" src="/besacraft_builds/static/src/js/holo.js"/>
+            </div>
+
+            <!-- 04 · Cart: a console and a drawer, outside #wrap so their own stacking context
+                 puts them over the site's header. -->
+            <button class="ac sh-console" type="button" id="sh-console" aria-controls="sh-tiroir" aria-expanded="false">
+                <span>Cart</span>
+                <span t-attf-class="sh-console__n#{not panier_n and ' is-vide' or ''}" id="sh-console-n" t-out="panier_n"/>
+                <span class="sh-console__tot" id="sh-console-tot" t-out="panier_total"/>
+            </button>
+            <div class="sh-fond" id="sh-fond" aria-hidden="true"/>
+            <aside class="ac sh-tiroir" id="sh-tiroir" role="dialog" aria-modal="true" aria-labelledby="sh-tiroir-titre">
+                <div class="sh-tiroir__tete">
+                    <h2 id="sh-tiroir-titre">Your cart</h2>
+                    <button class="sh-tiroir__ferme" type="button" id="sh-ferme">Close ✕</button>
+                </div>
+                <p class="sh-tiroir__ligne" id="sh-ligne" aria-live="polite">
+                    <span data-msg="pret">› console ready</span>
+                    <span data-msg="ajout" hidden="hidden">› added</span>
+                    <span data-msg="retrait" hidden="hidden">› removed</span>
+                    <span data-msg="erreur" hidden="hidden">› the cart did not answer, try again</span>
+                </p>
+                <ul class="sh-tiroir__liste" id="sh-liste"><t t-call="besacraft_builds.shop_panier_lignes"/></ul>
+                <p class="sh-tiroir__vide" id="sh-vide" t-att-hidden="panier and 'hidden' or None">Your cart is empty. Add the guide of a build from the catalogue.</p>
+                <div class="sh-tiroir__pied">
+                    <p class="sh-tiroir__total"><span>Total</span><b id="sh-total" t-out="panier_total"/></p>
+                    <a class="ac-plaque" id="sh-commande" href="/shop/cart" t-att-aria-disabled="not panier and 'true' or 'false'"><i/><i/>Checkout</a>
+                    <p class="sh-tiroir__note">Payment on the site's shop. The guide then opens from your account.</p>
+                </div>
+            </aside>
+        </t>
+    </template>
+</odoo>

@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="vestiaire_cosmetique_view_list" model="ir.ui.view">
+        <field name="name">besacraft.vestiaire.cosmetique.list</field>
+        <field name="model">besacraft.vestiaire.cosmetique</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="sequence" widget="handle"/>
+                <field name="code"/>
+                <field name="name"/>
+                <field name="genre"/>
+                <field name="emplacement"/>
+                <field name="prix"/>
+                <field name="de_base"/>
+                <field name="publie"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="vestiaire_cosmetique_view_form" model="ir.ui.view">
+        <field name="name">besacraft.vestiaire.cosmetique.form</field>
+        <field name="model">besacraft.vestiaire.cosmetique</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <field name="vignette" widget="image" class="oe_avatar"/>
+                    <group>
+                        <group>
+                            <field name="code"/>
+                            <field name="name"/>
+                            <field name="genre"/>
+                            <field name="emplacement" invisible="genre != 'cosmetique'"/>
+                        </group>
+                        <group>
+                            <field name="prix"/>
+                            <field name="de_base"/>
+                            <field name="publie"/>
+                        </group>
+                        <group>
+                            <field name="createur_id"/>
+                            <field name="source"/>
+                            <field name="licence"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="vestiaire_cosmetique_view_search" model="ir.ui.view">
+        <field name="name">besacraft.vestiaire.cosmetique.search</field>
+        <field name="model">besacraft.vestiaire.cosmetique</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="code"/>
+                <filter name="cosmetiques" string="Cosmetics" domain="[('genre', '=', 'cosmetique')]"/>
+                <filter name="emotes" string="Emotes" domain="[('genre', '=', 'emote')]"/>
+                <separator/>
+                <filter name="en_vente" string="For sale" domain="[('prix', '>', 0)]"/>
+                <filter name="de_base" string="Owned by everyone" domain="[('de_base', '=', True)]"/>
+                <group expand="0" string="Group By">
+                    <filter name="par_genre" string="Kind" context="{'group_by': 'genre'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="vestiaire_cosmetique_action" model="ir.actions.act_window">
+        <field name="name">Cosmetics and emotes</field>
+        <field name="res_model">besacraft.vestiaire.cosmetique</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="vestiaire_mouvement_view_list" model="ir.ui.view">
+        <field name="name">besacraft.vestiaire.mouvement.list</field>
+        <field name="model">besacraft.vestiaire.mouvement</field>
+        <field name="arch" type="xml">
+            <list create="1" edit="0" delete="0">
+                <field name="date"/>
+                <field name="partner_id"/>
+                <field name="motif"/>
+                <field name="libelle"/>
+                <field name="reference"/>
+                <field name="cosmetique_id" optional="hide"/>
+                <field name="user_id" optional="hide"/>
+                <field name="points" sum="Total"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="vestiaire_mouvement_view_form" model="ir.ui.view">
+        <field name="name">besacraft.vestiaire.mouvement.form</field>
+        <field name="model">besacraft.vestiaire.mouvement</field>
+        <field name="arch" type="xml">
+            <form edit="0" delete="0">
+                <sheet>
+                    <group>
+                        <field name="partner_id"/>
+                        <field name="points"/>
+                        <field name="motif"/>
+                        <field name="libelle"/>
+                        <field name="reference"/>
+                        <field name="cosmetique_id"/>
+                        <field name="date"/>
+                        <field name="user_id"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="vestiaire_mouvement_view_search" model="ir.ui.view">
+        <field name="name">besacraft.vestiaire.mouvement.search</field>
+        <field name="model">besacraft.vestiaire.mouvement</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="partner_id"/>
+                <field name="reference"/>
+                <group expand="0" string="Group By">
+                    <filter name="par_joueur" string="Player" context="{'group_by': 'partner_id'}"/>
+                    <filter name="par_motif" string="Reason" context="{'group_by': 'motif'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="vestiaire_mouvement_action" model="ir.actions.act_window">
+        <field name="name">Points movements</field>
+        <field name="res_model">besacraft.vestiaire.mouvement</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'default_motif': 'correction'}</field>
+    </record>
+
+    <record id="vestiaire_bareme_view_list" model="ir.ui.view">
+        <field name="name">besacraft.vestiaire.bareme.list</field>
+        <field name="model">besacraft.vestiaire.bareme</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="motif"/>
+                <field name="code"/>
+                <field name="name"/>
+                <field name="points"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="vestiaire_bareme_action" model="ir.actions.act_window">
+        <field name="name">Points scale</field>
+        <field name="res_model">besacraft.vestiaire.bareme</field>
+        <field name="view_mode">list</field>
+    </record>
+
+    <record id="vestiaire_cle_serveur_view_list" model="ir.ui.view">
+        <field name="name">besacraft.vestiaire.cle.serveur.list</field>
+        <field name="model">besacraft.vestiaire.cle.serveur</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="name"/>
+                <field name="derniere_utilisation"/>
+                <field name="active" widget="boolean_toggle"/>
+                <button name="action_generer" type="object" string="New key"
+                        confirm="The previous key of this server will stop working."/>
+            </list>
+        </field>
+    </record>
+
+    <record id="vestiaire_cle_serveur_action" model="ir.actions.act_window">
+        <field name="name">Server keys</field>
+        <field name="res_model">besacraft.vestiaire.cle.serveur</field>
+        <field name="view_mode">list</field>
+        <field name="context">{'active_test': False}</field>
+    </record>
+
+    <menuitem id="menu_vestiaire_cosmetiques" name="Cosmetics and emotes"
+              parent="menu_vestiaire_root" action="vestiaire_cosmetique_action"
+              groups="besacraft_vestiaire.group_vestiaire_createur" sequence="40"/>
+    <menuitem id="menu_vestiaire_mouvements" name="Points movements"
+              parent="menu_vestiaire_root" action="vestiaire_mouvement_action"
+              groups="besacraft_vestiaire.group_vestiaire_admin" sequence="50"/>
+    <menuitem id="menu_vestiaire_bareme" name="Points scale"
+              parent="menu_vestiaire_root" action="vestiaire_bareme_action"
+              groups="besacraft_vestiaire.group_vestiaire_admin" sequence="60"/>
+    <menuitem id="menu_vestiaire_cles" name="Server keys"
+              parent="menu_vestiaire_root" action="vestiaire_cle_serveur_action"
+              groups="besacraft_vestiaire.group_vestiaire_admin" sequence="70"/>
+</odoo>

@@ -1,0 +1,53 @@
+<odoo>
+    <template id="page_demande" name="Wardrobe account request">
+        <t t-call="website.layout">
+            <div id="wrap" class="oe_structure container py-5">
+                <t t-if="expire">
+                    <p>This link has expired. Join the game again and type /vestiaire to get a new one.</p>
+                </t>
+                <t t-elif="envoye">
+                    <p>Thanks! Nicolas will look at your request.</p>
+                </t>
+                <t t-else="">
+                    <h1>
+                        <img t-attf-src="https://crafthead.net/avatar/#{jeton.uuid}" alt="" width="48" height="48"/>
+                        <t t-out="jeton.pseudo"/>
+                    </h1>
+                    <div t-if="erreur" class="alert alert-danger" t-out="erreur"/>
+                    <form action="/vestiaire/demande" method="post">
+                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                        <input type="hidden" name="code" t-att-value="jeton.code"/>
+                        <div class="mb-3">
+                            <label for="vd_prenom" class="form-label">First name</label>
+                            <input id="vd_prenom" type="text" name="prenom" class="form-control" required="required"/>
+                        </div>
+                        <div class="mb-3">
+                            <label for="vd_email" class="form-label">Email</label>
+                            <input id="vd_email" type="email" name="email" class="form-control" required="required"/>
+                        </div>
+                        <div class="form-check mb-3">
+                            <input id="vd_moins_de_15" type="checkbox" name="moins_de_15" class="form-check-input"/>
+                            <label for="vd_moins_de_15" class="form-check-label">I am under 15</label>
+                        </div>
+                        <div id="vd_parent" class="mb-3 d-none">
+                            <label for="vd_email_parent" class="form-label">Parent email</label>
+                            <input id="vd_email_parent" type="email" name="email_parent" class="form-control"/>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Send my request</button>
+                    </form>
+                    <script>
+                        (function () {
+                            var box = document.getElementById("vd_moins_de_15");
+                            var parent = document.getElementById("vd_parent");
+                            var field = document.getElementById("vd_email_parent");
+                            box.addEventListener("change", function () {
+                                parent.classList.toggle("d-none", !box.checked);
+                                field.required = box.checked;
+                            });
+                        })();
+                    </script>
+                </t>
+            </div>
+        </t>
+    </template>
+</odoo>

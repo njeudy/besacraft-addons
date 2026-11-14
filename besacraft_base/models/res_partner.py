@@ -15,6 +15,25 @@ class ResPartner(models.Model):
     minecraft_skin = fields.Binary(string="Minecraft Skin")
     minecraft_head = fields.Binary(string="Minecraft Head")
 
+    # The UUID is what the in-game mod authenticates on: Mojang proves the player owns
+    # it, and this table decides which customer that is. Two contacts sharing one UUID
+    # would make that second half a coin toss, and the loser is served someone else's
+    # builds. NULL stays free, so the customers who never play are unaffected.
+    _sql_constraints = [
+        ("minecraft_uuid_uniq", "unique(minecraft_uuid)",
+         "This Minecraft account is already linked to another contact."),
+    ]
+
+    @api.model
+    def normaliser_uuid_minecraft(self, uuid):
+        """Mojang's form: 32 lowercase hex digits, no dashes.
+
+        playerdb.co answers with dashes and Mojang without. The game is the side we
+        cannot change, so its form is the one stored -- otherwise the portal and the
+        mod hold the same player under two different keys and no one is ever found.
+        """
+        return (uuid or "").replace("-", "").strip().lower() or False
+
     def get_minecraft_player_info(self):
         for partner in self:
             username = partner.minecraft_login
@@ -37,11 +56,14 @@ class ResPartner(models.Model):
     
     def set_minecraft_player_info(self):
         for partner in self:
-            minecraft_info = self.get_minecraft_player_info()
+            # `partner`, not `self`: resolving on the whole set gave every contact the
+            # first one's UUID, which is impersonation reached by accident.
+            minecraft_info = partner.get_minecraft_player_info()
             if minecraft_info and minecraft_info.get('username', False):
                 _logger.debug("SET MINECRAFT INFOS %s" % minecraft_info)
                 partner.write({
-                    'minecraft_uuid': minecraft_info.get('id', False),
+                    'minecraft_uuid': self.normaliser_uuid_minecraft(
+                        minecraft_info.get('id', False)),
                     'minecraft_skin': partner.set_image_from_url("https://crafthead.net/armor/body/%s" % minecraft_info.get('id', False)),
                     'minecraft_head': partner.set_image_from_url(minecraft_info.get('avatar', False)),
                 })

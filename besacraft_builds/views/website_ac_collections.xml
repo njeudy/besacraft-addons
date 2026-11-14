@@ -1,0 +1,147 @@
+<odoo>
+    <!-- Builds v2: the collections page. Search with a live preview, filters by series, access
+         and sort, and a grid that rearranges itself with an animation (see ac_collections.js).
+         The cards are the shared `ac_carte`; the page only carries the data the script reads. -->
+    <template id="collections" name="Besacraft — Collections">
+        <t t-call="website.layout">
+            <t t-set="additional_title">Collections</t>
+            <div id="wrap" class="ac ac-collections bc-notice">
+                <t t-call="besacraft_builds.ac_barre"/>
+
+                <section class="ac-tete" aria-labelledby="ac-col-titre">
+                    <div>
+                        <p class="ac-tete__meta ac-mono">
+                            <span><b t-out="total"/> <t>builds</t></span>
+                            <span><b t-out="len(series)"/> <t>series</t></span>
+                            <span t-if="niveau_commun"><t>all</t> <b t-out="niveau_commun"/></span>
+                        </p>
+                        <h1 id="ac-col-titre">Collections</h1>
+                        <p class="ac-tete__dit">All the buildings of the catalogue. Filter by series, find the one you like, and launch its step-by-step guide full screen.</p>
+                        <div class="ac-tete__agir">
+                            <a t-if="holo_build" class="ac-plaque" t-attf-href="/builds/#{int(holo_build.code)}"><i/><i/>▶ Launch <t t-out="holo_build.name"/></a>
+                            <a class="ac-lien" href="#ac-grille">Browse the builds</a>
+                        </div>
+                    </div>
+                    <div t-if="holo_build" class="ac-hublot" aria-hidden="true" data-ac-holo="hublot"
+                         t-att-data-code="holo_build.code">
+                        <canvas/>
+                        <img t-if="holo_build.id in avec_vue" class="ac-holo__fixe"
+                             t-attf-src="/web/image/besacraft.build/#{holo_build.id}/overview_image/1024x1024"
+                             alt="" width="1024" height="1024"/>
+                        <div class="ac-lecture"><t t-call="besacraft_builds.ac_holo_lecture"/></div>
+                    </div>
+                </section>
+
+                <section class="ac-filtres" aria-label="Filter the builds">
+                    <div class="ac-filtres__in">
+                        <fieldset class="ac-groupe">
+                            <legend>Series</legend>
+                            <div class="ac-puces" data-filtre="serie">
+                                <button class="ac-puce" type="button" data-val=""
+                                        t-att-aria-pressed="serie_active and 'false' or 'true'">All series</button>
+                                <button t-foreach="series" t-as="un_serie" class="ac-puce" type="button"
+                                        t-att-data-val="un_serie.code" t-attf-style="--s:#{un_serie.color}"
+                                        t-att-aria-pressed="serie_active == un_serie.code and 'true' or 'false'">
+                                    <i/><t t-out="un_serie.name"/>
+                                </button>
+                            </div>
+                        </fieldset>
+                        <fieldset class="ac-groupe">
+                            <legend>Access</legend>
+                            <div class="ac-puces" data-filtre="acces">
+                                <button class="ac-puce" type="button" data-val="" aria-pressed="true">All</button>
+                                <button class="ac-puce" type="button" data-val="gratuit" aria-pressed="false">Free</button>
+                                <button class="ac-puce" type="button" data-val="payant" aria-pressed="false">Paid</button>
+                            </div>
+                        </fieldset>
+                        <fieldset class="ac-groupe">
+                            <legend>Sort</legend>
+                            <div class="ac-puces" data-filtre="tri">
+                                <button class="ac-puce" type="button" data-val="n" aria-pressed="true">N°</button>
+                                <button class="ac-puce" type="button" data-val="blocs" aria-pressed="false">Blocks</button>
+                                <button class="ac-puce" type="button" data-val="couches" aria-pressed="false">Layers</button>
+                            </div>
+                        </fieldset>
+                        <div class="ac-recherche">
+                            <label class="ac-recherche__lib" for="ac-q">Search</label>
+                            <div class="ac-recherche__champ">
+                                <svg viewBox="0 0 16 16" fill="none" stroke="#A89A80" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="5"/><path d="m11 11 4 4"/></svg>
+                                <input id="ac-q" type="search" placeholder="A name, a number or a series: tavern, 088, steampunk…"
+                                       autocomplete="off" role="combobox" aria-expanded="false"
+                                       aria-controls="ac-apercu" aria-autocomplete="list"/>
+                                <kbd class="ac-recherche__touche" aria-hidden="true">/</kbd>
+                                <ul class="ac-apercu" id="ac-apercu" role="listbox" aria-label="Preview of the builds found" hidden="hidden"/>
+                            </div>
+                        </div>
+                        <p class="ac-compte" role="status" aria-live="polite"><b class="ac-compte__n" t-out="total"/> <span class="ac-compte__mot">builds shown</span></p>
+                        <button class="ac-raz" type="button" hidden="hidden">Show all</button>
+                    </div>
+                </section>
+
+                <section class="ac-grille-sec" id="ac-grille" aria-labelledby="ac-grille-titre">
+                    <h2 id="ac-grille-titre" class="ac-grille-sec__titre"><span>›</span> All the builds</h2>
+                    <div class="ac-grille">
+                        <t t-foreach="builds" t-as="un_build">
+                            <t t-call="besacraft_builds.ac_carte">
+                                <t t-set="build" t-value="un_build"/>
+                                <t t-set="ac_badges" t-value="True"/>
+                                <t t-set="ac_serie_lien" t-value="(un_build.series() &amp; series)[:1]"/>
+                            </t>
+                        </t>
+                    </div>
+                    <div class="ac-aucun" t-att-hidden="builds and 'hidden' or None">
+                        <strong>No build matches</strong>
+                        <p class="ac-aucun__dit">Try another name, or another series.</p>
+                        <p><button class="ac-raz ac-raz--vide" type="button">Show all</button></p>
+                    </div>
+                </section>
+
+                <section class="ac-rappel" aria-labelledby="ac-rappel-titre">
+                    <div class="ac-sec">
+                        <div class="ac-sec__tete">
+                            <p class="ac-sec__index"><span>›</span> The series</p>
+                            <h2 id="ac-rappel-titre">The builds of the videos</h2>
+                        </div>
+                        <ul class="ac-rappel__liste">
+                            <li t-foreach="series" t-as="un_serie">
+                                <a class="ac-rappel__serie" t-attf-href="/builds/serie/#{un_serie.code}"
+                                   t-attf-style="--s:#{un_serie.color}">
+                                    <i/>
+                                    <h3 t-out="un_serie.name"/>
+                                    <p t-if="un_serie.subtitle" t-out="un_serie.subtitle"/>
+                                    <p class="ac-mono">
+                                        <span>
+                                            <t t-if="par_serie.get(un_serie.id)"><b t-out="par_serie[un_serie.id]"/> <t t-if="par_serie[un_serie.id] == 1">build</t><t t-else="">builds</t></t>
+                                            <t t-else="">No build yet</t>
+                                        </span>
+                                        <span>View the series</span>
+                                    </p>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </section>
+
+                <t t-call="besacraft_builds.ac_credit">
+                    <t t-set="sources" t-value="sources"/>
+                </t>
+
+                <!-- The words the search preview needs, kept in the markup so they are translated
+                     like the rest of the page. -->
+                <div hidden="hidden" data-ac-textes="1">
+                    <p data-k="un">build shown</p>
+                    <p data-k="plusieurs">builds shown</p>
+                    <p data-k="lancer">▶ Launch</p>
+                    <p data-k="couches">layers</p>
+                    <p data-k="blocs">blocks</p>
+                    <p data-k="aucun">No build for “%s”.</p>
+                    <p data-k="tous">See the %s builds in the grid ↓</p>
+                    <p data-k="vide_serie">No build in this series yet: the first ones are coming.</p>
+                    <p data-k="vide">Try another name, or another series.</p>
+                </div>
+
+                <script type="module" src="/besacraft_builds/static/src/js/holo.js"/>
+            </div>
+        </t>
+    </template>
+</odoo>

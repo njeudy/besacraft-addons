@@ -1,11 +1,32 @@
+import base64
+import json
 import re
 
 from odoo import api, fields, models
 from odoo.exceptions import ValidationError
+from odoo.http import request
 
 from .youtube import youtube_id
 
 CODE_RE = re.compile(r"^\d+$")
+
+
+def prix_affiche(produit):
+    """What a product costs, as the site's shop will charge it, ready to print.
+
+    On a website request the price is the shop's: its pricelist, with the taxes the site
+    displays -- otherwise a card says 4,00 € and the cart 4,80 €. Elsewhere (back office,
+    crons) the product's list price.
+    """
+    produit = produit.sudo()
+    montant, devise = produit.list_price, produit.currency_id
+    if request and getattr(request, "website", None):
+        infos = produit._get_combination_info_variant()
+        montant, devise = infos["price"], request.website.currency_id
+    texte = "{:,.2f}".format(montant)
+    # Format français : espace fine insécable pour les milliers, virgule décimale.
+    texte = texte.replace(",", "\u202f").replace(".", ",")
+    return "%s\u00a0%s" % (texte, devise.symbol or "€")
 
 
 class BesacraftBuild(models.Model):
@@ -53,6 +74,11 @@ class BesacraftBuild(models.Model):
         string="Also In", domain="[('id', '!=', serie_id)]",
         help="Further series whose catalogue lists this build, besides its main one.")
     accroche = fields.Text("Tagline", translate=True)
+    # Le récit du build sur sa fiche produit, édité en place depuis le site (t-field) :
+    # c'est du texte d'auteur, qui n'a rien à faire dans un gabarit.
+    description = fields.Html(
+        translate=True, sanitize_attributes=False,
+        help="The build told on its product sheet. Edited on the website.")
     level = fields.Selection(
         [("debutant", "Beginner"), ("confirme", "Confident"), ("forgeron", "Blacksmith")],
         default="debutant", required=True,
@@ -101,6 +127,18 @@ class BesacraftBuild(models.Model):
     source_author = fields.Char("Original Author")
     source_license = fields.Char("Licence")
     source_url = fields.Char("Source")
+    # Ce qu'il faut à la fiche produit v2 : la galerie montre la boîte (`box_image`, photo
+    # produit), le build détouré qui déborde de l'anneau, la face du coffret à plat, et la
+    # vitrine 3D -- un glb qui peut peser 20 Mo, d'où une pièce jointe servie à la demande
+    # plutôt qu'un champ binaire lu avec la fiche.
+    cutout_image = fields.Image(
+        "Cutout", help="The build alone on a transparent background.")
+    box_face_image = fields.Image(
+        "Box Face", help="The front of the box, laid flat: the third view of the gallery.")
+    vitrine_glb_attachment_id = fields.Many2one(
+        "ir.attachment", "Showcase Model", ondelete="set null", copy=False,
+        help="The glTF model (.glb) mounted in the 3D showcase of the product sheet.")
+    chapter_ids = fields.One2many("besacraft.build.chapter", "build_id", string="Chapters")
     viewer_attachment_id = fields.Many2one("ir.attachment", ondelete="set null")
     build_json_attachment_id = fields.Many2one("ir.attachment", ondelete="set null")
     layer_ids = fields.One2many("besacraft.build.layer", "build_id")
@@ -297,17 +335,14 @@ Jouable en survie — aucun bloc inaccessible, aucune commande, aucun mod obliga
         return self.sudo().product_id.list_price if self.product_id else 0.0
 
     @api.depends("product_id.list_price", "enroll")
+    @api.depends_context("website_id")
     def _compute_price_label(self):
         for build in self:
             produit = build.sudo().product_id
             if build.enroll != "payment" or not produit:
                 build.price_label = False
                 continue
-            symbole = produit.currency_id.symbol or "€"
-            montant = "{:,.2f}".format(produit.list_price)
-            # Format français : espace insécable pour les milliers, virgule décimale.
-            montant = montant.replace(",", "\u202f").replace(".", ",")
-            build.price_label = "%s\u00a0%s" % (montant, symbole)
+            build.price_label = prix_affiche(produit)
 
     @api.depends("short_youtube_url")
     def _compute_short_youtube_id(self):
@@ -323,6 +358,69 @@ Jouable en survie — aucun bloc inaccessible, aucune commande, aucun mod obliga
             return False
         return bool(self.env["besacraft.build.member"].sudo().search_count(
             [("build_id", "=", self.id), ("partner_id", "=", partner.id)]))
+
+    def _chapitres_offerts(self):
+        """The free chapters that open the build, in order.
+
+        Only the leading run counts: the preview plays the build from its first layer, and a
+        free chapter further on cannot be shown without the locked ones before it.
+        """
+        self.ensure_one()
+        offerts = self.env["besacraft.build.chapter"]
+        for chapitre in self.chapter_ids:
+            if not chapitre.free or not chapitre.last_layer:
+                break
+            offerts |= chapitre
+        return offerts
+
+    def _viewer_apercu(self):
+        """The viewer cut down to the free chapters, as bytes, or None when there is none.
+
+        The cut is made here, on the data the viewer embeds, and not by hiding layers in the
+        browser: a preview that carried the whole build would only be a lock painted on.
+        Layers past the free chapters are dropped from `DATA`, and so are the guided steps
+        and zones past them when the viewer has a `GUIDE_DATA`.
+        """
+        self.ensure_one()
+        offerts = self._chapitres_offerts()
+        piece = self.sudo().viewer_attachment_id
+        if not offerts or not piece:
+            return None
+        html = base64.b64decode(piece.datas).decode("utf-8")
+        couches = max(offerts.mapped("last_layer")) + (self.layer_offset or 0)
+
+        def couper(texte, nom, transformer):
+            debut = texte.find("const %s = " % nom)
+            if debut < 0:
+                return texte, False
+            debut += len("const %s = " % nom)
+            donnees, fin = json.JSONDecoder().raw_decode(texte, debut)
+            transformer(donnees)
+            nouveau = json.dumps(donnees, ensure_ascii=False, separators=(",", ":"))
+            return texte[:debut] + nouveau + texte[fin:], True
+
+        def couper_data(donnees):
+            donnees["layers"] = donnees.get("layers", [])[:couches]
+            donnees["block_count"] = sum(
+                len(c.get("blocks", ())) for c in donnees["layers"])
+
+        def couper_guide(donnees):
+            # The guide's zones are the chapters, in the same order (chapters.json is
+            # written from them).
+            donnees["zones"] = donnees.get("zones", [])[:len(offerts)]
+            donnees["steps"] = [s for s in donnees.get("steps", [])
+                                if s.get("zone", 0) < len(offerts)
+                                and s.get("layer", 0) < couches]
+
+        try:
+            html, trouve = couper(html, "DATA", couper_data)
+            if not trouve:
+                return None
+            html, _trouve = couper(html, "GUIDE_DATA", couper_guide)
+        except (ValueError, TypeError, AttributeError):
+            # A viewer laid out differently: no preview rather than the whole build.
+            return None
+        return html.encode("utf-8")
 
     def _compute_website_url(self):
         # website.published.mixin's hook: the public URL drops the padding zeros.

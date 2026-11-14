@@ -48,6 +48,15 @@ class BesacraftSerie(models.Model):
     # pas un gabarit à redéployer.
     description = fields.Html(translate=True)
     logo = fields.Image(max_width=1024, max_height=1024)
+    cover_image = fields.Image(
+        "Cover Image", max_width=1920, max_height=1080,
+        help="Picture of the series on the home page card. Falls back to the logo.")
+    # Le pack existe dès qu'un produit y est rangé : pas de case « vendre en pack » à
+    # tenir d'accord avec lui. Le prix est celui du produit, saisi dans les ventes.
+    pack_product_id = fields.Many2one(
+        "product.product", "Series Pack",
+        help="Product selling every paid guide of the series at once, the ones to come "
+             "included. When set, the shop offers the pack under the series' builds.")
     episode_ids = fields.One2many("besacraft.episode", "serie_id")
     episode_count = fields.Integer(compute="_compute_episode_count")
 
@@ -57,5 +66,14 @@ class BesacraftSerie(models.Model):
         par_serie = {serie.id: n for serie, n in groupes}
         for serie in self:
             serie.episode_count = par_serie.get(serie.id, 0)
+
+    def _builds_du_pack(self):
+        """The paid builds a pack of these series unlocks: those filed in them today.
+
+        Read when the order is confirmed, not when the pack is put in the cart: a build
+        added to the series in between is part of what was bought.
+        """
+        Build = self.env["besacraft.build"].sudo()
+        return Build.search(Build._domaine_series(self) + [("enroll", "=", "payment")])
 
     _sql_constraints = [("code_uniq", "unique(code)", "A series code must be unique.")]
