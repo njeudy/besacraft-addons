@@ -39,5 +39,5 @@
 
     <menuitem id="menu_vestiaire_capes" name="Capes"
               parent="menu_vestiaire_root" action="vestiaire_cape_action"
-              groups="besacraft_vestiaire.group_vestiaire_admin" sequence="30"/>
+              groups="besacraft_vestiaire.group_vestiaire_admin" sequence="40"/>
 </odoo>

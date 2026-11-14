@@ -29,6 +29,11 @@ Routes
 ``PUT /mc/v1/vestiaire/equipement`` ``{tenue: [codes], roue: [8 codes or null]}``
     Saves the outfit and the wheel. Unowned codes, a second item on a slot and a
     head under a hat are dropped silently; the answer is what was kept.
+    An outfit entry may carry the game's settings after the code
+    (``chapeau_sorcier|noir||d|2``: colour, side, back, height). Only the code is
+    checked; the suffix (60 characters at most, otherwise ignored) is kept as is and
+    given back by ``moi``. A code sent bare forgets its settings. Colours are free:
+    nothing about them is sold.
 
 ``POST /mc/v1/vestiaire/achat`` ``{code, prix}``
     Buys an item at the price the player saw. ``409`` with ``deja_possede``,
@@ -99,3 +104,21 @@ Deployment
 without it every player shares the proxy's address: the ceiling then becomes global.
 Make sure the proxy sets ``X-Forwarded-For`` itself rather than passing on whatever
 the client sent.
+
+Back office
+===========
+
+The *Besacraft* app gathers everything under *Wardrobe*: *Players* (a kanban of
+the contacts with a Minecraft UUID: head, pseudo, points, owned cosmetics, worn
+cape, validated or awaiting validation), *Cosmetics*, *Emotes*, *Capes*,
+*Account requests*, *Points movements*, and *Configuration* (points scale and
+server keys).
+
+The cosmetic and emote cards show a picture taken, in this order, from:
+
+* a cosmetic's *Thumbnail* when it is set;
+* ``static/img/cosmetiques/<code>.png`` for a cosmetic;
+* ``static/img/emotes/<code>.gif`` for an emote, always: an animated GIF stored in
+  an image field would be flattened.
+
+A missing file simply leaves the card without a picture.

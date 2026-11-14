@@ -10,3 +10,4 @@ from . import test_api
 from . import test_portail
 from . import test_points
 from . import test_api_points
+from . import test_joueur

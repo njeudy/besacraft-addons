@@ -48,7 +48,7 @@ class VestiaireApi(http.Controller):
             "cape": partner.vestiaire_cape_id.empreinte or None,
             "points": partner.vestiaire_points,
             "possede": partner._vestiaire_possede().mapped("code"),
-            "tenue": partner._vestiaire_tenue().mapped("code"),
+            "tenue": partner._vestiaire_tenue_codes(),
             "roue": partner._vestiaire_roue(),
             "nouvelles": partner._vestiaire_nouvelles(),
         })

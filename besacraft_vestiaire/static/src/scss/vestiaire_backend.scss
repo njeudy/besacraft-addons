@@ -1,0 +1,11 @@
+// Minecraft heads, skins and item pictures are pixel art: keep the pixels sharp.
+.o_vestiaire_pixel,
+.o_vestiaire_pixel img {
+    image-rendering: pixelated;
+}
+
+.o_vestiaire_vignette {
+    width: 96px;
+    height: 96px;
+    object-fit: contain;
+}

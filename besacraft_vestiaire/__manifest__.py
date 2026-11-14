@@ -1,6 +1,6 @@
 {
     "name": "Besacraft — Wardrobe",
-    "version": "18.0.1.1.0",
+    "version": "18.0.1.2.0",
     "license": "LGPL-3",
     "author": "Nicolas JEUDY",
     "website": "https://besacraft.fr",
@@ -17,9 +17,18 @@
         "views/vestiaire_cape_views.xml",
         "views/vestiaire_points_views.xml",
         "data/vestiaire_catalogue_v50.xml",
+        "data/vestiaire_catalogue_pao.xml",
+        "data/vestiaire_catalogue_christine.xml",
+        "data/vestiaire_catalogue_zoe.xml",
         "wizards/vestiaire_offrir_views.xml",
         "views/vestiaire_skin_views.xml",
+        "views/vestiaire_joueur_views.xml",
         "views/portal_vestiaire.xml",
     ],
+    "assets": {
+        "web.assets_backend": [
+            "besacraft_vestiaire/static/src/scss/vestiaire_backend.scss",
+        ],
+    },
     "installable": True,
 }

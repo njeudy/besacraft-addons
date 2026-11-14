@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <!-- PAO's outfits: not sold (price 0), not owned by everyone; an administrator gives them
+         to PAO's account only. -->
+    <record id="cosmetique_pao_gilet" model="besacraft.vestiaire.cosmetique">
+        <field name="code">pao_gilet</field>
+        <field name="name">Gilet de PAO</field>
+        <field name="genre">cosmetique</field>
+        <field name="emplacement">torse</field>
+        <field name="sequence">500</field>
+    </record>
+    <record id="cosmetique_pao_gilet_vert" model="besacraft.vestiaire.cosmetique">
+        <field name="code">pao_gilet_vert</field>
+        <field name="name">Gilet écossais de PAO</field>
+        <field name="genre">cosmetique</field>
+        <field name="emplacement">torse</field>
+        <field name="sequence">510</field>
+    </record>
+    <record id="cosmetique_pao_tablier" model="besacraft.vestiaire.cosmetique">
+        <field name="code">pao_tablier</field>
+        <field name="name">Tablier de PAO</field>
+        <field name="genre">cosmetique</field>
+        <field name="emplacement">torse</field>
+        <field name="sequence">520</field>
+    </record>
+    <record id="cosmetique_pao_kilt" model="besacraft.vestiaire.cosmetique">
+        <field name="code">pao_kilt</field>
+        <field name="name">Kilt de PAO</field>
+        <field name="genre">cosmetique</field>
+        <field name="emplacement">taille</field>
+        <field name="sequence">530</field>
+    </record>
+    <record id="cosmetique_pao_sacoche" model="besacraft.vestiaire.cosmetique">
+        <field name="code">pao_sacoche</field>
+        <field name="name">Sacoche de PAO</field>
+        <field name="genre">cosmetique</field>
+        <field name="emplacement">bandouliere</field>
+        <field name="sequence">540</field>
+    </record>
+    <record id="cosmetique_pao_armure" model="besacraft.vestiaire.cosmetique">
+        <field name="code">pao_armure</field>
+        <field name="name">Armure de cuivre de PAO</field>
+        <field name="genre">cosmetique</field>
+        <field name="emplacement">torse</field>
+        <field name="sequence">560</field>
+    </record>
+    <record id="cosmetique_pao_casque_armure" model="besacraft.vestiaire.cosmetique">
+        <field name="code">pao_casque_armure</field>
+        <field name="name">Casque de l'armure de PAO</field>
+        <field name="genre">cosmetique</field>
+        <field name="emplacement">tete</field>
+        <field name="sequence">570</field>
+    </record>
+</odoo>

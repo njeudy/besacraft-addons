@@ -67,9 +67,9 @@
         </field>
     </record>
 
-    <menuitem id="menu_vestiaire_root" name="Wardrobe"
+    <menuitem id="menu_vestiaire_root" name="Wardrobe" parent="besacraft_base.menu_root"
               groups="besacraft_vestiaire.group_vestiaire_admin" sequence="60"/>
     <menuitem id="menu_vestiaire_demandes" name="Account requests"
               parent="menu_vestiaire_root" action="vestiaire_demande_action"
-              groups="besacraft_vestiaire.group_vestiaire_admin" sequence="10"/>
+              groups="besacraft_vestiaire.group_vestiaire_admin" sequence="50"/>
 </odoo>

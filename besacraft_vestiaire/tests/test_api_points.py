@@ -64,6 +64,34 @@ class TestApiPoints(common.HttpCase):
         self.assertEqual(self._appel("PUT", "/mc/v1/vestiaire/equipement", {"tenue": "x"})
                          .status_code, 400)
 
+    def _tenue_moi(self):
+        return self._appel("GET", "/mc/v1/vestiaire/moi").json()["tenue"]
+
+    def test_equipement_garde_le_reglage(self):
+        r = self._appel("PUT", "/mc/v1/vestiaire/equipement", {"tenue": ["t_ailes|noir||d|2"], "roue": []})
+        self.assertEqual(r.json()["tenue"], ["t_ailes|noir||d|2"])
+        self.assertEqual(self._tenue_moi(), ["t_ailes|noir||d|2"])
+
+    def test_code_nu_efface_le_reglage(self):
+        self.zoe._vestiaire_equiper(["t_ailes|noir"], [])
+        self.zoe._vestiaire_equiper(["t_ailes"], [])
+        self.assertEqual(self._tenue_moi(), ["t_ailes"])
+
+    def test_code_non_possede_toujours_ecarte(self):
+        r = self._appel("PUT", "/mc/v1/vestiaire/equipement",
+                        {"tenue": ["t_chapeau|noir", "inconnu|noir", "t_ailes|vert"], "roue": []})
+        self.assertEqual(r.json()["tenue"], ["t_ailes|vert"])
+
+    def test_suffixe_trop_long_ignore(self):
+        self.zoe._vestiaire_equiper(["t_ailes|" + "x" * 61], [])
+        self.assertEqual(self._tenue_moi(), ["t_ailes"])
+
+    def test_retire_de_la_tenue_oublie_le_reglage(self):
+        self.zoe._vestiaire_equiper(["t_ailes|noir"], [])
+        self.zoe._vestiaire_equiper([], [])
+        self.zoe.vestiaire_tenue_ids = [(4, self.ailes.id)]
+        self.assertEqual(self._tenue_moi(), ["t_ailes"])
+
     def test_achat(self):
         self.zoe._vestiaire_crediter(130, "cadeau", "Bravo")
         r = self._appel("POST", "/mc/v1/vestiaire/achat", {"code": "t_chapeau", "prix": 100})

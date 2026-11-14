@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- High priority: these views must never replace the default contact views. -->
+    <record id="vestiaire_joueur_view_kanban" model="ir.ui.view">
+        <field name="name">res.partner.kanban.vestiaire.joueur</field>
+        <field name="model">res.partner</field>
+        <field name="priority">100</field>
+        <field name="arch" type="xml">
+            <kanban create="0">
+                <field name="minecraft_head"/>
+                <field name="vestiaire_skin_apercu"/>
+                <field name="vestiaire_compte_valide"/>
+                <templates>
+                    <t t-name="card" class="flex-row">
+                        <aside class="o_kanban_aside_full">
+                            <field t-if="record.minecraft_head.raw_value" name="minecraft_head"
+                                   widget="image" class="o_vestiaire_pixel w-100"
+                                   options="{'img_class': 'object-fit-contain w-100 h-100'}"/>
+                            <field t-elif="record.vestiaire_skin_apercu.raw_value"
+                                   name="vestiaire_skin_apercu" widget="image"
+                                   class="o_vestiaire_pixel w-100"
+                                   options="{'img_class': 'object-fit-contain w-100 h-100'}"/>
+                        </aside>
+                        <main class="ps-2 ps-md-0">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <field name="minecraft_login" class="fw-bold fs-5"/>
+                                <span t-if="record.vestiaire_compte_valide.raw_value"
+                                      class="badge text-bg-success">Account validated</span>
+                                <span t-else="" class="badge text-bg-warning">Awaiting validation</span>
+                            </div>
+                            <field name="name" class="text-muted"/>
+                            <div class="mt-1">
+                                <i class="fa fa-star me-1" title="Points"/>
+                                <field name="vestiaire_points"/> pts
+                                <span class="ms-2">
+                                    <i class="fa fa-magic me-1" title="Owned cosmetics"/>
+                                    <field name="vestiaire_cosmetique_count"/> cosmetics
+                                </span>
+                            </div>
+                            <div t-if="record.vestiaire_cape_id.raw_value" class="text-truncate">
+                                <i class="fa fa-flag me-1" title="Worn cape"/>
+                                <field name="vestiaire_cape_id"/>
+                            </div>
+                        </main>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="vestiaire_joueur_view_list" model="ir.ui.view">
+        <field name="name">res.partner.list.vestiaire.joueur</field>
+        <field name="model">res.partner</field>
+        <field name="priority">100</field>
+        <field name="arch" type="xml">
+            <list create="0">
+                <field name="minecraft_login"/>
+                <field name="name"/>
+                <field name="email" optional="show"/>
+                <field name="vestiaire_points"/>
+                <field name="vestiaire_cosmetique_count"/>
+                <field name="vestiaire_emote_count" optional="hide"/>
+                <field name="vestiaire_cape_id" optional="show"/>
+                <field name="vestiaire_compte_valide"/>
+                <field name="minecraft_uuid" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="vestiaire_joueur_view_search" model="ir.ui.view">
+        <field name="name">res.partner.search.vestiaire.joueur</field>
+        <field name="model">res.partner</field>
+        <field name="priority">100</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="minecraft_login"/>
+                <field name="name"/>
+                <field name="minecraft_uuid"/>
+                <filter name="valides" string="Validated accounts" domain="[('user_ids', '!=', False)]"/>
+                <filter name="en_attente" string="Awaiting validation"
+                        domain="[('user_ids', '=', False)]"/>
+                <separator/>
+                <filter name="sans_skin" string="Without skin"
+                        domain="[('vestiaire_skin_ids', '=', False)]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="vestiaire_joueur_action" model="ir.actions.act_window">
+        <field name="name">Players</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="domain">[('minecraft_uuid', '!=', False)]</field>
+        <field name="search_view_id" ref="vestiaire_joueur_view_search"/>
+        <field name="context">{'default_is_company': False}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">No player yet</p>
+            <p>A player appears here once a Minecraft account is linked to a contact.</p>
+        </field>
+    </record>
+    <record id="vestiaire_joueur_action_kanban" model="ir.actions.act_window.view">
+        <field name="sequence">1</field>
+        <field name="view_mode">kanban</field>
+        <field name="view_id" ref="vestiaire_joueur_view_kanban"/>
+        <field name="act_window_id" ref="vestiaire_joueur_action"/>
+    </record>
+    <record id="vestiaire_joueur_action_list" model="ir.actions.act_window.view">
+        <field name="sequence">2</field>
+        <field name="view_mode">list</field>
+        <field name="view_id" ref="vestiaire_joueur_view_list"/>
+        <field name="act_window_id" ref="vestiaire_joueur_action"/>
+    </record>
+    <record id="vestiaire_joueur_action_form" model="ir.actions.act_window.view">
+        <field name="sequence">3</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="base.view_partner_form"/>
+        <field name="act_window_id" ref="vestiaire_joueur_action"/>
+    </record>
+
+    <menuitem id="menu_vestiaire_joueurs" name="Players"
+              parent="menu_vestiaire_root" action="vestiaire_joueur_action"
+              groups="besacraft_vestiaire.group_vestiaire_admin" sequence="10"/>
+</odoo>
