@@ -1706,6 +1706,7 @@ msgstr "L'archive n'a pas de texture %s.png."
 msgid "Texture %s.png matches no declared colour."
 msgstr "La texture %s.png ne correspond à aucune couleur déclarée."
 
+#. module: besacraft_vestiaire
 #: model:ir.model.fields,help:besacraft_vestiaire.field_besacraft_vestiaire_cosmetique__piece_armure
 msgid ""
 "A deployable armour piece leaves the outfit: the player puts it in the "
