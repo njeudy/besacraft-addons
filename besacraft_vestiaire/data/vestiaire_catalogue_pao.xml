@@ -58,4 +58,18 @@
         <field name="emplacement">torse</field>
         <field name="sequence">580</field>
     </record>
+    <record id="cosmetique_pao_armure_neon" model="besacraft.vestiaire.cosmetique">
+        <field name="code">pao_armure_neon</field>
+        <field name="name">Armure néon de PAO</field>
+        <field name="genre">cosmetique</field>
+        <field name="emplacement">torse</field>
+        <field name="sequence">590</field>
+    </record>
+    <record id="cosmetique_pao_casque_neon" model="besacraft.vestiaire.cosmetique">
+        <field name="code">pao_casque_neon</field>
+        <field name="name">Casque néon de PAO</field>
+        <field name="genre">cosmetique</field>
+        <field name="emplacement">tete</field>
+        <field name="sequence">595</field>
+    </record>
 </odoo>

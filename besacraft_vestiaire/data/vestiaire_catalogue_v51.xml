@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <!-- Wardrobe items of pack v51 owned by every valid account. -->
+    <record id="cosmetique_queue_singe" model="besacraft.vestiaire.cosmetique">
+        <field name="code">queue_singe</field>
+        <field name="name">Queue de singe</field>
+        <field name="genre">cosmetique</field>
+        <field name="emplacement">queue</field>
+        <field name="sequence">60</field>
+        <field name="de_base" eval="True"/>
+    </record>
+</odoo>

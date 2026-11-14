@@ -20,6 +20,7 @@
         "data/vestiaire_catalogue_pao.xml",
         "data/vestiaire_catalogue_christine.xml",
         "data/vestiaire_catalogue_zoe.xml",
+        "data/vestiaire_catalogue_v51.xml",
         "wizards/vestiaire_offrir_views.xml",
         "views/vestiaire_skin_views.xml",
         "views/vestiaire_joueur_views.xml",
