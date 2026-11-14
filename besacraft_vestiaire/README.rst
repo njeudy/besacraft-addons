@@ -47,6 +47,16 @@ Routes
     comes from the points scale, never from the caller. Replayable: the same player,
     reason and reference is credited once (``deja_credite``).
 
+``GET /mc/v1/vestiaire/distants``
+    The manifest of the remote cosmetics, for a signed-in player or a server key:
+    ``{format: 1, cosmetiques: [{code, version, emplacement, entree, fichiers:
+    [{chemin, sha256, taille}]}]}``. Only published cosmetics with a package are
+    listed, whoever owns them: the game also draws what the other players wear.
+
+``GET /mc/v1/vestiaire/fichier/<sha256>``
+    One file of a listed remote cosmetic, by its SHA-256, same authentication.
+    ``400`` for a malformed hash, ``404`` for a file no listed cosmetic holds.
+
 ``GET|POST /vestiaire/demande?code=...``
     The public account request form. The code is twelve characters, valid for 24
     hours and tied to the UUID Mojang vouched for. Players under 15 must give a
@@ -65,7 +75,13 @@ Cosmetics, emotes and points
 ============================
 
 The 3D models and animations ship in the mod's jar; Odoo holds the rights, keyed
-by the code of the jar's ``catalogue.json``. Everything the v50 pack shipped is
+by the code of the jar's ``catalogue.json``. A cosmetic can also be *remote*: drop
+on its form (tab *Remote files*) the zip made by ``generer.py --paquet <code>``.
+The package is data only (``cosmetique.json``, the ``.geo.json``, the
+``.animation.json`` and PNG textures at the paths the jar uses); anything else,
+a size above the limits or an inconsistent id refuses it as a whole. Each
+accepted package raises the remote version; the game downloads the files by
+their SHA-256 and the highest version wins over the jar. Everything the v50 pack shipped is
 seeded as *owned by everyone*, so nobody loses what they had. An item is owned
 when it is published and either owned by everyone, bought, or given.
 

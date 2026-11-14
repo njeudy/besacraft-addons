@@ -6,9 +6,10 @@ import zipfile
 
 from PIL import Image
 
+from odoo.addons.besacraft_minecraft_api.controllers import base
 from odoo.addons.besacraft_vestiaire.tools import paquet
 from odoo.exceptions import ValidationError
-from odoo.tests import TransactionCase
+from odoo.tests import TransactionCase, common, tagged
 
 CODE = "echarpe_test"
 
@@ -149,3 +150,59 @@ class TestDepot(TransactionCase):
         self.assertFalse(self.echarpe.fichier_ids)
         self.assertNotIn(self.echarpe, self.env["besacraft.vestiaire.cosmetique"]._distants_servis())
 
+
+@tagged("post_install", "-at_install")
+class TestApiDistant(common.HttpCase):
+
+    def setUp(self):
+        super().setUp()
+        base._passages.clear()
+        self.addCleanup(base._passages.clear)
+        self.zoe = self.env["res.partner"].create({
+            "name": "Zoé", "minecraft_login": "zoejeudy",
+            "minecraft_uuid": "cc67e9f6625340d4813855e5fecc4c10"})
+        self.jeton = self.env["besacraft.mc.session"]._ouvrir(self.zoe).token
+        cle = self.env["besacraft.vestiaire.cle.serveur"].create({"name": "Essai"})
+        self.cle = cle._generer()
+        Cosmetique = self.env["besacraft.vestiaire.cosmetique"]
+        self.echarpe = Cosmetique.create({"code": CODE, "name": "Scarf"})
+        self.echarpe.paquet = base64.b64encode(archive())
+        self.cache = Cosmetique.create({"code": "echarpe_cachee", "name": "Hidden", "publie": False})
+
+    def _get(self, chemin, jeton):
+        headers = {"Authorization": "Bearer %s" % jeton} if jeton else {}
+        return self.url_open(chemin, headers=headers, timeout=30)
+
+    def test_sans_jeton(self):
+        self.assertEqual(self._get("/mc/v1/vestiaire/distants", None).status_code, 401)
+        self.assertEqual(self._get("/mc/v1/vestiaire/distants", "faux").status_code, 401)
+
+    def test_manifeste_puis_telechargement(self):
+        for jeton in (self.jeton, self.cle):
+            r = self._get("/mc/v1/vestiaire/distants", jeton)
+            self.assertEqual(r.status_code, 200)
+            corps = r.json()
+            self.assertEqual(corps["format"], 1)
+            self.assertEqual([c["code"] for c in corps["cosmetiques"]], [CODE])
+            echarpe = corps["cosmetiques"][0]
+            self.assertEqual(echarpe["version"], 1)
+            self.assertEqual(echarpe["entree"]["version"], 1)
+            self.assertEqual(echarpe["entree"]["emplacement"], "cape")
+            attendus = {c: v for c, v in fichiers().items() if c != "cosmetique.json"}
+            self.assertEqual({f["chemin"] for f in echarpe["fichiers"]}, set(attendus))
+            for f in echarpe["fichiers"]:
+                telecharge = self._get("/mc/v1/vestiaire/fichier/%s" % f["sha256"], jeton)
+                self.assertEqual(telecharge.status_code, 200)
+                self.assertEqual(telecharge.content, attendus[f["chemin"]])
+                self.assertEqual(hashlib.sha256(telecharge.content).hexdigest(), f["sha256"])
+                self.assertEqual(len(telecharge.content), f["taille"])
+
+    def test_fichier_inconnu_ou_mal_forme(self):
+        self.assertEqual(self._get("/mc/v1/vestiaire/fichier/%s" % ("0" * 64), self.jeton).status_code, 404)
+        self.assertEqual(self._get("/mc/v1/vestiaire/fichier/xyz", self.jeton).status_code, 400)
+
+    def test_non_publie_jamais_servi(self):
+        self.echarpe.publie = False
+        self.assertEqual(self._get("/mc/v1/vestiaire/distants", self.jeton).json()["cosmetiques"], [])
+        sha = self.echarpe.fichier_ids[0].sha256
+        self.assertEqual(self._get("/mc/v1/vestiaire/fichier/%s" % sha, self.jeton).status_code, 404)
