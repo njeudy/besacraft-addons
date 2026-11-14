@@ -1705,3 +1705,46 @@ msgstr "L'archive n'a pas de texture %s.png."
 #, python-format
 msgid "Texture %s.png matches no declared colour."
 msgstr "La texture %s.png ne correspond à aucune couleur déclarée."
+
+#: model:ir.model.fields,help:besacraft_vestiaire.field_besacraft_vestiaire_cosmetique__piece_armure
+msgid ""
+"A deployable armour piece leaves the outfit: the player puts it in the "
+"armour stand of the wardrobe and deploys it in game. Read from the mod's "
+"catalogue."
+msgstr ""
+"Une pièce d'armure déployable quitte la tenue : le joueur la range dans le "
+"stand d'armures du Vestiaire et la déploie en jeu. Lue dans le catalogue du "
+"mod."
+
+#. module: besacraft_vestiaire
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_cosmetique__piece_armure
+msgid "Armour piece"
+msgstr "Pièce d'armure"
+
+#. module: besacraft_vestiaire
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_res_partner__vestiaire_armures
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_res_users__vestiaire_armures
+msgid "Armour stand"
+msgstr "Stand d'armures"
+
+#. module: besacraft_vestiaire
+#: model:ir.model.fields.selection,name:besacraft_vestiaire.selection__besacraft_vestiaire_cosmetique__piece_armure__plastron
+msgid "Breastplate"
+msgstr "Plastron"
+
+#. module: besacraft_vestiaire
+#: model:ir.model.fields.selection,name:besacraft_vestiaire.selection__besacraft_vestiaire_cosmetique__piece_armure__casque
+msgid "Helmet"
+msgstr "Casque"
+
+#. module: besacraft_vestiaire
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_res_partner__vestiaire_armure_derniere
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_res_users__vestiaire_armure_derniere
+msgid "Last armour used"
+msgstr "Dernière armure utilisée"
+
+#. module: besacraft_vestiaire
+#: model:ir.model.fields,help:besacraft_vestiaire.field_res_partner__vestiaire_armure_derniere
+#: model:ir.model.fields,help:besacraft_vestiaire.field_res_users__vestiaire_armure_derniere
+msgid "Position in the stand, -1 for none."
+msgstr "Position dans le stand, -1 pour aucune."

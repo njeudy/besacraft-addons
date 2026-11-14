@@ -42,6 +42,7 @@
         <field name="name">Armure de cuivre de PAO</field>
         <field name="genre">cosmetique</field>
         <field name="emplacement">torse</field>
+        <field name="piece_armure">plastron</field>
         <field name="sequence">560</field>
     </record>
     <record id="cosmetique_pao_casque_armure" model="besacraft.vestiaire.cosmetique">
@@ -49,6 +50,7 @@
         <field name="name">Casque de l'armure de PAO</field>
         <field name="genre">cosmetique</field>
         <field name="emplacement">tete</field>
+        <field name="piece_armure">casque</field>
         <field name="sequence">570</field>
     </record>
     <record id="cosmetique_pao_manteau" model="besacraft.vestiaire.cosmetique">
@@ -63,6 +65,7 @@
         <field name="name">Armure néon de PAO</field>
         <field name="genre">cosmetique</field>
         <field name="emplacement">torse</field>
+        <field name="piece_armure">plastron</field>
         <field name="sequence">590</field>
     </record>
     <record id="cosmetique_pao_casque_neon" model="besacraft.vestiaire.cosmetique">
@@ -70,6 +73,7 @@
         <field name="name">Casque néon de PAO</field>
         <field name="genre">cosmetique</field>
         <field name="emplacement">tete</field>
+        <field name="piece_armure">casque</field>
         <field name="sequence">595</field>
     </record>
 </odoo>

@@ -8,6 +8,7 @@ from odoo.exceptions import ValidationError
 from ..tools import paquet
 
 GENRES = [("cosmetique", "Cosmetic"), ("emote", "Emote")]
+PIECES_ARMURE = [("plastron", "Breastplate"), ("casque", "Helmet")]
 
 
 class BesacraftVestiaireCosmetique(models.Model):
@@ -25,6 +26,10 @@ class BesacraftVestiaireCosmetique(models.Model):
     genre = fields.Selection(GENRES, string="Kind", required=True, default="cosmetique")
     emplacement = fields.Char(string="Slot",
                               help="Slot of a cosmetic in the mod (chapeau, tete, ailes...).")
+    piece_armure = fields.Selection(
+        PIECES_ARMURE, string="Armour piece",
+        help="A deployable armour piece leaves the outfit: the player puts it in the armour "
+             "stand of the wardrobe and deploys it in game. Read from the mod's catalogue.")
     sequence = fields.Integer(default=10)
     vignette = fields.Image(string="Thumbnail", max_width=256, max_height=256)
     prix = fields.Integer(string="Price (points)", default=0,

@@ -33,6 +33,7 @@
                             <field name="name"/>
                             <field name="genre"/>
                             <field name="emplacement" invisible="genre != 'cosmetique'"/>
+                            <field name="piece_armure" invisible="genre != 'cosmetique'"/>
                         </group>
                         <group>
                             <field name="prix"/>

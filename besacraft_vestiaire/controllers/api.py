@@ -86,6 +86,7 @@ class VestiaireApi(http.Controller):
         if refus:
             return refus
         skin = partner._vestiaire_skin_actif()
+        armures, derniere = partner._vestiaire_armures()
         return reponse({
             "pseudo": partner.minecraft_login,
             "skin": {"empreinte": skin.empreinte, "modele": skin.modele} if skin else None,
@@ -94,6 +95,8 @@ class VestiaireApi(http.Controller):
             "possede": partner._vestiaire_possede().mapped("code"),
             "tenue": partner._vestiaire_tenue_codes(),
             "roue": partner._vestiaire_roue(),
+            "armures": armures,
+            "armure_derniere": derniere,
             "nouvelles": partner._vestiaire_nouvelles(),
         })
 
@@ -120,7 +123,16 @@ class VestiaireApi(http.Controller):
         tenue, roue = donnees.get("tenue"), donnees.get("roue")
         if not isinstance(tenue, list) or not isinstance(roue, list):
             raise werkzeug.exceptions.BadRequest()
-        return reponse(partner._vestiaire_equiper(tenue, roue))
+        resultat = partner._vestiaire_equiper(tenue, roue)
+        # Merged, not replaced: a game without armours (2.5.0) sends no "armures" and keeps the stand.
+        if "armures" in donnees:
+            if not isinstance(donnees["armures"], list):
+                raise werkzeug.exceptions.BadRequest()
+            armures, derniere = partner._vestiaire_equiper_armures(donnees["armures"],
+                                                                    donnees.get("armure_derniere", -1))
+        else:
+            armures, derniere = partner._vestiaire_armures()
+        return reponse(dict(resultat, armures=armures, armure_derniere=derniere))
 
     @http.route("/mc/v1/vestiaire/achat", type="http", auth="public", methods=["POST"],
                 csrf=False, save_session=False)
