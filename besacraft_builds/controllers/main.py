@@ -702,10 +702,13 @@ class BesacraftBuilds(http.Controller):
                 # By invitation and not invited: nothing to buy, and nothing to see.
                 return request.not_found()
             contenu = base64.b64decode(piece.datas)
-        # A long cache plus an ETag avoids shipping several megabytes on every layer change.
-        # The ETag follows the CONTENT: the import refreshes the viewer by rewriting the same
-        # attachment, and an ETag on its id kept browsers on the old viewer for a day. The
-        # preview also depends on the chapters, hence their last write in its ETag.
+        # `no-cache` does not mean "do not cache": the browser keeps the file and asks
+        # whether it still holds, so an unchanged viewer costs a 304 and not several
+        # megabytes. A `max-age` of a day was tried and defeated the ETag it came with --
+        # the browser never asked, and kept the viewer of the day before for 24 hours, on
+        # an address that never changes since the import rewrites the same attachment.
+        # The ETag follows the CONTENT, and the preview also depends on the chapters,
+        # hence their last write in its own.
         etag = '"%s-%s"' % (build.id, piece.checksum or piece.id)
         if apercu:
             chapitres = build.chapter_ids
@@ -715,6 +718,6 @@ class BesacraftBuilds(http.Controller):
         return request.make_response(contenu, headers=[
             ("Content-Type", "text/html; charset=utf-8"),
             ("Content-Length", str(len(contenu))),
-            ("Cache-Control", "private, max-age=86400"),
+            ("Cache-Control", "private, no-cache"),
             ("ETag", etag),
         ])
