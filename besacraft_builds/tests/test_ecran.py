@@ -46,6 +46,30 @@ class TestEcranBuild(HttpCase):
     def _get(self, url):
         return self.url_open(url, allow_redirects=False)
 
+    # --- cache du viewer -----------------------------------------------------------------
+
+    def test_le_viewer_se_revalide_au_lieu_de_dormir_un_jour(self):
+        """L'adresse du viewer ne change jamais : c'est la même pièce jointe que l'import
+        réécrit. Avec un `max-age`, le navigateur gardait le guide de la veille pendant
+        vingt-quatre heures sans rien demander, et l'ETag ne servait à rien."""
+        reponse = self._get(self.viewer + "?apercu=1")
+        self.assertEqual(reponse.status_code, 200)
+        self.assertEqual(reponse.headers.get("Cache-Control"), "private, no-cache")
+        self.assertTrue(reponse.headers.get("ETag"))
+
+    def test_le_viewer_inchange_repond_304(self):
+        """Revalider ne doit pas coûter les deux mégaoctets à chaque ouverture."""
+        etag = self._get(self.viewer + "?apercu=1").headers.get("ETag")
+        reponse = self.url_open(self.viewer + "?apercu=1", allow_redirects=False,
+                                headers={"If-None-Match": etag})
+        self.assertEqual(reponse.status_code, 304)
+
+    def test_un_import_change_l_etiquette_du_viewer(self):
+        """Ce que la revalidation doit voir : une pièce jointe réécrite est un autre guide."""
+        avant = self._get(self.viewer + "?apercu=1").headers.get("ETag")
+        self.piece.write({"datas": base64.b64encode((VIEWER + "<!-- v2 -->").encode())})
+        self.assertNotEqual(self._get(self.viewer + "?apercu=1").headers.get("ETag"), avant)
+
     def _connecter_admin(self):
         designer = self.env.ref("website.group_website_designer")
         user = self.env["res.users"].search(
