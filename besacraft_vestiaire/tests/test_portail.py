@@ -14,8 +14,8 @@ class TestPortail(common.HttpCase):
             "name": "Zoé", "login": "zoe-portail", "password": "zoe-portail-123",
             "groups_id": [(6, 0, [self.env.ref("base.group_portal").id])]})
         self.zoe = self.user.partner_id
-        self.zoe.write({"minecraft_uuid": "cc67e9f6625340d4813855e5fecc4c10",
-                        "minecraft_login": "zoejeudy"})
+        self.zoe.write({"minecraft_uuid": "5e1f0a2b7c3d4e8f9a6b1c2d3e4f5a6b",
+                        "minecraft_login": "joueuressai"})
         autre = self.env["res.partner"].create({"name": "Autre"})
         self.skin_autre = self.env["besacraft.vestiaire.skin"].create({
             "partner_id": autre.id, "image": base64.b64encode(png(64, 64))})

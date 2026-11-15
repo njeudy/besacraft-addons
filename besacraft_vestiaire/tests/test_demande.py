@@ -1,14 +1,14 @@
 from odoo.exceptions import UserError, ValidationError
 from odoo.tests import TransactionCase, common, tagged
 
-UUID = "cc67e9f6625340d4813855e5fecc4c10"
+UUID = "5e1f0a2b7c3d4e8f9a6b1c2d3e4f5a6b"
 
 
 @tagged("post_install", "-at_install")
 class TestDemande(TransactionCase):
     def setUp(self):
         super().setUp()
-        self.code = self.env["besacraft.vestiaire.code"]._emettre(UUID, "zoejeudy")
+        self.code = self.env["besacraft.vestiaire.code"]._emettre(UUID, "joueuressai")
         self.Demande = self.env["besacraft.vestiaire.demande"]
         self.valeurs = {"prenom": "Zoé", "email": "zoe@example.org",
                         "moins_de_15": False, "email_parent": ""}
@@ -16,7 +16,7 @@ class TestDemande(TransactionCase):
     def test_la_demande_porte_l_uuid_du_code(self):
         demande = self.Demande._soumettre(self.code.code, self.valeurs)
         self.assertEqual(demande.uuid, UUID)
-        self.assertEqual(demande.pseudo, "zoejeudy")
+        self.assertEqual(demande.pseudo, "joueuressai")
         self.assertEqual(demande.state, "a_valider")
 
     def test_moins_de_15_ans_exige_un_parent(self):
@@ -49,7 +49,7 @@ class TestDemande(TransactionCase):
         demande.action_valider()
         self.assertEqual(demande.partner_id, zoe)
         self.assertEqual(zoe.minecraft_uuid, UUID)
-        self.assertEqual(zoe.minecraft_login, "zoejeudy")
+        self.assertEqual(zoe.minecraft_login, "joueuressai")
 
     def test_valider_cree_un_contact_sinon(self):
         demande = self.Demande._soumettre(self.code.code, dict(
@@ -140,13 +140,13 @@ class TestPageDemande(common.HttpCase):
         self.assertTrue("expired" in page.text or "expiré" in page.text)
 
     def test_un_lien_valide_montre_le_pseudo(self):
-        code = self.env["besacraft.vestiaire.code"]._emettre(UUID, "zoejeudy")
+        code = self.env["besacraft.vestiaire.code"]._emettre(UUID, "joueuressai")
         page = self.url_open("/vestiaire/demande?code=%s" % code.code)
-        self.assertIn("zoejeudy", page.text)
+        self.assertIn("joueuressai", page.text)
 
     def test_un_envoi_invalide_ne_laisse_rien_en_base(self):
         import re
-        code = self.env["besacraft.vestiaire.code"]._emettre(UUID, "zoejeudy")
+        code = self.env["besacraft.vestiaire.code"]._emettre(UUID, "joueuressai")
         page = self.url_open("/vestiaire/demande?code=%s" % code.code)
         csrf = re.search(r'name="csrf_token" value="([^"]+)"', page.text).group(1)
         rep = self.url_open("/vestiaire/demande", data={

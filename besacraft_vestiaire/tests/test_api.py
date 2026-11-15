@@ -9,8 +9,8 @@ class TestApi(common.HttpCase):
         base._passages.clear()
         self.addCleanup(base._passages.clear)
         self.zoe = self.env["res.partner"].create({
-            "name": "Zoé", "minecraft_login": "zoejeudy",
-            "minecraft_uuid": "cc67e9f6625340d4813855e5fecc4c10"})
+            "name": "Zoé", "minecraft_login": "joueuressai",
+            "minecraft_uuid": "5e1f0a2b7c3d4e8f9a6b1c2d3e4f5a6b"})
         self.jeton = self.env["besacraft.mc.session"]._ouvrir(self.zoe).token
 
     def _moi(self, jeton):
@@ -34,5 +34,5 @@ class TestApi(common.HttpCase):
         self.assertEqual(r.status_code, 200)
         corps = r.json()
         self.assertEqual({k: corps[k] for k in ("pseudo", "skin", "cape", "points", "tenue")},
-                         {"pseudo": "zoejeudy", "skin": None, "cape": None, "points": 0,
+                         {"pseudo": "joueuressai", "skin": None, "cape": None, "points": 0,
                           "tenue": []})

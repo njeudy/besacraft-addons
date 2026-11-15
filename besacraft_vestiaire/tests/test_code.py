@@ -9,7 +9,7 @@ from odoo.tests import common, tagged
 MOJANG = ("odoo.addons.besacraft_minecraft_api.models"
           ".besacraft_mc_session.requests.get")
 JSON = {"Content-Type": "application/json"}
-UUID = "cc67e9f6625340d4813855e5fecc4c10"
+UUID = "5e1f0a2b7c3d4e8f9a6b1c2d3e4f5a6b"
 
 
 class _Reponse:
@@ -17,7 +17,7 @@ class _Reponse:
     content = b"x"
 
     def json(self):
-        return {"id": UUID, "name": "zoejeudy"}
+        return {"id": UUID, "name": "joueuressai"}
 
 
 @tagged("post_install", "-at_install")
@@ -31,10 +31,10 @@ class TestCode(common.HttpCase):
     def _session(self):
         server_id = self.url_open("/mc/v1/defi", data="{}", headers=JSON).json()["server_id"]
         return self.url_open("/mc/v1/session", headers=JSON, data=json.dumps(
-            {"pseudo": "zoejeudy", "server_id": server_id}))
+            {"pseudo": "joueuressai", "server_id": server_id}))
 
     def test_un_code_expire_ne_se_retrouve_pas(self):
-        code = self.Code._emettre(UUID, "zoejeudy")
+        code = self.Code._emettre(UUID, "joueuressai")
         self.assertEqual(self.Code._trouver(code.code), code)
         code.expire_le = fields.Datetime.now() - timedelta(minutes=1)
         self.assertFalse(self.Code._trouver(code.code))
@@ -44,7 +44,7 @@ class TestCode(common.HttpCase):
         self.assertFalse(self.Code._trouver(""))
 
     def test_le_code_fait_douze_caracteres(self):
-        self.assertRegex(self.Code._emettre(UUID, "zoejeudy").code, r"^[A-Za-z0-9]{12}$")
+        self.assertRegex(self.Code._emettre(UUID, "joueuressai").code, r"^[A-Za-z0-9]{12}$")
 
     @patch(MOJANG, return_value=_Reponse())
     def test_un_pseudo_change_est_mis_a_jour(self, _get):
@@ -52,7 +52,7 @@ class TestCode(common.HttpCase):
             "name": "Zoé", "minecraft_uuid": UUID, "minecraft_login": "ancien_pseudo"})
         self.assertEqual(self._session().status_code, 200)
         zoe.invalidate_recordset()
-        self.assertEqual(zoe.minecraft_login, "zoejeudy")
+        self.assertEqual(zoe.minecraft_login, "joueuressai")
 
     @patch(MOJANG, return_value=_Reponse())
     def test_un_joueur_sans_contact_recoit_un_lien_de_demande(self, _get):
@@ -63,4 +63,4 @@ class TestCode(common.HttpCase):
         self.assertIn("/vestiaire/demande?code=", corps["url"])
         code = self.Code._trouver(corps["code"])
         self.assertEqual(code.uuid, UUID)
-        self.assertEqual(code.pseudo, "zoejeudy")
+        self.assertEqual(code.pseudo, "joueuressai")

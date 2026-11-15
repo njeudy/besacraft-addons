@@ -53,8 +53,8 @@ class TestResolutionDuPseudo(common.TransactionCase):
         """
         Partenaire = self.env["res.partner"]
         self.assertEqual(
-            Partenaire.normaliser_uuid_minecraft("46029DC4-4a8d-4b6e-95c2-9debad8d61c4"),
-            "46029dc44a8d4b6e95c29debad8d61c4")
+            Partenaire.normaliser_uuid_minecraft("7B2E9A10-3c4d-4e5f-8a9b-0c1d2e3f4a5b"),
+            "7b2e9a103c4d4e5f8a9b0c1d2e3f4a5b")
         self.assertEqual(
             Partenaire.normaliser_uuid_minecraft("069a79f444e94726a5befca90e38aaf5"),
             "069a79f444e94726a5befca90e38aaf5")

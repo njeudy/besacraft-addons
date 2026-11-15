@@ -328,6 +328,7 @@ msgstr "Correction"
 #. module: besacraft_vestiaire
 #: model:ir.model.fields.selection,name:besacraft_vestiaire.selection__besacraft_vestiaire_cosmetique__genre__cosmetique
 #: model_terms:ir.ui.view,arch_db:besacraft_vestiaire.vestiaire_cosmetique_view_kanban
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_fichier__cosmetique_id
 msgid "Cosmetic"
 msgstr "Cosmétique"
 
@@ -1409,3 +1410,352 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:besacraft_vestiaire.vestiaire_cosmetique_view_form
 msgid "Custom thumbnail"
 msgstr "Vignette personnalisée"
+
+#. module: besacraft_vestiaire
+#: model:ir.model,name:besacraft_vestiaire.model_besacraft_vestiaire_fichier
+msgid "Wardrobe remote file"
+msgstr "Fichier distant du vestiaire"
+
+#. module: besacraft_vestiaire
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_fichier__chemin
+msgid "Path"
+msgstr "Chemin"
+
+#. module: besacraft_vestiaire
+#: model:ir.model.fields,help:besacraft_vestiaire.field_besacraft_vestiaire_fichier__chemin
+msgid "Path under assets/besacraft/ in the mod, e.g. textures/cosmetique/<code>.png."
+msgstr "Chemin sous assets/besacraft/ dans le mod, par ex. textures/cosmetique/<code>.png."
+
+#. module: besacraft_vestiaire
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_fichier__sha256
+msgid "SHA-256"
+msgstr "SHA-256"
+
+#. module: besacraft_vestiaire
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_fichier__taille
+msgid "Size (bytes)"
+msgstr "Taille (octets)"
+
+#. module: besacraft_vestiaire
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_fichier__contenu
+msgid "Content"
+msgstr "Contenu"
+
+#. module: besacraft_vestiaire
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_cosmetique__paquet
+msgid "Package"
+msgstr "Archive"
+
+#. module: besacraft_vestiaire
+#: model:ir.model.fields,help:besacraft_vestiaire.field_besacraft_vestiaire_cosmetique__paquet
+msgid "Zip made by generer.py --paquet <code>: catalogue entry, model, animations and textures. Replaces the remote files at once."
+msgstr "Zip produit par generer.py --paquet <code> : entrée de catalogue, modèle, animations et textures. Remplace d'un coup les fichiers distants."
+
+#. module: besacraft_vestiaire
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_cosmetique__paquet_nom
+msgid "Package name"
+msgstr "Nom de l'archive"
+
+#. module: besacraft_vestiaire
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_cosmetique__fichier_ids
+#: model_terms:ir.ui.view,arch_db:besacraft_vestiaire.vestiaire_cosmetique_view_form
+msgid "Remote files"
+msgstr "Fichiers distants"
+
+#. module: besacraft_vestiaire
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_cosmetique__version_distante
+msgid "Remote version"
+msgstr "Version distante"
+
+#. module: besacraft_vestiaire
+#: model:ir.model.fields,help:besacraft_vestiaire.field_besacraft_vestiaire_cosmetique__version_distante
+msgid "Raised by one at each accepted package. 0: drawn from the jar only."
+msgstr "Augmente de 1 à chaque archive acceptée. 0 : dessiné depuis le jar seulement."
+
+#. module: besacraft_vestiaire
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_cosmetique__entree_distante
+msgid "Catalogue entry"
+msgstr "Entrée de catalogue"
+
+#. module: besacraft_vestiaire
+#: model:ir.model.fields,help:besacraft_vestiaire.field_besacraft_vestiaire_cosmetique__entree_distante
+msgid "The catalogue entry read from the package, served to the game."
+msgstr "L'entrée de catalogue lue dans l'archive, servie au jeu."
+
+#. module: besacraft_vestiaire
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_cosmetique__distant
+msgid "Remote"
+msgstr "Distant"
+
+#. module: besacraft_vestiaire
+#: model:ir.model.fields,help:besacraft_vestiaire.field_besacraft_vestiaire_cosmetique__distant
+msgid "The game downloads this cosmetic from Odoo."
+msgstr "Le jeu télécharge ce cosmétique depuis Odoo."
+
+#. module: besacraft_vestiaire
+#: model_terms:ir.ui.view,arch_db:besacraft_vestiaire.vestiaire_cosmetique_view_form
+msgid "Drop the zip made by <code>generer.py --paquet</code>: the game then downloads this cosmetic from Odoo, no new mod version needed. Each accepted package raises the version."
+msgstr "Déposez le zip produit par <code>generer.py --paquet</code> : le jeu télécharge alors ce cosmétique depuis Odoo, sans nouvelle version du mod. Chaque archive acceptée augmente la version."
+
+#. module: besacraft_vestiaire
+#: model_terms:ir.ui.view,arch_db:besacraft_vestiaire.vestiaire_cosmetique_view_form
+msgid "Remove the package"
+msgstr "Retirer l'archive"
+
+#. module: besacraft_vestiaire
+#: model_terms:ir.ui.view,arch_db:besacraft_vestiaire.vestiaire_cosmetique_view_form
+msgid "The game will draw this cosmetic from the jar only, if the jar has it. Continue?"
+msgstr "Le jeu dessinera ce cosmétique depuis le jar seulement, si le jar l'a. Continuer ?"
+
+#. module: besacraft_vestiaire
+#. odoo-python
+#: code:addons/besacraft_vestiaire/models/vestiaire_cosmetique.py:0
+msgid "Only cosmetics can be remote, not emotes."
+msgstr "Seuls les cosmétiques peuvent être distants, pas les émotes."
+
+#. module: besacraft_vestiaire
+#. odoo-python
+#: code:addons/besacraft_vestiaire/models/vestiaire_cosmetique.py:0
+#, python-format
+msgid "The package is for the slot %(paquet)s, the cosmetic is in %(fiche)s."
+msgstr "L'archive est pour l'emplacement %(paquet)s, le cosmétique est en %(fiche)s."
+
+#. module: besacraft_vestiaire
+#. odoo-python
+#: code:addons/besacraft_vestiaire/models/vestiaire_cosmetique.py:0
+#: code:addons/besacraft_vestiaire/tools/paquet.py:0
+msgid "The package is not a valid zip file."
+msgstr "L'archive n'est pas un fichier zip valide."
+
+#. module: besacraft_vestiaire
+#. odoo-python
+#: code:addons/besacraft_vestiaire/tools/paquet.py:0
+msgid "The code must be 1 to 40 lowercase letters, digits or underscores."
+msgstr "Le code doit faire de 1 à 40 lettres minuscules, chiffres ou soulignés."
+
+#. module: besacraft_vestiaire
+#. odoo-python
+#: code:addons/besacraft_vestiaire/tools/paquet.py:0
+msgid "The package is larger than 2 MB."
+msgstr "L'archive dépasse 2 Mo."
+
+#. module: besacraft_vestiaire
+#. odoo-python
+#: code:addons/besacraft_vestiaire/tools/paquet.py:0
+#, python-format
+msgid "The package holds more than %s files."
+msgstr "L'archive contient plus de %s fichiers."
+
+#. module: besacraft_vestiaire
+#. odoo-python
+#: code:addons/besacraft_vestiaire/tools/paquet.py:0
+#, python-format
+msgid "Unexpected file in the package: %s"
+msgstr "Fichier inattendu dans l'archive : %s"
+
+#. module: besacraft_vestiaire
+#. odoo-python
+#: code:addons/besacraft_vestiaire/tools/paquet.py:0
+msgid "The package is larger than 4 MB once unpacked."
+msgstr "L'archive dépasse 4 Mo une fois décompressée."
+
+#. module: besacraft_vestiaire
+#. odoo-python
+#: code:addons/besacraft_vestiaire/tools/paquet.py:0
+#, python-format
+msgid "Unreadable file in the package: %s"
+msgstr "Fichier illisible dans l'archive : %s"
+
+#. module: besacraft_vestiaire
+#. odoo-python
+#: code:addons/besacraft_vestiaire/tools/paquet.py:0
+#, python-format
+msgid "%s is larger than 256 KB."
+msgstr "%s dépasse 256 Ko."
+
+#. module: besacraft_vestiaire
+#. odoo-python
+#: code:addons/besacraft_vestiaire/tools/paquet.py:0
+msgid "The package has no cosmetique.json."
+msgstr "L'archive n'a pas de cosmetique.json."
+
+#. module: besacraft_vestiaire
+#. odoo-python
+#: code:addons/besacraft_vestiaire/tools/paquet.py:0
+msgid "The geometry file has no minecraft:geometry."
+msgstr "Le fichier de géométrie n'a pas de minecraft:geometry."
+
+#. module: besacraft_vestiaire
+#. odoo-python
+#: code:addons/besacraft_vestiaire/tools/paquet.py:0
+msgid "The animation file has no animations."
+msgstr "Le fichier d'animations n'a pas d'animations."
+
+#. module: besacraft_vestiaire
+#. odoo-python
+#: code:addons/besacraft_vestiaire/tools/paquet.py:0
+#, python-format
+msgid "A trigger plays an unknown animation: %s"
+msgstr "Un déclencheur joue une animation inconnue : %s"
+
+#. module: besacraft_vestiaire
+#. odoo-python
+#: code:addons/besacraft_vestiaire/tools/paquet.py:0
+#, python-format
+msgid "The package has no %s."
+msgstr "L'archive n'a pas de %s."
+
+#. module: besacraft_vestiaire
+#. odoo-python
+#: code:addons/besacraft_vestiaire/tools/paquet.py:0
+#, python-format
+msgid "%s is not valid JSON."
+msgstr "%s n'est pas un JSON valide."
+
+#. module: besacraft_vestiaire
+#. odoo-python
+#: code:addons/besacraft_vestiaire/tools/paquet.py:0
+#, python-format
+msgid "%s must hold a JSON object."
+msgstr "%s doit contenir un objet JSON."
+
+#. module: besacraft_vestiaire
+#. odoo-python
+#: code:addons/besacraft_vestiaire/tools/paquet.py:0
+#, python-format
+msgid "%s is not a valid image."
+msgstr "%s n'est pas une image valide."
+
+#. module: besacraft_vestiaire
+#. odoo-python
+#: code:addons/besacraft_vestiaire/tools/paquet.py:0
+#, python-format
+msgid "%s must be a PNG."
+msgstr "%s doit être un PNG."
+
+#. module: besacraft_vestiaire
+#. odoo-python
+#: code:addons/besacraft_vestiaire/tools/paquet.py:0
+#, python-format
+msgid "%s is larger than 512×512 pixels."
+msgstr "%s dépasse 512×512 pixels."
+
+#. module: besacraft_vestiaire
+#. odoo-python
+#: code:addons/besacraft_vestiaire/tools/paquet.py:0
+#, python-format
+msgid "cosmetique.json describes %s, not %s."
+msgstr "cosmetique.json décrit %s, pas %s."
+
+#. module: besacraft_vestiaire
+#. odoo-python
+#: code:addons/besacraft_vestiaire/tools/paquet.py:0
+msgid "Effects cannot be remote: their particles ship with the mod."
+msgstr "Les effets ne peuvent pas être distants : leurs particules sont livrées avec le mod."
+
+#. module: besacraft_vestiaire
+#. odoo-python
+#: code:addons/besacraft_vestiaire/tools/paquet.py:0
+#, python-format
+msgid "Unknown slot: %s"
+msgstr "Emplacement inconnu : %s"
+
+#. module: besacraft_vestiaire
+#. odoo-python
+#: code:addons/besacraft_vestiaire/tools/paquet.py:0
+#, python-format
+msgid "The attachment bones must be among %s."
+msgstr "Les os d'accroche doivent être parmi %s."
+
+#. module: besacraft_vestiaire
+#. odoo-python
+#: code:addons/besacraft_vestiaire/tools/paquet.py:0
+msgid "The triggers must be a list."
+msgstr "Les déclencheurs doivent être une liste."
+
+#. module: besacraft_vestiaire
+#. odoo-python
+#: code:addons/besacraft_vestiaire/tools/paquet.py:0
+#, python-format
+msgid "The package has no base texture %s.png."
+msgstr "L'archive n'a pas de texture de base %s.png."
+
+#. module: besacraft_vestiaire
+#. odoo-python
+#: code:addons/besacraft_vestiaire/tools/paquet.py:0
+msgid "The colours must be a list."
+msgstr "Les couleurs doivent être une liste."
+
+#. module: besacraft_vestiaire
+#. odoo-python
+#: code:addons/besacraft_vestiaire/tools/paquet.py:0
+msgid "Invalid colour in cosmetique.json."
+msgstr "Couleur invalide dans cosmetique.json."
+
+#. module: besacraft_vestiaire
+#. odoo-python
+#: code:addons/besacraft_vestiaire/tools/paquet.py:0
+#, python-format
+msgid "The package has no texture %s.png."
+msgstr "L'archive n'a pas de texture %s.png."
+
+#. module: besacraft_vestiaire
+#. odoo-python
+#: code:addons/besacraft_vestiaire/tools/paquet.py:0
+#, python-format
+msgid "Texture %s.png matches no declared colour."
+msgstr "La texture %s.png ne correspond à aucune couleur déclarée."
+
+#. module: besacraft_vestiaire
+#: model:ir.model.fields,help:besacraft_vestiaire.field_besacraft_vestiaire_cosmetique__piece_armure
+msgid ""
+"A deployable armour piece leaves the outfit: the player puts it in the "
+"armour stand of the wardrobe and deploys it in game. Read from the mod's "
+"catalogue."
+msgstr ""
+"Une pièce d'armure déployable quitte la tenue : le joueur la range dans le "
+"stand d'armures du Vestiaire et la déploie en jeu. Lue dans le catalogue du "
+"mod."
+
+#. module: besacraft_vestiaire
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_cosmetique__piece_armure
+msgid "Armour piece"
+msgstr "Pièce d'armure"
+
+#. module: besacraft_vestiaire
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_res_partner__vestiaire_armures
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_res_users__vestiaire_armures
+msgid "Armour stand"
+msgstr "Stand d'armures"
+
+#. module: besacraft_vestiaire
+#: model:ir.model.fields.selection,name:besacraft_vestiaire.selection__besacraft_vestiaire_cosmetique__piece_armure__plastron
+msgid "Breastplate"
+msgstr "Plastron"
+
+#. module: besacraft_vestiaire
+#: model:ir.model.fields.selection,name:besacraft_vestiaire.selection__besacraft_vestiaire_cosmetique__piece_armure__casque
+msgid "Helmet"
+msgstr "Casque"
+
+#. module: besacraft_vestiaire
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_res_partner__vestiaire_armure_derniere
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_res_users__vestiaire_armure_derniere
+msgid "Last armour used"
+msgstr "Dernière armure utilisée"
+
+#. module: besacraft_vestiaire
+#: model:ir.model.fields,help:besacraft_vestiaire.field_res_partner__vestiaire_armure_derniere
+#: model:ir.model.fields,help:besacraft_vestiaire.field_res_users__vestiaire_armure_derniere
+msgid "Position in the stand, -1 for none."
+msgstr "Position dans le stand, -1 pour aucune."
+
+#. module: besacraft_vestiaire
+#: model:besacraft.vestiaire.cosmetique,name:besacraft_vestiaire.cosmetique_zoe_armure_ironman
+msgid "Zoe's Iron Man armour"
+msgstr "Armure Iron Man de Zoé"
+
+#. module: besacraft_vestiaire
+#: model:besacraft.vestiaire.cosmetique,name:besacraft_vestiaire.cosmetique_zoe_casque_ironman
+msgid "Zoe's Iron Man helmet"
+msgstr "Casque Iron Man de Zoé"

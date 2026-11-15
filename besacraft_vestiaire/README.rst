@@ -17,7 +17,7 @@ Routes
 ``GET /mc/v1/vestiaire/moi``
     The signed-in player's pseudo, active skin, worn cape, ``points``, the codes they
     own (``possede``), their ``tenue`` and the eight slots of their emote ``roue``,
-    and the ``nouvelles`` (gains and gifts) not yet told in game, which this call
+    their armour stand (``armures``, ``armure_derniere``), and the ``nouvelles`` (gains and gifts) not yet told in game, which this call
     marks as told. For an account that is not validated yet it answers
     ``403 compte_non_valide`` with a request ``code`` and the ``url`` of the request
     form; the other wardrobe routes do the same.
@@ -35,6 +35,13 @@ Routes
     given back by ``moi``. A code sent bare forgets its settings. Colours are free:
     nothing about them is sold.
 
+    With ``armures`` (a list) and ``armure_derniere`` (a position, ``-1`` for none),
+    it also saves the armour stand: up to eight armours, each ``{nom, plastron,
+    teinte_plastron, casque, teinte_casque, style}``. A breastplate or helmet must be
+    an owned cosmetic marked as such (field *Armour piece*); otherwise the armour, or
+    its helmet alone, is dropped. A body without ``armures`` (a game from before the
+    deployable armours) keeps the stand as it is. The answer adds the kept stand.
+
 ``POST /mc/v1/vestiaire/achat`` ``{code, prix}``
     Buys an item at the price the player saw. ``409`` with ``deja_possede``,
     ``solde_insuffisant`` or ``prix_change`` (and the current ``points`` and
@@ -46,6 +53,16 @@ Routes
     keys, only the hash is kept). ``motif`` is ``mission`` or ``defi``; the amount
     comes from the points scale, never from the caller. Replayable: the same player,
     reason and reference is credited once (``deja_credite``).
+
+``GET /mc/v1/vestiaire/distants``
+    The manifest of the remote cosmetics, for a signed-in player or a server key:
+    ``{format: 1, cosmetiques: [{code, version, emplacement, entree, fichiers:
+    [{chemin, sha256, taille}]}]}``. Only published cosmetics with a package are
+    listed, whoever owns them: the game also draws what the other players wear.
+
+``GET /mc/v1/vestiaire/fichier/<sha256>``
+    One file of a listed remote cosmetic, by its SHA-256, same authentication.
+    ``400`` for a malformed hash, ``404`` for a file no listed cosmetic holds.
 
 ``GET|POST /vestiaire/demande?code=...``
     The public account request form. The code is twelve characters, valid for 24
@@ -65,7 +82,13 @@ Cosmetics, emotes and points
 ============================
 
 The 3D models and animations ship in the mod's jar; Odoo holds the rights, keyed
-by the code of the jar's ``catalogue.json``. Everything the v50 pack shipped is
+by the code of the jar's ``catalogue.json``. A cosmetic can also be *remote*: drop
+on its form (tab *Remote files*) the zip made by ``generer.py --paquet <code>``.
+The package is data only (``cosmetique.json``, the ``.geo.json``, the
+``.animation.json`` and PNG textures at the paths the jar uses); anything else,
+a size above the limits or an inconsistent id refuses it as a whole. Each
+accepted package raises the remote version; the game downloads the files by
+their SHA-256 and the highest version wins over the jar. Everything the v50 pack shipped is
 seeded as *owned by everyone*, so nobody loses what they had. An item is owned
 when it is published and either owned by everyone, bought, or given.
 

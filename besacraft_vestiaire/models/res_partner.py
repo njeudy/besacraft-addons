@@ -5,6 +5,7 @@ import logging
 from odoo import _, api, fields, models
 from odoo.exceptions import ValidationError
 
+from ..tools import armures as outils_armures
 from ..tools import mojang
 
 _logger = logging.getLogger(__name__)
@@ -112,6 +113,11 @@ class ResPartnerPoints(models.Model):
     # Colour and settings of each worn cosmetic, as the game writes them after the code
     # ("noir||d|2"). Purely visual: stored as received, never interpreted here.
     vestiaire_reglages = fields.Text(string="Outfit settings")
+    # The armour stand, as the game writes it: a JSON list of armours (breastplate and colour,
+    # helmet and colour, appearance style). Visual only; what is not owned is left out on read.
+    vestiaire_armures = fields.Text(string="Armour stand")
+    vestiaire_armure_derniere = fields.Integer(string="Last armour used", default=-1,
+                                               help="Position in the stand, -1 for none.")
 
     @api.depends("vestiaire_mouvement_ids.points")
     def _compute_vestiaire_points(self):
@@ -156,6 +162,35 @@ class ResPartnerPoints(models.Model):
             if 0 <= case.index < 8 and case.emote_id in possede:
                 roue[case.index] = case.emote_id.code
         return roue
+
+    def _vestiaire_pieces_armure(self):
+        """Owned armour pieces: code -> "plastron" or "casque"."""
+        self.ensure_one()
+        return {c.code: c.piece_armure for c in self._vestiaire_possede() if c.piece_armure}
+
+    def _vestiaire_armures(self):
+        """The armour stand, without what the player no longer owns, and the last armour used."""
+        self.ensure_one()
+        try:
+            brutes = json.loads(self.sudo().vestiaire_armures or "[]")
+        except ValueError:
+            brutes = []
+        armures = outils_armures.normaliser(brutes, self._vestiaire_pieces_armure())
+        derniere = self.sudo().vestiaire_armure_derniere
+        # A dropped armour shifts the ones after it: the last one used is found again by content.
+        if isinstance(brutes, list) and 0 <= derniere < len(brutes):
+            gardee = outils_armures.normaliser([brutes[derniere]], self._vestiaire_pieces_armure())
+            derniere = armures.index(gardee[0]) if gardee and gardee[0] in armures else -1
+        return armures, outils_armures.derniere(derniere, armures)
+
+    def _vestiaire_equiper_armures(self, armures, derniere):
+        """Save the armour stand sent by the game. Returns what was kept."""
+        self.ensure_one()
+        gardees = outils_armures.normaliser(armures, self._vestiaire_pieces_armure())
+        index = outils_armures.derniere(derniere, gardees)
+        self.sudo().write({"vestiaire_armures": json.dumps(gardees) if gardees else False,
+                           "vestiaire_armure_derniere": index})
+        return gardees, index
 
     def _vestiaire_ranger(self):
         """Drop from the outfit and the wheel what is no longer owned."""

@@ -9,7 +9,7 @@ from odoo.tests import TransactionCase, tagged
 from .test_images import png
 
 GET = "odoo.addons.besacraft_vestiaire.tools.mojang.requests.get"
-UUID = "cc67e9f6625340d4813855e5fecc4c10"
+UUID = "5e1f0a2b7c3d4e8f9a6b1c2d3e4f5a6b"
 
 
 class _R:

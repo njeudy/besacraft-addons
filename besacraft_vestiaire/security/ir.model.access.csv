@@ -12,3 +12,5 @@ access_vestiaire_mouvement_admin,vestiaire.mouvement admin,model_besacraft_vesti
 access_vestiaire_bareme_admin,vestiaire.bareme admin,model_besacraft_vestiaire_bareme,group_vestiaire_admin,1,1,1,1
 access_vestiaire_case_admin,vestiaire.case admin,model_besacraft_vestiaire_case,group_vestiaire_admin,1,1,1,1
 access_vestiaire_cle_serveur_admin,vestiaire.cle.serveur admin,model_besacraft_vestiaire_cle_serveur,group_vestiaire_admin,1,1,1,1
+access_vestiaire_fichier_admin,vestiaire.fichier admin,model_besacraft_vestiaire_fichier,group_vestiaire_admin,1,1,1,1
+access_vestiaire_fichier_createur,vestiaire.fichier createur,model_besacraft_vestiaire_fichier,group_vestiaire_createur,1,1,1,1

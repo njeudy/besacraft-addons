@@ -7,8 +7,8 @@ class TestCompte(TransactionCase):
         super().setUp()
         self.zoe = self.env["res.partner"].create({
             "name": "Zoé", "email": "zoe@example.org",
-            "minecraft_uuid": "cc67e9f6625340d4813855e5fecc4c10",
-            "minecraft_login": "zoejeudy"})
+            "minecraft_uuid": "5e1f0a2b7c3d4e8f9a6b1c2d3e4f5a6b",
+            "minecraft_login": "joueuressai"})
 
     def test_un_contact_sans_utilisateur_n_est_pas_valide(self):
         self.assertFalse(self.zoe._vestiaire_valide())
@@ -33,5 +33,5 @@ class TestCompte(TransactionCase):
 
     def test_retrouver_par_uuid_avec_tirets(self):
         trouve = self.env["res.partner"]._vestiaire_par_uuid(
-            "CC67E9F6-6253-40D4-8138-55E5FECC4C10")
+            "5E1F0A2B-7C3D-4E8F-9A6B-1C2D3E4F5A6B")
         self.assertEqual(trouve, self.zoe)

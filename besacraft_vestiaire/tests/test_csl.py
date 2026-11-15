@@ -10,8 +10,8 @@ class TestCsl(common.HttpCase):
     def setUp(self):
         super().setUp()
         self.zoe = self.env["res.partner"].create({
-            "name": "Zoé", "minecraft_login": "ZoeJeudy",
-            "minecraft_uuid": "cc67e9f6625340d4813855e5fecc4c10"})
+            "name": "Zoé", "minecraft_login": "JoueurEssai",
+            "minecraft_uuid": "5e1f0a2b7c3d4e8f9a6b1c2d3e4f5a6b"})
         self.env["res.users"].create({
             "name": "Zoé", "login": "zoe-csl", "partner_id": self.zoe.id,
             "groups_id": [(6, 0, [self.env.ref("base.group_portal").id])]})
@@ -34,27 +34,27 @@ class TestCsl(common.HttpCase):
         return partner
 
     def test_profil_complet(self):
-        r = self.url_open("/csl/ZoeJeudy.json")
+        r = self.url_open("/csl/JoueurEssai.json")
         self.assertEqual(r.status_code, 200)
         self.assertEqual(r.headers["Cache-Control"], "no-cache")
         self.assertEqual(r.json(), {
-            "username": "ZoeJeudy",
+            "username": "JoueurEssai",
             "skins": {"slim": self.skin.empreinte},
             "cape": self.cape.empreinte,
             "elytra": self.cape.empreinte_elytre})
 
     def test_casse_ignoree(self):
-        self.assertEqual(self.url_open("/csl/zoejeudy.json").status_code, 200)
+        self.assertEqual(self.url_open("/csl/joueuressai.json").status_code, 200)
 
     def test_sans_cape_ni_skin_les_cles_sont_absentes(self):
         self.zoe.vestiaire_cape_id = False
         self.skin.unlink()
-        self.assertEqual(self.url_open("/csl/ZoeJeudy.json").json(), {"username": "ZoeJeudy"})
+        self.assertEqual(self.url_open("/csl/JoueurEssai.json").json(), {"username": "JoueurEssai"})
 
     def test_inconnu_et_non_valide_en_404(self):
         self.assertEqual(self.url_open("/csl/Personne.json").status_code, 404)
         self.zoe.user_ids.active = False
-        self.assertEqual(self.url_open("/csl/ZoeJeudy.json").status_code, 404)
+        self.assertEqual(self.url_open("/csl/JoueurEssai.json").status_code, 404)
 
     def test_texture_servie_avec_cache(self):
         r = self.url_open("/csl/textures/%s" % self.skin.empreinte)
@@ -104,7 +104,7 @@ class TestCsl(common.HttpCase):
 
     def test_cape_non_publiee_ni_dans_le_profil_ni_en_texture(self):
         self.cape.publiee = False
-        profil = self.url_open("/csl/ZoeJeudy.json").json()
+        profil = self.url_open("/csl/JoueurEssai.json").json()
         self.assertNotIn("cape", profil)
         self.assertNotIn("elytra", profil)
         self.assertEqual(profil["skins"], {"slim": self.skin.empreinte})
