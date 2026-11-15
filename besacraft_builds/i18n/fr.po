@@ -2313,8 +2313,10 @@ msgstr "Dans ton compte du site (« Se connecter » en haut de page). Sur sa car
 
 #. module: besacraft_builds
 #: model_terms:ir.ui.view,arch_db:besacraft_builds.shop
-msgid "It depends on the series: the Schematics come from MineColonies, the Steampunk farms from the Create mod. The videos are shot with the Besacraft modpack on Modrinth."
-msgstr "Ça dépend de la série : les Schematics viennent de MineColonies, les fermes Steampunk du mod Create. Les vidéos sont tournées avec le modpack Besacraft sur Modrinth."
+msgid ""
+"Everything you need is in the <a href=\"https://modrinth.com/modpack/besacraft_1722\" target=\"_blank\" rel=\"noopener\">Besacraft modpack on Modrinth</a>, free: MineColonies for the Schematics, Create for the Steampunk builds, and every other mod the videos use. Install it and you can build."
+msgstr ""
+"Tout ce qu'il faut est dans le <a href=\"https://modrinth.com/modpack/besacraft_1722\" target=\"_blank\" rel=\"noopener\">modpack Besacraft sur Modrinth</a>, gratuit : MineColonies pour les Schematics, Create pour les builds Steampunk, et tous les autres mods des vidéos. Installe-le et tu peux construire."
 
 #. module: besacraft_builds
 #: model_terms:ir.ui.view,arch_db:besacraft_builds.shop
