@@ -13,8 +13,8 @@ class TestApiPoints(common.HttpCase):
         Cosmetique = self.env["besacraft.vestiaire.cosmetique"]
         Cosmetique.search([]).write({"de_base": False})
         self.zoe = self.env["res.partner"].create({
-            "name": "Zoé", "minecraft_login": "zoejeudy",
-            "minecraft_uuid": "cc67e9f6625340d4813855e5fecc4c10"})
+            "name": "Zoé", "minecraft_login": "joueuressai",
+            "minecraft_uuid": "5e1f0a2b7c3d4e8f9a6b1c2d3e4f5a6b"})
         self.env["res.users"].create({
             "name": "Zoé", "login": "zoe-api-points", "partner_id": self.zoe.id,
             "groups_id": [(6, 0, [self.env.ref("base.group_portal").id])]})
@@ -131,8 +131,8 @@ class TestApiServeur(common.HttpCase):
         base._passages.clear()
         self.addCleanup(base._passages.clear)
         self.zoe = self.env["res.partner"].create({
-            "name": "Zoé", "minecraft_login": "zoejeudy",
-            "minecraft_uuid": "cc67e9f6625340d4813855e5fecc4c10"})
+            "name": "Zoé", "minecraft_login": "joueuressai",
+            "minecraft_uuid": "5e1f0a2b7c3d4e8f9a6b1c2d3e4f5a6b"})
         self.cle = self.env["besacraft.vestiaire.cle.serveur"].create({"name": "zunk"})
         self.secret = self.cle._generer()
         self.env["besacraft.vestiaire.bareme"].create({"motif": "mission", "points": 15,
@@ -144,7 +144,7 @@ class TestApiServeur(common.HttpCase):
                                 timeout=30)
 
     def test_gain_rejouable(self):
-        corps = {"uuid": "cc67e9f6-6253-40d4-8138-55e5fecc4c10", "motif": "mission",
+        corps = {"uuid": "5e1f0a2b-7c3d-4e8f-9a6b-1c2d3e4f5a6b", "motif": "mission",
                  "reference": "zunk:ep3:pont"}
         self.assertEqual(self._gain(corps).json(), {"points": 15, "deja_credite": False})
         self.assertEqual(self._gain(corps).json(), {"points": 15, "deja_credite": True})

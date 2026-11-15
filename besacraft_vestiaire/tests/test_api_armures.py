@@ -20,8 +20,8 @@ class TestApiArmures(common.HttpCase):
         Cosmetique = self.env["besacraft.vestiaire.cosmetique"]
         Cosmetique.search([]).write({"de_base": False})
         self.zoe = self.env["res.partner"].create({
-            "name": "Zoé", "minecraft_login": "zoejeudy",
-            "minecraft_uuid": "cc67e9f6625340d4813855e5fecc4c10"})
+            "name": "Zoé", "minecraft_login": "joueuressai",
+            "minecraft_uuid": "5e1f0a2b7c3d4e8f9a6b1c2d3e4f5a6b"})
         self.env["res.users"].create({
             "name": "Zoé", "login": "zoe-api-armures", "partner_id": self.zoe.id,
             "groups_id": [(6, 0, [self.env.ref("base.group_portal").id])]})

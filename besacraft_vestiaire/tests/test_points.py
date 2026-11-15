@@ -15,8 +15,8 @@ class PointsCommon(common.TransactionCase):
         # The v50 seed makes everything owned by everyone: start from a clean shelf.
         Cosmetique.search([]).write({"de_base": False})
         cls.zoe = cls.env["res.partner"].create({
-            "name": "Zoé", "minecraft_login": "zoejeudy",
-            "minecraft_uuid": "cc67e9f6625340d4813855e5fecc4c10"})
+            "name": "Zoé", "minecraft_login": "joueuressai",
+            "minecraft_uuid": "5e1f0a2b7c3d4e8f9a6b1c2d3e4f5a6b"})
         cls.env["res.users"].create({
             "name": "Zoé", "login": "zoe-points", "partner_id": cls.zoe.id,
             "groups_id": [(6, 0, [cls.env.ref("base.group_portal").id])]})

@@ -159,8 +159,8 @@ class TestApiDistant(common.HttpCase):
         base._passages.clear()
         self.addCleanup(base._passages.clear)
         self.zoe = self.env["res.partner"].create({
-            "name": "Zoé", "minecraft_login": "zoejeudy",
-            "minecraft_uuid": "cc67e9f6625340d4813855e5fecc4c10"})
+            "name": "Zoé", "minecraft_login": "joueuressai",
+            "minecraft_uuid": "5e1f0a2b7c3d4e8f9a6b1c2d3e4f5a6b"})
         self.jeton = self.env["besacraft.mc.session"]._ouvrir(self.zoe).token
         cle = self.env["besacraft.vestiaire.cle.serveur"].create({"name": "Essai"})
         self.cle = cle._generer()
