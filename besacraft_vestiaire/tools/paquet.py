@@ -25,8 +25,9 @@ ENTREE = "cosmetique.json"
 ID = re.compile(r"^[a-z0-9_]{1,40}$")
 VARIANTE = re.compile(r"^[a-z0-9_]+$")
 ACCROCHES = {"head", "body", "arm_left", "arm_right", "leg_left", "leg_right"}
-EMPLACEMENTS = {"chapeau", "tete", "cape", "ailes", "dos", "queue", "bras", "chaussures",
-                "familier_epaule", "familier_tete", "accessoire"}
+# Every slot of the mod's catalogue but "effet", whose particles ship with the mod.
+EMPLACEMENTS = {"chapeau", "tete", "visage", "cape", "ailes", "dos", "bandouliere", "queue", "torse",
+                "taille", "bras", "chaussures", "familier_epaule", "familier_tete", "accessoire"}
 
 
 def chemins_permis(code):
