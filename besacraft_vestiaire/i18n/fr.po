@@ -1755,6 +1755,66 @@ msgid "Position in the stand, -1 for none."
 msgstr "Position dans le stand, -1 pour aucune."
 
 #. module: besacraft_vestiaire
+#: model:besacraft.vestiaire.cosmetique,name:besacraft_vestiaire.cosmetique_compagnon_armure
+msgid "Compagnon armour"
+msgstr "Armure du Compagnon"
+
+#. module: besacraft_vestiaire
+#: model:besacraft.vestiaire.cosmetique,name:besacraft_vestiaire.cosmetique_compagnon_casque
+msgid "Compagnon helmet"
+msgstr "Casque du Compagnon"
+
+#. module: besacraft_vestiaire
+#: model:besacraft.vestiaire.cosmetique,name:besacraft_vestiaire.cosmetique_titan_armure
+msgid "Steel Titan armour"
+msgstr "Armure du Titan d'Acier"
+
+#. module: besacraft_vestiaire
+#: model:besacraft.vestiaire.cosmetique,name:besacraft_vestiaire.cosmetique_titan_casque
+msgid "Steel Titan helmet"
+msgstr "Casque du Titan d'Acier"
+
+#. module: besacraft_vestiaire
+#: model:besacraft.vestiaire.cosmetique,name:besacraft_vestiaire.cosmetique_prisme_armure
+msgid "Prism Squad armour"
+msgstr "Armure de l'Escouade Prisme"
+
+#. module: besacraft_vestiaire
+#: model:besacraft.vestiaire.cosmetique,name:besacraft_vestiaire.cosmetique_prisme_casque
+msgid "Prism Squad helmet"
+msgstr "Casque de l'Escouade Prisme"
+
+#. module: besacraft_vestiaire
+#: model:besacraft.vestiaire.cosmetique,name:besacraft_vestiaire.cosmetique_compagnon_neon_armure
+msgid "Neon Compagnon armour"
+msgstr "Armure du Compagnon Néon"
+
+#. module: besacraft_vestiaire
+#: model:besacraft.vestiaire.cosmetique,name:besacraft_vestiaire.cosmetique_compagnon_neon_casque
+msgid "Neon Compagnon helmet"
+msgstr "Casque du Compagnon Néon"
+
+#. module: besacraft_vestiaire
+#: model:besacraft.vestiaire.cosmetique,name:besacraft_vestiaire.cosmetique_titan_neon_armure
+msgid "Neon Steel Titan armour"
+msgstr "Armure du Titan d'Acier Néon"
+
+#. module: besacraft_vestiaire
+#: model:besacraft.vestiaire.cosmetique,name:besacraft_vestiaire.cosmetique_titan_neon_casque
+msgid "Neon Steel Titan helmet"
+msgstr "Casque du Titan d'Acier Néon"
+
+#. module: besacraft_vestiaire
+#: model:besacraft.vestiaire.cosmetique,name:besacraft_vestiaire.cosmetique_prisme_neon_armure
+msgid "Neon Prism Squad armour"
+msgstr "Armure de l'Escouade Prisme Néon"
+
+#. module: besacraft_vestiaire
+#: model:besacraft.vestiaire.cosmetique,name:besacraft_vestiaire.cosmetique_prisme_neon_casque
+msgid "Neon Prism Squad helmet"
+msgstr "Casque de l'Escouade Prisme Néon"
+
+#. module: besacraft_vestiaire
 #: model:besacraft.vestiaire.cosmetique,name:besacraft_vestiaire.cosmetique_zoe_armure_ironman
 msgid "Zoe's Iron Man armour"
 msgstr "Armure Iron Man de Zoé"

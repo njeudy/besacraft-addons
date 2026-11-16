@@ -23,6 +23,7 @@
         "data/vestiaire_catalogue_zoe.xml",
         "data/vestiaire_catalogue_v51.xml",
         "data/vestiaire_catalogue_noel.xml",
+        "data/vestiaire_catalogue_armures_teintes.xml",
         "wizards/vestiaire_offrir_views.xml",
         "views/vestiaire_skin_views.xml",
         "views/vestiaire_joueur_views.xml",
