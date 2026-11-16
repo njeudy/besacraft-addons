@@ -6,6 +6,7 @@ from odoo import _, api, fields, models
 from odoo.exceptions import ValidationError
 
 from ..tools import armures as outils_armures
+from ..tools import fonctions as outils_fonctions
 from ..tools import mojang
 
 _logger = logging.getLogger(__name__)
@@ -167,6 +168,24 @@ class ResPartnerPoints(models.Model):
         """Owned armour pieces: code -> "plastron" or "casque"."""
         self.ensure_one()
         return {c.code: c.piece_armure for c in self._vestiaire_possede() if c.piece_armure}
+
+    def _vestiaire_fonctions_armure(self):
+        """What each owned armour piece lets this player do: code -> function codes."""
+        Possession = self.env["besacraft.vestiaire.possession"].sudo()
+        if self:
+            self.ensure_one()
+            pieces = self._vestiaire_possede().filtered("piece_armure")
+            possessions = {p.cosmetique_id: p for p in Possession.search([
+                ("partner_id", "=", self.id), ("cosmetique_id", "in", pieces.ids)])}
+        else:
+            # A player unknown to Odoo owns only what everyone owns.
+            pieces = self.env["besacraft.vestiaire.cosmetique"].sudo().search([
+                ("publie", "=", True), ("de_base", "=", True), ("piece_armure", "!=", False)])
+            possessions = {}
+        return {piece.code: outils_fonctions.effectives(
+                    piece.fonction_ids.mapped("code"),
+                    possessions[piece].fonction_ids.mapped("code") if piece in possessions else [])
+                for piece in pieces}
 
     def _vestiaire_armures(self):
         """The armour stand, without what the player no longer owns, and the last armour used."""

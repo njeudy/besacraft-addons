@@ -97,6 +97,7 @@ class VestiaireApi(http.Controller):
             "roue": partner._vestiaire_roue(),
             "armures": armures,
             "armure_derniere": derniere,
+            "fonctions": partner._vestiaire_fonctions_armure(),
             "nouvelles": partner._vestiaire_nouvelles(),
         })
 
@@ -151,6 +152,21 @@ class VestiaireApi(http.Controller):
                 return reponse({"erreur": "inconnu"}, code=404)
             return reponse(dict(refuse.details, erreur=refuse.erreur), code=409)
         return reponse({"points": points, "possede": partner._vestiaire_possede().mapped("code")})
+
+    @http.route("/mc/v1/serveur/fonctions/<string:uuid>", type="http", auth="public", methods=["GET"],
+                csrf=False, save_session=False)
+    def fonctions(self, uuid, **kw):
+        """What each armour piece of this player lets them do, for one of our servers: it
+        refuses flight or headlights that the player's armour does not give."""
+        limiter("serveur-ip:%s" % request.httprequest.remote_addr, APPELS_SERVEUR_PAR_MINUTE, 60)
+        cle = self._cle_serveur()
+        if not cle:
+            raise werkzeug.exceptions.Unauthorized()
+        cle.derniere_utilisation = fields.Datetime.now()
+        partner = request.env["res.partner"].sudo()._vestiaire_par_uuid(uuid)
+        if partner and not partner._vestiaire_valide():
+            partner = partner.browse()
+        return reponse({"fonctions": partner._vestiaire_fonctions_armure()})
 
     @http.route("/mc/v1/serveur/gain", type="http", auth="public", methods=["POST"],
                 csrf=False, save_session=False)

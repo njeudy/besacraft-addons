@@ -10,3 +10,4 @@ from . import vestiaire_bareme
 from . import vestiaire_case
 from . import vestiaire_cle_serveur
 from . import vestiaire_fichier
+from . import vestiaire_fonction

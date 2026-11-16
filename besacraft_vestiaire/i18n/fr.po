@@ -281,6 +281,7 @@ msgstr "Classique"
 #: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_bareme__code
 #: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_code__code
 #: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_cosmetique__code
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_fonction__code
 msgid "Code"
 msgstr "Code"
 
@@ -719,6 +720,7 @@ msgstr "Échéance de mon activité"
 #: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_cosmetique__name
 #: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_skin__name
 #: model_terms:ir.ui.view,arch_db:besacraft_vestiaire.portal_vestiaire
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_fonction__name
 msgid "Name"
 msgstr "Nom"
 
@@ -949,6 +951,7 @@ msgstr "Envoyer ma demande"
 
 #. module: besacraft_vestiaire
 #: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_cosmetique__sequence
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_fonction__sequence
 msgid "Sequence"
 msgstr "Séquence"
 
@@ -1719,6 +1722,7 @@ msgstr ""
 
 #. module: besacraft_vestiaire
 #: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_cosmetique__piece_armure
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_possession__piece_armure
 msgid "Armour piece"
 msgstr "Pièce d'armure"
 
@@ -1751,6 +1755,66 @@ msgid "Position in the stand, -1 for none."
 msgstr "Position dans le stand, -1 pour aucune."
 
 #. module: besacraft_vestiaire
+#: model:besacraft.vestiaire.cosmetique,name:besacraft_vestiaire.cosmetique_compagnon_armure
+msgid "Compagnon armour"
+msgstr "Armure du Compagnon"
+
+#. module: besacraft_vestiaire
+#: model:besacraft.vestiaire.cosmetique,name:besacraft_vestiaire.cosmetique_compagnon_casque
+msgid "Compagnon helmet"
+msgstr "Casque du Compagnon"
+
+#. module: besacraft_vestiaire
+#: model:besacraft.vestiaire.cosmetique,name:besacraft_vestiaire.cosmetique_titan_armure
+msgid "Steel Titan armour"
+msgstr "Armure du Titan d'Acier"
+
+#. module: besacraft_vestiaire
+#: model:besacraft.vestiaire.cosmetique,name:besacraft_vestiaire.cosmetique_titan_casque
+msgid "Steel Titan helmet"
+msgstr "Casque du Titan d'Acier"
+
+#. module: besacraft_vestiaire
+#: model:besacraft.vestiaire.cosmetique,name:besacraft_vestiaire.cosmetique_prisme_armure
+msgid "Prism Squad armour"
+msgstr "Armure de l'Escouade Prisme"
+
+#. module: besacraft_vestiaire
+#: model:besacraft.vestiaire.cosmetique,name:besacraft_vestiaire.cosmetique_prisme_casque
+msgid "Prism Squad helmet"
+msgstr "Casque de l'Escouade Prisme"
+
+#. module: besacraft_vestiaire
+#: model:besacraft.vestiaire.cosmetique,name:besacraft_vestiaire.cosmetique_compagnon_neon_armure
+msgid "Neon Compagnon armour"
+msgstr "Armure du Compagnon Néon"
+
+#. module: besacraft_vestiaire
+#: model:besacraft.vestiaire.cosmetique,name:besacraft_vestiaire.cosmetique_compagnon_neon_casque
+msgid "Neon Compagnon helmet"
+msgstr "Casque du Compagnon Néon"
+
+#. module: besacraft_vestiaire
+#: model:besacraft.vestiaire.cosmetique,name:besacraft_vestiaire.cosmetique_titan_neon_armure
+msgid "Neon Steel Titan armour"
+msgstr "Armure du Titan d'Acier Néon"
+
+#. module: besacraft_vestiaire
+#: model:besacraft.vestiaire.cosmetique,name:besacraft_vestiaire.cosmetique_titan_neon_casque
+msgid "Neon Steel Titan helmet"
+msgstr "Casque du Titan d'Acier Néon"
+
+#. module: besacraft_vestiaire
+#: model:besacraft.vestiaire.cosmetique,name:besacraft_vestiaire.cosmetique_prisme_neon_armure
+msgid "Neon Prism Squad armour"
+msgstr "Armure de l'Escouade Prisme Néon"
+
+#. module: besacraft_vestiaire
+#: model:besacraft.vestiaire.cosmetique,name:besacraft_vestiaire.cosmetique_prisme_neon_casque
+msgid "Neon Prism Squad helmet"
+msgstr "Casque de l'Escouade Prisme Néon"
+
+#. module: besacraft_vestiaire
 #: model:besacraft.vestiaire.cosmetique,name:besacraft_vestiaire.cosmetique_zoe_armure_ironman
 msgid "Zoe's Iron Man armour"
 msgstr "Armure Iron Man de Zoé"
@@ -1759,3 +1823,113 @@ msgstr "Armure Iron Man de Zoé"
 #: model:besacraft.vestiaire.cosmetique,name:besacraft_vestiaire.cosmetique_zoe_casque_ironman
 msgid "Zoe's Iron Man helmet"
 msgstr "Casque Iron Man de Zoé"
+
+#. module: besacraft_vestiaire
+#: model:ir.model,name:besacraft_vestiaire.model_besacraft_vestiaire_fonction
+msgid "Armour function"
+msgstr "Fonction d'armure"
+
+#. module: besacraft_vestiaire
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_cosmetique__fonction_ids
+msgid "Armour functions"
+msgstr "Fonctions d'armure"
+
+#. module: besacraft_vestiaire
+#: model:ir.model.fields,help:besacraft_vestiaire.field_besacraft_vestiaire_cosmetique__fonction_ids
+msgid "What this armour piece lets its wearer do. Empty: everything. A deployed armour gives the functions of its breastplate and of its helmet together."
+msgstr "Ce que cette pièce d'armure permet à celui qui la porte. Vide : tout. Une armure déployée donne ensemble les fonctions de son plastron et de son casque."
+
+#. module: besacraft_vestiaire
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_possession__fonction_ids
+msgid "Unlocked functions"
+msgstr "Fonctions débloquées"
+
+#. module: besacraft_vestiaire
+#: model:ir.model.fields,help:besacraft_vestiaire.field_besacraft_vestiaire_possession__fonction_ids
+msgid "For an armour piece: the functions this player has unlocked. Empty: all those of the piece. The player gets only those the piece can also do."
+msgstr "Pour une pièce d'armure : les fonctions que ce joueur a débloquées. Vide : toutes celles de la pièce. Le joueur n'a que celles que la pièce sait aussi faire."
+
+#. module: besacraft_vestiaire
+#: model:ir.model.fields,field_description:besacraft_vestiaire.field_besacraft_vestiaire_fonction__description
+msgid "Description"
+msgstr "Description"
+
+#. module: besacraft_vestiaire
+#: model:ir.model.constraint,message:besacraft_vestiaire.constraint_besacraft_vestiaire_fonction_unique_code
+msgid "An armour function code is unique."
+msgstr "Le code d'une fonction d'armure est unique."
+
+#. module: besacraft_vestiaire
+#: model:ir.ui.view,arch_db:besacraft_vestiaire.vestiaire_cosmetique_view_form
+msgid "All"
+msgstr "Toutes"
+
+#. module: besacraft_vestiaire
+#: model:besacraft.vestiaire.fonction,name:besacraft_vestiaire.fonction_vol
+msgid "Flight"
+msgstr "Vol"
+
+#. module: besacraft_vestiaire
+#: model:besacraft.vestiaire.fonction,name:besacraft_vestiaire.fonction_phares
+msgid "Headlights"
+msgstr "Phares"
+
+#. module: besacraft_vestiaire
+#: model:besacraft.vestiaire.fonction,name:besacraft_vestiaire.fonction_hud
+msgid "Helmet display"
+msgstr "Affichage du casque"
+
+#. module: besacraft_vestiaire
+#: model:besacraft.vestiaire.fonction,name:besacraft_vestiaire.fonction_scanner
+msgid "Scanner"
+msgstr "Scanner"
+
+#. module: besacraft_vestiaire
+#: model:besacraft.vestiaire.fonction,name:besacraft_vestiaire.fonction_lunettes_create
+msgid "Engineer's goggles"
+msgstr "Lunettes d'ingénieur"
+
+#. module: besacraft_vestiaire
+#: model:besacraft.vestiaire.fonction,name:besacraft_vestiaire.fonction_chantier
+msgid "Building site"
+msgstr "Chantier"
+
+#. module: besacraft_vestiaire
+#: model:besacraft.vestiaire.fonction,description:besacraft_vestiaire.fonction_vol
+msgid "Flight, afterburner and energy; no fall damage while deployed; underwater thrust."
+msgstr "Vol, postcombustion et énergie ; aucun dégât de chute armure déployée ; propulsion sous l'eau."
+
+#. module: besacraft_vestiaire
+#: model:besacraft.vestiaire.fonction,description:besacraft_vestiaire.fonction_phares
+msgid "Lights in the helmet's eyes, automatic in the dark."
+msgstr "Lumières dans les yeux du casque, automatiques dans le noir."
+
+#. module: besacraft_vestiaire
+#: model:besacraft.vestiaire.fonction,description:besacraft_vestiaire.fonction_hud
+msgid "The visor display: compass, horizon, energy, name of the block looked at."
+msgstr "L'affichage de la visière : boussole, horizon, énergie, nom du bloc regardé."
+
+#. module: besacraft_vestiaire
+#: model:besacraft.vestiaire.fonction,description:besacraft_vestiaire.fonction_scanner
+msgid "Mob detector and health, targeting, Pokémon scan and tracker."
+msgstr "Détecteur et vie des mobs, ciblage, scan et traqueur de Pokémon."
+
+#. module: besacraft_vestiaire
+#: model:besacraft.vestiaire.fonction,description:besacraft_vestiaire.fonction_lunettes_create
+msgid "With the visor down, the helmet shows what Create's goggles show."
+msgstr "Visière baissée, le casque affiche ce qu'affichent les lunettes de Create."
+
+#. module: besacraft_vestiaire
+#: model:besacraft.vestiaire.fonction,description:besacraft_vestiaire.fonction_chantier
+msgid "Follow a Besacraft build tutorial layer by layer."
+msgstr "Suivre un tuto de build Besacraft couche par couche."
+
+#. module: besacraft_vestiaire
+#: model:besacraft.vestiaire.fonction,name:besacraft_vestiaire.fonction_tournage
+msgid "Filming"
+msgstr "Tournage"
+
+#. module: besacraft_vestiaire
+#: model:besacraft.vestiaire.fonction,description:besacraft_vestiaire.fonction_tournage
+msgid "Film Zunk's episodes from the helmet."
+msgstr "Tourner les épisodes de Zunk depuis le casque."

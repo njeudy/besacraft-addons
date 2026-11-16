@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <!-- Tintable armours (three colours chosen in game) and their neon versions: not sold,
+         not owned by everyone; an administrator gives them to the players he chooses. -->
+    <record id="cosmetique_compagnon_armure" model="besacraft.vestiaire.cosmetique">
+        <field name="code">compagnon_armure</field>
+        <field name="name">Compagnon armour</field>
+        <field name="genre">cosmetique</field>
+        <field name="emplacement">torse</field>
+        <field name="piece_armure">plastron</field>
+        <field name="sequence">1000</field>
+    </record>
+    <record id="cosmetique_compagnon_casque" model="besacraft.vestiaire.cosmetique">
+        <field name="code">compagnon_casque</field>
+        <field name="name">Compagnon helmet</field>
+        <field name="genre">cosmetique</field>
+        <field name="emplacement">tete</field>
+        <field name="piece_armure">casque</field>
+        <field name="sequence">1010</field>
+    </record>
+    <record id="cosmetique_titan_armure" model="besacraft.vestiaire.cosmetique">
+        <field name="code">titan_armure</field>
+        <field name="name">Steel Titan armour</field>
+        <field name="genre">cosmetique</field>
+        <field name="emplacement">torse</field>
+        <field name="piece_armure">plastron</field>
+        <field name="sequence">1020</field>
+    </record>
+    <record id="cosmetique_titan_casque" model="besacraft.vestiaire.cosmetique">
+        <field name="code">titan_casque</field>
+        <field name="name">Steel Titan helmet</field>
+        <field name="genre">cosmetique</field>
+        <field name="emplacement">tete</field>
+        <field name="piece_armure">casque</field>
+        <field name="sequence">1030</field>
+    </record>
+    <record id="cosmetique_prisme_armure" model="besacraft.vestiaire.cosmetique">
+        <field name="code">prisme_armure</field>
+        <field name="name">Prism Squad armour</field>
+        <field name="genre">cosmetique</field>
+        <field name="emplacement">torse</field>
+        <field name="piece_armure">plastron</field>
+        <field name="sequence">1040</field>
+    </record>
+    <record id="cosmetique_prisme_casque" model="besacraft.vestiaire.cosmetique">
+        <field name="code">prisme_casque</field>
+        <field name="name">Prism Squad helmet</field>
+        <field name="genre">cosmetique</field>
+        <field name="emplacement">tete</field>
+        <field name="piece_armure">casque</field>
+        <field name="sequence">1050</field>
+    </record>
+    <record id="cosmetique_compagnon_neon_armure" model="besacraft.vestiaire.cosmetique">
+        <field name="code">compagnon_neon_armure</field>
+        <field name="name">Neon Compagnon armour</field>
+        <field name="genre">cosmetique</field>
+        <field name="emplacement">torse</field>
+        <field name="piece_armure">plastron</field>
+        <field name="sequence">1060</field>
+    </record>
+    <record id="cosmetique_compagnon_neon_casque" model="besacraft.vestiaire.cosmetique">
+        <field name="code">compagnon_neon_casque</field>
+        <field name="name">Neon Compagnon helmet</field>
+        <field name="genre">cosmetique</field>
+        <field name="emplacement">tete</field>
+        <field name="piece_armure">casque</field>
+        <field name="sequence">1070</field>
+    </record>
+    <record id="cosmetique_titan_neon_armure" model="besacraft.vestiaire.cosmetique">
+        <field name="code">titan_neon_armure</field>
+        <field name="name">Neon Steel Titan armour</field>
+        <field name="genre">cosmetique</field>
+        <field name="emplacement">torse</field>
+        <field name="piece_armure">plastron</field>
+        <field name="sequence">1080</field>
+    </record>
+    <record id="cosmetique_titan_neon_casque" model="besacraft.vestiaire.cosmetique">
+        <field name="code">titan_neon_casque</field>
+        <field name="name">Neon Steel Titan helmet</field>
+        <field name="genre">cosmetique</field>
+        <field name="emplacement">tete</field>
+        <field name="piece_armure">casque</field>
+        <field name="sequence">1090</field>
+    </record>
+    <record id="cosmetique_prisme_neon_armure" model="besacraft.vestiaire.cosmetique">
+        <field name="code">prisme_neon_armure</field>
+        <field name="name">Neon Prism Squad armour</field>
+        <field name="genre">cosmetique</field>
+        <field name="emplacement">torse</field>
+        <field name="piece_armure">plastron</field>
+        <field name="sequence">1100</field>
+    </record>
+    <record id="cosmetique_prisme_neon_casque" model="besacraft.vestiaire.cosmetique">
+        <field name="code">prisme_neon_casque</field>
+        <field name="name">Neon Prism Squad helmet</field>
+        <field name="genre">cosmetique</field>
+        <field name="emplacement">tete</field>
+        <field name="piece_armure">casque</field>
+        <field name="sequence">1110</field>
+    </record>
+</odoo>

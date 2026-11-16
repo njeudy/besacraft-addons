@@ -13,6 +13,12 @@ class BesacraftVestiairePossession(models.Model):
                                string="Origin", required=True, default="offert")
     date = fields.Datetime(default=fields.Datetime.now, required=True)
     annonce = fields.Boolean(string="Announced in game")
+    piece_armure = fields.Selection(related="cosmetique_id.piece_armure")
+    fonction_ids = fields.Many2many(
+        "besacraft.vestiaire.fonction", "besacraft_vestiaire_possession_fonction_rel",
+        "possession_id", "fonction_id", string="Unlocked functions",
+        help="For an armour piece: the functions this player has unlocked. Empty: all those "
+             "of the piece. The player gets only those the piece can also do.")
 
     _sql_constraints = [
         ("unique_cape", "unique(partner_id, cape_id)", "A player owns a cape only once."),
