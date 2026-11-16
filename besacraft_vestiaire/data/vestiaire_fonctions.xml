@@ -36,4 +36,10 @@
         <field name="sequence">60</field>
         <field name="description">Follow a Besacraft build tutorial layer by layer.</field>
     </record>
+    <record id="fonction_tournage" model="besacraft.vestiaire.fonction">
+        <field name="code">tournage</field>
+        <field name="name">Filming</field>
+        <field name="sequence">70</field>
+        <field name="description">Film Zunk's episodes from the helmet.</field>
+    </record>
 </odoo>

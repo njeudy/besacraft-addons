@@ -1863,3 +1863,13 @@ msgstr "Visière baissée, le casque affiche ce qu'affichent les lunettes de Cre
 #: model:besacraft.vestiaire.fonction,description:besacraft_vestiaire.fonction_chantier
 msgid "Follow a Besacraft build tutorial layer by layer."
 msgstr "Suivre un tuto de build Besacraft couche par couche."
+
+#. module: besacraft_vestiaire
+#: model:besacraft.vestiaire.fonction,name:besacraft_vestiaire.fonction_tournage
+msgid "Filming"
+msgstr "Tournage"
+
+#. module: besacraft_vestiaire
+#: model:besacraft.vestiaire.fonction,description:besacraft_vestiaire.fonction_tournage
+msgid "Film Zunk's episodes from the helmet."
+msgstr "Tourner les épisodes de Zunk depuis le casque."
