@@ -34,6 +34,8 @@
                             <field name="genre"/>
                             <field name="emplacement" invisible="genre != 'cosmetique'"/>
                             <field name="piece_armure" invisible="genre != 'cosmetique'"/>
+                            <field name="fonction_ids" widget="many2many_tags" invisible="not piece_armure"
+                                   options="{'no_create': True}" placeholder="All"/>
                         </group>
                         <group>
                             <field name="prix"/>

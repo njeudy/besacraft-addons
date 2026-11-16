@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="fonction_vol" model="besacraft.vestiaire.fonction">
+        <field name="code">vol</field>
+        <field name="name">Flight</field>
+        <field name="sequence">10</field>
+        <field name="description">Flight, afterburner and energy; no fall damage while deployed; underwater thrust.</field>
+    </record>
+    <record id="fonction_phares" model="besacraft.vestiaire.fonction">
+        <field name="code">phares</field>
+        <field name="name">Headlights</field>
+        <field name="sequence">20</field>
+        <field name="description">Lights in the helmet's eyes, automatic in the dark.</field>
+    </record>
+    <record id="fonction_hud" model="besacraft.vestiaire.fonction">
+        <field name="code">hud</field>
+        <field name="name">Helmet display</field>
+        <field name="sequence">30</field>
+        <field name="description">The visor display: compass, horizon, energy, name of the block looked at.</field>
+    </record>
+    <record id="fonction_scanner" model="besacraft.vestiaire.fonction">
+        <field name="code">scanner</field>
+        <field name="name">Scanner</field>
+        <field name="sequence">40</field>
+        <field name="description">Mob detector and health, targeting, Pokémon scan and tracker.</field>
+    </record>
+    <record id="fonction_lunettes_create" model="besacraft.vestiaire.fonction">
+        <field name="code">lunettes_create</field>
+        <field name="name">Engineer's goggles</field>
+        <field name="sequence">50</field>
+        <field name="description">With the visor down, the helmet shows what Create's goggles show.</field>
+    </record>
+    <record id="fonction_chantier" model="besacraft.vestiaire.fonction">
+        <field name="code">chantier</field>
+        <field name="name">Building site</field>
+        <field name="sequence">60</field>
+        <field name="description">Follow a Besacraft build tutorial layer by layer.</field>
+    </record>
+</odoo>

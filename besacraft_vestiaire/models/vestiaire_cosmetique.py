@@ -30,6 +30,11 @@ class BesacraftVestiaireCosmetique(models.Model):
         PIECES_ARMURE, string="Armour piece",
         help="A deployable armour piece leaves the outfit: the player puts it in the armour "
              "stand of the wardrobe and deploys it in game. Read from the mod's catalogue.")
+    fonction_ids = fields.Many2many(
+        "besacraft.vestiaire.fonction", "besacraft_vestiaire_cosmetique_fonction_rel",
+        "cosmetique_id", "fonction_id", string="Armour functions",
+        help="What this armour piece lets its wearer do. Empty: everything. A deployed armour "
+             "gives the functions of its breastplate and of its helmet together.")
     sequence = fields.Integer(default=10)
     vignette = fields.Image(string="Thumbnail", max_width=256, max_height=256)
     prix = fields.Integer(string="Price (points)", default=0,

@@ -1,6 +1,6 @@
 {
     "name": "Besacraft — Wardrobe",
-    "version": "18.0.1.3.0",
+    "version": "18.0.1.4.0",
     "license": "LGPL-3",
     "author": "Nicolas JEUDY",
     "website": "https://besacraft.fr",
@@ -12,6 +12,7 @@
         "security/ir.model.access.csv",
         "data/ir_cron.xml",
         "data/mail_templates.xml",
+        "data/vestiaire_fonctions.xml",
         "views/vestiaire_demande_views.xml",
         "views/website_demande.xml",
         "views/vestiaire_cape_views.xml",

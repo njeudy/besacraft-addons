@@ -38,6 +38,9 @@
                         <list editable="bottom">
                             <field name="cape_id"/>
                             <field name="cosmetique_id"/>
+                            <field name="piece_armure" column_invisible="True"/>
+                            <field name="fonction_ids" widget="many2many_tags" optional="show"
+                                   options="{'no_create': True}" invisible="not piece_armure"/>
                             <field name="origine"/>
                             <field name="date"/>
                         </list>
