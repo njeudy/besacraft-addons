@@ -1933,3 +1933,51 @@ msgstr "Tournage"
 #: model:besacraft.vestiaire.fonction,description:besacraft_vestiaire.fonction_tournage
 msgid "Film Zunk's episodes from the helmet."
 msgstr "Tourner les épisodes de Zunk depuis le casque."
+
+#. odoo-python
+#: code:addons/besacraft_vestiaire/tools/paquet.py:0
+#, python-format
+msgid "The tints must be an object with three palettes."
+msgstr "Les teintes doivent être un objet avec trois palettes."
+
+#. odoo-python
+#: code:addons/besacraft_vestiaire/tools/paquet.py:0
+#, python-format
+msgid "The %s palette must list 1 to %s colours."
+msgstr "La palette %s doit compter de 1 à %s couleurs."
+
+#. odoo-python
+#: code:addons/besacraft_vestiaire/tools/paquet.py:0
+#, python-format
+msgid "Invalid colour in the %s palette."
+msgstr "Couleur invalide dans la palette %s."
+
+#. odoo-python
+#: code:addons/besacraft_vestiaire/tools/paquet.py:0
+#, python-format
+msgid "The sizes must be a list."
+msgstr "Les tailles doivent être une liste."
+
+#. odoo-python
+#: code:addons/besacraft_vestiaire/tools/paquet.py:0
+#, python-format
+msgid "Invalid size in cosmetique.json."
+msgstr "Taille invalide dans cosmetique.json."
+
+#. odoo-python
+#: code:addons/besacraft_vestiaire/tools/paquet.py:0
+#, python-format
+msgid "The zone names must be a list of three names."
+msgstr "Les noms des zones doivent être une liste de trois noms."
+
+#. odoo-python
+#: code:addons/besacraft_vestiaire/tools/paquet.py:0
+#, python-format
+msgid "A tintable cosmetic needs its grey layer %s__principale.png."
+msgstr "Un cosmétique teintable a besoin de son calque gris %s__principale.png."
+
+#. odoo-python
+#: code:addons/besacraft_vestiaire/tools/paquet.py:0
+#, python-format
+msgid "Texture %s.png is no tint layer."
+msgstr "La texture %s.png n'est pas un calque de teinte."

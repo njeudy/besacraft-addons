@@ -131,10 +131,14 @@ class BesacraftVestiaireCosmetique(models.Model):
             "taille": len(donnees),
             "contenu": base64.b64encode(donnees),
         } for chemin, donnees in sorted(fichiers.items()) if chemin != paquet.ENTREE])
+        armure = entree.get("armure")
+        piece = armure.get("piece") if isinstance(armure, dict) else None
         self.write({
             "version_distante": self.version_distante + 1,
             "entree_distante": json.dumps(entree, ensure_ascii=False, sort_keys=True),
             "emplacement": entree["emplacement"],
+            # A remote armour piece goes to the armour stand, like one of the jar.
+            "piece_armure": piece if piece in dict(PIECES_ARMURE) else False,
         })
 
     def action_retirer_paquet(self):

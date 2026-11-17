@@ -133,6 +133,63 @@ class TestDepot(TransactionCase):
             self.echarpe.paquet = base64.b64encode(b"pas un zip")
         self.assertEqual(self.echarpe.version_distante, 1)
 
+    def test_emplacements_du_mod(self):
+        """Clothes, glasses and slung items of the mod's catalogue can be remote too."""
+        for emplacement in ("torse", "taille", "visage", "bandouliere"):
+            lue, _ = paquet.lire(self.env, archive(fichiers(**{"cosmetique.json": json.dumps(
+                entree(emplacement=emplacement)).encode()})), CODE)
+            self.assertEqual(lue["emplacement"], emplacement)
+
+    def test_cheveux_et_barbe(self):
+        for emplacement in ("cheveux", "barbe"):
+            lue, _ = paquet.lire(self.env, archive(fichiers(**{"cosmetique.json": json.dumps(
+                entree(emplacement=emplacement)).encode()})), CODE)
+            self.assertEqual(lue["emplacement"], emplacement)
+
+    def _teintable(self, teintes, **calques):
+        contenu = {f"textures/cosmetique/{CODE}__bleu.png": None,
+                   f"textures/cosmetique/{CODE}__principale.png": png(couleur=(170, 170, 170, 255))}
+        contenu.update(calques)
+        e = entree(emplacement="barbe", teintes=teintes)
+        e.pop("variantes")
+        contenu["cosmetique.json"] = json.dumps(e).encode()
+        return archive(fichiers(**contenu))
+
+    TEINTES = {"principale": [{"id": "noir", "nom": "Noir", "couleur": "#1F1B1A"},
+                              {"id": "blanc", "nom": "Blanc", "couleur": "#EDEBE4"}],
+               "secondaire": [{"id": "x", "couleur": "#000000"}],
+               "lumineuse": [{"id": "x", "couleur": "#000000"}],
+               "tailles": [{"id": "courte", "nom": "Courte"}, {"id": "longue", "nom": "Longue"}],
+               "zones": ["Poils", "-", "-"]}
+
+    def test_teintes_distantes(self):
+        """A remote cosmetic can be tinted: its grey layers come with it, sizes included."""
+        lue, contenu = paquet.lire(self.env, self._teintable(self.TEINTES, **{
+            f"textures/cosmetique/{CODE}__reflets.png": png(couleur=(0, 0, 0, 0))}), CODE)
+        self.assertEqual(lue["teintes"]["tailles"][1]["id"], "longue")
+        self.assertIn(f"textures/cosmetique/{CODE}__reflets.png", contenu)
+
+    def test_teintes_refusees(self):
+        sans_calque = self._teintable(self.TEINTES, **{f"textures/cosmetique/{CODE}__principale.png": None})
+        self._refuse_lire(sans_calque)
+        mauvaise = dict(self.TEINTES, principale=[{"id": "noir", "couleur": "noir"}])
+        self._refuse_lire(self._teintable(mauvaise))
+        double = dict(self.TEINTES, tailles=[{"id": "a"}, {"id": "a"}])
+        self._refuse_lire(self._teintable(double))
+        self._refuse_lire(self._teintable(self.TEINTES, **{
+            f"textures/cosmetique/{CODE}__bleu.png": png()}))
+
+    def _refuse_lire(self, octets):
+        with self.assertRaises(ValidationError):
+            paquet.lire(self.env, octets, CODE)
+
+    def test_piece_armure_distante(self):
+        e = entree(emplacement="tete", armure={"piece": "casque", "deploiement": "pieces"})
+        self.echarpe.paquet = base64.b64encode(archive(fichiers(**{"cosmetique.json": json.dumps(e).encode()})))
+        self.assertEqual(self.echarpe.piece_armure, "casque")
+        self.echarpe.paquet = base64.b64encode(archive())
+        self.assertFalse(self.echarpe.piece_armure)
+
     def test_emote_jamais_distante(self):
         self.echarpe.genre = "emote"
         with self.assertRaises(ValidationError):
