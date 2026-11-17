@@ -27,7 +27,13 @@ VARIANTE = re.compile(r"^[a-z0-9_]+$")
 ACCROCHES = {"head", "body", "arm_left", "arm_right", "leg_left", "leg_right"}
 # Every slot of the mod's catalogue but "effet", whose particles ship with the mod.
 EMPLACEMENTS = {"chapeau", "tete", "visage", "cape", "ailes", "dos", "bandouliere", "queue", "torse",
-                "taille", "bras", "chaussures", "familier_epaule", "familier_tete", "accessoire"}
+                "taille", "bras", "chaussures", "familier_epaule", "familier_tete", "accessoire",
+                "cheveux", "barbe"}
+# The grey layers of a tintable cosmetic, multiplied in game by the colour of their zone.
+CALQUES = ("principale", "secondaire", "lumineuse", "reflets", "reflets_lumineux")
+ZONES = ("principale", "secondaire", "lumineuse")
+COULEUR = re.compile(r"^#[0-9A-Fa-f]{6}$")
+PALETTE_MAX = 32
 
 
 def chemins_permis(code):
@@ -143,11 +149,54 @@ def _verifier_entree(env, code, entree):
         raise ValidationError(_("The triggers must be a list."))
 
 
+def _verifier_teintes(env, teintes):
+    """The palettes of a tintable cosmetic: three zones, each a list of ``{id, nom, couleur}``;
+    optional sizes ``[{id, nom}]`` and zone names. The game ignores what it cannot read, but a
+    package that the game would show without colours is refused here, where it can be fixed."""
+    _ = env._
+    if not isinstance(teintes, dict):
+        raise ValidationError(_("The tints must be an object with three palettes."))
+    for zone in ZONES:
+        palette = teintes.get(zone)
+        if not isinstance(palette, list) or not palette or len(palette) > PALETTE_MAX:
+            raise ValidationError(_("The %s palette must list 1 to %s colours.", zone, PALETTE_MAX))
+        vus = set()
+        for teinte in palette:
+            tid = isinstance(teinte, dict) and teinte.get("id")
+            if (not isinstance(tid, str) or not VARIANTE.match(tid) or "__" in tid or tid in vus
+                    or not isinstance(teinte.get("couleur"), str) or not COULEUR.match(teinte["couleur"])):
+                raise ValidationError(_("Invalid colour in the %s palette.", zone))
+            vus.add(tid)
+    tailles = teintes.get("tailles", [])
+    if not isinstance(tailles, list) or len(tailles) > PALETTE_MAX:
+        raise ValidationError(_("The sizes must be a list."))
+    vues = set()
+    for taille in tailles:
+        tid = isinstance(taille, dict) and taille.get("id")
+        if not isinstance(tid, str) or not VARIANTE.match(tid) or "__" in tid or tid in vues:
+            raise ValidationError(_("Invalid size in cosmetique.json."))
+        vues.add(tid)
+    zones = teintes.get("zones")
+    if zones is not None and (not isinstance(zones, list) or len(zones) != 3
+                              or not all(isinstance(z, str) and z.strip() for z in zones)):
+        raise ValidationError(_("The zone names must be a list of three names."))
+
+
 def _verifier_textures(env, code, entree, fichiers):
     _ = env._
     textures = {c[len("textures/cosmetique/"):-len(".png")] for c in fichiers if c.endswith(".png")}
     if code not in textures:
         raise ValidationError(_("The package has no base texture %s.png.", code))
+    if "teintes" in entree:
+        _verifier_teintes(env, entree["teintes"])
+        attendues = {code} | {f"{code}__{calque}" for calque in CALQUES}
+        if f"{code}__principale" not in textures:
+            raise ValidationError(_("A tintable cosmetic needs its grey layer %s__principale.png.", code))
+        for nom in textures:
+            base = nom[:-len("_glowmask")] if nom.endswith("_glowmask") else nom
+            if base not in attendues:
+                raise ValidationError(_("Texture %s.png is no tint layer.", nom))
+        return
     variantes = entree.get("variantes") or []
     if not isinstance(variantes, list):
         raise ValidationError(_("The colours must be a list."))
