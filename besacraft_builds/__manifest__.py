@@ -1,6 +1,6 @@
 {
     "name": "Besacraft — Build Catalogue",
-    "version": "18.0.1.15.1",
+    "version": "18.0.1.16.0",
     "license": "LGPL-3",
     "author": "Nicolas JEUDY",
     "website": "https://besacraft.fr",
@@ -16,7 +16,6 @@
         "views/besacraft_build_views.xml",
         "views/besacraft_episode_views.xml",
         "views/menus.xml",
-        "views/res_config_settings_views.xml",
         "views/website_catalogue.xml",
         "views/website_serie.xml",
         "views/website_tuto.xml",

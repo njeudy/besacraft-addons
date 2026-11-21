@@ -27,11 +27,6 @@ msgid "Access Lines"
 msgstr "Lignes d'accès"
 
 #. module: besacraft_builds
-#: model_terms:ir.ui.view,arch_db:besacraft_builds.res_config_settings_view_form_besacraft
-msgid "Adds a « Le projet » entry at the start of the builds section bar."
-msgstr "Ajoute une entrée « Le projet » en tête de la barre de sections des builds."
-
-#. module: besacraft_builds
 #: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build__serie_ids
 msgid "Also In"
 msgstr "Aussi dans"
@@ -108,13 +103,6 @@ msgstr "Pièce jointe build.json"
 #: model:ir.ui.menu,name:besacraft_builds.menu_build
 msgid "Builds"
 msgstr "Builds"
-
-#. module: besacraft_builds
-#: model:ir.model.fields,field_description:besacraft_builds.field_res_config_settings__besacraft_projet_url
-#: model:ir.model.fields,field_description:besacraft_builds.field_website__besacraft_projet_url
-#: model_terms:ir.ui.view,arch_db:besacraft_builds.res_config_settings_view_form_besacraft
-msgid "Builds project page"
-msgstr "Page de présentation des builds"
 
 #. module: besacraft_builds
 #: model_terms:ir.ui.view,arch_db:besacraft_builds.view_besacraft_episode_form
@@ -514,12 +502,6 @@ msgstr "Auteur d'origine"
 #: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build__overview_image
 msgid "Overview"
 msgstr "Vue d'ensemble"
-
-#. module: besacraft_builds
-#: model:ir.model.fields,help:besacraft_builds.field_res_config_settings__besacraft_projet_url
-#: model:ir.model.fields,help:besacraft_builds.field_website__besacraft_projet_url
-msgid "Page presenting the builds project. When set, the section bar of the catalogue starts with a « Le projet » entry pointing at it."
-msgstr "Page qui présente le projet des builds. Quand elle est renseignée, la barre de sections du catalogue commence par une entrée « Le projet » qui pointe dessus."
 
 #. module: besacraft_builds
 #: model:ir.model.fields,field_description:besacraft_builds.field_besacraft_build__palette_label
@@ -1374,11 +1356,6 @@ msgstr "Choisis un bâtiment et ouvre son guide en plein écran : chaque bloc to
 #: model_terms:ir.ui.view,arch_db:besacraft_builds.collections
 msgid "Preview of the builds found"
 msgstr "Aperçu des builds trouvés"
-
-#. module: besacraft_builds
-#: model_terms:ir.ui.view,arch_db:besacraft_builds.ac_barre
-msgid "Project"
-msgstr "Le projet"
 
 #. module: besacraft_builds
 #: model_terms:ir.ui.view,arch_db:besacraft_builds.catalogue

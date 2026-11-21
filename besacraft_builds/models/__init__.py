@@ -11,4 +11,3 @@ from . import sale_order
 from . import besacraft_build_import
 from . import besacraft_build_recipe
 from . import website
-from . import res_config_settings
