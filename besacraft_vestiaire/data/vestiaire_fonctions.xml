@@ -12,6 +12,12 @@
         <field name="sequence">20</field>
         <field name="description">Lights in the helmet's eyes, automatic in the dark.</field>
     </record>
+    <record id="fonction_gyrophare" model="besacraft.vestiaire.fonction">
+        <field name="code">gyrophare</field>
+        <field name="name">Beacon</field>
+        <field name="sequence">25</field>
+        <field name="description">A flashing beacon pops out of the helmet and sweeps light around the wearer.</field>
+    </record>
     <record id="fonction_hud" model="besacraft.vestiaire.fonction">
         <field name="code">hud</field>
         <field name="name">Helmet display</field>
