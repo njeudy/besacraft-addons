@@ -51,6 +51,11 @@ class BesacraftVestiaireSkin(models.Model):
             self.filtered("actif")._garder_un_seul_actif()
         return res
 
+    def _vestiaire_jeu(self):
+        """These skins as the game's wardrobe screen reads them."""
+        return [{"id": s.id, "nom": s.name, "modele": s.modele, "empreinte": s.empreinte,
+                 "actif": s.actif} for s in self]
+
     def _garder_un_seul_actif(self):
         """Per contact, the last of these records wins; every other active skin is switched off."""
         gagnants = {}

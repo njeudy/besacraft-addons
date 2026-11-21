@@ -135,6 +135,52 @@ class VestiaireApi(http.Controller):
             armures, derniere = partner._vestiaire_armures()
         return reponse(dict(resultat, armures=armures, armure_derniere=derniere))
 
+    @http.route("/mc/v1/vestiaire/skins", type="http", auth="public", methods=["GET"],
+                csrf=False, save_session=False)
+    def skins(self, **kw):
+        """The player's own skins, for the game's wardrobe screen."""
+        partner, refus = self._compte()
+        if refus:
+            return refus
+        return reponse({"skins": partner.sudo().vestiaire_skin_ids._vestiaire_jeu()})
+
+    @http.route("/mc/v1/vestiaire/skin/<int:skin_id>/image", type="http", auth="public",
+                methods=["GET"], csrf=False, save_session=False)
+    def skin_image(self, skin_id, **kw):
+        """One of the player's own skins, active or not: the public texture route only
+        serves the active one."""
+        partner, refus = self._compte()
+        if refus:
+            return refus
+        skin = partner.sudo().vestiaire_skin_ids.filtered(lambda s: s.id == skin_id)
+        if not skin:
+            raise werkzeug.exceptions.NotFound()
+        return request.make_response(base64.b64decode(skin.image), headers=[
+            ("Content-Type", "image/png"),
+            ("X-Content-Type-Options", "nosniff"),
+            ("Cache-Control", "private, max-age=31536000, immutable"),
+        ])
+
+    @http.route("/mc/v1/vestiaire/skin", type="http", auth="public", methods=["PUT"],
+                csrf=False, save_session=False)
+    def skin_actif(self, **kw):
+        """Wear one of the player's own skins; null goes back to the Mojang skin."""
+        partner, refus = self._compte()
+        if refus:
+            return refus
+        skin_id = corps_json().get("id")
+        if skin_id is not None and (not isinstance(skin_id, int) or isinstance(skin_id, bool)):
+            raise werkzeug.exceptions.BadRequest()
+        skins = partner.sudo().vestiaire_skin_ids
+        if skin_id is None:
+            skins.filtered("actif").write({"actif": False})
+        else:
+            skin = skins.filtered(lambda s: s.id == skin_id)
+            if not skin:
+                return reponse({"erreur": "inconnu"}, code=404)
+            skin.actif = True
+        return reponse({"skins": skins._vestiaire_jeu()})
+
     @http.route("/mc/v1/vestiaire/achat", type="http", auth="public", methods=["POST"],
                 csrf=False, save_session=False)
     def achat(self, **kw):
