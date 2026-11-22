@@ -11,8 +11,6 @@
             <div class="ac-barre__in">
                 <span class="ac-barre__nom">Builds Minecraft</span>
                 <nav aria-label="Builds Minecraft">
-                    <a t-if="website.besacraft_projet_url" t-att-href="website.besacraft_projet_url"
-                       data-ac-projet="1">Project</a>
                     <a href="/builds" t-att-aria-current="barre_active == 'home' and 'page' or None">Home</a>
                     <a href="/builds/collections"
                        t-att-aria-current="barre_active == 'collections' and 'page' or None">Collections</a>

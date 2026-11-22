@@ -12,11 +12,6 @@
             <div class="bc-barre-in">
                 <span class="bc-barre-marque">Builds</span>
                 <ul>
-                    <li t-if="website.besacraft_projet_url">
-                        <a t-att-href="website.besacraft_projet_url"
-                           t-attf-class="#{barre_active == 'projet' and 'bc-actif' or ''}"
-                           t-att-aria-current="barre_active == 'projet' and 'page' or None">Le projet</a>
-                    </li>
                     <li>
                         <a href="/builds"
                            t-attf-class="#{barre_active == 'catalogue' and 'bc-actif' or ''}"

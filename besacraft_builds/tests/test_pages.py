@@ -153,15 +153,6 @@ class TestPages(HttpCase):
             self.assertIn(attribut, page)
         self.assertIn("ac-etat--payant", page)
 
-    def test_la_barre_porte_le_projet_quand_il_est_renseigne(self):
-        # Une base de dev peut déjà porter l'adresse : on part d'un site sans projet.
-        self.site.besacraft_projet_url = False
-        self.assertNotIn("data-ac-projet", self.url_open("/builds").text)
-        self.site.besacraft_projet_url = "/builds-minecraft"
-        page = self.url_open("/builds").text
-        self.assertIn('href="/builds-minecraft"', page)
-        self.assertIn("data-ac-projet", page)
-
     # --- hologramme ---------------------------------------------------------------------------------
 
     def test_le_point_d_entree_holo_donne_un_build_et_des_chiffres(self):
