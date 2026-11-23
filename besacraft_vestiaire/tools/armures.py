@@ -1,5 +1,6 @@
 """The armour stand of a player, as the game sends it: up to eight armours, each a breastplate
-and its colour, an optional helmet and its colour, and an appearance style.
+and its colour, an optional helmet and its colour, an appearance style and, optionally, the
+colour of the beacon its gyrophare function pops out of the helmet.
 
 Pure Python, no Odoo: the API and the model use it, and it can be checked on its own.
 """
@@ -20,7 +21,9 @@ def normaliser(armures, pieces):
     `pieces` maps every owned code that is an armour piece to "plastron" or "casque". An
     armour whose breastplate is not an owned breastplate is dropped; a helmet that is not an
     owned helmet is dropped alone. Colours and style are game-side names, only their form is
-    checked. A second identical armour is dropped. Returns the clean list."""
+    checked. The beacon colour ("gyrophare") is kept only when it is set, so an armour without
+    one comes back as older games wrote it; it does not make another armour. A second identical
+    armour is dropped. Returns the clean list."""
     gardees, vues = [], set()
     for objet in armures if isinstance(armures, list) else []:
         if len(gardees) >= STAND_MAX:
@@ -43,6 +46,9 @@ def normaliser(armures, pieces):
             "style": _id(objet.get("style")),
         }
         cle = tuple(v for k, v in armure.items() if k != "nom")
+        gyrophare = _id(objet.get("gyrophare"))
+        if gyrophare:
+            armure["gyrophare"] = gyrophare
         if cle in vues:
             continue
         vues.add(cle)

@@ -60,6 +60,13 @@ class TestApiArmures(common.HttpCase):
         self.assertEqual(corps["armures"], attendu)
         self.assertEqual(corps["armure_derniere"], 0)
 
+    def test_couleur_du_gyrophare_gardee(self):
+        r = self._equiper(armures=[armure("t_plastron", "t_casque", gyrophare="rouge")], armure_derniere=0)
+        attendu = [armure("t_plastron", "t_casque", gyrophare="rouge")]
+        self.assertEqual(r.json()["armures"], attendu)
+        self.assertEqual(self._appel("GET", "/mc/v1/vestiaire/moi").json()["armures"], attendu)
+        self.assertEqual(self.zoe._vestiaire_armures(), (attendu, 0))
+
     def test_client_sans_armures_ne_les_efface_pas(self):
         self._equiper(armures=[armure("t_plastron")], armure_derniere=0)
         r = self._equiper(tenue=["t_ailes"])  # a 2.5.0 game: no "armures" key
@@ -109,6 +116,13 @@ class TestOutilsArmures(common.BaseCase):
                                       "style": "nano", "nom": "n" * 60}], self.PIECES)
         self.assertEqual(gardees, [{"nom": "n" * outils.NOM_MAX, "plastron": "p", "teinte_plastron": None,
                                     "casque": "c", "teinte_casque": None, "style": "nano"}])
+
+    def test_couleur_du_gyrophare(self):
+        gardees = outils.normaliser([{"plastron": "p", "gyrophare": "bleu"}, {"plastron": "p", "gyrophare": 3},
+                                     {"plastron": "p", "style": "nano", "gyrophare": "Pas Bon"}], self.PIECES)
+        self.assertEqual(gardees[0]["gyrophare"], "bleu")
+        self.assertEqual(len(gardees), 2, "the beacon colour does not make another armour")
+        self.assertNotIn("gyrophare", gardees[1], "no key when no valid colour: older games read the same")
 
     def test_derniere(self):
         self.assertEqual(outils.derniere(0, [1]), 0)

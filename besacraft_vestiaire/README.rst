@@ -42,6 +42,19 @@ Routes
     its helmet alone, is dropped. A body without ``armures`` (a game from before the
     deployable armours) keeps the stand as it is. The answer adds the kept stand.
 
+``GET /mc/v1/vestiaire/skins``
+    The player's own skins, uploaded from the portal: ``{skins: [{id, nom, modele,
+    empreinte, actif}]}``.
+
+``GET /mc/v1/vestiaire/skin/<id>/image``
+    The PNG of one of the player's own skins, active or not (the CustomSkinLoader
+    texture route only serves active skins). Anybody else's skin is a ``404``.
+
+``PUT /mc/v1/vestiaire/skin`` ``{id}``
+    Wears one of the player's own skins; ``null`` takes the active one off, so the
+    game shows the Mojang skin again. ``404 inconnu`` for a skin that is not theirs.
+    The answer is the updated list of skins.
+
 ``POST /mc/v1/vestiaire/achat`` ``{code, prix}``
     Buys an item at the price the player saw. ``409`` with ``deja_possede``,
     ``solde_insuffisant`` or ``prix_change`` (and the current ``points`` and

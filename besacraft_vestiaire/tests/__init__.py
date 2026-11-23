@@ -14,3 +14,4 @@ from . import test_joueur
 from . import test_distant
 from . import test_api_armures
 from . import test_api_fonctions
+from . import test_api_skins

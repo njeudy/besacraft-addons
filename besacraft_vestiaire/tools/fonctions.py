@@ -6,7 +6,7 @@ side means "everything", so pieces and ownerships created before this feature ke
 """
 
 # The order is the one shown to the player and sent to the game.
-FONCTIONS = ("vol", "phares", "hud", "scanner", "lunettes_create", "chantier", "tournage")
+FONCTIONS = ("vol", "phares", "gyrophare", "hud", "scanner", "lunettes_create", "chantier", "tournage")
 
 
 def effectives(sait, debloque):

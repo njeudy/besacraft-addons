@@ -1935,6 +1935,16 @@ msgid "Film Zunk's episodes from the helmet."
 msgstr "Tourner les épisodes de Zunk depuis le casque."
 
 #. module: besacraft_vestiaire
+#: model:besacraft.vestiaire.fonction,name:besacraft_vestiaire.fonction_gyrophare
+msgid "Beacon"
+msgstr "Gyrophare"
+
+#. module: besacraft_vestiaire
+#: model:besacraft.vestiaire.fonction,description:besacraft_vestiaire.fonction_gyrophare
+msgid "A flashing beacon pops out of the helmet and sweeps light around the wearer."
+msgstr "Un gyrophare sort du casque et fait tourner sa lumière autour du porteur."
+
+#. module: besacraft_vestiaire
 #. odoo-python
 #: code:addons/besacraft_vestiaire/tools/paquet.py:0
 #, python-format
